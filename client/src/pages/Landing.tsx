@@ -31,16 +31,16 @@ export default function Landing() {
             Join the friendliest hackathon community. Create, collaborate, and compete in events that celebrate innovation and creativity.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/organizer/events/new">
-              <Button size="lg" className="bg-coral text-white px-8 py-4 rounded-full font-medium text-lg hover-scale hover:bg-coral/80 transition-colors" data-testid="button-create-hackathon">
-                <Plus className="w-5 h-5 mr-2" />
-                Create Hackathon
-              </Button>
-            </Link>
             <Link href="/explore">
-              <Button variant="outline" size="lg" className="border-2 border-mint text-text-dark px-8 py-4 rounded-full font-medium text-lg hover-scale hover:bg-mint/20 transition-colors" data-testid="button-explore-events">
+              <Button size="lg" className="bg-coral text-white px-8 py-4 rounded-full font-medium text-lg hover-scale hover:bg-coral/80 transition-colors" data-testid="button-explore-events">
                 <Search className="w-5 h-5 mr-2" />
                 Explore Events
+              </Button>
+            </Link>
+            <Link href="/organizer/events/new">
+              <Button variant="outline" size="lg" className="border-2 border-mint text-text-dark px-8 py-4 rounded-full font-medium text-lg hover-scale hover:bg-mint/20 transition-colors" data-testid="button-create-hackathon">
+                <Plus className="w-5 h-5 mr-2" />
+                Create Hackathon
               </Button>
             </Link>
           </div>
