@@ -11,7 +11,7 @@ import EventDetail from "@/pages/EventDetail";
 import ProjectsGallery from "@/pages/ProjectsGallery";
 import ProjectDetail from "@/pages/ProjectDetail";
 import PublishProject from "@/pages/PublishProject";
-import Judges from "@/pages/Judges";
+import JuryBoard from "@/pages/Judges";
 import Leaderboards from "@/pages/Leaderboards";
 import Sponsors from "@/pages/Sponsors";
 import Login from "@/pages/auth/Login";
@@ -42,8 +42,8 @@ function Router() {
         <Route path="/publish" component={PublishProject} />
         <Route path="/upload" component={UploadProject} />
         <Route path="/profiles/:handle" component={Profile} />
-        <Route path="/judges" component={Judges} />
-        <Route path="/judges/:id" component={Judges} />
+        <Route path="/judges" component={JuryBoard} />
+        <Route path="/judges/:id" component={JuryBoard} />
         <Route path="/judge-register" component={JudgeRegister} />
         <Route path="/leaders" component={Leaderboards} />
         <Route path="/sponsors" component={Sponsors} />

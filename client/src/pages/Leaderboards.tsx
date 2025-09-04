@@ -125,7 +125,7 @@ export default function Leaderboards() {
             </TabsTrigger>
             <TabsTrigger value="judges" className="rounded-lg" data-testid="tab-judges">
               <Star className="w-4 h-4 mr-2" />
-              Judges
+              Jury Board
             </TabsTrigger>
           </TabsList>
 

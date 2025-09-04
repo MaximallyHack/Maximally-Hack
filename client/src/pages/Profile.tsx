@@ -108,7 +108,7 @@ export default function Profile() {
     switch (role) {
       case 'participant': return 'coral';
       case 'organizer': return 'mint';
-      case 'judge': return 'sky';
+      case 'jury-member': return 'sky';
       default: return 'soft-gray';
     }
   };
@@ -117,7 +117,7 @@ export default function Profile() {
     switch (role) {
       case 'participant': return <Code className="w-4 h-4" />;
       case 'organizer': return <Calendar className="w-4 h-4" />;
-      case 'judge': return <Star className="w-4 h-4" />;
+      case 'jury-member': return <Star className="w-4 h-4" />;
       default: return <Users className="w-4 h-4" />;
     }
   };

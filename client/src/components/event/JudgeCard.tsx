@@ -10,7 +10,7 @@ interface JudgeCardProps {
   showContactButton?: boolean;
 }
 
-export default function JudgeCard({ judge, showContactButton = false }: JudgeCardProps) {
+export default function JuryMemberCard({ judge, showContactButton = false }: JudgeCardProps) {
   const getAvailabilityColor = () => {
     switch (judge.availability) {
       case 'Available': return 'success';

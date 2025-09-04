@@ -8,13 +8,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Search, MapPin, ExternalLink, Linkedin, Twitter, Star, Filter } from "lucide-react";
-import JudgeCard from "@/components/event/JudgeCard";
+import JuryMemberCard from "@/components/event/JudgeCard";
 import { CrayonSquiggle } from "@/components/ui/floating-elements";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/lib/api";
 import type { Judge } from "@/lib/api";
 
-export default function Judges() {
+export default function JuryBoard() {
   const { id } = useParams();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedExpertise, setSelectedExpertise] = useState<string>("all");
@@ -168,8 +168,8 @@ export default function Judges() {
 
               {specificJudge.availability === 'Available' && (
                 <div className="mt-6">
-                  <Button className="w-full bg-coral text-white hover:bg-coral/80" data-testid="button-invite-judge">
-                    Invite to Judge
+                  <Button className="w-full bg-coral text-white hover:bg-coral/80" data-testid="button-invite-jury-member">
+                    Invite to Jury Board
                   </Button>
                 </div>
               )}
@@ -184,9 +184,9 @@ export default function Judges() {
     <div className="min-h-screen bg-cream py-8" data-testid="judges-page">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h1 className="font-heading font-bold text-4xl text-text-dark mb-4">Expert Judges</h1>
+          <h1 className="font-heading font-bold text-4xl text-text-dark mb-4">The Jury Board</h1>
           <CrayonSquiggle className="mx-auto mb-6" />
-          <p className="text-text-muted text-lg">Connect with industry leaders and invite them to judge your hackathons</p>
+          <p className="text-text-muted text-lg">Connect with industry leaders and invite them to join your jury board</p>
         </div>
         
         {/* Search and Filters */}
@@ -197,11 +197,11 @@ export default function Judges() {
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-muted w-5 h-5" />
                 <Input
                   type="text"
-                  placeholder="Search judges by name, company, or expertise..."
+                  placeholder="Search jury members by name, company, or expertise..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full pl-10 pr-4 py-3 border border-soft-gray rounded-xl focus:ring-2 focus:ring-sky focus:border-transparent"
-                  data-testid="input-search-judges"
+                  data-testid="input-search-jury-members"
                 />
               </div>
             </div>
@@ -257,18 +257,18 @@ export default function Judges() {
                 className="cursor-pointer"
                 data-testid={`judge-card-${judge.id}`}
               >
-                <JudgeCard judge={judge} showContactButton />
+                <JuryMemberCard judge={judge} showContactButton />
               </div>
             ))}
           </div>
         ) : (
           <div className="text-center py-16">
             <div className="text-6xl mb-4">👨‍💼</div>
-            <h3 className="font-heading font-semibold text-xl text-text-dark mb-2">No judges found</h3>
+            <h3 className="font-heading font-semibold text-xl text-text-dark mb-2">No jury members found</h3>
             <p className="text-text-muted mb-6">
               {searchQuery || selectedExpertise || selectedAvailability
                 ? "Try adjusting your search or filters"
-                : "Our judge network is growing. Check back soon!"
+                : "Our jury board network is growing. Check back soon!"
               }
             </p>
             <Button 
@@ -346,7 +346,7 @@ export default function Judges() {
                     
                     {selectedJudge.availability === 'Available' && (
                       <Button className="bg-coral text-white hover:bg-coral/80">
-                        Invite to Judge
+                        Invite to Jury Board
                       </Button>
                     )}
                   </div>
