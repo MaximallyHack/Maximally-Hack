@@ -50,7 +50,7 @@ Maximally Hack features a friendly, approachable design with:
 - **Cards**: 16px border radius with soft shadows
 - **Buttons**: Pill-shaped with hover animations
 - **Components**: Consistent spacing on 4px grid system
-- **Animations**: Floating elements and smooth hover effects
+- **Animations**: Floating elements and smooth hover effects powered by Framer Motion
 
 ## 🚀 Tech Stack
 
@@ -65,9 +65,8 @@ Maximally Hack features a friendly, approachable design with:
 
 ### Backend (Express Server)
 - **Express.js** with TypeScript for robust API endpoints
-- **Drizzle ORM** with PostgreSQL for type-safe database operations
-- **Session management** with secure authentication flows
 - **JSON fixture data** for development and demo purposes
+- **Session management** with secure authentication flows
 
 ### Development Tools
 - **ESLint & TypeScript** for code quality and type checking
@@ -85,13 +84,15 @@ maximally-hack/
 │   │   │   ├── event/      # Event-specific components
 │   │   │   ├── judge/      # Judge dashboard components  
 │   │   │   ├── layout/     # Navigation and layout
+│   │   │   ├── project/    # Project-related components
 │   │   │   └── ui/         # Base UI component library
 │   │   ├── pages/          # Page components and routes
 │   │   │   ├── auth/       # Authentication flows
 │   │   │   ├── judge/      # Judge-specific pages
 │   │   │   └── organizer/  # Organizer dashboard pages
 │   │   ├── lib/            # Utilities and fixtures
-│   │   └── hooks/          # Custom React hooks
+│   │   ├── hooks/          # Custom React hooks
+│   │   └── contexts/       # React context providers
 ├── server/                 # Backend Express server
 ├── shared/                 # Shared types and schemas
 └── ...
@@ -101,7 +102,7 @@ maximally-hack/
 
 ### Prerequisites
 - Node.js 20+ 
-- npm or yarn package manager
+- npm package manager
 
 ### Quick Start
 
@@ -122,7 +123,6 @@ maximally-hack/
 - `npm run build` - Create optimized production build
 - `npm run start` - Start production server
 - `npm run check` - Run TypeScript type checking
-- `npm run db:push` - Apply database schema changes
 
 ## 📱 Platform Pages
 
@@ -132,13 +132,16 @@ maximally-hack/
 - **Event Detail** (`/event/:id`) - Individual hackathon information and registration
 - **Projects** (`/projects`) - Browse submitted projects and portfolios
 - **Submit** (`/submit`) - Project submission interface with preview
+- **Upload Project** (`/upload`) - Enhanced project upload with media support
 - **Profile** (`/profile`) - User profiles, achievements, and project history
+- **Dashboard** (`/dashboard`) - Personalized user dashboard
 
 ### Specialized Interfaces  
 - **Judge Dashboard** (`/judge`) - Project review and scoring interface
 - **Judge Registration** (`/judge/register`) - Judge onboarding and verification
 - **Organizer Dashboard** (`/organizer`) - Event management and analytics
 - **Create Event** (`/organizer/create`) - Event setup and configuration
+- **Edit Event** (`/organizer/edit/:id`) - Event modification interface
 - **Leaderboards** (`/leaderboards`) - Competition rankings and achievements
 
 ### Community & Support
@@ -167,11 +170,6 @@ maximally-hack/
 3. **Monitor**: Track submissions and participant engagement
 4. **Evaluate**: Coordinate judging process and announce winners
 
-### Sponsors
-1. **Partner**: Integrate brand presence and prize offerings
-2. **Engage**: Connect with innovative participants and projects
-3. **Track**: Monitor engagement and partnership ROI
-
 ## 🔧 Development Guidelines
 
 ### Adding New Features
@@ -179,8 +177,7 @@ maximally-hack/
 1. **Components**: Create reusable components in `client/src/components/`
 2. **Pages**: Add new routes in `client/src/pages/`
 3. **API Routes**: Extend backend functionality in `server/routes.ts`
-4. **Database**: Update schema definitions in `shared/schema.ts`
-5. **Styling**: Follow Tailwind utility patterns and design system
+4. **Styling**: Follow Tailwind utility patterns and design system
 
 ### Code Quality Standards
 
@@ -216,7 +213,6 @@ The deployment automatically:
 Set these environment variables in Replit Secrets:
 - `NODE_ENV=production`
 - `PORT=5000` (default)
-- Database connection strings (if using external DB)
 
 ## 🤝 Contributing
 
@@ -239,8 +235,8 @@ Set these environment variables in Replit Secrets:
 ## 📊 Platform Statistics
 
 ### Current Implementation
-- **20+ Pages** - Complete user journey coverage
-- **50+ Components** - Reusable UI component library  
+- **25+ Pages** - Complete user journey coverage
+- **60+ Components** - Reusable UI component library  
 - **4 User Roles** - Participants, Judges, Organizers, Sponsors
 - **Mock Data** - Comprehensive fixtures for development
 - **Responsive Design** - Mobile-first, cross-device compatibility
@@ -250,6 +246,26 @@ Set these environment variables in Replit Secrets:
 - **Performance**: Optimized bundle splitting and lazy loading
 - **Accessibility**: WCAG 2.1 AA compliance target
 - **Browser Support**: Modern browsers with fallbacks
+
+## 🎯 Key Features Showcase
+
+### Event Management
+- **AI Shipathon 2025**: Featured hackathon with complete timeline and judging criteria
+- **Multi-criteria Scoring**: Innovation, execution, clarity, AI use, and beginner spirit
+- **Prize Tracks**: Multiple award categories with sponsor integration
+- **Real-time Updates**: Live countdown and submission tracking
+
+### Project Submission System
+- **Rich Documentation**: Markdown support for README files
+- **Media Upload**: Screenshots, demo videos, and project galleries
+- **Version Control**: Project history and submission tracking
+- **Preview Mode**: Real-time preview of project submissions
+
+### Judge Interface
+- **Comprehensive Scoring**: Multi-criteria evaluation system
+- **Feedback Tools**: Detailed comment and suggestion system
+- **Progress Tracking**: Judge assignment and completion status
+- **Collaboration**: Judge discussion and consensus building
 
 ## 📄 License
 
