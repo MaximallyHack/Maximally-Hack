@@ -31,7 +31,7 @@ export default function Navbar() {
             <div className="w-8 h-8 bg-coral rounded-full flex items-center justify-center">
               <Rocket className="w-4 h-4 text-white" />
             </div>
-            <span className="font-heading font-bold text-xl text-text-dark">HackSpace</span>
+            <span className="font-heading font-bold text-xl text-text-dark">Maximally Hack</span>
           </Link>
 
           {/* Desktop Navigation */}

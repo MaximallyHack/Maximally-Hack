@@ -54,7 +54,7 @@ export default function Login() {
             </div>
           </FloatingElement>
           <h1 className="font-heading font-bold text-3xl text-text-dark mb-2">Welcome Back</h1>
-          <p className="text-text-muted">Sign in to your HackSpace account</p>
+          <p className="text-text-muted">Sign in to your Maximally Hack account</p>
         </div>
 
         <Card className="bg-white rounded-2xl p-8 shadow-soft border border-soft-gray">
@@ -152,7 +152,7 @@ export default function Login() {
             {/* Sign Up Link */}
             <div className="text-center pt-4 border-t border-soft-gray">
               <p className="text-text-muted text-sm">
-                New to HackSpace?{" "}
+                New to Maximally Hack?{" "}
                 <Link href="/onboarding" className="text-coral hover:text-coral/80 font-medium transition-colors" data-testid="link-sign-up">
                   Create your account
                 </Link>

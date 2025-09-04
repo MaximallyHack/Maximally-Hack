@@ -12,7 +12,7 @@ export default function Footer() {
               <div className="w-8 h-8 bg-coral rounded-full flex items-center justify-center">
                 <Rocket className="w-4 h-4 text-white" />
               </div>
-              <span className="font-heading font-bold text-xl text-text-dark">HackSpace</span>
+              <span className="font-heading font-bold text-xl text-text-dark">Maximally Hack</span>
             </div>
             <p className="text-text-muted text-sm">
               The friendliest hackathon platform where great ideas come to life.
@@ -106,7 +106,7 @@ export default function Footer() {
 
         {/* Bottom */}
         <div className="flex flex-col md:flex-row justify-between items-center text-sm text-text-muted">
-          <p>&copy; 2024 HackSpace. Made with ❤️ for the hacker community.</p>
+          <p>&copy; 2024 Maximally Hack. Made with ❤️ for the hacker community.</p>
           <div className="flex space-x-4 mt-4 md:mt-0">
             <a href="#" className="hover:text-coral transition-colors" data-testid="footer-social-twitter">
               <i className="fab fa-twitter"></i>

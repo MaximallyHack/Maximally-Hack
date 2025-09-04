@@ -133,7 +133,7 @@ export default function Onboarding() {
   const handleComplete = () => {
     triggerConfetti();
     toast({
-      title: "Welcome to HackSpace! 🎉",
+      title: "Welcome to Maximally Hack! 🎉",
       description: "Your profile has been created successfully.",
     });
     
@@ -162,7 +162,7 @@ export default function Onboarding() {
       <div className="max-w-2xl mx-auto">
         {/* Progress Header */}
         <div className="text-center mb-8">
-          <h1 className="font-heading font-bold text-3xl text-text-dark mb-2">Welcome to HackSpace</h1>
+          <h1 className="font-heading font-bold text-3xl text-text-dark mb-2">Welcome to Maximally Hack</h1>
           <p className="text-text-muted mb-6">Let's set up your profile in just a few steps</p>
           
           <div className="flex items-center gap-4 mb-6">
@@ -178,7 +178,7 @@ export default function Onboarding() {
             <div className="text-center mb-8">
               <h2 className="font-heading font-bold text-2xl text-text-dark mb-2">Choose Your Role</h2>
               <CrayonSquiggle className="mx-auto mb-4" />
-              <p className="text-text-muted">How would you like to participate in HackSpace?</p>
+              <p className="text-text-muted">How would you like to participate in Maximally Hack?</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

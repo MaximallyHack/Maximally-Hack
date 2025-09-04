@@ -386,7 +386,7 @@ export default function CreateEvent() {
                         data-testid="input-title"
                       />
                       {data.slug && (
-                        <p className="text-xs text-text-muted mt-1">URL: hackspace.com/e/{data.slug}</p>
+                        <p className="text-xs text-text-muted mt-1">URL: maximallyhack.com/e/{data.slug}</p>
                       )}
                     </div>
 

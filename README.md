@@ -1,7 +1,7 @@
 
-# HackSpace
+# Maximally Hack
 
-A frontend-only hackathon platform designed with a playful minimal aesthetic using pastel crayon colors. HackSpace provides a complete hackathon ecosystem including event discovery, team formation, project submission, judging interfaces, and community features.
+A frontend-only hackathon platform designed with a playful minimal aesthetic using pastel crayon colors. Maximally Hack provides a complete hackathon ecosystem including event discovery, team formation, project submission, judging interfaces, and community features.
 
 ## ✨ Features
 
@@ -15,7 +15,7 @@ A frontend-only hackathon platform designed with a playful minimal aesthetic usi
 
 ## 🎨 Design Philosophy
 
-HackSpace features a friendly, approachable design with:
+Maximally Hack features a friendly, approachable design with:
 - **Colors**: Cream base (#FFFDF7), sky blue (#A3D5FF), coral (#FF8C8C), yellow (#FFE680), mint (#A8E6CF)
 - **Typography**: Fredoka/Baloo 2 for headings, Inter/Nunito for body text
 - **Components**: 16px radius cards, pill-shaped buttons, soft shadows

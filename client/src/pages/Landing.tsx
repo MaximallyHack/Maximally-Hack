@@ -199,7 +199,7 @@ export default function Landing() {
               <div className="text-yellow">⭐⭐⭐⭐⭐</div>
             </div>
             <div className="bg-white rounded-2xl p-6 shadow-soft text-center">
-              <p className="text-text-muted italic mb-4">"HackSpace makes organizing events a breeze. The tools are intuitive and powerful."</p>
+              <p className="text-text-muted italic mb-4">"Maximally Hack makes organizing events a breeze. The tools are intuitive and powerful."</p>
               <div className="text-yellow">⭐⭐⭐⭐⭐</div>
             </div>
             <div className="bg-white rounded-2xl p-6 shadow-soft text-center">

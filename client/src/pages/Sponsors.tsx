@@ -152,7 +152,7 @@ export default function Sponsors() {
         {/* Hero Section */}
         <div className="text-center mb-16">
           <h1 className="font-heading font-bold text-5xl text-text-dark mb-6">
-            Partner with HackSpace
+            Partner with Maximally Hack
           </h1>
           <CrayonSquiggle className="mx-auto mb-6" />
           <p className="text-xl text-text-muted mb-8 max-w-3xl mx-auto">
