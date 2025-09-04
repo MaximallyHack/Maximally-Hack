@@ -43,6 +43,11 @@ export default function Footer() {
                   Leaderboards
                 </Link>
               </li>
+              <li>
+                <Link href="/sponsors" className="hover:text-coral transition-colors" data-testid="footer-sponsors">
+                  Sponsors
+                </Link>
+              </li>
             </ul>
           </div>
 

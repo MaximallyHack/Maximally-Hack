@@ -12,8 +12,6 @@ export default function Navbar() {
     { href: "/explore", label: "Explore", testId: "nav-explore" },
     { href: "/projects", label: "Projects", testId: "nav-projects" },
     { href: "/judges", label: "Judges", testId: "nav-judges" },
-    { href: "/leaders", label: "Leaders", testId: "nav-leaders" },
-    { href: "/sponsors", label: "Sponsors", testId: "nav-sponsors" },
   ];
 
   const isActive = (href: string) => {

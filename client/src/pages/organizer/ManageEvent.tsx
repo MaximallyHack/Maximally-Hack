@@ -125,10 +125,12 @@ export default function ManageEvent() {
                 Copy Link
               </Button>
               
-              <Button className="bg-coral text-white hover:bg-coral/80" data-testid="button-settings">
-                <Settings className="w-4 h-4 mr-2" />
-                Settings
-              </Button>
+              <Link href={`/organizer/events/${mockEvent.id}/edit`}>
+                <Button className="bg-coral text-white hover:bg-coral/80" data-testid="button-edit">
+                  <Edit className="w-4 h-4 mr-2" />
+                  Edit Event
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
