@@ -52,7 +52,13 @@ export default function Navbar() {
             </div>
 
             {/* Desktop Actions */}
-            <div className="hidden md:flex items-center space-x-4">
+            <div className="hidden md:flex items-center space-x-3">
+            <Link href="/publish">
+              <Button variant="outline" className="bg-sky border-sky text-white hover:bg-sky/80" data-testid="button-publish">
+                <Plus className="w-4 h-4 mr-1" />
+                Publish
+              </Button>
+            </Link>
             <Link href="/organizer">
               <Button variant="outline" className="bg-mint border-mint text-text-dark hover:bg-mint/80" data-testid="button-organize">
                 Organize
@@ -90,6 +96,12 @@ export default function Navbar() {
                     </Link>
                   ))}
                   <div className="pt-4 border-t border-soft-gray space-y-3">
+                    <Link href="/publish" onClick={() => setIsOpen(false)}>
+                      <Button variant="outline" className="w-full bg-sky border-sky text-white hover:bg-sky/80" data-testid="mobile-button-publish">
+                        <Plus className="w-4 h-4 mr-1" />
+                        Publish Project
+                      </Button>
+                    </Link>
                     <Link href="/organizer" onClick={() => setIsOpen(false)}>
                       <Button variant="outline" className="w-full bg-mint border-mint text-text-dark hover:bg-mint/80" data-testid="mobile-button-organize">
                         Organize

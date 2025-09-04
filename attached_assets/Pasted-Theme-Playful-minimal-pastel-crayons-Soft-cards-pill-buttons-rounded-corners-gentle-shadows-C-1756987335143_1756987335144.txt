@@ -1,0 +1,313 @@
+Theme
+
+Playful minimal, pastel crayons. Soft cards, pill buttons, rounded corners, gentle shadows. Colors: sky blue, coral, yellow, mint on warm off-white. Friendly copy. Tiny doodle icons for accents.
+
+A) Publish Project page
+
+Goal: let anyone list a project publicly and say what help they need.
+
+Sections
+
+Project basics
+
+Title
+
+One-liner
+
+Cover image
+
+Tags and tech stack
+
+About the project
+
+Short description
+
+Full write-up in simple markdown
+
+Links: repo, live demo, slides
+
+Team
+
+Owner name and avatar
+
+Current team members with roles
+
+Help wanted
+
+Roles needed (checklist)
+
+Join policy: open join, request to join, invite only
+
+Simple task list preview with a few open tasks
+
+Contact
+
+Public email or contact form toggle
+
+Preview and submit
+
+Live card preview on the right
+
+Buttons: Save draft, Publish to gallery
+
+Confetti on publish in test mode
+
+States to show
+
+Empty form
+
+Draft saved
+
+Publish success
+
+B) Projects Gallery page
+
+Goal: let people browse, filter, and spot open projects fast.
+
+Header
+
+Title and short line about sharing and teaming up
+
+Toolbar
+
+Search bar
+
+Filters: tag, tech, looking for contributors, roles needed, event, time
+
+Sort: newest, popular
+
+Grid
+
+Project cards show:
+
+Cover image
+
+Title and one-liner
+
+Tags
+
+Owner avatar and team avatars
+
+Badges like Winner or Finalist if any
+
+“Open roles” chips if looking for help
+
+Buttons: View, Join, Contact
+
+States
+
+Loading skeletons
+
+No results friendly empty state
+
+Filter chips visible and easy to clear
+
+C) Project Detail page
+
+Goal: full project view with clear paths to join or contact.
+
+Hero
+
+Cover image
+
+Title and one-liner
+
+Tag chips
+
+Buttons: View repo, View demo, Share
+
+Team
+
+Owner card
+
+Team list with roles
+
+Open roles section with short lines on what is needed
+
+About
+
+Readme in clean blocks
+
+Links block
+
+Screenshots
+
+Simple swipe or scroll gallery
+
+Tasks
+
+Small list of 3-6 example tasks with status
+
+Button: Ask to work on this task
+
+Join and Contact
+
+Join button leads to a join request modal
+
+Contact button opens a contact drawer with a short message box
+
+Sidebar
+
+Event tag if it came from a hackathon
+
+Date
+
+Tech stack chips
+
+States
+
+Join request sent
+
+Message sent
+
+Not accepting contributors
+
+D) Join Request flow
+
+Goal: make it simple to ask to join.
+
+Join modal
+
+Short intro line
+
+Pick role you want to play
+
+Short pitch box
+
+Optional link to your past work
+
+Button: Send request
+
+Toast: Request sent in test mode
+
+Owner view in preview
+
+Request list with mini cards
+
+Buttons: Accept, Chat, Decline (UI only)
+
+E) Contact flow
+
+Goal: quick nudge to the owner.
+
+Contact drawer
+
+Subject presets: Question, Collab, Feedback
+
+Message box
+
+Optional contact info toggle
+
+Button: Send
+
+Toast: Message sent in test mode
+
+F) Manage Project page (owner preview)
+
+Goal: let owners update the project and handle people.
+
+Tabs
+
+Overview
+
+Publish status
+
+Quick numbers: views, requests, stars (mock)
+
+Quick actions: Edit details, Manage roles, Share project
+
+Details
+
+Edit basics, tags, links, cover
+
+Edit description and readme
+
+Save bar with status
+
+Team and roles
+
+Team list with roles
+
+Open roles list
+
+Add or close a role slot
+
+Requests
+
+Join requests queue with Accept or Decline
+
+Quick reply message
+
+Tasks
+
+Simple task list
+
+Add new task
+
+Mark task as Open, In progress, Done
+
+Visibility
+
+Join policy
+
+Contact method
+
+Feature on gallery toggle (mock)
+
+States
+
+Saved
+
+No requests yet
+
+All roles filled
+
+G) Project actions shown across pages
+
+Join button appears if project is open or request-based
+
+Contact button always available if owner enabled it
+
+Share button shows copy link toast
+
+Report link small and subtle in footer area (UI only for now)
+
+H) Copy and micro text
+
+Publish CTA: “Publish to gallery”
+
+Help wanted header: “We need help with”
+
+Join modal title: “Join the team”
+
+Contact header: “Send a quick note”
+
+Empty gallery: “No projects match your filters. Try clearing them.”
+
+Owner requests empty: “No requests yet. Share your project to find teammates.”
+
+I) Visual tone
+
+Warm off-white background
+
+Pastel cards with soft shadows
+
+Pill buttons in coral and mint
+
+Rounded corners everywhere
+
+Small crayon doodles near section titles
+
+Confetti on publish and accepted requests
+
+J) What to seed for a good demo
+
+24 projects total with mixed tags
+
+At least 8 projects marked “looking for contributors”
+
+Each of those has 2-3 open roles and 3 sample tasks
+
+A mix of solo and 3-person teams
+
+A few award badges like Winner, Finalist

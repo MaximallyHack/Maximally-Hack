@@ -8,7 +8,9 @@ import Footer from "@/components/layout/Footer";
 import Landing from "@/pages/Landing";
 import Explore from "@/pages/Explore";
 import EventDetail from "@/pages/EventDetail";
-import Projects from "@/pages/Projects";
+import ProjectsGallery from "@/pages/ProjectsGallery";
+import ProjectDetail from "@/pages/ProjectDetail";
+import PublishProject from "@/pages/PublishProject";
 import Judges from "@/pages/Judges";
 import Leaderboards from "@/pages/Leaderboards";
 import Sponsors from "@/pages/Sponsors";
@@ -35,8 +37,9 @@ function Router() {
         <Route path="/explore" component={Explore} />
         <Route path="/e/:slug" component={EventDetail} />
         <Route path="/e/:slug/submit" component={Submit} />
-        <Route path="/projects" component={Projects} />
-        <Route path="/projects/:id" component={Projects} />
+        <Route path="/projects" component={ProjectsGallery} />
+        <Route path="/projects/:id" component={ProjectDetail} />
+        <Route path="/publish" component={PublishProject} />
         <Route path="/upload" component={UploadProject} />
         <Route path="/profiles/:handle" component={Profile} />
         <Route path="/judges" component={Judges} />
