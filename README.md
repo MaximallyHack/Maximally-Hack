@@ -63,9 +63,10 @@ Maximally Hack features a friendly, approachable design with:
 - **Framer Motion** for smooth animations and micro-interactions
 - **Vite** for lightning-fast development and optimized production builds
 
-### Backend (Express Server)
+### Backend Architecture
 - **Express.js** with TypeScript for robust API endpoints
-- **JSON fixture data** for development and demo purposes
+- **Drizzle ORM** for type-safe database operations
+- **PostgreSQL** database with Neon/Supabase integration
 - **Session management** with secure authentication flows
 
 ### Development Tools
@@ -73,6 +74,13 @@ Maximally Hack features a friendly, approachable design with:
 - **Tailwind Merge** for dynamic class management
 - **React Hook Form** with validation for form handling
 - **Lucide React** for consistent iconography
+
+### Deployment & Infrastructure
+- **Replit** for integrated development and deployment
+- **Static Deployments** for cost-effective frontend hosting
+- **Environment Configuration** via Replit Secrets
+
+📋 **[Complete Tech Stack Documentation](TECH_STACK.md)** - Detailed breakdown of all technologies, libraries, and architectural decisions.
 
 ## 📁 Project Structure
 
