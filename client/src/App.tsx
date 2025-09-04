@@ -17,6 +17,9 @@ import Onboarding from "@/pages/auth/Onboarding";
 import OrganizerDashboard from "@/pages/organizer/OrganizerDashboard";
 import CreateEvent from "@/pages/organizer/CreateEvent";
 import JudgeDashboard from "@/pages/judge/JudgeDashboard";
+import JudgeRegister from "@/pages/judge/JudgeRegister";
+import UploadProject from "@/pages/UploadProject";
+import Help from "@/pages/Help";
 import Submit from "@/pages/Submit";
 import Profile from "@/pages/Profile";
 import NotFound from "@/pages/not-found";
@@ -32,11 +35,14 @@ function Router() {
         <Route path="/e/:slug/submit" component={Submit} />
         <Route path="/projects" component={Projects} />
         <Route path="/projects/:id" component={Projects} />
+        <Route path="/upload" component={UploadProject} />
         <Route path="/profiles/:handle" component={Profile} />
         <Route path="/judges" component={Judges} />
         <Route path="/judges/:id" component={Judges} />
+        <Route path="/judge-register" component={JudgeRegister} />
         <Route path="/leaders" component={Leaderboards} />
         <Route path="/sponsors" component={Sponsors} />
+        <Route path="/help" component={Help} />
         <Route path="/login" component={Login} />
         <Route path="/onboarding" component={Onboarding} />
         <Route path="/organizer" component={OrganizerDashboard} />

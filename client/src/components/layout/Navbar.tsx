@@ -9,11 +9,11 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
-    { href: "/", label: "Home", testId: "nav-home" },
     { href: "/explore", label: "Explore", testId: "nav-explore" },
     { href: "/projects", label: "Projects", testId: "nav-projects" },
     { href: "/judges", label: "Judges", testId: "nav-judges" },
-    { href: "/leaders", label: "Leaderboards", testId: "nav-leaders" },
+    { href: "/leaders", label: "Leaders", testId: "nav-leaders" },
+    { href: "/sponsors", label: "Sponsors", testId: "nav-sponsors" },
   ];
 
   const isActive = (href: string) => {
@@ -23,19 +23,25 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-cream/95 backdrop-blur-sm border-b border-soft-gray">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2 hover-scale" data-testid="logo-link">
+    <>
+      {/* Test Mode Badge */}
+      <div className="bg-mint text-text-dark text-center py-1 px-4 text-sm font-medium">
+        🧪 Test Mode - All data is simulated for preview
+      </div>
+      
+      <nav className="sticky top-0 z-50 bg-cream/95 backdrop-blur-sm border-b border-soft-gray">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            {/* Logo */}
+            <Link href="/" className="flex items-center space-x-2 hover-scale" data-testid="logo-link">
             <div className="w-8 h-8 bg-coral rounded-full flex items-center justify-center">
               <Rocket className="w-4 h-4 text-white" />
             </div>
             <span className="font-heading font-bold text-xl text-text-dark">Maximally Hack</span>
-          </Link>
+            </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex space-x-6">
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex space-x-6">
             {navItems.map((item) => (
               <Link key={item.href} href={item.href} data-testid={item.testId}>
                 <span className={`transition-colors hover:text-coral ${
@@ -45,25 +51,24 @@ export default function Navbar() {
                 </span>
               </Link>
             ))}
-          </div>
+            </div>
 
-          {/* Desktop Actions */}
-          <div className="hidden md:flex items-center space-x-4">
+            {/* Desktop Actions */}
+            <div className="hidden md:flex items-center space-x-4">
+            <Link href="/organizer">
+              <Button variant="outline" className="bg-mint border-mint text-text-dark hover:bg-mint/80" data-testid="button-organize">
+                Organize
+              </Button>
+            </Link>
             <Link href="/login">
-              <Button variant="outline" className="bg-mint border-mint text-text-dark hover:bg-mint/80" data-testid="button-login">
+              <Button className="bg-coral hover:bg-coral/80 text-white" data-testid="button-login">
                 Login
               </Button>
             </Link>
-            <Link href="/organizer/events/new">
-              <Button className="bg-coral hover:bg-coral/80 text-white" data-testid="button-create-event">
-                <Plus className="w-4 h-4 mr-2" />
-                Create Event
-              </Button>
-            </Link>
-          </div>
+            </div>
 
-          {/* Mobile Menu */}
-          <div className="md:hidden">
+            {/* Mobile Menu */}
+            <div className="md:hidden">
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" data-testid="button-mobile-menu">
@@ -87,24 +92,24 @@ export default function Navbar() {
                     </Link>
                   ))}
                   <div className="pt-4 border-t border-soft-gray space-y-3">
-                    <Link href="/login" onClick={() => setIsOpen(false)}>
-                      <Button variant="outline" className="w-full bg-mint border-mint text-text-dark hover:bg-mint/80" data-testid="mobile-button-login">
-                        Login
+                    <Link href="/organizer" onClick={() => setIsOpen(false)}>
+                      <Button variant="outline" className="w-full bg-mint border-mint text-text-dark hover:bg-mint/80" data-testid="mobile-button-organize">
+                        Organize
                       </Button>
                     </Link>
-                    <Link href="/organizer/events/new" onClick={() => setIsOpen(false)}>
-                      <Button className="w-full bg-coral hover:bg-coral/80 text-white" data-testid="mobile-button-create-event">
-                        <Plus className="w-4 h-4 mr-2" />
-                        Create Event
+                    <Link href="/login" onClick={() => setIsOpen(false)}>
+                      <Button className="w-full bg-coral hover:bg-coral/80 text-white" data-testid="mobile-button-login">
+                        Login
                       </Button>
                     </Link>
                   </div>
                 </div>
               </SheetContent>
             </Sheet>
+            </div>
           </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+    </>
   );
 }
