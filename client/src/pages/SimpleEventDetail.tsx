@@ -18,7 +18,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default function SimpleEventDetail() {
   const { slug } = useParams();
   const [activeTab, setActiveTab] = useState("overview");
-  const [viewMode, setViewMode] = useState<'simple' | 'detailed'>('simple');
   const { toast } = useToast();
   const { trigger: triggerConfetti, Confetti } = useConfetti();
 
@@ -110,15 +109,7 @@ export default function SimpleEventDetail() {
               <h1 className="text-3xl font-medium text-gray-900 mb-3">{event.title}</h1>
               <p className="text-gray-600 text-lg">{event.description}</p>
             </div>
-            <div className="flex items-center gap-3">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setViewMode(viewMode === 'simple' ? 'detailed' : 'simple')}
-              >
-                <Settings className="w-4 h-4 mr-2" />
-                {viewMode === 'simple' ? 'Detailed' : 'Simple'}
-              </Button>
+            <div>
               <Button onClick={handleRegister} className="bg-gray-900 hover:bg-gray-800">
                 Register Now
               </Button>
@@ -182,6 +173,8 @@ export default function SimpleEventDetail() {
             <TabsTrigger value="rules" className="rounded-md">Rules</TabsTrigger>
             <TabsTrigger value="teams" className="rounded-md">Teams</TabsTrigger>
             <TabsTrigger value="submissions" className="rounded-md">Submissions</TabsTrigger>
+            <TabsTrigger value="timeline" className="rounded-md">Timeline</TabsTrigger>
+            <TabsTrigger value="resources" className="rounded-md">Resources</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-8">
@@ -190,7 +183,7 @@ export default function SimpleEventDetail() {
               <p className="text-gray-600 leading-relaxed mb-6">{event.longDescription}</p>
               
               {event.tracks && event.tracks.length > 0 && (
-                <div>
+                <div className="mb-8">
                   <h3 className="text-lg font-medium text-gray-900 mb-3">Tracks</h3>
                   <div className="flex flex-wrap gap-2">
                     {event.tracks.map(track => (
@@ -203,23 +196,83 @@ export default function SimpleEventDetail() {
               )}
             </div>
 
-            {viewMode === 'detailed' && event.timeline && (
-              <div>
-                <h2 className="text-xl font-medium text-gray-900 mb-4">Timeline</h2>
-                <div className="space-y-4">
-                  {event.timeline.map((item, index) => (
-                    <div key={index} className="flex gap-4 p-4 bg-gray-50 rounded-lg">
-                      <div className="text-sm font-medium text-gray-900 min-w-0 flex-1">
-                        {item.title}
-                      </div>
-                      <div className="text-sm text-gray-500 whitespace-nowrap">
-                        {item.time}
-                      </div>
+            {/* Links and Social Media */}
+            <div>
+              <h2 className="text-xl font-medium text-gray-900 mb-4">Links & Social</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {event.links && (
+                  <div>
+                    <h3 className="text-sm font-medium text-gray-700 mb-3">Official Links</h3>
+                    <div className="space-y-2">
+                      {event.links.website && (
+                        <a 
+                          href={event.links.website} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                          Official Website
+                        </a>
+                      )}
+                      {event.links.registration && (
+                        <a 
+                          href={event.links.registration} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                          Registration
+                        </a>
+                      )}
+                      {event.links.devpost && (
+                        <a 
+                          href={event.links.devpost} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                          Devpost
+                        </a>
+                      )}
+                      {event.links.discord && (
+                        <a 
+                          href={event.links.discord} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                          Discord
+                        </a>
+                      )}
                     </div>
-                  ))}
-                </div>
+                  </div>
+                )}
+                
+                {event.socials && (
+                  <div>
+                    <h3 className="text-sm font-medium text-gray-700 mb-3">Social Media</h3>
+                    <div className="space-y-2">
+                      {Object.entries(event.socials).map(([platform, url]) => (
+                        <a 
+                          key={platform}
+                          href={url as string} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 transition-colors capitalize"
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                          {platform}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
-            )}
+            </div>
           </TabsContent>
 
           <TabsContent value="prizes" className="space-y-6">
@@ -337,6 +390,99 @@ export default function SimpleEventDetail() {
                 <Button variant="outline">Submit first project</Button>
               </div>
             )}
+          </TabsContent>
+
+          {/* Timeline Tab */}
+          <TabsContent value="timeline" className="space-y-6">
+            <h2 className="text-xl font-medium text-gray-900">Timeline</h2>
+            {event.timeline && event.timeline.length > 0 ? (
+              <div className="space-y-4">
+                {event.timeline.map((item, index) => (
+                  <div key={index} className="flex gap-4 p-4 bg-gray-50 rounded-lg">
+                    <div className="text-sm font-medium text-gray-900 min-w-0 flex-1">
+                      {item.title}
+                    </div>
+                    <div className="text-sm text-gray-500 whitespace-nowrap">
+                      {item.time}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <p className="text-gray-600">Timeline coming soon</p>
+              </div>
+            )}
+          </TabsContent>
+
+          {/* Resources Tab */}
+          <TabsContent value="resources" className="space-y-6">
+            <h2 className="text-xl font-medium text-gray-900">Resources</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Getting Started</h3>
+                <div className="space-y-3">
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <h4 className="font-medium text-gray-900 mb-2">Hackathon Guide</h4>
+                    <p className="text-sm text-gray-600">Everything you need to know to participate</p>
+                  </div>
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <h4 className="font-medium text-gray-900 mb-2">Submission Guidelines</h4>
+                    <p className="text-sm text-gray-600">How to submit your project properly</p>
+                  </div>
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <h4 className="font-medium text-gray-900 mb-2">Judging Criteria</h4>
+                    <p className="text-sm text-gray-600">What judges will be looking for</p>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Development Tools</h3>
+                <div className="space-y-3">
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <h4 className="font-medium text-gray-900 mb-2">API Access</h4>
+                    <p className="text-sm text-gray-600">Free APIs and services for participants</p>
+                  </div>
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <h4 className="font-medium text-gray-900 mb-2">Design Assets</h4>
+                    <p className="text-sm text-gray-600">Logos, colors, and brand guidelines</p>
+                  </div>
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <h4 className="font-medium text-gray-900 mb-2">Code Templates</h4>
+                    <p className="text-sm text-gray-600">Starter projects and boilerplates</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Contact & Support */}
+            <div>
+              <h3 className="text-lg font-medium text-gray-900 mb-4">Need Help?</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="p-4 bg-blue-50 rounded-lg text-center">
+                  <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <span className="text-white text-sm">💬</span>
+                  </div>
+                  <h4 className="font-medium text-gray-900 mb-2">Join Discord</h4>
+                  <p className="text-sm text-gray-600">Get help from mentors and peers</p>
+                </div>
+                <div className="p-4 bg-green-50 rounded-lg text-center">
+                  <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <span className="text-white text-sm">📧</span>
+                  </div>
+                  <h4 className="font-medium text-gray-900 mb-2">Email Support</h4>
+                  <p className="text-sm text-gray-600">Direct help from organizers</p>
+                </div>
+                <div className="p-4 bg-purple-50 rounded-lg text-center">
+                  <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <span className="text-white text-sm">📚</span>
+                  </div>
+                  <h4 className="font-medium text-gray-900 mb-2">Documentation</h4>
+                  <p className="text-sm text-gray-600">Detailed guides and tutorials</p>
+                </div>
+              </div>
+            </div>
           </TabsContent>
         </Tabs>
       </div>
