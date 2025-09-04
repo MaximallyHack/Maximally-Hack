@@ -54,7 +54,7 @@ const defaultSubmissionData: SubmissionData = {
   videoUrl: '',
   track: '',
   tags: [],
-  teamId: ''
+  teamId: 'solo'
 };
 
 const commonTags = [
@@ -408,7 +408,7 @@ export default function Submit() {
                         <SelectValue placeholder="Select your team (optional for solo)" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">Solo Submission</SelectItem>
+                        <SelectItem value="solo">Solo Submission</SelectItem>
                         {teams?.map(team => (
                           <SelectItem key={team.id} value={team.id}>{team.name}</SelectItem>
                         ))}

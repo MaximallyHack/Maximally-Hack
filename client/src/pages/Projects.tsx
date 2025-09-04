@@ -17,7 +17,7 @@ import type { Submission } from "@/lib/api";
 export default function Projects() {
   const { id } = useParams();
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedTech, setSelectedTech] = useState<string>("");
+  const [selectedTech, setSelectedTech] = useState<string>("all");
   const [sortBy, setSortBy] = useState("score");
   const [selectedProject, setSelectedProject] = useState<Submission | null>(null);
 
@@ -36,7 +36,7 @@ export default function Projects() {
       }
       
       // Filter by tech stack
-      if (selectedTech) {
+      if (selectedTech && selectedTech !== "all") {
         projects = projects.filter(p => p.techStack.includes(selectedTech));
       }
       
@@ -224,7 +224,7 @@ export default function Projects() {
                 <SelectValue placeholder="Tech Stack" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Technologies</SelectItem>
+                <SelectItem value="all">All Technologies</SelectItem>
                 {allTechStack.map(tech => (
                   <SelectItem key={tech} value={tech}>{tech}</SelectItem>
                 ))}

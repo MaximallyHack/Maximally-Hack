@@ -1,0 +1,271 @@
+Here’s a clean copy-paste prompt for your code assistant. It adds a frontend-only Judge Hub and Public Projects, keeps everything mock-data, applies the playful pastel theme, and renames the app to Maximally Hack.
+
+---
+
+**PROMPT TO CODE ASSISTANT**
+
+You are updating a frontend-only Next.js + Tailwind project. No backend. Use mock JSON fixtures and tiny fake API helpers with setTimeout. Keep everything responsive and accessible.
+
+Goal:
+
+1. Add a Judge Hub where anyone can register as a judge and get a public judge profile page.
+2. Add a Public Projects gallery where anyone can browse and open a project detail page, and a simple upload UI that only writes to local state.
+3. Rename the product from Hackspace to Maximally Hack in all places.
+4. Keep the playful minimal + pastel crayon theme.
+
+Stack assumptions:
+
+* Next.js App Router with TypeScript and Tailwind
+* Existing pages for events exist
+* We will add only frontend files, fixtures, and routes
+
+Theme tokens:
+
+* Colors: bg `#FFFDF7`, text `#2D2D2D`, textMuted `#6C6C6C`, sky `#A3D5FF`, coral `#FF8C8C`, yellow `#FFE680`, mint `#A8E6CF`, surface `#F5F5F7`, success `#7FD77F`, error `#FF6F6F`
+* Radius: cards 16px, buttons pill
+* Shadow: `0 8px 24px rgba(0,0,0,0.06)`
+* Fonts: headings Fredoka or Baloo 2, body Inter or Nunito
+* Motion: 180ms ease, hover scale 1.03
+* Confetti on submit success is fine as a mock
+
+Global rename:
+
+* Replace all visible text and metadata from “Hackspace” to “Maximally Hack” including title, favicon alt text, readme badge, navbar brand.
+
+File structure to add or update:
+
+```
+app/
+  judges/page.tsx
+  judges/[id]/page.tsx
+  judge-register/page.tsx
+  projects/page.tsx
+  projects/[id]/page.tsx
+  upload/page.tsx
+  api-mock/route-handlers.ts      // client helpers that simulate fetch
+components/
+  ui/*                             // Button, Input, Textarea, Select, Tag, Tabs, Modal, Drawer, Toast, Skeleton
+  cards/JudgeCard.tsx
+  cards/ProjectCard.tsx
+  judge/RubricPills.tsx            // UI only, for judge profile badges
+  project/Screenshots.tsx          // carousel mock
+  project/TagList.tsx
+lib/
+  fixtures/judges.json
+  fixtures/projects.json
+  fixtures/users.json
+  fixtures/tags.json
+  api.ts                           // fake fetchers using fixtures + setTimeout
+  theme.ts                         // tokens above
+```
+
+Navigation updates:
+
+* Navbar: add links Judges, Projects, Upload
+* Footer: update brand to Maximally Hack
+
+Mock API helper examples (client side only):
+
+```ts
+// lib/api.ts
+import judges from './fixtures/judges.json';
+import projects from './fixtures/projects.json';
+
+const wait = (ms:number)=>new Promise(r=>setTimeout(r, ms));
+
+export async function getJudges() {
+  await wait(400);
+  return judges;
+}
+export async function getJudgeById(id:string) {
+  await wait(300);
+  return judges.find(j=>j.id===id) || null;
+}
+export async function getProjects(params?:{tag?:string; q?:string; sort?:string}) {
+  await wait(500);
+  // naive filter on fixtures for demo
+  return projects;
+}
+export async function getProjectById(id:string) {
+  await wait(300);
+  return projects.find(p=>p.id===id) || null;
+}
+export async function createJudgeDraft(payload:any){
+  await wait(600);
+  return { ok:true, id: crypto.randomUUID(), ...payload };
+}
+export async function createProjectDraft(payload:any){
+  await wait(600);
+  return { ok:true, id: crypto.randomUUID(), ...payload };
+}
+```
+
+Fixtures, create these with at least 12 judges and 24 projects:
+
+`lib/fixtures/judges.json` item shape:
+
+```json
+{
+  "id": "j_alexa",
+  "name": "Alexa Mehta",
+  "avatar": "/avatars/a1.png",
+  "headline": "Product at Replit, ex Google",
+  "bio": "Judged 15 hackathons. Loves beginner friendly AI projects.",
+  "expertise": ["AI", "Product", "No-code"],
+  "region": "US",
+  "links": { "linkedin": "https://...", "twitter": "https://..." },
+  "eventsJudged": 15,
+  "badges": ["Top Judge", "Mentor Fav", "Community Pick"],
+  "availability": "Open to invites"
+}
+```
+
+`lib/fixtures/projects.json` item shape:
+
+```json
+{
+  "id": "p_001",
+  "title": "Local LLM Notes",
+  "oneLiner": "Privacy first notes with RAG and offline LLM.",
+  "cover": "/covers/p1.png",
+  "tags": ["AI", "Productivity", "RAG"],
+  "tech": ["Next.js", "Supabase", "LLM"],
+  "team": [{ "name": "Kian", "avatar": "/avatars/u1.png" }, { "name": "Anya", "avatar": "/avatars/u2.png" }],
+  "repo": "https://github.com/...",
+  "demo": "https://demo.site/...",
+  "slides": "https://slides.com/...",
+  "images": ["/shots/p1-1.png","/shots/p1-2.png"],
+  "readme": "## Why\nWe built this to explore...\n\n## How\nNext.js + Supabase...\n",
+  "awards": ["Winner", "Best AI"],
+  "event": { "id": "ev_code_hypothesis", "title": "Code Hypothesis" },
+  "date": "2025-08-28"
+}
+```
+
+Pages to implement with exact behaviors and UI:
+
+1. Judges directory `app/judges/page.tsx`
+
+* Header: title “Judge Hub”, subtitle “Browse judges and invite them to your event.”
+* Toolbar: search input, filters for Expertise, Region, Availability, Sort by Popular
+* Grid of JudgeCard
+* Empty state and skeletons
+* JudgeCard shows avatar, name, headline, expertise tags, events judged, View Profile button
+* Optional Invite button calls a modal that just shows a success toast (mock)
+
+2. Judge profile `app/judges/[id]/page.tsx`
+
+* Hero: avatar large, name, headline, badges as pastel pills
+* About section with bio and links
+* Expertise tags list, region chip
+* Stats strip: Events judged, Endorsements mock, Avg response mock
+* Gallery: certificate previews mock as small cards
+* CTA bar: Invite to judge (opens modal, mock)
+* Accessibility: alt text on avatar, headings are semantic
+
+3. Judge registration `app/judge-register/page.tsx`
+
+* Form sections: Basic info, Links, Expertise tags (multi select), Region, Short bio
+* Live preview panel on the right that updates as you type
+* Submit button calls createJudgeDraft then shows success toast and a link to the new profile route with the generated id
+* All data only in local state, no real persistence
+
+4. Projects gallery `app/projects/page.tsx`
+
+* Header: “Projects”
+* Toolbar: search, tag chips from `fixtures/tags.json`, tech dropdown, sort by New, Popular
+* Grid of ProjectCard
+* ProjectCard: cover image, title, one liner, tags, small avatar group, quick links icons for repo and demo
+* Skeletons while loading
+
+5. Project detail `app/projects/[id]/page.tsx`
+
+* Hero: cover image, title, one liner, tags, action buttons for Repo and Demo
+* Team section with avatars and names
+* Awards badges row if present
+* Screenshots carousel mock (use simple horizontal scroll)
+* Readme section rendered as Markdown
+* Sidebar: event link chip, date, tech stack chips
+* Share bar mock with Copy Link toast
+
+6. Project upload `app/upload/page.tsx`
+
+* Form sections: Title, One liner, Tags multi select, Tech multi select, Links for Repo, Demo, Slides, Cover upload mock, Screenshots upload mock, Readme Markdown editor
+* Right side live preview
+* Save Draft triggers createProjectDraft and shows success toast
+* Submit Final shows confetti and a “View in gallery” button that routes to the new project id
+* Everything local only
+
+7. Small additions to existing event pages
+
+* On Submissions tab: add “Open in Projects” buttons on cards that route to the project detail route
+* On Results tab: winners and finalists cards link to project detail
+
+Components to create:
+
+* `components/cards/JudgeCard.tsx`
+
+  * Props to render fields above, onClick routes to profile
+* `components/cards/ProjectCard.tsx`
+
+  * Image, title, one liner, tags, avatars, repo/demo icons
+* `components/project/Screenshots.tsx`
+
+  * Simple horizontal scroll list with arrows
+* `components/project/TagList.tsx`
+* `components/judge/RubricPills.tsx`
+
+  * Simple pill badges like “AI”, “Product”, “No-code”
+
+UI polish rules:
+
+* Use the theme tokens for all colors
+* Buttons are pill and use coral for primary, mint outline for secondary
+* Cards radius 16, subtle shadow
+* Add Skeleton components for grid loads
+* Add EmptyState components with playful doodles
+* Ensure focus rings are visible and labels are present for inputs
+* No real uploads. Use file pickers that only preview images in memory
+
+State and fixtures:
+
+* Add at least 12 judges spanning AI, Web, Product, Design, Hardware, with different regions
+* Add at least 24 projects with mixed tags and tech
+* Add `fixtures/tags.json` like:
+
+```json
+["AI","Web","Mobile","Design","Health","Fintech","Education","Open Source","Gaming"]
+```
+
+Search and filter behavior:
+
+* Filters and search operate on the loaded arrays in memory
+* Include a Reset Filters button
+* Show the active filters as chips above the grid
+
+Responsive:
+
+* Cards go 3 columns desktop, 2 tablet, 1 mobile
+* Sticky action bar on mobile for submit pages
+* Tabs collapse to segmented control on small screens
+
+Accessibility:
+
+* Alt text on images
+* aria-labels on icon buttons
+* Keyboard focus styles
+* Sufficient contrast for text on pastel chips
+
+Deliverables:
+
+* All pages build and run with mock data
+* Navbar includes Judges, Projects, Upload
+* All visible branding reads “Maximally Hack”
+* No backend calls
+* Light and quick
+
+Please implement exactly as specified. End of prompt.
+
+---
+
+Want starter JSON for judges and projects too? I can dump a ready seed if you want.

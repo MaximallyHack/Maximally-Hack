@@ -17,8 +17,8 @@ import type { Judge } from "@/lib/api";
 export default function Judges() {
   const { id } = useParams();
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedExpertise, setSelectedExpertise] = useState<string>("");
-  const [selectedAvailability, setSelectedAvailability] = useState<string>("");
+  const [selectedExpertise, setSelectedExpertise] = useState<string>("all");
+  const [selectedAvailability, setSelectedAvailability] = useState<string>("all");
   const [selectedJudge, setSelectedJudge] = useState<Judge | null>(null);
 
   const { data: judges, isLoading } = useQuery({
@@ -36,12 +36,12 @@ export default function Judges() {
       }
       
       // Filter by expertise
-      if (selectedExpertise) {
+      if (selectedExpertise && selectedExpertise !== "all") {
         judges = judges.filter(j => j.expertise.includes(selectedExpertise));
       }
       
       // Filter by availability
-      if (selectedAvailability) {
+      if (selectedAvailability && selectedAvailability !== "all") {
         judges = judges.filter(j => j.availability === selectedAvailability);
       }
       
@@ -211,7 +211,7 @@ export default function Judges() {
                 <SelectValue placeholder="Expertise" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Expertise</SelectItem>
+                <SelectItem value="all">All Expertise</SelectItem>
                 {allExpertise.map(exp => (
                   <SelectItem key={exp} value={exp}>{exp}</SelectItem>
                 ))}
@@ -223,7 +223,7 @@ export default function Judges() {
                 <SelectValue placeholder="Availability" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Availability</SelectItem>
+                <SelectItem value="all">All Availability</SelectItem>
                 <SelectItem value="Available">Available</SelectItem>
                 <SelectItem value="Limited">Limited</SelectItem>
                 <SelectItem value="Unavailable">Unavailable</SelectItem>
