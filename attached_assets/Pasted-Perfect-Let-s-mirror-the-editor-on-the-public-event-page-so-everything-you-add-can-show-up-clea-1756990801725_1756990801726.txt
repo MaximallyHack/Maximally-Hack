@@ -1,0 +1,240 @@
+Perfect. Let’s mirror the editor on the **public event page** so everything you add can show up cleanly. No backend talk — just front-end layout, components, and states.
+
+# Event Page layout
+
+## 1) Header strip
+
+* Logo, event name, tagline
+* Date range, timezone
+* Primary CTAs: Register, Join Discord
+* Secondary CTAs: Info deck, FAQ
+* Social icons row (only show ones filled)
+
+**Mobile:** stack title, date, CTAs. Sticky bottom bar with Register + Discord.
+
+## 2) Hero block
+
+* Cover image or video
+* Countdown timer to start or deadline
+* Quick facts row: Mode, Team size, Prize pool, Location
+* Share buttons
+
+**Empty states:** hide countdown if past end time. Hide facts not provided.
+
+## 3) Tabs
+
+Tabs across the top that jump to sections:
+
+* Overview
+* Schedule
+* Prizes
+* Judges
+* Rules
+* Community
+* Gallery
+* Contact
+
+On mobile, convert to a horizontal scroll pill bar.
+
+## 4) Overview
+
+* Short description
+* Full description (markdown)
+* “Why join” bullets
+* Quick links grid as chips:
+
+  * Website, Registration, Devpost, Info deck, FAQ, Rules PDF, Sponsor deck, Volunteer form, Mentor form, Press kit
+* Tracks or themes (if added)
+* Location map embed if offline
+
+**Empty states:** hide a chip if link is missing.
+
+## 5) Schedule
+
+* Vertical timeline with milestones: title, date/time, optional blurb
+* “Add to calendar” buttons for key milestones
+
+**Mobile:** collapsible accordions per milestone.
+
+## 6) Prizes
+
+* Prize cards: title, amount, what’s included
+* Total prize pool badge
+
+**Empty states:** if no amounts, show “non-cash awards” label.
+
+## 7) Judges
+
+* Grid cards: avatar, name, title, org, link button
+* Optional toggle copy: “Full panel coming soon”
+
+If you rename judges later, the section title can swap to your chosen name without changing the layout.
+
+## 8) Judging criteria
+
+* Weighted list with progress bars
+* Short explanation per criterion
+
+## 9) Rules & eligibility
+
+* Age limit, team size, IP policy, code of conduct link
+* Simple callout box for key rules
+
+## 10) Community
+
+* Big buttons: Discord, WhatsApp, Telegram, Forum
+* “Community page” link
+* Mini note on response time if you added an SLA
+
+## 11) Media
+
+* Banner image
+* Gallery grid (lightbox)
+* Promo video embed
+
+## 12) Socials strip
+
+Row of icons with tooltips. Hide empties.
+
+## 13) Contact
+
+* Name, emails, phone
+* Simple contact card
+
+## 14) SEO/share preview (front-end effect)
+
+* Proper meta preview shown in a share modal so organizers see how it looks
+
+---
+
+# Component details
+
+* **Link chips grid:** small rounded chips with icon + label. Click opens in new tab. Auto-wrap to next line.
+* **Sticky CTA:** on desktop a right sidebar with Register, Join Discord, Devpost. On mobile a sticky bottom bar.
+* **Empty state rules:** any missing field simply hides the sub-component. No blank boxes.
+* **Theming:** use your glassy/translucent cards, soft blur, high contrast text, Maximally red and yellow accents.
+* **Accessibility:** clear labels, big tap targets, readable contrast.
+* **Performance:** lazy load gallery and judge avatars.
+
+---
+
+# Fill with 2 sample events
+
+## A) Maximally AI Shipathon
+
+**Header:**
+
+* Title: Maximally AI Shipathon
+* Tagline: Build fast, ship smarter
+* Dates: Aug 30–Sept 1, 2025, IST
+* CTAs: Register, Join Discord, Info deck, FAQ
+* Socials: Instagram, LinkedIn, YouTube
+
+**Hero:**
+
+* Cover: your red-yellow pixel poster or recap reel
+* Countdown: show “Submissions close in…” when live
+* Facts: Online, Team 1–4, Prize pool ₹10,000+, Location: Global
+
+**Overview:**
+
+* Short and full description blocks
+* Link chips: Registration, Devpost, Info deck, FAQ, Rules, Mentor sign-up, Press kit
+
+**Schedule:**
+
+* Reg opens, Team formation, Submissions due, Judges review, Winners
+
+**Prizes:**
+
+* Grand prize, 2 runner-ups, Special awards
+
+**Judges:**
+
+* Grid with avatars and links
+
+**Criteria:**
+
+* Originality 30, Impact 30, Technical 40
+
+**Rules & eligibility:**
+
+* Team size, age open, IP remains with teams, CoC link
+
+**Community:**
+
+* Discord big button, WhatsApp optional
+
+**Media:**
+
+* Gallery from event, YouTube recap
+
+**Contact:**
+
+* Maximally support email
+
+---
+
+## B) AI for Good Hackathon
+
+**Header:**
+
+* Title: AI for Good Hackathon
+* Tagline: Build for health, climate, and education
+* Dates: Oct 12–13, 2025, IST
+* CTAs: Register, Join Discord, Sponsor deck
+* Socials: Twitter, LinkedIn
+
+**Hero:**
+
+* Cover: calm banner with category icons
+* Facts: Hybrid, Team 2–5, Prize pool ₹50,000, Location: Chandigarh + Online
+
+**Overview:**
+
+* Problem tracks: Health access, Climate data, Learning tools
+* Link chips: Website, Registration, Devpost, Info deck, FAQ, Rules PDF, Volunteer form, Mentor form, Sponsor deck
+
+**Schedule:**
+
+* Kickoff, Workshops, Submission, Demos, Results
+
+**Prizes:**
+
+* Grand, Track winners, Impact award
+
+**Judges:**
+
+* Grid with civic tech leaders
+
+**Criteria:**
+
+* Impact 40, Feasibility 30, Tech 30
+
+**Rules & eligibility:**
+
+* Age 15+, team size 2–5, open source encouraged
+
+**Community:**
+
+* Discord, Telegram, Community page
+
+**Media:**
+
+* Gallery placeholders
+
+**Contact:**
+
+* Organizer name, email
+
+---
+
+# Implementation quick map
+
+* Single page with tabs that anchor-scroll
+* Right sidebar sticky CTA on desktop, sticky bottom bar on mobile
+* Each section a card with glass effect
+* Show-if-present logic for every optional field
+* Reusable components: LinkChip, FactBadge, TimelineItem, PrizeCard, JudgeCard, CriteriaBar, SocialIcon, GalleryGrid
+
+If you want, I can draft the React component tree for this exact page next, no backend, just props and placeholders.
