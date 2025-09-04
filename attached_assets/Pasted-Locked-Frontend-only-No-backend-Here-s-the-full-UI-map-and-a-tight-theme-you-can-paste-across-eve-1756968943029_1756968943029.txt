@@ -1,0 +1,520 @@
+Locked. Frontend-only. No backend. Here’s the full UI map and a tight theme you can paste across every screen. Think of this as your storyboard for a complete Devpost-style platform, just prettier and friendlier.
+
+# Goal
+
+A clickable, frontend-only preview of every flow: public browse, event pages, registration, teams, submissions, judging, results, profiles, org tools, plus extras like leaderboards and certificates. All data is mock JSON. Buttons act, but only update local state.
+
+---
+
+# Theme — playful minimal, pastel crayon
+
+**Palette**
+
+* Base bg: `#FFFDF7`
+* Text: `#2D2D2D`, muted `#6C6C6C`
+* Pastels: sky `#A3D5FF`, coral `#FF8C8C`, yellow `#FFE680`, mint `#A8E6CF`
+* Surfaces: `#F5F5F7`
+* States: success `#7FD77F`, error `#FF6F6F`, info `#A3D5FF`
+
+**Type**
+
+* Headings: Fredoka or Baloo 2, bold
+* Body: Inter or Nunito
+
+**Shape & motion**
+
+* Radius: 16 px cards, pill buttons
+* Shadow: `0 8px 24px rgba(0,0,0,0.06)`
+* Hover: scale 1.03, 180 ms ease
+* Doodles: subtle crayon stars, squiggles as dividers and section accents
+* Confetti on key actions: final submit, publish results
+
+**Icon vibe**
+
+* Thin outline set, plus a few hand-drawn stickers for fun labels
+
+---
+
+# IA — pages and routes (frontend only)
+
+## Public
+
+* `/` Landing
+* `/explore` Event directory with filters
+* `/e/[slug]` Event page with tabs:
+
+  * About, Prizes, Rules, Timeline, Judges, FAQs, Updates
+  * Teams, Submissions, Results
+* `/e/[slug]/submit` Submission form + live preview
+* `/projects` Global gallery
+* `/projects/[id]` Project detail
+* `/profiles/[handle]` User profile
+* `/judges` Judge hub list
+* `/judges/[id]` Judge profile
+* `/leaders` Leaderboards
+* `/sponsors` Sponsor info
+* `/login` Magic link screen (fake)
+* `/onboarding` Pick role, set basics
+* `/legal/terms`, `/legal/privacy`
+* `/help` FAQ index
+* `/404` Friendly empty state
+
+## Organizer
+
+* `/organizer` Home
+* `/organizer/events/new` Create wizard
+* `/organizer/events/[id]/edit` Editor with live preview
+* `/organizer/events/[id]/registrations`
+* `/organizer/events/[id]/teams`
+* `/organizer/events/[id]/submissions`
+* `/organizer/events/[id]/judges`
+* `/organizer/events/[id]/settings`
+* `/organizer/results/[id]` Podium composer
+* `/organizer/certificates` Certificate preview
+* `/organizer/exports` CSV preview panels
+
+## Judge
+
+* `/judge` My events
+* `/judge/[eventId]` Assigned list
+* `/judge/[eventId]/[submissionId]` Score UI
+
+---
+
+# Screen specs — blocks, widgets, states
+
+## `/` Landing
+
+* Hero block: bold line, 2 CTAs
+
+  * Create hackathon \[primary coral], Explore events \[mint outline]
+* Featured events: 6 EventCards with dates, tags, mini countdown
+* Categories chips row: AI, student, beginner, weekend, prize 10k+
+* How it works: 3 fun steps with doodle icons
+* Social proof: judge avatar strip + tiny quotes
+* Footer: links, light crayon border
+
+**States**: loading skeleton grid, empty, error banner
+
+---
+
+## `/explore` Directory
+
+* Top bar: search input, sort select \[Date, Popular, Prize], chip filters summary
+* Left panel filters:
+
+  * Time: Upcoming, Ongoing, Past
+  * Format: online, in-person, hybrid
+  * Duration: 24h, 48h, week
+  * Fee: free, paid
+  * Theme tags: AI, web, mobile, design
+  * Team size: solo, 2-4, 5+
+  * Prize range slider
+* Grid: EventCard
+
+  * Card: title, dates, chips, prize, quick actions \[Save, Share]
+* Pager
+
+**States**: no results empty card with “reset filters”, skeletons
+
+---
+
+## `/e/[slug]` Event page
+
+**Header band**
+
+* Title, short summary
+* Pills: dates, online or city, prize pool
+* CTA: Register or Manage event
+* Countdown component
+
+**Info strip**
+
+* Timeline chips, participant count mock, tracks list
+
+**Tabs**
+
+* About: markdown sections with doodle underlines
+* Prizes: podium list, sponsor logos
+* Rules: checklist groups
+* Timeline: vertical steps with times
+* Judges: JudgeCards, badges, links
+* FAQs: accordions
+* Updates: organizer posts feed with labels
+
+**Teams tab**
+
+* LFG board: TeamCard grid
+
+  * each has title, needs \[chips], quick “request to join” modal
+* Create team button for registered users
+
+**Submissions tab**
+
+* Filters: tags, tech, team size, sort by score or time
+* ProjectCard grid: title, one-liner, links, tags, score preview, badge if finalist
+
+**Results tab**
+
+* Podium: 1-2-3 cards, finalists list, share buttons, confetti
+
+**States**: pre-reg window, submit window open, submit closed, judging, results published
+
+---
+
+## `/e/[slug]/submit` Submission
+
+* Left panel form
+
+  * Title, one-liner, description markdown
+  * Repo, demo, slides URL fields with inline checks
+  * Tags multi-select, track select
+  * Team select
+* Right panel: live preview card
+* Sticky footer: Save draft, Submit final
+* Inline tips: what judges look for
+
+**States**: draft saved toast, missing field warnings, lock after close time
+
+---
+
+## Registration modals
+
+* Join the hack
+
+  * Choose: solo, create team, join with code
+* Create team form → show join code with copy button
+* Join team form → code input, success screen with avatars
+
+---
+
+## Judge flows
+
+### `/judge` My events
+
+* Event rows with progress bars: X of Y scored
+* Quick filters: All, Incomplete, Submitted
+
+### Assigned list
+
+* Grid or table: project title, team, tags, links, status chip, Score button
+
+### Score page
+
+* Left: project detail
+
+  * title, one-liner, links, team, tags, screenshots carousel mock
+* Right: rubric panel
+
+  * Criteria sliders 1-10: Impact, Build quality, Creativity, Clarity
+  * Weight editor button opens drawer (mock)
+  * Feedback textarea
+  * Total auto calc
+  * Buttons: Save, Submit
+* Top nav: previous, next
+* Sticky helper: keyboard hints, autosave indicator
+
+**States**: not started, draft saved, submitted, time over
+
+---
+
+## Organizer flows
+
+### `/organizer` Home
+
+* Stats chips: events, regs, submissions, judges
+* Recent events list with Manage buttons
+* Shortcuts: Create event, Certificates, Exports
+
+### Create wizard
+
+1. Basics: title, slug, dates, format, city
+2. Content: About, Rules, Prizes, Timeline editors
+3. Windows: reg open, submit open/close, judging window
+4. Tracks & team size
+5. Review + preview
+6. Publish toggle
+
+### Editor with live preview
+
+* Split view: form left, instant event preview right
+* Section anchors for quick jumps
+
+### Registrations
+
+* Table: name, email, team, status, joined at
+* Bulk actions mock: approve, remove, export
+* Filters and search
+
+### Teams
+
+* Team cards: members, join code, Needs chips
+* Actions: copy code, kick member (UI only), rename
+
+### Submissions
+
+* Table: title, team, repo, demo, submitted at
+* Columns toggle, sort
+* Row click opens drawer: project detail, judge scores, comments thread mock
+
+### Judges
+
+* Add by email modal, list of judges with badges
+* Assignments drawer: simple matrix preview
+* Criteria editor: weights, add criterion, save preview
+* Certificates tab: template picker, preview gallery
+
+### Settings
+
+* Visibility switch, banner image picker, social links, SEO snippet
+* Danger zone mock: Close regs, Lock submissions, Publish results
+
+### Results composer
+
+* Pick winners: drag cards into 1-2-3 slots
+* Finalists multi-select
+* Notes fields
+* Preview Results tab
+* Publish preview button triggers confetti on Results tab
+
+---
+
+## Profiles
+
+### User profile `/profiles/[handle]`
+
+* Header: avatar, banner, name, role pills
+* Stats chips: Wins, Finals, Judged, Organized
+* Tabs:
+
+  * Projects: grid
+  * Hackathons: list of events joined
+  * Badges: badge wall
+  * About: bio, links
+
+### Judge profile
+
+* Bio, socials, expertise tags
+* Events judged list
+* Certificates gallery mock
+* “Invite to judge” button opens fake modal
+
+### Organizer profile
+
+* Hosted events, impact stats, ratings mock
+
+---
+
+## Global projects `/projects`
+
+* Toolbar: search, tags, tech, timeframe
+* Grid: ProjectCard
+* Detail view:
+
+  * Hero with title, one-liner, links
+  * Readme markdown
+  * Team section with avatars
+  * Badges, track
+  * Screenshots carousel
+  * Comments preview mock
+
+---
+
+## Leaderboards `/leaders`
+
+* Tabs: Hackers, Organizers, Judges
+* Season selector
+* Table: rank, name, points, badges, delta arrows
+* Card view on mobile
+
+---
+
+## Judge hub `/judges`
+
+* Filters: expertise, region, availability
+* Grid of JudgeCards with badges, social links, short quote
+* Card click → judge profile
+
+---
+
+## Sponsors `/sponsors`
+
+* Package cards: Bronze, Silver, Gold
+* Perks list, logo mock wall, “contact us” modal
+* Sample placement preview component
+
+---
+
+## Auth
+
+* `/login` Magic link form, success screen with doodle checkmark
+* `/onboarding` Role pick pills, basic info form, interests chips
+
+---
+
+## Help and legal
+
+* `/help` Category cards, search bar
+* `/legal/*` Text pages with crayon section breaks
+
+---
+
+# Components you will need
+
+**UI base**
+
+* Button, IconButton, LinkButton
+* Input, Textarea, Select, Slider, Switch
+* Tag, Badge, Chip
+* Tabs, Accordion
+* Tooltip, Popover
+* Modal, Drawer, Toast, Snackbar
+* Avatar, AvatarGroup
+* Card, StatChip, ProgressBar
+* Table with sticky header, Pagination
+* Skeleton loaders
+* Markdown viewer, Code block
+* FileDrop zone mock
+
+**Event kit**
+
+* EventCard, EventHeader, Countdown, PrizeBlock, Timeline, UpdatePost
+* TeamCard, TeamFinderBoard, JoinCodeWidget
+* ProjectCard, ProjectDrawer
+* ResultPodium with share bar
+* CertificatePreview
+
+**Judge kit**
+
+* RubricSlider, ScorePanel, ScoreSummary
+* AssignmentMatrix preview
+* CriteriaEditor
+
+**Organizer kit**
+
+* WizardSteps, LivePreviewPane, SectionAnchorNav
+* FilterBar, BulkActionBar, ExportPanel
+
+---
+
+# States to demo across the app
+
+* Loading skeletons, empty lists, error banners
+* Time windows: before open, open, closed, judging, results
+* Permission hints: show or hide buttons by role flag in mock data
+* Draft vs submitted
+* Published vs hidden
+
+---
+
+# Search and filter facets to include
+
+* Events: time window, format, theme tags, fee, prize range, team size, city
+* Submissions: tags, tech, track, team size, sort by time or score
+* Projects: tags, tech stack, date range
+* Judges: expertise, industry, timezone
+
+---
+
+# Validation and hints UI
+
+* URL fields show inline status ticks
+* Required field badges
+* Character counters on descriptions
+* Unsaved changes toast on form leave
+* Confirm modals for destructive UI actions
+
+---
+
+# Responsive rules
+
+* Grid goes 3→2→1 columns
+* Sticky footers on mobile for key CTAs
+* Tabs collapse to segmented control
+* Tables switch to card stacks with key rows
+
+---
+
+# Accessibility basics
+
+* Focus rings on all interactive elements
+* Proper labels and aria for sliders and tabs
+* Color contrast target 4.5:1 for text on pastels
+* Reduce-motion toggle that disables confetti and bouncy hovers
+
+---
+
+# Mock data plan
+
+`/lib/fixtures`
+
+* `events.json`, `users.json`, `teams.json`, `registrations.json`
+* `submissions.json`, `judges.json`, `scorecards.json`, `projects.json`
+* Include at least:
+
+  * 10 events across states
+  * 12 submissions in a flagship event
+  * 8 judges with varied expertise
+  * 20 projects for global gallery
+  * 6 updates per event
+* Add booleans and timestamps to drive page states
+
+---
+
+# File layout suggestion
+
+```
+app/
+  layout.tsx
+  page.tsx
+  explore/page.tsx
+  e/[slug]/page.tsx
+  e/[slug]/submit/page.tsx
+  e/[slug]/results/page.tsx
+  projects/page.tsx
+  projects/[id]/page.tsx
+  profiles/[handle]/page.tsx
+  judges/page.tsx
+  judges/[id]/page.tsx
+  leaders/page.tsx
+  sponsors/page.tsx
+  organizer/...
+  judge/...
+components/
+  ui/...
+  event/...
+  judge/...
+  organizer/...
+lib/
+  fixtures/*.json
+  api.ts           // fake fetchers with setTimeout
+  theme.ts
+```
+
+---
+
+# Build order for the preview
+
+1. Theme tokens, Navbar, Footer, basic layout
+2. EventCard, ProjectCard, JudgeCard
+3. Landing + Explore with filters and skeletons
+4. Event page with all tabs and header strip
+5. Registration modals, Team finder board
+6. Submission form with live preview
+7. Judge list and Score UI
+8. Organizer wizard, editor with live preview
+9. Submissions table and Result podium composer
+10. Profiles, leaderboards, sponsors, help, legal
+
+---
+
+# QA checklist for yourself
+
+* Every screen has loading, empty, error
+* All tabs clickable with real content blocks
+* All key CTAs visible or disabled based on mock role
+* Time-window badges flip the right buttons
+* Mobile looks clean, no overflow
+* Color contrast passes, focus moves correctly
+
+If you want, I can follow up with starter fixture JSON for events, submissions, and judges, plus a Tailwind color config so you can paste into Replit and start wiring screens right away.
