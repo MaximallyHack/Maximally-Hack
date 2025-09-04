@@ -6,8 +6,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import Landing from "@/pages/Landing";
-import Explore from "@/pages/Explore";
-import EnhancedEventDetail from "@/pages/EnhancedEventDetail";
+import SimpleExplore from "@/pages/SimpleExplore";
+import SimpleEventDetail from "@/pages/SimpleEventDetail";
 import ProjectsGallery from "@/pages/ProjectsGallery";
 import ProjectDetail from "@/pages/ProjectDetail";
 import PublishProject from "@/pages/PublishProject";
@@ -35,8 +35,8 @@ function Router() {
       <Navbar />
       <Switch>
         <Route path="/" component={Landing} />
-        <Route path="/explore" component={Explore} />
-        <Route path="/e/:slug" component={EnhancedEventDetail} />
+        <Route path="/explore" component={SimpleExplore} />
+        <Route path="/e/:slug" component={SimpleEventDetail} />
         <Route path="/e/:slug/submit" component={Submit} />
         <Route path="/projects" component={ProjectsGallery} />
         <Route path="/projects/:id" component={ProjectDetail} />
