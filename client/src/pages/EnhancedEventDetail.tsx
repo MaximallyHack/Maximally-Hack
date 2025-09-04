@@ -178,9 +178,9 @@ export default function EnhancedEventDetail() {
       </header>
 
       {/* Hero Block */}
-      <section className="relative bg-gradient-to-br from-sky/10 via-coral/5 to-mint/10 py-20">
+      <section className="relative bg-gradient-to-br from-sky/10 via-coral/5 to-mint/10 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div>
               {/* Cover Image or Video */}
               {event.hero?.coverImage && (
@@ -235,13 +235,13 @@ export default function EnhancedEventDetail() {
       </section>
 
       {/* Content Area */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Main Content */}
           <div className="lg:col-span-3">
             {/* Tabs Navigation */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid w-full grid-cols-4 md:grid-cols-8 bg-white rounded-xl border border-soft-gray p-1 mb-8">
+              <TabsList className="grid w-full grid-cols-4 md:grid-cols-8 bg-white rounded-xl border border-soft-gray p-1 mb-6">
                 <TabsTrigger value="overview" className="rounded-lg text-xs md:text-sm">Overview</TabsTrigger>
                 <TabsTrigger value="schedule" className="rounded-lg text-xs md:text-sm">Schedule</TabsTrigger>
                 <TabsTrigger value="prizes" className="rounded-lg text-xs md:text-sm">Prizes</TabsTrigger>
@@ -254,12 +254,12 @@ export default function EnhancedEventDetail() {
 
               {/* Overview Section */}
               <TabsContent value="overview" id="overview">
-                <div className="space-y-8">
+                <div className="space-y-6">
                   {/* Description */}
                   <Card className="bg-white shadow-soft border border-soft-gray">
-                    <CardContent className="p-8">
+                    <CardContent className="p-6">
                       <div className="prose max-w-none">
-                        <h2 className="font-heading font-bold text-2xl text-text-dark mb-6 flex items-center">
+                        <h2 className="font-heading font-bold text-xl text-text-dark mb-4 flex items-center">
                           <Target className="w-6 h-6 text-coral mr-3" />
                           About the Challenge
                         </h2>
@@ -273,16 +273,16 @@ export default function EnhancedEventDetail() {
                   {/* Why Join */}
                   {event.whyJoin && (
                     <Card className="bg-gradient-to-br from-mint/10 to-sky/10 border border-mint/20 shadow-soft">
-                      <CardContent className="p-8">
-                        <h3 className="font-heading font-bold text-xl text-text-dark mb-6 flex items-center">
-                          <Rocket className="w-6 h-6 text-mint mr-3" />
+                      <CardContent className="p-6">
+                        <h3 className="font-heading font-bold text-lg text-text-dark mb-4 flex items-center">
+                          <Rocket className="w-5 h-5 text-mint mr-3" />
                           Why Join This Challenge?
                         </h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                           {event.whyJoin.map((reason: string, index: number) => (
-                            <div key={index} className="flex items-start gap-3 bg-white/50 rounded-lg p-4">
-                              <CheckCircle className="w-5 h-5 text-mint mt-0.5 flex-shrink-0" />
-                              <span className="text-text-dark">{reason}</span>
+                            <div key={index} className="flex items-start gap-3 bg-white/50 rounded-lg p-3">
+                              <CheckCircle className="w-4 h-4 text-mint mt-0.5 flex-shrink-0" />
+                              <span className="text-text-dark text-sm">{reason}</span>
                             </div>
                           ))}
                         </div>
@@ -293,9 +293,9 @@ export default function EnhancedEventDetail() {
                   {/* Quick Links Grid */}
                   {event.links && (
                     <Card className="bg-white shadow-soft border border-soft-gray">
-                      <CardContent className="p-8">
-                        <h3 className="font-heading font-bold text-xl text-text-dark mb-6 flex items-center">
-                          <ExternalLink className="w-6 h-6 text-sky mr-3" />
+                      <CardContent className="p-6">
+                        <h3 className="font-heading font-bold text-lg text-text-dark mb-4 flex items-center">
+                          <ExternalLink className="w-5 h-5 text-sky mr-3" />
                           Quick Links
                         </h3>
                         <div className="flex flex-wrap gap-3">
@@ -313,9 +313,9 @@ export default function EnhancedEventDetail() {
 
                   {/* Tracks */}
                   <Card className="bg-white shadow-soft border border-soft-gray">
-                    <CardContent className="p-8">
-                      <h3 className="font-heading font-bold text-xl text-text-dark mb-6 flex items-center">
-                        <Code className="w-6 h-6 text-yellow mr-3" />
+                    <CardContent className="p-6">
+                      <h3 className="font-heading font-bold text-lg text-text-dark mb-4 flex items-center">
+                        <Code className="w-5 h-5 text-yellow mr-3" />
                         Challenge Tracks
                       </h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

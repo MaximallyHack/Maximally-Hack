@@ -60,8 +60,8 @@
       {
         "id": "shipathon-promo",
         "type": "video",
-        "src": "https://youtube.com/embed/v5Ah9H-f94E",
-        "thumbnail": "/api/placeholder/400/300",
+        "src": "https://www.youtube.com/embed/v5Ah9H-f94E",
+        "thumbnail": "https://img.youtube.com/vi/v5Ah9H-f94E/maxresdefault.jpg",
         "alt": "Maximally AI Shipathon 2025 Promo",
         "caption": "Official promo - Build fast, ship smarter"
       },
