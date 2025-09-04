@@ -147,3 +147,143 @@ export type JoinRequest = typeof joinRequests.$inferSelect;
 export type InsertJoinRequest = z.infer<typeof insertJoinRequestSchema>;
 export type ProjectMessage = typeof projectMessages.$inferSelect;
 export type InsertProjectMessage = z.infer<typeof insertProjectMessageSchema>;
+
+// Event types for frontend-only implementation
+export interface Prize {
+  place?: number;
+  track?: string;
+  amount: number;
+  title: string;
+  description?: string;
+}
+
+export interface TimelineItem {
+  time: string;
+  title: string;
+  description: string;
+  isActive?: boolean;
+  isCompleted?: boolean;
+}
+
+export interface FAQ {
+  question: string;
+  answer: string;
+}
+
+export interface GalleryItem {
+  id: string;
+  type: 'image' | 'video';
+  src: string;
+  thumbnail?: string;
+  alt: string;
+  caption?: string;
+}
+
+export interface Event {
+  id: string;
+  slug: string;
+  title: string;
+  tagline?: string;
+  description: string;
+  longDescription?: string;
+  startDate: string;
+  endDate: string;
+  registrationOpen?: string;
+  registrationClose?: string;
+  submissionOpen?: string;
+  submissionClose?: string;
+  status: "upcoming" | "active" | "completed" | "registration_open";
+  format: "online" | "in-person" | "hybrid";
+  location: string;
+  prizePool: number;
+  maxTeamSize: number;
+  participantCount: number;
+  organizerId: string;
+  tracks: string[];
+  tags: string[];
+  judges: string[];
+  sponsors: string[];
+  socials?: Record<string, string>;
+  links?: Record<string, string>;
+  hero?: {
+    coverImage?: string;
+    promoVideo?: string;
+    countdown?: boolean;
+  };
+  criteria?: {
+    name: string;
+    percentage: number;
+    description: string;
+  }[];
+  whyJoin?: string[];
+  gallery?: GalleryItem[];
+  eligibility?: {
+    age?: string;
+    teamSize?: string;
+    ipPolicy?: string;
+    codeOfConduct?: string;
+  };
+  community?: {
+    discord?: string;
+    telegram?: string;
+    forum?: string;
+    responseTime?: string;
+  };
+  contact?: {
+    name?: string;
+    email?: string;
+    phone?: string;
+    organizer?: string;
+  };
+  prizes: Prize[];
+  timeline?: TimelineItem[];
+  rules?: string[];
+  faqs?: FAQ[];
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface Team {
+  id: string;
+  name: string;
+  description: string;
+  lookingFor: string[];
+  members: {
+    id: string;
+    name: string;
+    role: string;
+    avatar?: string;
+  }[];
+  skills: string[];
+  eventId: string;
+  isOpen: boolean;
+  maxSize: number;
+}
+
+export interface Submission {
+  id: string;
+  title: string;
+  description: string;
+  teamId: string;
+  eventId: string;
+  demoUrl?: string;
+  repoUrl?: string;
+  videoUrl?: string;
+  images: string[];
+  technologies: string[];
+  track?: string;
+  submittedAt: string;
+  score?: number;
+}
+
+export interface Judge {
+  id: string;
+  name: string;
+  title: string;
+  company: string;
+  bio: string;
+  avatar?: string;
+  expertise: string[];
+  linkedinUrl?: string;
+  twitterUrl?: string;
+}

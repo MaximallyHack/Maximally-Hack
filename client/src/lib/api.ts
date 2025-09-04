@@ -14,14 +14,15 @@ export interface Event {
   id: string;
   slug: string;
   title: string;
+  tagline?: string;
   description: string;
   longDescription?: string;
   startDate: string;
   endDate: string;
-  registrationOpen: string;
-  registrationClose: string;
-  submissionOpen: string;
-  submissionClose: string;
+  registrationOpen?: string;
+  registrationClose?: string;
+  submissionOpen?: string;
+  submissionClose?: string;
   status: 'upcoming' | 'active' | 'completed' | 'registration_open';
   format: 'online' | 'in-person' | 'hybrid';
   location: string;
@@ -33,6 +34,45 @@ export interface Event {
   tags: string[];
   judges: string[];
   sponsors: string[];
+  socials?: Record<string, string>;
+  links?: Record<string, string>;
+  hero?: {
+    coverImage?: string;
+    promoVideo?: string;
+    countdown?: boolean;
+  };
+  criteria?: {
+    name: string;
+    percentage: number;
+    description: string;
+  }[];
+  whyJoin?: string[];
+  gallery?: {
+    id: string;
+    type: 'image' | 'video';
+    src: string;
+    thumbnail?: string;
+    alt: string;
+    caption?: string;
+  }[];
+  eligibility?: {
+    age?: string;
+    teamSize?: string;
+    ipPolicy?: string;
+    codeOfConduct?: string;
+  };
+  community?: {
+    discord?: string;
+    telegram?: string;
+    forum?: string;
+    responseTime?: string;
+  };
+  contact?: {
+    name?: string;
+    email?: string;
+    phone?: string;
+    organizer?: string;
+  };
   prizes: any[];
   timeline?: any[];
   rules?: string[];

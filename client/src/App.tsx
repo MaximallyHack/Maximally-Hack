@@ -7,7 +7,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import Landing from "@/pages/Landing";
 import Explore from "@/pages/Explore";
-import EventDetail from "@/pages/EventDetail";
+import EnhancedEventDetail from "@/pages/EnhancedEventDetail";
 import ProjectsGallery from "@/pages/ProjectsGallery";
 import ProjectDetail from "@/pages/ProjectDetail";
 import PublishProject from "@/pages/PublishProject";
@@ -36,7 +36,7 @@ function Router() {
       <Switch>
         <Route path="/" component={Landing} />
         <Route path="/explore" component={Explore} />
-        <Route path="/e/:slug" component={EventDetail} />
+        <Route path="/e/:slug" component={EnhancedEventDetail} />
         <Route path="/e/:slug/submit" component={Submit} />
         <Route path="/projects" component={ProjectsGallery} />
         <Route path="/projects/:id" component={ProjectDetail} />
