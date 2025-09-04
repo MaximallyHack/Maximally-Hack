@@ -1,0 +1,342 @@
+Judge Hub
+5) Judges directory /judges
+
+Toolbar
+
+Search, filters: Expertise, Region, Availability. Sort by Popular.
+
+Reset button.
+
+Grid
+
+JudgeCard: avatar, name, headline, expertise tags, events judged, View profile, Invite button.
+
+States
+
+Skeletons, empty state with “No judges match your filters”.
+
+6) Judge profile /judges/[id]
+
+Hero
+
+Large avatar, name, headline.
+
+Badge pills: Top Judge, AI, Product, No-code.
+
+Sections
+
+About and links.
+
+Expertise tag wall and region chip.
+
+Stats strip: Events judged, Endorsements mock, Avg response mock.
+
+Certificates gallery mock.
+
+CTA bar: Invite to judge.
+
+7) Judge register /judge-register
+
+Form
+
+Basic info: name, email, headline, region.
+
+Links: LinkedIn, X, website.
+
+Expertise tags multi-select.
+
+Short bio.
+
+Live preview on right.
+
+Submit shows toast and routes to profile id.
+
+Projects
+8) Projects gallery /projects
+
+Toolbar
+
+Search, tags row, tech dropdown, sort by New, Popular.
+
+Reset.
+
+Grid
+
+ProjectCard: cover, title, one-liner, tags, avatar group, quick links for repo and demo.
+
+States
+
+Skeletons, empty.
+
+9) Project detail /projects/[id]
+
+Hero
+
+Cover, title, one-liner, tag chips, action buttons for Repo and Demo.
+
+Sections
+
+Team avatars and names.
+
+Awards badges if any.
+
+Screenshots strip with simple scroll.
+
+Readme markdown.
+
+Sidebar: event chip, date, tech stack chips.
+
+Share bar mock with copy link.
+
+10) Upload project /upload
+
+Form
+
+Title, one-liner, tags, tech, links, cover upload mock, screenshots upload mock, Readme markdown.
+
+Right live preview.
+
+Save draft toast.
+
+Submit final plays confetti and shows “View in gallery”.
+
+Organizer area
+11) Organizer home /organizer
+
+Blocks
+
+Stat chips: Events, Registrations, Submissions, Judges.
+
+Recent events list with Manage buttons.
+
+Shortcuts: Create event, Certificates, Exports.
+
+12) Create wizard /organizer/events/new
+
+Steps
+
+Basics: title, slug, dates, format, city.
+
+Content: About, Rules, Prizes, Timeline editors.
+
+Windows: reg open, submit open, submit close, judging window.
+
+Tracks and team size.
+
+Review and preview.
+
+Publish toggle.
+
+Design
+
+Stepper at top, cards for each step, right preview pane.
+
+13) Manage hackathon overview /organizer/events/[id]/overview
+
+Goal
+
+Single control room for the event.
+
+Layout
+
+Top bar: event name, status chip, quick actions: View public, Copy link, Publish.
+
+Four panels grid:
+
+Status timeline: current phase with next milestone.
+
+Numbers: registrations, teams, submissions, judges.
+
+Quick tasks: Add judge, Edit timeline, Post update, Open submissions.
+
+Health: missing content checks, unassigned submissions, time left.
+
+Design
+
+Each panel is a pastel card with icon and small action buttons.
+
+14) Details editor /organizer/events/[id]/edit
+
+Split view
+
+Left: form sections with anchors.
+
+Right: live event preview updates on change.
+
+Sections
+
+Basics: title, slug, summary, banner image pick.
+
+Content editors: About, Rules, Prizes, Timeline.
+
+Visual theme: pick banner color, accent color, doodle pack.
+
+Social: website, Discord, X, LinkedIn.
+
+SEO snippet: title and meta preview.
+
+UI
+
+Save bar appears when dirty. Toast on save.
+
+15) Schedule windows /organizer/events/[id]/windows
+
+Blocks
+
+Date pickers: registration window, submission window, judging window.
+
+Quick presets: 24h, 48h, 7d.
+
+Validation hints if overlap.
+
+Preview
+
+Horizontal timeline with colored segments.
+
+16) Tracks and criteria /organizer/events/[id]/tracks
+
+Tracks
+
+Track cards with name, description, tag chips. Add, reorder.
+
+Judging criteria
+
+Criteria list with weights. Sliders 0–100 for weights.
+
+Add criterion modal. Hints for clear names.
+
+Preview
+
+Right side shows judge score form mock with new criteria.
+
+17) Registrations /organizer/events/[id]/registrations
+
+Toolbar
+
+Search, filters by status. Export button opens CSV preview modal.
+
+Table
+
+Name, email, team, status, joined at. Bulk select row checkboxes.
+
+Row actions
+
+Approve, remove, message modal (mock).
+
+States
+
+Empty friendly state. Skeleton rows.
+
+18) Teams /organizer/events/[id]/teams
+
+Grid
+
+Team cards: name, members, join code, Needs chips.
+
+Actions
+
+Copy code, regenerate, rename. Remove member modal (mock).
+
+19) Submissions /organizer/events/[id]/submissions
+
+Toolbar
+
+Filters: track, tags, team size, status. Sort by submitted at or avg score.
+
+Table
+
+Title, team, repo, demo, submitted at, avg score mock, status chip.
+
+Drawer
+
+Click row opens drawer with project detail, judge scores list, comment thread mock, flag button.
+
+20) Judges /organizer/events/[id]/judges
+
+Blocks
+
+Judges list: avatar, name, badges, assigned count.
+
+Add judge modal: search existing judges, or paste email to add a placeholder profile in test mode.
+
+Criteria quick view with weights.
+
+Assignment matrix
+
+Grid preview: projects vs judges. Cell shows assigned or empty. Toggle cells to simulate assignment. No data save, just in memory.
+
+Certificates tab
+
+Template picker, live certificate preview cards for Judge, Winner, Finalist.
+
+21) Results composer /organizer/results/[id]
+
+Flow
+
+Pick winners: drag project cards to 1st, 2nd, 3rd slots.
+
+Select finalists list.
+
+Add short notes per winner.
+
+Preview Results tab as it will look publicly.
+
+Publish preview button triggers confetti.
+
+22) Announcements /organizer/events/[id]/updates
+
+Feed
+
+Create post box with title and body.
+
+Post list with tags: Info, Schedule, Fix, Winner.
+
+Toggle to pin post.
+
+23) Sponsors /organizer/events/[id]/sponsors
+
+Blocks
+
+Package cards: Bronze, Silver, Gold with perks list.
+
+Sponsor wall preview.
+
+Add sponsor modal with name and logo. Pure front-end.
+
+24) Exports /organizer/exports
+
+Panels
+
+Participants CSV preview.
+
+Projects CSV preview.
+
+Judges CSV preview.
+
+Download buttons show success toast only.
+
+25) Settings /organizer/events/[id]/settings
+
+Sections
+
+Visibility switch, join type, team size limits.
+
+Danger area: Close registrations, Lock submissions, Publish results. All mock with confirms.
+
+Leaders /leaders
+
+Tabs: Hackers, Organizers, Judges.
+
+Season select.
+
+Table with rank, name, points, badges, up or down arrow.
+
+Compact card view on mobile.
+
+Help /help
+
+Search bar.
+
+Category cards.
+
+Article preview cards with pastel borders.
