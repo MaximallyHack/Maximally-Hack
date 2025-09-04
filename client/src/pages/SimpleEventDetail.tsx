@@ -8,9 +8,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { useConfetti } from "@/components/ui/confetti";
+import { useAuth } from "@/contexts/AuthContext";
 import { 
   Calendar, Clock, Globe, Users, Trophy, MapPin, 
-  ExternalLink, ArrowRight, Star, Settings
+  ExternalLink, ArrowRight, Star
 } from "lucide-react";
 import { api } from "@/lib/api";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -20,6 +21,7 @@ export default function SimpleEventDetail() {
   const [activeTab, setActiveTab] = useState("overview");
   const { toast } = useToast();
   const { trigger: triggerConfetti, Confetti } = useConfetti();
+  const { user, isLoggedIn, registerForEvent, unregisterFromEvent } = useAuth();
 
   const { data: event, isLoading } = useQuery({
     queryKey: ['events', slug],
@@ -74,12 +76,46 @@ export default function SimpleEventDetail() {
     );
   }
 
-  const handleRegister = () => {
-    toast({
-      title: "Registration successful",
-      description: "You've been registered for this hackathon.",
-    });
-    triggerConfetti();
+  const handleRegister = async () => {
+    if (!isLoggedIn) {
+      toast({
+        title: "Please log in",
+        description: "You need to be logged in to register for events.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const result = await registerForEvent(event.id);
+    if (result.success) {
+      toast({
+        title: "Registration successful! 🎉",
+        description: "You've been registered for this hackathon.",
+      });
+      triggerConfetti();
+    } else {
+      toast({
+        title: "Registration failed",
+        description: result.error || "Something went wrong.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleUnregister = async () => {
+    const result = await unregisterFromEvent(event.id);
+    if (result.success) {
+      toast({
+        title: "Unregistered successfully",
+        description: "You've been removed from this hackathon.",
+      });
+    } else {
+      toast({
+        title: "Failed to unregister",
+        description: result.error || "Something went wrong.",
+        variant: "destructive",
+      });
+    }
   };
 
   const formatDate = (dateString: string) => {
@@ -109,10 +145,40 @@ export default function SimpleEventDetail() {
               <h1 className="text-3xl font-medium text-gray-900 mb-3">{event.title}</h1>
               <p className="text-gray-600 text-lg">{event.description}</p>
             </div>
-            <div>
-              <Button onClick={handleRegister} className="bg-gray-900 hover:bg-gray-800">
-                Register Now
-              </Button>
+            <div className="flex items-center gap-3">
+              {isLoggedIn ? (
+                user?.registeredEvents.includes(event.id) ? (
+                  <div className="flex items-center gap-3">
+                    <Badge className="bg-green-100 text-green-800 px-3 py-1">
+                      ✓ Registered
+                    </Badge>
+                    <Button 
+                      onClick={handleUnregister} 
+                      variant="outline"
+                      className="border-red-200 text-red-600 hover:bg-red-50"
+                    >
+                      Unregister
+                    </Button>
+                  </div>
+                ) : (
+                  <Button onClick={handleRegister} className="bg-gray-900 hover:bg-gray-800">
+                    Register Now
+                  </Button>
+                )
+              ) : (
+                <div className="flex items-center gap-3">
+                  <Link href="/login">
+                    <Button className="bg-gray-900 hover:bg-gray-800">
+                      Login to Register
+                    </Button>
+                  </Link>
+                  <Link href="/signup">
+                    <Button variant="outline">
+                      Sign Up
+                    </Button>
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
 

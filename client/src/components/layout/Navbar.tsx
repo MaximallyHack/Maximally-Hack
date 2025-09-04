@@ -2,11 +2,15 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Rocket, Menu, Plus } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Rocket, Menu, User, LogOut, Settings } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Navbar() {
   const [location] = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const { user, isLoggedIn, logout } = useAuth();
 
   const navItems = [
     { href: "/explore", label: "Explore", testId: "nav-explore" },
@@ -53,17 +57,60 @@ export default function Navbar() {
 
             {/* Desktop Actions */}
             <div className="hidden md:flex items-center space-x-3">
-            <Link href="/publish">
-              <Button variant="outline" className="bg-sky border-sky text-white hover:bg-sky/80" data-testid="button-publish">
-                <Plus className="w-4 h-4 mr-1" />
-                Publish
-              </Button>
-            </Link>
-            <Link href="/login">
-              <Button className="bg-coral hover:bg-coral/80 text-white" data-testid="button-login">
-                Login
-              </Button>
-            </Link>
+              {isLoggedIn ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                      <Avatar className="h-8 w-8">
+                        <AvatarFallback className="bg-coral text-white">
+                          {user?.fullName?.charAt(0) || user?.username?.charAt(0) || 'U'}
+                        </AvatarFallback>
+                      </Avatar>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56" align="end">
+                    <div className="flex items-center justify-start gap-2 p-2">
+                      <div className="flex flex-col space-y-1 leading-none">
+                        <p className="font-medium">{user?.fullName || user?.username}</p>
+                        <p className="w-[200px] truncate text-sm text-muted-foreground">
+                          {user?.email}
+                        </p>
+                      </div>
+                    </div>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link href="/dashboard" className="flex items-center">
+                        <User className="mr-2 h-4 w-4" />
+                        My Dashboard
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/profile" className="flex items-center">
+                        <Settings className="mr-2 h-4 w-4" />
+                        Profile Settings
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={logout} className="flex items-center text-red-600">
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Log out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <div className="flex items-center space-x-3">
+                  <Link href="/login">
+                    <Button variant="outline" className="border-coral text-coral hover:bg-coral/10" data-testid="button-login">
+                      Login
+                    </Button>
+                  </Link>
+                  <Link href="/signup">
+                    <Button className="bg-coral hover:bg-coral/80 text-white" data-testid="button-signup">
+                      Sign Up
+                    </Button>
+                  </Link>
+                </div>
+              )}
             </div>
 
             {/* Mobile Menu */}
@@ -91,17 +138,37 @@ export default function Navbar() {
                     </Link>
                   ))}
                   <div className="pt-4 border-t border-soft-gray space-y-3">
-                    <Link href="/publish" onClick={() => setIsOpen(false)}>
-                      <Button variant="outline" className="w-full bg-sky border-sky text-white hover:bg-sky/80" data-testid="mobile-button-publish">
-                        <Plus className="w-4 h-4 mr-1" />
-                        Publish Project
-                      </Button>
-                    </Link>
-                    <Link href="/login" onClick={() => setIsOpen(false)}>
-                      <Button className="w-full bg-coral hover:bg-coral/80 text-white" data-testid="mobile-button-login">
-                        Login
-                      </Button>
-                    </Link>
+                    {isLoggedIn ? (
+                      <>
+                        <div className="px-2 py-2">
+                          <p className="font-medium text-text-dark">{user?.fullName || user?.username}</p>
+                          <p className="text-sm text-text-muted">{user?.email}</p>
+                        </div>
+                        <Link href="/dashboard" onClick={() => setIsOpen(false)}>
+                          <Button variant="outline" className="w-full border-coral text-coral hover:bg-coral/10">
+                            <User className="w-4 h-4 mr-2" />
+                            My Dashboard
+                          </Button>
+                        </Link>
+                        <Button onClick={() => { logout(); setIsOpen(false); }} className="w-full bg-red-500 hover:bg-red-600 text-white">
+                          <LogOut className="w-4 h-4 mr-2" />
+                          Log out
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        <Link href="/login" onClick={() => setIsOpen(false)}>
+                          <Button variant="outline" className="w-full border-coral text-coral hover:bg-coral/10" data-testid="mobile-button-login">
+                            Login
+                          </Button>
+                        </Link>
+                        <Link href="/signup" onClick={() => setIsOpen(false)}>
+                          <Button className="w-full bg-coral hover:bg-coral/80 text-white" data-testid="mobile-button-signup">
+                            Sign Up
+                          </Button>
+                        </Link>
+                      </>
+                    )}
                   </div>
                 </div>
               </SheetContent>

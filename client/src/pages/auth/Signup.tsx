@@ -7,19 +7,21 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
-import { demoCredentials } from "@/lib/auth";
 import { Loader2, Eye, EyeOff } from "lucide-react";
 
-export default function Login() {
+export default function Signup() {
   const [, setLocation] = useLocation();
-  const { login } = useAuth();
+  const { register } = useAuth();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({
+    fullName: "",
     username: "",
-    password: ""
+    email: "",
+    password: "",
+    confirmPassword: ""
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,44 +35,38 @@ export default function Login() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords don't match");
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      setError("Password must be at least 6 characters");
+      return;
+    }
+
     setIsLoading(true);
 
     try {
-      const result = await login(formData.username, formData.password);
-      
+      const result = await register({
+        fullName: formData.fullName,
+        username: formData.username,
+        email: formData.email,
+        password: formData.password
+      });
+
       if (result.success) {
         toast({
-          title: "Welcome back!",
-          description: "You've been logged in successfully.",
+          title: "Account created successfully!",
+          description: "Welcome to Maximally Hack! You can now register for hackathons.",
         });
         setLocation("/dashboard");
       } else {
-        setError(result.error || "Invalid credentials");
+        setError(result.error || "Failed to create account");
       }
     } catch (err) {
       setError("An unexpected error occurred");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleDemoLogin = async (username: string, password: string) => {
-    setFormData({ username, password });
-    setError("");
-    setIsLoading(true);
-
-    try {
-      const result = await login(username, password);
-      
-      if (result.success) {
-        toast({
-          title: "Demo login successful!",
-          description: "You've been logged in with a demo account.",
-        });
-        setLocation("/dashboard");
-      }
-    } catch (err) {
-      setError("Demo login failed");
     } finally {
       setIsLoading(false);
     }
@@ -81,15 +77,28 @@ export default function Login() {
       <div className="w-full max-w-md">
         <Card>
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-medium">Welcome Back</CardTitle>
+            <CardTitle className="text-2xl font-medium">Create Account</CardTitle>
             <CardDescription>
-              Sign in to your account to register for hackathons and track your progress
+              Join the hackathon community and start building amazing projects
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <Label htmlFor="username">Username or Email</Label>
+                <Label htmlFor="fullName">Full Name</Label>
+                <Input
+                  id="fullName"
+                  name="fullName"
+                  type="text"
+                  required
+                  value={formData.fullName}
+                  onChange={handleChange}
+                  placeholder="Enter your full name"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="username">Username</Label>
                 <Input
                   id="username"
                   name="username"
@@ -97,7 +106,20 @@ export default function Login() {
                   required
                   value={formData.username}
                   onChange={handleChange}
-                  placeholder="Enter your username or email"
+                  placeholder="Choose a username"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="Enter your email"
                 />
               </div>
 
@@ -111,7 +133,7 @@ export default function Login() {
                     required
                     value={formData.password}
                     onChange={handleChange}
-                    placeholder="Enter your password"
+                    placeholder="Create a password"
                   />
                   <Button
                     type="button"
@@ -129,6 +151,19 @@ export default function Login() {
                 </div>
               </div>
 
+              <div>
+                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                <Input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type="password"
+                  required
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  placeholder="Confirm your password"
+                />
+              </div>
+
               {error && (
                 <Alert variant="destructive">
                   <AlertDescription>{error}</AlertDescription>
@@ -143,45 +178,28 @@ export default function Login() {
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Signing in...
+                    Creating account...
                   </>
                 ) : (
-                  "Sign In"
+                  "Create Account"
                 )}
               </Button>
             </form>
 
             <div className="mt-6 text-center text-sm">
-              Don't have an account?{" "}
-              <Link href="/signup" className="text-blue-600 hover:underline">
-                Sign up
+              Already have an account?{" "}
+              <Link href="/login" className="text-blue-600 hover:underline">
+                Sign in
               </Link>
             </div>
           </CardContent>
         </Card>
 
-        {/* Demo Accounts */}
-        <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-          <h3 className="text-sm font-medium text-blue-700 mb-3">Demo Accounts</h3>
-          <div className="space-y-2">
-            {demoCredentials.map((cred, index) => (
-              <Button
-                key={index}
-                variant="outline"
-                size="sm"
-                className="w-full text-left justify-start bg-white hover:bg-blue-50 border-blue-200"
-                onClick={() => handleDemoLogin(cred.username, cred.password)}
-                disabled={isLoading}
-              >
-                <div className="text-left">
-                  <div className="font-medium text-sm">{cred.name}</div>
-                  <div className="text-xs text-gray-500">{cred.username}</div>
-                </div>
-              </Button>
-            ))}
-          </div>
-          <p className="text-xs text-blue-600 mt-3">
-            Click any demo account to login instantly. Password: demo123
+        {/* Demo Info */}
+        <div className="mt-6 p-4 bg-blue-50 rounded-lg text-center">
+          <p className="text-sm text-blue-700 font-medium mb-2">Demo Mode</p>
+          <p className="text-xs text-blue-600">
+            This is a demo signup. No real accounts are created. All data is stored locally for testing purposes.
           </p>
         </div>
       </div>

@@ -4,6 +4,7 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { AuthProvider } from "@/contexts/AuthContext";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import Landing from "@/pages/Landing";
@@ -16,6 +17,7 @@ import JuryBoard from "@/pages/Judges";
 import Leaderboards from "@/pages/Leaderboards";
 import Sponsors from "@/pages/Sponsors";
 import Login from "@/pages/auth/Login";
+import Signup from "@/pages/auth/Signup";
 import Onboarding from "@/pages/auth/Onboarding";
 import OrganizerDashboard from "@/pages/organizer/OrganizerDashboard";
 import CreateEvent from "@/pages/organizer/CreateEvent";
@@ -28,6 +30,7 @@ import UploadProject from "@/pages/UploadProject";
 import Help from "@/pages/Help";
 import Submit from "@/pages/Submit";
 import Profile from "@/pages/Profile";
+import Dashboard from "@/pages/Dashboard";
 import NotFound from "@/pages/not-found";
 
 function ScrollToTop() {
@@ -42,10 +45,11 @@ function ScrollToTop() {
 
 function Router() {
   return (
-    <div className="min-h-screen bg-cream">
-      <ScrollToTop />
-      <Navbar />
-      <Switch>
+    <AuthProvider>
+      <div className="min-h-screen bg-cream">
+        <ScrollToTop />
+        <Navbar />
+        <Switch>
         <Route path="/" component={Landing} />
         <Route path="/explore" component={SimpleExplore} />
         <Route path="/e/:slug" component={SimpleEventDetail} />
@@ -62,6 +66,8 @@ function Router() {
         <Route path="/sponsors" component={Sponsors} />
         <Route path="/help" component={Help} />
         <Route path="/login" component={Login} />
+        <Route path="/signup" component={Signup} />
+        <Route path="/dashboard" component={Dashboard} />
         <Route path="/onboarding" component={Onboarding} />
         <Route path="/organizer" component={OrganizerDashboard} />
         <Route path="/organizer/events/new" component={CreateEvent} />
@@ -73,6 +79,7 @@ function Router() {
       </Switch>
       <Footer />
     </div>
+    </AuthProvider>
   );
 }
 
