@@ -1,0 +1,149 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Baloo+2:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Nunito:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Theme Colors */
+  --cream: hsl(48, 100%, 98%);
+  --soft-gray: hsl(0, 0%, 96%);
+  --text-dark: hsl(0, 0%, 18%);
+  --text-muted: hsl(0, 0%, 42%);
+  --sky: hsl(204, 100%, 82%);
+  --coral: hsl(0, 69%, 78%);
+  --yellow: hsl(49, 100%, 75%);
+  --mint: hsl(142, 52%, 77%);
+  --success: hsl(120, 50%, 70%);
+  --error: hsl(0, 69%, 71%);
+  
+  /* Shadcn Variables */
+  --background: hsl(48, 100%, 98%);
+  --foreground: hsl(0, 0%, 18%);
+  --card: hsl(0, 0%, 96%);
+  --card-foreground: hsl(0, 0%, 18%);
+  --popover: hsl(48, 100%, 98%);
+  --popover-foreground: hsl(0, 0%, 18%);
+  --primary: hsl(0, 69%, 78%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(142, 52%, 77%);
+  --secondary-foreground: hsl(0, 0%, 18%);
+  --muted: hsl(0, 0%, 96%);
+  --muted-foreground: hsl(0, 0%, 42%);
+  --accent: hsl(204, 100%, 82%);
+  --accent-foreground: hsl(0, 0%, 18%);
+  --destructive: hsl(0, 69%, 71%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --border: hsl(0, 0%, 96%);
+  --input: hsl(0, 0%, 96%);
+  --ring: hsl(204, 100%, 82%);
+  --radius: 1rem;
+  
+  /* Custom Properties */
+  --font-heading: 'Fredoka', 'Baloo 2', cursive;
+  --font-body: 'Inter', 'Nunito', sans-serif;
+  --shadow-soft: 0 8px 24px hsla(0, 0%, 0%, 0.06);
+}
+
+.dark {
+  --background: hsl(0, 0%, 4%);
+  --foreground: hsl(0, 0%, 95%);
+  --card: hsl(0, 0%, 8%);
+  --card-foreground: hsl(0, 0%, 95%);
+  --popover: hsl(0, 0%, 4%);
+  --popover-foreground: hsl(0, 0%, 95%);
+  --primary: hsl(0, 69%, 78%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(0, 0%, 15%);
+  --secondary-foreground: hsl(0, 0%, 95%);
+  --muted: hsl(0, 0%, 15%);
+  --muted-foreground: hsl(0, 0%, 64%);
+  --accent: hsl(0, 0%, 15%);
+  --accent-foreground: hsl(0, 0%, 95%);
+  --destructive: hsl(0, 69%, 71%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --border: hsl(0, 0%, 15%);
+  --input: hsl(0, 0%, 15%);
+  --ring: hsl(204, 100%, 82%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-body antialiased bg-cream text-text-dark;
+    font-family: var(--font-body);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+  }
+}
+
+@layer utilities {
+  .bg-cream { background-color: var(--cream); }
+  .bg-soft-gray { background-color: var(--soft-gray); }
+  .bg-sky { background-color: var(--sky); }
+  .bg-coral { background-color: var(--coral); }
+  .bg-yellow { background-color: var(--yellow); }
+  .bg-mint { background-color: var(--mint); }
+  .bg-success { background-color: var(--success); }
+  .bg-error { background-color: var(--error); }
+  
+  .text-cream { color: var(--cream); }
+  .text-text-dark { color: var(--text-dark); }
+  .text-text-muted { color: var(--text-muted); }
+  .text-sky { color: var(--sky); }
+  .text-coral { color: var(--coral); }
+  .text-yellow { color: var(--yellow); }
+  .text-mint { color: var(--mint); }
+  .text-success { color: var(--success); }
+  .text-error { color: var(--error); }
+  
+  .border-soft-gray { border-color: var(--soft-gray); }
+  .border-sky { border-color: var(--sky); }
+  .border-coral { border-color: var(--coral); }
+  .border-mint { border-color: var(--mint); }
+  
+  .font-heading { font-family: var(--font-heading); }
+  .font-body { font-family: var(--font-body); }
+  
+  .shadow-soft { box-shadow: var(--shadow-soft); }
+  
+  .hover-scale {
+    transition: transform 0.18s ease;
+  }
+  
+  .hover-scale:hover {
+    transform: scale(1.03);
+  }
+  
+  .crayon-squiggle {
+    background-image: url("data:image/svg+xml,%3Csvg width='40' height='8' viewBox='0 0 40 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 4C5 1 10 7 15 4C20 1 25 7 30 4C35 1 40 7 40 4' stroke='%23A3D5FF' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: repeat-x;
+    height: 8px;
+    width: 100%;
+  }
+  
+  .float-animation {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  @keyframes confetti-fall {
+    0% {
+      transform: translate(-50%, -50%) scale(0) rotate(0deg);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(-50%, -50%) scale(2) rotate(360deg);
+      opacity: 0;
+    }
+  }
+}

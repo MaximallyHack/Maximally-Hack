@@ -1,0 +1,361 @@
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "wouter";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Search, MapPin, ExternalLink, Linkedin, Twitter, Star, Filter } from "lucide-react";
+import JudgeCard from "@/components/event/JudgeCard";
+import { CrayonSquiggle } from "@/components/ui/floating-elements";
+import { Skeleton } from "@/components/ui/skeleton";
+import { api } from "@/lib/api";
+import type { Judge } from "@/lib/api";
+
+export default function Judges() {
+  const { id } = useParams();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedExpertise, setSelectedExpertise] = useState<string>("");
+  const [selectedAvailability, setSelectedAvailability] = useState<string>("");
+  const [selectedJudge, setSelectedJudge] = useState<Judge | null>(null);
+
+  const { data: judges, isLoading } = useQuery({
+    queryKey: ['judges', searchQuery, selectedExpertise, selectedAvailability],
+    queryFn: async () => {
+      let judges = await api.getJudges();
+      
+      // Filter by search query
+      if (searchQuery) {
+        judges = judges.filter(j => 
+          j.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          j.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          j.expertise.some(exp => exp.toLowerCase().includes(searchQuery.toLowerCase()))
+        );
+      }
+      
+      // Filter by expertise
+      if (selectedExpertise) {
+        judges = judges.filter(j => j.expertise.includes(selectedExpertise));
+      }
+      
+      // Filter by availability
+      if (selectedAvailability) {
+        judges = judges.filter(j => j.availability === selectedAvailability);
+      }
+      
+      return judges;
+    },
+  });
+
+  // If we have an ID, try to find and show that specific judge
+  const { data: specificJudge } = useQuery({
+    queryKey: ['judge', id],
+    queryFn: () => api.getJudge(id!),
+    enabled: !!id,
+  });
+
+  // Get unique expertise options
+  const allExpertise = judges ? Array.from(new Set(judges.flatMap(j => j.expertise))) : [];
+
+  if (id && specificJudge) {
+    return (
+      <div className="min-h-screen bg-cream py-8" data-testid="judge-detail-page">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Judge Hero */}
+          <div className="bg-white rounded-2xl p-8 shadow-soft border border-soft-gray mb-8">
+            <div className="flex flex-col md:flex-row items-center gap-8">
+              <Avatar className="w-32 h-32">
+                <AvatarImage src={specificJudge.avatar} alt={specificJudge.name} />
+                <AvatarFallback className="bg-sky text-white text-3xl">
+                  {specificJudge.name.split(' ').map(n => n[0]).join('')}
+                </AvatarFallback>
+              </Avatar>
+              
+              <div className="text-center md:text-left flex-1">
+                <h1 className="font-heading font-bold text-3xl text-text-dark mb-2">{specificJudge.name}</h1>
+                <p className="text-xl text-text-muted mb-4">{specificJudge.title} at {specificJudge.company}</p>
+                
+                <div className="flex items-center justify-center md:justify-start gap-4 mb-4">
+                  <div className="flex items-center gap-1">
+                    <Star className="w-4 h-4 text-yellow" fill="currentColor" />
+                    <span className="font-medium">{specificJudge.rating}</span>
+                  </div>
+                  <div className="flex items-center gap-1 text-text-muted text-sm">
+                    <MapPin className="w-4 h-4" />
+                    <span>{specificJudge.location}</span>
+                  </div>
+                  <Badge className={`bg-${specificJudge.availability === 'Available' ? 'success' : specificJudge.availability === 'Limited' ? 'yellow' : 'error'}/20 text-${specificJudge.availability === 'Available' ? 'success' : specificJudge.availability === 'Limited' ? 'yellow' : 'error'} px-3 py-1 rounded-full text-sm border-0`}>
+                    {specificJudge.availability}
+                  </Badge>
+                </div>
+
+                <div className="flex justify-center md:justify-start gap-3">
+                  {specificJudge.social.linkedin && (
+                    <Button variant="outline" size="icon" className="border-sky text-sky hover:bg-sky/10" asChild>
+                      <a href={`https://linkedin.com/in/${specificJudge.social.linkedin}`} target="_blank" rel="noopener noreferrer" data-testid="button-linkedin">
+                        <Linkedin className="w-4 h-4" />
+                      </a>
+                    </Button>
+                  )}
+                  {specificJudge.social.twitter && (
+                    <Button variant="outline" size="icon" className="border-sky text-sky hover:bg-sky/10" asChild>
+                      <a href={`https://twitter.com/${specificJudge.social.twitter}`} target="_blank" rel="noopener noreferrer" data-testid="button-twitter">
+                        <Twitter className="w-4 h-4" />
+                      </a>
+                    </Button>
+                  )}
+                  {specificJudge.social.website && (
+                    <Button variant="outline" size="icon" className="border-coral text-coral hover:bg-coral/10" asChild>
+                      <a href={specificJudge.social.website} target="_blank" rel="noopener noreferrer" data-testid="button-website">
+                        <ExternalLink className="w-4 h-4" />
+                      </a>
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Judge Details */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2">
+              <div className="bg-white rounded-2xl p-8 shadow-soft border border-soft-gray mb-8">
+                <h2 className="font-heading font-bold text-2xl text-text-dark mb-4">About</h2>
+                <p className="text-text-muted mb-6">{specificJudge.bio}</p>
+                
+                {specificJudge.quote && (
+                  <blockquote className="border-l-4 border-mint pl-6 italic text-text-muted">
+                    "{specificJudge.quote}"
+                  </blockquote>
+                )}
+              </div>
+            </div>
+
+            <div>
+              <div className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray mb-6">
+                <h3 className="font-heading font-semibold text-lg text-text-dark mb-4">Expertise</h3>
+                <div className="flex flex-wrap gap-2">
+                  {specificJudge.expertise.map(skill => (
+                    <Badge key={skill} className="bg-sky/20 text-sky px-2 py-1 rounded-full text-xs border-0">
+                      {skill}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+
+              <div className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray mb-6">
+                <h3 className="font-heading font-semibold text-lg text-text-dark mb-4">Experience</h3>
+                <div className="space-y-3">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-coral">{specificJudge.eventsJudged}</div>
+                    <div className="text-sm text-text-muted">Events Judged</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray">
+                <h3 className="font-heading font-semibold text-lg text-text-dark mb-4">Badges</h3>
+                <div className="flex flex-wrap gap-2">
+                  {specificJudge.badges.map(badge => (
+                    <Badge key={badge} className="bg-mint/20 text-mint px-2 py-1 rounded-full text-xs border-0">
+                      {badge}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+
+              {specificJudge.availability === 'Available' && (
+                <div className="mt-6">
+                  <Button className="w-full bg-coral text-white hover:bg-coral/80" data-testid="button-invite-judge">
+                    Invite to Judge
+                  </Button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-cream py-8" data-testid="judges-page">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12">
+          <h1 className="font-heading font-bold text-4xl text-text-dark mb-4">Expert Judges</h1>
+          <CrayonSquiggle className="mx-auto mb-6" />
+          <p className="text-text-muted text-lg">Connect with industry leaders and invite them to judge your hackathons</p>
+        </div>
+        
+        {/* Search and Filters */}
+        <div className="bg-white rounded-2xl p-6 shadow-soft mb-8 border border-soft-gray">
+          <div className="flex flex-col lg:flex-row gap-4">
+            <div className="flex-1">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-muted w-5 h-5" />
+                <Input
+                  type="text"
+                  placeholder="Search judges by name, company, or expertise..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 border border-soft-gray rounded-xl focus:ring-2 focus:ring-sky focus:border-transparent"
+                  data-testid="input-search-judges"
+                />
+              </div>
+            </div>
+            
+            <Select value={selectedExpertise} onValueChange={setSelectedExpertise}>
+              <SelectTrigger className="w-48 border-soft-gray rounded-xl" data-testid="select-expertise">
+                <SelectValue placeholder="Expertise" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">All Expertise</SelectItem>
+                {allExpertise.map(exp => (
+                  <SelectItem key={exp} value={exp}>{exp}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            
+            <Select value={selectedAvailability} onValueChange={setSelectedAvailability}>
+              <SelectTrigger className="w-48 border-soft-gray rounded-xl" data-testid="select-availability">
+                <SelectValue placeholder="Availability" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">All Availability</SelectItem>
+                <SelectItem value="Available">Available</SelectItem>
+                <SelectItem value="Limited">Limited</SelectItem>
+                <SelectItem value="Unavailable">Unavailable</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        {/* Results */}
+        {isLoading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Array.from({ length: 9 }).map((_, i) => (
+              <div key={i} className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray text-center">
+                <Skeleton className="w-20 h-20 rounded-full mx-auto mb-4" />
+                <Skeleton className="h-6 w-3/4 mx-auto mb-2" />
+                <Skeleton className="h-4 w-1/2 mx-auto mb-4" />
+                <div className="flex gap-2 justify-center mb-4">
+                  <Skeleton className="h-6 w-12" />
+                  <Skeleton className="h-6 w-16" />
+                </div>
+                <Skeleton className="h-4 w-20 mx-auto" />
+              </div>
+            ))}
+          </div>
+        ) : judges && judges.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {judges.map((judge) => (
+              <div 
+                key={judge.id} 
+                onClick={() => setSelectedJudge(judge)}
+                className="cursor-pointer"
+                data-testid={`judge-card-${judge.id}`}
+              >
+                <JudgeCard judge={judge} showContactButton />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-16">
+            <div className="text-6xl mb-4">👨‍💼</div>
+            <h3 className="font-heading font-semibold text-xl text-text-dark mb-2">No judges found</h3>
+            <p className="text-text-muted mb-6">
+              {searchQuery || selectedExpertise || selectedAvailability
+                ? "Try adjusting your search or filters"
+                : "Our judge network is growing. Check back soon!"
+              }
+            </p>
+            <Button 
+              onClick={() => {
+                setSearchQuery("");
+                setSelectedExpertise("");
+                setSelectedAvailability("");
+              }}
+              className="bg-coral text-white hover:bg-coral/80"
+              data-testid="button-clear-filters"
+            >
+              Clear Filters
+            </Button>
+          </div>
+        )}
+
+        {/* Judge Detail Modal */}
+        <Dialog open={!!selectedJudge} onOpenChange={() => setSelectedJudge(null)}>
+          <DialogContent className="max-w-2xl bg-white" data-testid="judge-detail-modal">
+            {selectedJudge && (
+              <>
+                <DialogHeader>
+                  <div className="flex items-center gap-4">
+                    <Avatar className="w-16 h-16">
+                      <AvatarImage src={selectedJudge.avatar} alt={selectedJudge.name} />
+                      <AvatarFallback className="bg-sky text-white">
+                        {selectedJudge.name.split(' ').map(n => n[0]).join('')}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <DialogTitle className="font-heading font-bold text-xl text-text-dark">
+                        {selectedJudge.name}
+                      </DialogTitle>
+                      <DialogDescription className="text-text-muted">
+                        {selectedJudge.title} at {selectedJudge.company}
+                      </DialogDescription>
+                    </div>
+                  </div>
+                </DialogHeader>
+                
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="font-semibold text-text-dark mb-2">About</h3>
+                    <p className="text-text-muted text-sm">{selectedJudge.bio}</p>
+                  </div>
+                  
+                  <div>
+                    <h3 className="font-semibold text-text-dark mb-2">Expertise</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedJudge.expertise.slice(0, 6).map(skill => (
+                        <Badge key={skill} className="bg-sky/20 text-sky px-2 py-1 rounded-full text-xs border-0">
+                          {skill}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div className="flex justify-between items-center pt-4 border-t border-soft-gray">
+                    <div className="flex gap-2">
+                      {selectedJudge.social.linkedin && (
+                        <Button variant="outline" size="icon" className="border-sky text-sky hover:bg-sky/10" asChild>
+                          <a href={`https://linkedin.com/in/${selectedJudge.social.linkedin}`} target="_blank" rel="noopener noreferrer">
+                            <Linkedin className="w-4 h-4" />
+                          </a>
+                        </Button>
+                      )}
+                      {selectedJudge.social.twitter && (
+                        <Button variant="outline" size="icon" className="border-sky text-sky hover:bg-sky/10" asChild>
+                          <a href={`https://twitter.com/${selectedJudge.social.twitter}`} target="_blank" rel="noopener noreferrer">
+                            <Twitter className="w-4 h-4" />
+                          </a>
+                        </Button>
+                      )}
+                    </div>
+                    
+                    {selectedJudge.availability === 'Available' && (
+                      <Button className="bg-coral text-white hover:bg-coral/80">
+                        Invite to Judge
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              </>
+            )}
+          </DialogContent>
+        </Dialog>
+      </div>
+    </div>
+  );
+}

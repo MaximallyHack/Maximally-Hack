@@ -1,0 +1,62 @@
+[
+  {
+    "id": "team-1",
+    "name": "AI Innovators",
+    "description": "Looking for frontend developers and designers to build healthcare AI solutions.",
+    "eventId": "ai-for-good-2024",
+    "leaderId": "user-1",
+    "members": ["user-1", "user-2"],
+    "maxSize": 4,
+    "joinCode": "ABC123",
+    "skills": ["AI", "Healthcare", "Frontend", "Design"],
+    "lookingFor": ["Frontend Developer", "Designer"],
+    "track": "Healthcare",
+    "created": "2024-12-01T00:00:00Z",
+    "status": "recruiting"
+  },
+  {
+    "id": "team-2",
+    "name": "Climate Warriors",
+    "description": "Passionate about environmental solutions. Need data scientists and developers.",
+    "eventId": "ai-for-good-2024",
+    "leaderId": "user-3",
+    "members": ["user-3"],
+    "maxSize": 4,
+    "joinCode": "XYZ789",
+    "skills": ["Environmental Science", "Data Analysis"],
+    "lookingFor": ["Data Scientist", "Backend Developer"],
+    "track": "Climate",
+    "created": "2024-12-02T00:00:00Z",
+    "status": "recruiting"
+  },
+  {
+    "id": "team-3",
+    "name": "EduTech Builders",
+    "description": "Building the future of education. Looking for one more developer.",
+    "eventId": "ai-for-good-2024",
+    "leaderId": "user-4",
+    "members": ["user-4", "user-5", "user-6"],
+    "maxSize": 4,
+    "joinCode": "EDU456",
+    "skills": ["Education", "React", "Node.js", "UI/UX"],
+    "lookingFor": ["Full-stack Developer"],
+    "track": "Education",
+    "created": "2024-11-28T00:00:00Z",
+    "status": "recruiting"
+  },
+  {
+    "id": "team-4",
+    "name": "Social Justice Squad",
+    "description": "Using technology to promote equality and justice for all.",
+    "eventId": "ai-for-good-2024",
+    "leaderId": "user-7",
+    "members": ["user-7", "user-8", "user-9", "user-10"],
+    "maxSize": 4,
+    "joinCode": "JST101",
+    "skills": ["Legal Tech", "AI Ethics", "Policy", "Research"],
+    "lookingFor": [],
+    "track": "Social Justice",
+    "created": "2024-11-25T00:00:00Z",
+    "status": "full"
+  }
+]

@@ -1,0 +1,150 @@
+[
+  {
+    "id": "healthai-assistant",
+    "title": "HealthAI Assistant",
+    "tagline": "AI-powered virtual health assistant",
+    "description": "AI-powered virtual health assistant that provides personalized medical guidance and symptom checking using advanced natural language processing and medical knowledge databases.",
+    "longDescription": "HealthAI Assistant is a comprehensive virtual health companion that leverages cutting-edge AI to provide personalized medical guidance, symptom analysis, and health recommendations. The system uses advanced natural language processing to understand user queries and provides evidence-based responses while maintaining strict medical ethics and privacy standards.",
+    "eventId": "ai-for-good-2024",
+    "teamId": "team-1",
+    "submittedBy": "user-1",
+    "submittedAt": "2024-12-17T15:30:00Z",
+    "track": "Healthcare",
+    "tags": ["AI", "Healthcare", "NLP", "React", "Python"],
+    "techStack": ["React", "Python", "TensorFlow", "OpenAI API", "FastAPI"],
+    "demoUrl": "https://healthai-demo.example.com",
+    "githubUrl": "https://github.com/team1/healthai-assistant",
+    "slidesUrl": "https://slides.example.com/healthai",
+    "videoUrl": "https://youtube.com/watch?v=healthai",
+    "images": [
+      "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=600&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=600&h=400&fit=crop"
+    ],
+    "status": "submitted",
+    "scores": {
+      "sarah-chen": { "impact": 9, "technical": 8, "creativity": 8, "presentation": 9, "total": 8.5, "feedback": "Excellent use of AI for healthcare accessibility. Strong technical implementation." },
+      "mark-rodriguez": { "impact": 10, "technical": 9, "creativity": 9, "presentation": 8, "total": 9.0, "feedback": "Impressive healthcare application with real-world potential. Great user experience." },
+      "lisa-thompson": { "impact": 9, "technical": 8, "creativity": 7, "presentation": 9, "total": 8.25, "feedback": "Strong social impact focus. Could benefit from more accessibility features." }
+    },
+    "averageScore": 8.6,
+    "awards": ["Finalist", "Healthcare Track Winner"],
+    "features": [
+      "Symptom analysis and triage",
+      "Personalized health recommendations",
+      "Medical knowledge base integration",
+      "Privacy-first design",
+      "Multi-language support"
+    ]
+  },
+  {
+    "id": "carbon-tracker",
+    "title": "Carbon Tracker",
+    "tagline": "Personal carbon footprint tracker with AI recommendations",
+    "description": "Personal carbon footprint tracker with AI-powered recommendations for sustainable living and real-time environmental impact monitoring.",
+    "longDescription": "Carbon Tracker is an innovative mobile and web application that helps individuals track their carbon footprint in real-time and provides AI-powered recommendations for reducing environmental impact. The app integrates with IoT devices and uses machine learning to provide personalized sustainability insights.",
+    "eventId": "ai-for-good-2024",
+    "teamId": "team-2",
+    "submittedBy": "user-3",
+    "submittedAt": "2024-12-17T14:45:00Z",
+    "track": "Climate",
+    "tags": ["Sustainability", "IoT", "Mobile", "AI", "React Native"],
+    "techStack": ["React Native", "Node.js", "MongoDB", "IoT Sensors", "TensorFlow"],
+    "demoUrl": "https://carbon-tracker-demo.example.com",
+    "githubUrl": "https://github.com/team2/carbon-tracker",
+    "slidesUrl": "https://slides.example.com/carbon-tracker",
+    "videoUrl": "https://youtube.com/watch?v=carbon-tracker",
+    "images": [
+      "https://images.unsplash.com/photo-1569163139394-de4e4c43af30?w=600&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?w=600&h=400&fit=crop"
+    ],
+    "status": "submitted",
+    "scores": {
+      "sarah-chen": { "impact": 9, "technical": 8, "creativity": 9, "presentation": 8, "total": 8.5, "feedback": "Innovative approach to climate action. Good use of IoT integration." },
+      "mark-rodriguez": { "impact": 8, "technical": 9, "creativity": 8, "presentation": 8, "total": 8.25, "feedback": "Solid technical execution. Mobile app is well-designed and user-friendly." },
+      "lisa-thompson": { "impact": 10, "technical": 8, "creativity": 9, "presentation": 9, "total": 9.0, "feedback": "Excellent climate impact potential. Love the AI-powered recommendations." }
+    },
+    "averageScore": 8.6,
+    "awards": ["Climate Track Winner"],
+    "features": [
+      "Real-time carbon footprint tracking",
+      "AI-powered sustainability recommendations",
+      "IoT device integration",
+      "Social sharing and challenges",
+      "Carbon offset marketplace"
+    ]
+  },
+  {
+    "id": "learai-tutor",
+    "title": "LearnAI Tutor",
+    "tagline": "Personalized AI tutor for adaptive learning",
+    "description": "Personalized AI tutor that adapts to individual learning styles and provides real-time feedback using advanced machine learning algorithms.",
+    "longDescription": "LearnAI Tutor revolutionizes education by providing personalized tutoring experiences that adapt to each student's unique learning style, pace, and preferences. The system uses advanced AI to analyze learning patterns and provide tailored content, exercises, and feedback.",
+    "eventId": "ai-for-good-2024",
+    "teamId": "team-3",
+    "submittedBy": "user-4",
+    "submittedAt": "2024-12-17T16:00:00Z",
+    "track": "Education",
+    "tags": ["Education", "AI", "NLP", "Adaptive Learning", "React"],
+    "techStack": ["React", "Python", "OpenAI API", "PostgreSQL", "Redis"],
+    "demoUrl": "https://learnai-demo.example.com",
+    "githubUrl": "https://github.com/team3/learnai-tutor",
+    "slidesUrl": "https://slides.example.com/learnai",
+    "videoUrl": "https://youtube.com/watch?v=learnai",
+    "images": [
+      "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=400&fit=crop"
+    ],
+    "status": "submitted",
+    "scores": {
+      "sarah-chen": { "impact": 9, "technical": 9, "creativity": 9, "presentation": 9, "total": 9.0, "feedback": "Excellent AI implementation for education. Very promising for real-world deployment." },
+      "mark-rodriguez": { "impact": 8, "technical": 9, "creativity": 8, "presentation": 9, "total": 8.5, "feedback": "Strong technical foundation. The adaptive learning algorithms are impressive." },
+      "lisa-thompson": { "impact": 9, "technical": 8, "creativity": 9, "presentation": 8, "total": 8.5, "feedback": "Great potential for democratizing education. User interface could be more accessible." }
+    },
+    "averageScore": 8.7,
+    "awards": ["Education Track Winner"],
+    "features": [
+      "Adaptive learning algorithms",
+      "Personalized curriculum generation",
+      "Real-time progress tracking",
+      "Multiple learning style support",
+      "Gamified learning experience"
+    ]
+  },
+  {
+    "id": "fair-justice-ai",
+    "title": "Fair Justice AI",
+    "tagline": "AI system to reduce bias in legal proceedings",
+    "description": "AI system to identify and reduce bias in legal proceedings and ensure fair representation across all demographics.",
+    "longDescription": "Fair Justice AI is a comprehensive system designed to analyze legal proceedings and identify potential biases in sentencing, jury selection, and case outcomes. The system provides recommendations for ensuring fair and equitable treatment in the justice system.",
+    "eventId": "ai-for-good-2024",
+    "teamId": "team-4",
+    "submittedBy": "user-7",
+    "submittedAt": "2024-12-17T15:15:00Z",
+    "track": "Social Justice",
+    "tags": ["Legal Tech", "AI", "Ethics", "Bias Detection", "Python"],
+    "techStack": ["Python", "TensorFlow", "Natural Language Processing", "Data Analytics", "Flask"],
+    "demoUrl": "https://fair-justice-demo.example.com",
+    "githubUrl": "https://github.com/team4/fair-justice-ai",
+    "slidesUrl": "https://slides.example.com/fair-justice",
+    "videoUrl": "https://youtube.com/watch?v=fair-justice",
+    "images": [
+      "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=600&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1521791136064-7986c2920216?w=600&h=400&fit=crop"
+    ],
+    "status": "submitted",
+    "scores": {
+      "sarah-chen": { "impact": 10, "technical": 8, "creativity": 9, "presentation": 8, "total": 8.75, "feedback": "Critically important application of AI for social justice. Strong ethical framework." },
+      "mark-rodriguez": { "impact": 9, "technical": 8, "creativity": 8, "presentation": 8, "total": 8.25, "feedback": "Important social impact. Technical implementation is solid and well-documented." },
+      "lisa-thompson": { "impact": 10, "technical": 7, "creativity": 8, "presentation": 9, "total": 8.5, "feedback": "Exceptional social impact potential. Could benefit from more diverse training data." }
+    },
+    "averageScore": 8.5,
+    "awards": ["Social Justice Track Winner"],
+    "features": [
+      "Bias detection algorithms",
+      "Sentencing pattern analysis",
+      "Fair representation metrics",
+      "Historical data analysis",
+      "Recommendation system for judges"
+    ]
+  }
+]
