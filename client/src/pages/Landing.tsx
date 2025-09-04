@@ -38,9 +38,9 @@ export default function Landing() {
               </Button>
             </Link>
             <Link href="/organizer/events/new">
-              <Button variant="outline" size="lg" className="border-2 border-mint text-text-dark px-8 py-4 rounded-full font-medium text-lg hover-scale hover:bg-mint/20 transition-colors" data-testid="button-create-hackathon">
+              <Button variant="outline" size="lg" className="border-2 border-mint text-text-dark px-8 py-4 rounded-full font-medium text-lg hover-scale hover:bg-mint/20 transition-colors" data-testid="button-join-community">
                 <Plus className="w-5 h-5 mr-2" />
-                Create Hackathon
+                Join Our Community
               </Button>
             </Link>
           </div>
