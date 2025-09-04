@@ -1,26 +1,26 @@
 [
   {
-    "id": "ai-for-good-2024",
+    "id": "maximally-ai-shipathon-2025",
     "slug": "ai-for-good-challenge",
-    "title": "AI for Good Challenge",
-    "tagline": "Build for health, climate, and education",
-    "description": "Transform lives with AI - join 2000+ innovators building solutions for humanity's biggest challenges.",
-    "longDescription": "🌟 Join the most impactful AI hackathon of 2024! Over 48 hours, you'll collaborate with passionate developers, designers, and researchers to create AI solutions that tackle real-world problems. From revolutionizing healthcare access to combating climate change, your code can change the world.\n\n💡 **Why Join?**\n• Work with industry mentors from Google, OpenAI, and Microsoft\n• Access to premium AI APIs and datasets\n• Win life-changing prizes including startup incubation\n• Build your portfolio with meaningful projects\n• Connect with a global community of changemakers",
-    "startDate": "2025-10-12T09:00:00Z",
-    "endDate": "2025-10-13T18:00:00Z",
-    "registrationOpen": "2024-09-01T00:00:00Z",
-    "registrationClose": "2025-10-11T23:59:59Z",
-    "submissionOpen": "2025-10-12T09:00:00Z",
-    "submissionClose": "2025-10-13T16:00:00Z",
+    "title": "Maximally AI Shipathon",
+    "tagline": "48-hour global hackathon for the curious, the chaotic, and the creative",
+    "description": "Build something real in 48 hours. Whether you're a coder, artist, student, or first-time builder — if you're excited about AI, this is your playground.",
+    "longDescription": "🧠 **Maximally AI Shipathon** is a **48-hour global hackathon** for the curious, the chaotic, and the creative. Whether you're a coder, artist, student, or first-time builder — if you're excited about AI and want to build something real, this event is for you.\n\nNo pitch decks. No suits. Just ideas, friends, and a playground where *weird is welcome*.\n\n🎯 **Who It's For:**\n• First-time builders\n• No-code makers & indie hackers\n• AI-curious designers, writers, musicians\n• Students & creators of all kinds\n\n**No experience needed.** Just bring energy and ideas.",
+    "startDate": "2025-08-30T00:00:00Z",
+    "endDate": "2025-09-01T00:00:00Z",
+    "registrationOpen": "2025-07-01T00:00:00Z",
+    "registrationClose": "2025-08-29T23:59:59Z",
+    "submissionOpen": "2025-08-30T00:00:00Z",
+    "submissionClose": "2025-08-31T23:59:59Z",
     "status": "upcoming",
     "format": "hybrid",
-    "location": "Chandigarh + Global",
-    "prizePool": 50000,
-    "maxTeamSize": 5,
-    "participantCount": 2147,
+    "location": "Online + Chandigarh",
+    "prizePool": 10000,
+    "maxTeamSize": 4,
+    "participantCount": 1573,
     "organizerId": "maximally",
-    "tracks": ["Healthcare Access", "Climate Intelligence", "Education Revolution", "Social Impact AI"],
-    "tags": ["AI", "Social Impact", "48h", "Hybrid"],
+    "tracks": ["🛠️ Build with AI", "🎨 Create with AI", "🧪 Experiment with AI"],
+    "tags": ["AI", "Shipathon", "48h", "Global"],
     "judges": ["sarah-chen", "mark-rodriguez", "lisa-thompson"],
     "sponsors": ["google", "microsoft", "openai", "nvidia"],
     "socials": {
@@ -30,266 +30,118 @@
       "twitter": "https://twitter.com/maximallyhack"
     },
     "links": {
-      "website": "https://maximally.ai",
-      "registration": "https://register.maximally.ai/ai-for-good",
-      "devpost": "https://ai-for-good.devpost.com",
-      "discord": "https://discord.gg/maximally",
-      "infoPacket": "https://docs.maximally.ai/ai-for-good-info.pdf",
-      "faq": "https://maximally.ai/faq",
-      "rules": "https://maximally.ai/rules",
-      "mentorSignup": "https://mentor.maximally.ai",
-      "sponsorDeck": "https://sponsor.maximally.ai/deck",
-      "pressKit": "https://press.maximally.ai"
+      "website": "https://www.maximally.in",
+      "registration": "https://maximally-ai-shipathon-2025.devpost.com/",
+      "devpost": "https://maximally-ai-shipathon-2025.devpost.com/",
+      "discord": "https://discord.gg/S2YyGtBWKa",
+      "email": "hello@maximally.in",
+      "instagram": "https://instagram.com/maximally.in"
     },
     "hero": {
       "coverImage": "/api/placeholder/1200/600",
-      "promoVideo": "https://youtube.com/watch?v=ai-for-good-promo",
+      "promoVideo": "https://youtu.be/v5Ah9H-f94E?si=E-7dfnkhqZ87XG5X",
       "countdown": true
     },
     "criteria": [
-      { "name": "Social Impact", "percentage": 40, "description": "How significantly does your solution address real-world problems?" },
-      { "name": "Technical Innovation", "percentage": 30, "description": "Creativity and technical sophistication of your AI implementation" },
-      { "name": "Feasibility", "percentage": 30, "description": "How realistic is your solution to implement and scale?" }
+      { "name": "Originality & Creativity", "percentage": 25, "description": "Is it fresh and unexpected?" },
+      { "name": "Execution", "percentage": 25, "description": "Does it work or at least demo clearly?" },
+      { "name": "Clarity", "percentage": 20, "description": "Can we understand it easily?" },
+      { "name": "AI Use", "percentage": 20, "description": "Was AI used meaningfully?" },
+      { "name": "Beginner Spirit", "percentage": 10, "description": "Bonus for first-timers or clever hacks" }
     ],
     "whyJoin": [
-      "🚀 Launch your impact career with real-world AI projects",
-      "🤝 Network with 2000+ developers, researchers, and industry leaders", 
-      "💰 Win up to $25k plus startup incubation opportunities",
-      "🎓 Learn from AI experts through workshops and mentorship",
-      "🌍 Join a global movement using technology for social good"
+      "🎯 Build anything AI-powered - code, no-code, or prompt your way through",
+      "🚀 First-time builders welcome - no experience needed, just energy and ideas", 
+      "🎨 Three awesome tracks: Build, Create, or Experiment with AI",
+      "🛠️ Use any tools - from OpenAI to Glide, RunwayML to Replit",
+      "🌍 Join a global playground where weird is welcome and creativity wins"
     ],
     "gallery": [
       {
-        "id": "teaser-video",
+        "id": "shipathon-promo",
         "type": "video",
-        "src": "https://youtube.com/embed/ai-for-good-2024",
+        "src": "https://youtube.com/embed/v5Ah9H-f94E",
         "thumbnail": "/api/placeholder/400/300",
-        "alt": "AI for Good 2024 Teaser",
-        "caption": "Official event teaser - See the impact we're creating together"
+        "alt": "Maximally AI Shipathon 2025 Promo",
+        "caption": "Official promo - Build fast, ship smarter"
       },
       {
-        "id": "highlights-reel",
-        "type": "video", 
-        "src": "https://youtube.com/embed/ai-for-good-highlights",
-        "thumbnail": "/api/placeholder/400/300",
-        "alt": "Last year's highlights",
-        "caption": "Amazing projects from AI for Good 2023"
-      },
-      {
-        "id": "venue-shot",
+        "id": "build-showcase",
         "type": "image",
         "src": "/api/placeholder/800/600",
-        "alt": "Chandigarh venue",
-        "caption": "Beautiful hybrid setup in Chandigarh"
+        "alt": "AI builds in action",
+        "caption": "From agents to art - see what you can create"
       },
       {
-        "id": "team-collaboration",
+        "id": "community-vibes",
         "type": "image", 
         "src": "/api/placeholder/800/600",
-        "alt": "Teams collaborating",
-        "caption": "Diverse teams building the future"
+        "alt": "Builders collaborating",
+        "caption": "A playground where weird is welcome"
       }
     ],
     "prizes": [
-      { "place": 1, "amount": 25000, "title": "Grand Champion", "description": "Plus 6-month startup incubation program worth $50k" },
-      { "place": 2, "amount": 15000, "title": "Innovation Runner-up", "description": "Plus 3-month mentorship with industry leaders" },
-      { "place": 3, "amount": 10000, "title": "Impact Award", "description": "Plus feature in Maximally Impact Report" },
-      { "track": "Healthcare Access", "amount": 8000, "title": "Healthcare Heroes", "description": "For solutions improving medical care accessibility" },
-      { "track": "Climate Intelligence", "amount": 8000, "title": "Planet Protectors", "description": "For environmental and sustainability solutions" },
-      { "track": "Education Revolution", "amount": 8000, "title": "Learning Pioneers", "description": "For transformative educational technology" },
-      { "track": "Social Impact AI", "amount": 8000, "title": "Community Champions", "description": "For solutions addressing social justice issues" }
+      { "place": 1, "amount": 3000, "title": "Most Creative Build", "description": "For the most original and unexpected creation" },
+      { "place": 2, "amount": 2000, "title": "Best First-Timer", "description": "For outstanding work by a first-time builder" },
+      { "place": 3, "amount": 1500, "title": "People's Choice", "description": "Voted by the community" },
+      { "track": "🛠️ Build with AI", "amount": 1000, "title": "Build Champions", "description": "Best agents, bots, tools, or automations" },
+      { "track": "🎨 Create with AI", "amount": 1000, "title": "Creative Masters", "description": "Best art, music, video, or design" },
+      { "track": "🧪 Experiment with AI", "amount": 1000, "title": "Mad Scientists", "description": "Best pranks, simulations, or weird stuff" }
     ],
     "timeline": [
-      { "time": "Oct 12, 9:00 AM IST", "title": "Opening Ceremony", "description": "Inspiring keynotes from industry leaders and challenge deep-dives", "isActive": false, "isCompleted": false },
-      { "time": "Oct 12, 10:30 AM IST", "title": "Hacking Begins!", "description": "Teams start building - API access opens, mentors available", "isActive": true, "isCompleted": false },
-      { "time": "Oct 12, 2:00 PM IST", "title": "Tech Workshops", "description": "AI/ML workshops with Google, OpenAI, and Microsoft experts", "isActive": false, "isCompleted": false },
-      { "time": "Oct 12, 8:00 PM IST", "title": "Mentor Speed Dating", "description": "Connect with industry mentors for project guidance", "isActive": false, "isCompleted": false },
-      { "time": "Oct 13, 10:00 AM IST", "title": "Mid-Point Check-in", "description": "Progress presentations and pivot opportunities", "isActive": false, "isCompleted": false },
-      { "time": "Oct 13, 4:00 PM IST", "title": "Final Submissions", "description": "Submit your project and demo video", "isActive": false, "isCompleted": false },
-      { "time": "Oct 13, 5:00 PM IST", "title": "Public Demos", "description": "Teams present to judges and global audience", "isActive": false, "isCompleted": false },
-      { "time": "Oct 13, 6:00 PM IST", "title": "Awards Ceremony", "description": "Winners announced with live celebration", "isActive": false, "isCompleted": false }
+      { "time": "Aug 30, 12:00 AM IST", "title": "Shipathon Begins!", "description": "Start building - registration on Devpost, join Discord", "isActive": false, "isCompleted": false },
+      { "time": "Aug 30, 6:00 AM IST", "title": "Kick-off Stream", "description": "Live welcome and track explanations", "isActive": false, "isCompleted": false },
+      { "time": "Aug 30, 2:00 PM IST", "title": "Build Sessions", "description": "Workshop on AI tools and no-code solutions", "isActive": false, "isCompleted": false },
+      { "time": "Aug 31, 10:00 AM IST", "title": "Community Check-in", "description": "Share progress and get feedback in Discord", "isActive": false, "isCompleted": false },
+      { "time": "Aug 31, 6:00 PM IST", "title": "Final Push", "description": "Last 6 hours - time to polish and submit", "isActive": false, "isCompleted": false },
+      { "time": "Sep 1, 12:00 AM IST", "title": "Submissions Close", "description": "Final deadline - submit your project on Devpost", "isActive": false, "isCompleted": false },
+      { "time": "Sep 1-2, 2025", "title": "Judging Period", "description": "Judges review and evaluate all submissions", "isActive": false, "isCompleted": false },
+      { "time": "Sep 3, 2025", "title": "Winners Announced", "description": "Top projects featured and winners celebrated", "isActive": false, "isCompleted": false }
     ],
     "rules": [
-      "Teams can have 2-5 members from any background or skill level",
-      "All AI models and code must be built during the hackathon hours",
-      "You can use any open-source frameworks, APIs, and pre-existing datasets",
-      "Projects must address at least one of the four impact tracks",
-      "Submissions require working demo, source code, and 2-minute pitch video",
-      "Solutions must be ethical and beneficial to society",
-      "All participants must follow our Code of Conduct for inclusive collaboration"
+      "Teams of 1-4 builders - solo builders welcome too",
+      "No prebuilt projects - all builds must start after Aug 30, 12:00 AM IST",
+      "Project must be safe, respectful, and follow our code of conduct",
+      "Must join Discord to qualify for prizes",
+      "You can use any AI APIs, frameworks, and existing tools/services",
+      "Submit on Devpost by Sept 1, 12:00 AM IST",
+      "Demo video (max 2 mins) and working link/repo required"
     ],
     "eligibility": {
-      "age": "15+ (minors need guardian consent)",
-      "teamSize": "2-5 people maximum",
+      "age": "Global, all ages, all skill levels",
+      "teamSize": "Solo or teams up to 4",
       "ipPolicy": "Teams retain full ownership of their projects",
       "codeOfConduct": "https://maximally.ai/code-of-conduct"
     },
     "community": {
-      "discord": "https://discord.gg/maximally",
-      "telegram": "https://t.me/maximallyhack", 
-      "forum": "https://community.maximally.ai",
-      "responseTime": "< 2 hours during event"
-    },
-    "contact": {
-      "name": "Maximally Team",
-      "email": "hello@maximally.ai",
-      "phone": "+91-98765-43210",
-      "organizer": "Aryan Khurana, CEO & Founder"
-    },
-    "faqs": [
-      {
-        "question": "Who can participate in AI for Good Challenge?",
-        "answer": "Anyone passionate about using AI for social impact! Whether you're a student, professional, researcher, or complete beginner - all backgrounds and skill levels are welcome. We'll have workshops and mentors to help everyone contribute meaningfully."
-      },
-      {
-        "question": "Do I need prior AI/ML experience?",
-        "answer": "Not at all! While AI knowledge helps, we value diverse perspectives. Many winning teams include designers, domain experts, and social scientists. We provide beginner-friendly workshops and APIs to get you started."
-      },
-      {
-        "question": "What's the judging criteria?",
-        "answer": "Projects are evaluated on Social Impact (40%), Technical Innovation (30%), and Feasibility (30%). We prioritize solutions that can genuinely help people over pure technical complexity."
-      },
-      {
-        "question": "Is this fully online or in-person?",
-        "answer": "It's hybrid! We have a beautiful venue in Chandigarh for local participants, plus full online participation for global teams. All workshops, mentoring, and judging happen both ways."
-      },
-      {
-        "question": "What resources and support do I get?",
-        "answer": "Free access to premium AI APIs (OpenAI, Google Cloud AI, Azure), curated datasets, 24/7 mentor support, technical workshops, and a dedicated Discord community. Plus food and swag for in-person participants!"
-      }
-    ]
-  },
-  {
-    "id": "maximally-ai-shipathon-2025",
-    "slug": "maximally-ai-shipathon",
-    "title": "Maximally AI Shipathon",
-    "tagline": "Build fast, ship smarter",
-    "description": "The ultimate 36-hour AI building marathon for creators who want to ship game-changing products.",
-    "longDescription": "🚀 **The Fastest AI Building Event on the Planet!**\n\nJoin 1500+ builders, makers, and AI enthusiasts for the most intense 36-hour product sprint of your life. This isn't just another hackathon - it's a shipathon where your goal is to build, launch, and get real users for your AI-powered product.\n\n⚡ **What Makes This Special?**\n• Ship to real users during the event\n• Get live feedback and iterate instantly\n• Access to exclusive AI APIs and tools\n• Mentorship from unicorn startup founders\n• Prize for most user traction, not just demos\n• Global community of ambitious builders",
-    "startDate": "2025-08-30T09:00:00Z",
-    "endDate": "2025-09-01T21:00:00Z",
-    "registrationOpen": "2025-07-01T00:00:00Z",
-    "registrationClose": "2025-08-29T23:59:59Z",
-    "submissionOpen": "2025-08-30T09:00:00Z",
-    "submissionClose": "2025-09-01T19:00:00Z",
-    "status": "upcoming",
-    "format": "online",
-    "location": "Global",
-    "prizePool": 10000,
-    "maxTeamSize": 4,
-    "participantCount": 1573,
-    "organizerId": "maximally",
-    "tracks": ["AI Productivity", "Creator Economy", "Developer Tools", "Consumer AI"],
-    "tags": ["AI", "Startup", "Ship", "36h"],
-    "judges": ["sarah-chen", "mark-rodriguez"],
-    "sponsors": ["openai", "anthropic", "vercel"],
-    "socials": {
-      "instagram": "https://instagram.com/maximallyhack",
-      "linkedin": "https://linkedin.com/company/maximally",
-      "youtube": "https://youtube.com/@maximallyhack"
-    },
-    "links": {
-      "website": "https://maximally.ai",
-      "registration": "https://register.maximally.ai/shipathon",
-      "devpost": "https://ai-shipathon.devpost.com",
-      "discord": "https://discord.gg/maximally",
-      "infoPacket": "https://docs.maximally.ai/shipathon-info.pdf",
-      "faq": "https://maximally.ai/shipathon-faq",
-      "rules": "https://maximally.ai/shipathon-rules",
-      "mentorSignup": "https://mentor.maximally.ai/shipathon"
-    },
-    "hero": {
-      "coverImage": "/api/placeholder/1200/600",
-      "promoVideo": "https://youtube.com/watch?v=maximally-shipathon-2025",
-      "countdown": true
-    },
-    "criteria": [
-      { "name": "User Traction", "percentage": 50, "description": "Real users, engagement, and product-market fit signals" },
-      { "name": "Technical Excellence", "percentage": 30, "description": "Code quality, AI implementation, and scalability" },
-      { "name": "Speed to Market", "percentage": 20, "description": "How quickly you shipped and iterated based on feedback" }
-    ],
-    "whyJoin": [
-      "🎯 Ship real products with real users, not just demos",
-      "⚡ Learn to build and iterate at lightning speed",
-      "🤖 Get early access to cutting-edge AI tools and APIs",
-      "👥 Connect with ambitious builders and potential co-founders",
-      "💰 Win based on actual user traction and growth metrics"
-    ],
-    "gallery": [
-      {
-        "id": "shipathon-recap",
-        "type": "video",
-        "src": "https://youtube.com/embed/maximally-shipathon-recap",
-        "thumbnail": "/api/placeholder/400/300",
-        "alt": "Shipathon 2024 Recap",
-        "caption": "See the incredible products shipped in just 36 hours"
-      },
-      {
-        "id": "live-shipping",
-        "type": "image",
-        "src": "/api/placeholder/800/600",
-        "alt": "Teams shipping live",
-        "caption": "Real products launching in real-time"
-      }
-    ],
-    "prizes": [
-      { "place": 1, "amount": 5000, "title": "Most User Traction", "description": "For the team with most real users and engagement" },
-      { "place": 2, "amount": 3000, "title": "Technical Innovation", "description": "For outstanding AI implementation and code quality" },
-      { "place": 3, "amount": 2000, "title": "Speed Demon", "description": "For fastest time from idea to shipped product" },
-      { "track": "AI Productivity", "amount": 1500, "title": "Productivity Champions" },
-      { "track": "Creator Economy", "amount": 1500, "title": "Creator Tools Masters" },
-      { "track": "Developer Tools", "amount": 1500, "title": "Dev Tool Wizards" },
-      { "track": "Consumer AI", "amount": 1500, "title": "Consumer AI Heroes" }
-    ],
-    "timeline": [
-      { "time": "Aug 30, 9:00 AM IST", "title": "Shipathon Begins!", "description": "Start building - APIs unlocked, mentors ready", "isActive": false, "isCompleted": false },
-      { "time": "Aug 30, 11:00 AM IST", "title": "Ship Workshop", "description": "Learn rapid prototyping and launch strategies", "isActive": false, "isCompleted": false },
-      { "time": "Aug 30, 6:00 PM IST", "title": "First Ships Due", "description": "Demo your MVP to get early feedback", "isActive": false, "isCompleted": false },
-      { "time": "Aug 31, 10:00 AM IST", "title": "Iteration Sprint", "description": "Improve based on user feedback and data", "isActive": false, "isCompleted": false },
-      { "time": "Aug 31, 8:00 PM IST", "title": "Growth Hacking Session", "description": "Learn to get users and drive engagement", "isActive": false, "isCompleted": false },
-      { "time": "Sep 1, 7:00 PM IST", "title": "Final Ships", "description": "Submit your final product with user metrics", "isActive": false, "isCompleted": false },
-      { "time": "Sep 1, 9:00 PM IST", "title": "Demo & Awards", "description": "Present to judges and celebrate winners", "isActive": false, "isCompleted": false }
-    ],
-    "rules": [
-      "Teams of 1-4 builders focused on shipping real products",
-      "Must ship a working product accessible to real users during the event",
-      "You can use any AI APIs, frameworks, and existing tools/services",
-      "Projects must be started during the shipathon (no pre-built products)",
-      "Final submission must include live product link and user metrics",
-      "Judged primarily on real user traction and engagement metrics",
-      "Products must be family-friendly and comply with platform policies"
-    ],
-    "eligibility": {
-      "age": "16+ (all skill levels welcome)",
-      "teamSize": "1-4 people maximum",
-      "ipPolicy": "Teams own their products completely",
-      "codeOfConduct": "https://maximally.ai/code-of-conduct"
-    },
-    "community": {
-      "discord": "https://discord.gg/maximally",
+      "discord": "https://discord.gg/S2YyGtBWKa",
       "responseTime": "< 1 hour during event"
     },
     "contact": {
-      "name": "Maximally Shipathon Team",
-      "email": "shipathon@maximally.ai",
+      "name": "Maximally Team",
+      "email": "hello@maximally.in",
       "organizer": "Aryan Khurana & Team Maximally"
     },
     "faqs": [
       {
         "question": "What's the difference between this and a regular hackathon?",
-        "answer": "This is a shipathon! Instead of just building demos, you'll ship real products that real users can access during the event. We judge based on actual user traction, not just technical demos."
+        "answer": "This is a shipathon focused on building real AI-powered projects! Whether you code, no-code, or prompt your way through - it's all about creativity and making something that works. Weird is welcome!"
       },
       {
-        "question": "Do I need to have users before the event starts?",
-        "answer": "No! You'll build your product during the shipathon and get users during the event. We'll teach you growth strategies and provide resources to help you get your first users quickly."
+        "question": "Do I need AI experience to participate?",
+        "answer": "Not at all! We welcome first-time builders, no-code makers, AI-curious designers, writers, musicians, and creators of all kinds. No experience needed - just bring energy and ideas."
       },
       {
-        "question": "What AI tools and APIs will be available?",
-        "answer": "You'll get free access to OpenAI, Anthropic Claude, Vercel AI SDK, and other premium AI tools. Plus exclusive early access to new APIs from our sponsors."
+        "question": "What can I build in the tracks?",
+        "answer": "🛠️ Build with AI: agents, bots, tools, extensions, automations. 🎨 Create with AI: art, music, video, design, memes. 🧪 Experiment with AI: pranks, simulations, hacks, weird stuff!"
       },
       {
-        "question": "How do you measure 'user traction'?",
-        "answer": "We look at real users who sign up and actively use your product, engagement metrics, retention, and user feedback. Quality matters more than quantity - 10 engaged users beats 100 drive-by visitors."
+        "question": "What tools can I use?",
+        "answer": "Anything! No-code tools like Glide, Bubble, Zapier. AI tools like OpenAI, RunwayML, ElevenLabs. Dev tools like Replit, GitHub, Vercel. Use whatever helps you build faster."
+      },
+      {
+        "question": "How do I submit my project?",
+        "answer": "Submit on Devpost by Sept 1, 12:00 AM IST. Include: demo video (max 2 mins), short write-up of what you built and how AI was used, plus a working link or GitHub repo."
       }
     ]
   },
