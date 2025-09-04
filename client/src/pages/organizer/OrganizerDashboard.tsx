@@ -69,9 +69,9 @@ const mockOrganizerEvents: EventStats[] = [
 
 const mockStats = {
   totalEvents: 12,
-  totalParticipants: 5200,
+  totalRegistrations: 5200,
   totalSubmissions: 280,
-  totalPrizes: 450000
+  totalJudges: 48
 };
 
 export default function OrganizerDashboard() {
@@ -154,8 +154,8 @@ export default function OrganizerDashboard() {
           <Card className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-text-muted text-sm">Total Participants</p>
-                <p className="text-3xl font-bold text-sky">{mockStats.totalParticipants.toLocaleString()}</p>
+                <p className="text-text-muted text-sm">Registrations</p>
+                <p className="text-3xl font-bold text-sky">{mockStats.totalRegistrations.toLocaleString()}</p>
               </div>
               <Users className="w-8 h-8 text-sky" />
             </div>
@@ -184,13 +184,15 @@ export default function OrganizerDashboard() {
           <Card className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-text-muted text-sm">Total Prizes</p>
-                <p className="text-3xl font-bold text-yellow">{formatPrize(mockStats.totalPrizes)}</p>
+                <p className="text-text-muted text-sm">Judges</p>
+                <p className="text-3xl font-bold text-yellow">{mockStats.totalJudges}</p>
               </div>
-              <Star className="w-8 h-8 text-yellow" />
+              <Shield className="w-8 h-8 text-yellow" />
             </div>
             <div className="flex items-center gap-1 mt-2 text-sm">
-              <span className="text-text-muted">across all events</span>
+              <TrendingUp className="w-4 h-4 text-success" />
+              <span className="text-success">+5</span>
+              <span className="text-text-muted">this month</span>
             </div>
           </Card>
         </div>
@@ -224,9 +226,20 @@ export default function OrganizerDashboard() {
                           <span>{event.participants} participants</span>
                         </div>
                       </div>
-                      <Badge className={`bg-${getStatusColor(event.status)}/20 text-${getStatusColor(event.status)} px-2 py-1 rounded-full text-xs border-0`}>
-                        {event.status}
-                      </Badge>
+                      <div className="flex items-center gap-2">
+                        <Badge className={`bg-${getStatusColor(event.status)}/20 text-${getStatusColor(event.status)} px-2 py-1 rounded-full text-xs border-0`}>
+                          {event.status}
+                        </Badge>
+                        <Link href={`/organizer/events/${event.id}/overview`}>
+                          <Button 
+                            size="sm" 
+                            className="bg-sky text-white hover:bg-sky/80 text-xs px-3"
+                            data-testid={`button-manage-${event.id}`}
+                          >
+                            Manage
+                          </Button>
+                        </Link>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -244,14 +257,14 @@ export default function OrganizerDashboard() {
                     </Button>
                   </Link>
                   
-                  <Button variant="outline" className="w-full h-20 border-sky text-sky hover:bg-sky/10 rounded-xl flex-col gap-2" data-testid="quick-view-analytics">
-                    <BarChart3 className="w-6 h-6" />
-                    <span>View Analytics</span>
+                  <Button variant="outline" className="w-full h-20 border-sky text-sky hover:bg-sky/10 rounded-xl flex-col gap-2" data-testid="quick-certificates">
+                    <Trophy className="w-6 h-6" />
+                    <span>Certificates</span>
                   </Button>
                   
-                  <Button variant="outline" className="w-full h-20 border-mint text-mint hover:bg-mint/10 rounded-xl flex-col gap-2" data-testid="quick-export-data">
+                  <Button variant="outline" className="w-full h-20 border-mint text-mint hover:bg-mint/10 rounded-xl flex-col gap-2" data-testid="quick-exports">
                     <Download className="w-6 h-6" />
-                    <span>Export Data</span>
+                    <span>Exports</span>
                   </Button>
                   
                   <Button variant="outline" className="w-full h-20 border-yellow text-text-dark hover:bg-yellow/10 rounded-xl flex-col gap-2" data-testid="quick-settings">

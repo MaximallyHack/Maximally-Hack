@@ -27,6 +27,7 @@ interface ProjectData {
   title: string;
   oneLiner: string;
   description: string;
+  readme: string;
   repoUrl: string;
   demoUrl: string;
   slidesUrl: string;
@@ -52,6 +53,7 @@ const defaultProjectData: ProjectData = {
   title: '',
   oneLiner: '',
   description: '',
+  readme: '',
   repoUrl: '',
   demoUrl: '',
   slidesUrl: '',
@@ -231,10 +233,23 @@ export default function UploadProject() {
                       value={data.description}
                       onChange={(e) => setData(prev => ({ ...prev, description: e.target.value }))}
                       placeholder="Tell the story of your project. What problem does it solve? How does it work? What makes it special?"
-                      rows={6}
+                      rows={4}
                       className="border-soft-gray focus:ring-2 focus:ring-coral focus:border-transparent"
                       data-testid="textarea-description"
                     />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-text-dark mb-2">README Documentation</label>
+                    <Textarea
+                      value={data.readme}
+                      onChange={(e) => setData(prev => ({ ...prev, readme: e.target.value }))}
+                      placeholder="Write your project documentation in Markdown format. Include setup instructions, usage examples, and contribution guidelines..."
+                      rows={8}
+                      className="border-soft-gray focus:ring-2 focus:ring-coral focus:border-transparent font-mono text-sm"
+                      data-testid="textarea-readme"
+                    />
+                    <p className="text-xs text-text-muted mt-1">Supports Markdown formatting</p>
                   </div>
                 </div>
               </div>
@@ -572,6 +587,21 @@ export default function UploadProject() {
                       className="w-full h-20 object-cover rounded-lg"
                     />
                   ))}
+                </div>
+              </Card>
+            )}
+            
+            {/* README Preview */}
+            {data.readme && (
+              <Card className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray">
+                <h5 className="font-medium text-text-dark mb-4 flex items-center gap-2">
+                  <FileText className="w-4 h-4" />
+                  README Documentation
+                </h5>
+                <div className="prose max-w-none text-text-muted">
+                  <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed bg-soft-gray/30 p-4 rounded-lg">
+                    {data.readme}
+                  </pre>
                 </div>
               </Card>
             )}

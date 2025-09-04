@@ -16,6 +16,7 @@ import Login from "@/pages/auth/Login";
 import Onboarding from "@/pages/auth/Onboarding";
 import OrganizerDashboard from "@/pages/organizer/OrganizerDashboard";
 import CreateEvent from "@/pages/organizer/CreateEvent";
+import ManageEvent from "@/pages/organizer/ManageEvent";
 import JudgeDashboard from "@/pages/judge/JudgeDashboard";
 import JudgeRegister from "@/pages/judge/JudgeRegister";
 import UploadProject from "@/pages/UploadProject";
@@ -47,6 +48,7 @@ function Router() {
         <Route path="/onboarding" component={Onboarding} />
         <Route path="/organizer" component={OrganizerDashboard} />
         <Route path="/organizer/events/new" component={CreateEvent} />
+        <Route path="/organizer/events/:id/overview" component={ManageEvent} />
         <Route path="/judge" component={JudgeDashboard} />
         <Route component={NotFound} />
       </Switch>
