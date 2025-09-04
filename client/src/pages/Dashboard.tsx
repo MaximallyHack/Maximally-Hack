@@ -21,7 +21,7 @@ import {
   GitBranch, Star, Target, Activity, UserPlus, Zap,
   ChevronRight, Medal, Upload, Eye, Github, Globe,
   Search, Filter, SortDesc, BarChart3, MessageCircle,
-  Share2, Bookmark, Heart, Fire, Lightbulb, Rocket,
+  Share2, Bookmark, Heart, Lightbulb, Rocket,
   CheckCircle, AlertCircle, XCircle, Clock4, Sparkles,
   ArrowUp, ArrowDown, ChevronDown, MoreHorizontal,
   PieChart, LineChart, TrendingDown, Calendar as CalendarIcon,
@@ -267,41 +267,6 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-            <Card>
-              <CardContent className="p-6 text-center">
-                <div className="text-2xl font-semibold text-gray-900 mb-1">
-                  {registeredEvents.length}
-                </div>
-                <div className="text-sm text-gray-600">Total Events</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-6 text-center">
-                <div className="text-2xl font-semibold text-blue-600 mb-1">
-                  {activeEvents.length}
-                </div>
-                <div className="text-sm text-gray-600">Active Now</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-6 text-center">
-                <div className="text-2xl font-semibold text-green-600 mb-1">
-                  {completedEvents.length}
-                </div>
-                <div className="text-sm text-gray-600">Completed</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-6 text-center">
-                <div className="text-2xl font-semibold text-purple-600 mb-1">
-                  0
-                </div>
-                <div className="text-sm text-gray-600">Awards Won</div>
-              </CardContent>
-            </Card>
-          </div>
         </div>
 
         {/* Content Tabs */}
@@ -330,12 +295,93 @@ export default function Dashboard() {
                     <BarChart3 className="w-4 h-4 mr-2" />
                     Analytics
                   </Button>
-                  <Link href="/submit">
-                    <Button data-testid="button-submit-project">
-                      <Plus className="w-4 h-4 mr-2" />
-                      Submit New Project
-                    </Button>
-                  </Link>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button data-testid="button-submit-project">
+                        <Plus className="w-4 h-4 mr-2" />
+                        Submit New Project
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                      <DialogHeader>
+                        <DialogTitle>Submit New Project</DialogTitle>
+                      </DialogHeader>
+                      <div className="space-y-6">
+                        <div className="space-y-4">
+                          <div>
+                            <label className="text-sm font-medium mb-2 block">Project Title</label>
+                            <Input placeholder="Enter your project title" data-testid="input-project-title-main" />
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium mb-2 block">Tagline</label>
+                            <Input placeholder="A brief description of your project" data-testid="input-project-tagline-main" />
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium mb-2 block">Select Event</label>
+                            <Select>
+                              <SelectTrigger data-testid="select-project-event-main">
+                                <SelectValue placeholder="Choose hackathon event" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {events?.filter(e => e.status === 'active' || e.status === 'upcoming').map(event => (
+                                  <SelectItem key={event.id} value={event.id}>{event.title}</SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium mb-2 block">Team (Optional)</label>
+                            <Select>
+                              <SelectTrigger data-testid="select-project-team-main">
+                                <SelectValue placeholder="Solo project or select team" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="solo">Solo Project</SelectItem>
+                                {userTeams.map(team => (
+                                  <SelectItem key={team.id} value={team.id}>{team.name}</SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium mb-2 block">Description</label>
+                            <Textarea placeholder="Describe your project, what it does, and how you built it..." rows={4} data-testid="textarea-project-description-main" />
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <label className="text-sm font-medium mb-2 block">GitHub URL</label>
+                              <Input placeholder="https://github.com/username/repo" data-testid="input-project-github-main" />
+                            </div>
+                            <div>
+                              <label className="text-sm font-medium mb-2 block">Demo URL</label>
+                              <Input placeholder="https://yourproject.com" data-testid="input-project-demo-main" />
+                            </div>
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium mb-2 block">Technologies Used</label>
+                            <Input placeholder="React, Node.js, Python, etc. (comma separated)" data-testid="input-project-tech-main" />
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium mb-2 block">Tags</label>
+                            <Input placeholder="AI, Web Development, Mobile, etc. (comma separated)" data-testid="input-project-tags-main" />
+                          </div>
+                        </div>
+                        
+                        <div className="flex gap-3 pt-4 border-t">
+                          <Button className="flex-1" onClick={() => {
+                            toast({ title: "Project submitted successfully!", description: "Your project is now live on the platform." });
+                          }} data-testid="button-submit-project-form-main">
+                            <Upload className="w-4 h-4 mr-2" />
+                            Submit Project
+                          </Button>
+                          <Button variant="outline" className="flex-1" data-testid="button-save-draft-main">
+                            <FileText className="w-4 h-4 mr-2" />
+                            Save as Draft
+                          </Button>
+                        </div>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
                 </div>
               </div>
 
@@ -782,12 +828,122 @@ export default function Dashboard() {
                     <h3 className="text-xl font-medium text-gray-900 mb-2">No teams yet</h3>
                     <p className="text-gray-600 mb-6">Join or create a team to collaborate on hackathons</p>
                     <div className="flex gap-3 justify-center">
-                      <Link href="/teams">
-                        <Button variant="outline" data-testid="button-find-teams">
-                          <Users className="w-4 h-4 mr-2" />
-                          Find Teams
-                        </Button>
-                      </Link>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button variant="outline" data-testid="button-find-teams">
+                            <Users className="w-4 h-4 mr-2" />
+                            Find Teams
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+                          <DialogHeader>
+                            <DialogTitle>Find & Join Teams</DialogTitle>
+                          </DialogHeader>
+                          <div className="space-y-6">
+                            {/* Search and Filter */}
+                            <div className="flex gap-4 items-center">
+                              <div className="relative flex-1">
+                                <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                                <Input placeholder="Search teams by name, skills, or event..." className="pl-10" data-testid="input-search-teams-main" />
+                              </div>
+                              <Select>
+                                <SelectTrigger className="w-40" data-testid="select-team-event-filter-main">
+                                  <SelectValue placeholder="All Events" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="all">All Events</SelectItem>
+                                  {events?.filter(e => e.status === 'active' || e.status === 'upcoming').map(event => (
+                                    <SelectItem key={event.id} value={event.id}>{event.title}</SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            
+                            {/* Available Teams */}
+                            <div className="space-y-4">
+                              <h3 className="font-medium text-gray-900">Available Teams Looking for Members</h3>
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
+                                {teams?.filter(team => !team.members.includes(user.id) && team.status === 'recruiting').slice(0, 6).map(team => {
+                                  const eventName = events?.find(e => e.id === team.eventId)?.title || 'Unknown Event';
+                                  
+                                  return (
+                                    <Card key={team.id} className="hover:shadow-sm transition-shadow">
+                                      <CardContent className="p-4">
+                                        <div className="space-y-3">
+                                          <div className="flex items-start justify-between">
+                                            <div>
+                                              <h4 className="font-medium text-gray-900">{team.name}</h4>
+                                              <p className="text-sm text-gray-600 mt-1 line-clamp-2">{team.description}</p>
+                                            </div>
+                                            <Badge className="bg-blue-100 text-blue-800 text-xs">Recruiting</Badge>
+                                          </div>
+                                          
+                                          <div className="text-sm text-gray-600">
+                                            <div className="flex items-center gap-2 mb-1">
+                                              <Calendar className="w-4 h-4" />
+                                              <span>{eventName}</span>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                              <Users className="w-4 h-4" />
+                                              <span>{team.members.length}/{team.maxSize} members</span>
+                                            </div>
+                                          </div>
+                                          
+                                          {team.lookingFor.length > 0 && (
+                                            <div>
+                                              <h5 className="text-xs font-medium text-gray-700 mb-1">Looking for:</h5>
+                                              <div className="flex flex-wrap gap-1">
+                                                {team.lookingFor.slice(0, 3).map(skill => (
+                                                  <Badge key={skill} variant="outline" className="text-xs">{skill}</Badge>
+                                                ))}
+                                                {team.lookingFor.length > 3 && (
+                                                  <Badge variant="outline" className="text-xs">+{team.lookingFor.length - 3}</Badge>
+                                                )}
+                                              </div>
+                                            </div>
+                                          )}
+                                          
+                                          <div className="flex gap-2 pt-2">
+                                            <Button size="sm" className="flex-1" onClick={() => {
+                                              toast({ title: "Join request sent!", description: `You've requested to join ${team.name}` });
+                                            }} data-testid={`button-join-team-main-${team.id}`}>
+                                              <UserPlus className="w-4 h-4 mr-1" />
+                                              Join
+                                            </Button>
+                                            <Button size="sm" variant="outline" onClick={() => {
+                                              navigator.clipboard.writeText(team.joinCode);
+                                              toast({ title: "Join code copied!", description: `Code: ${team.joinCode}` });
+                                            }}>
+                                              <Copy className="w-4 h-4" />
+                                            </Button>
+                                          </div>
+                                        </div>
+                                      </CardContent>
+                                    </Card>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                            
+                            <Separator />
+                            
+                            <div className="flex gap-3">
+                              <Button variant="outline" className="flex-1" onClick={() => {
+                                toast({ title: "Feature coming soon!", description: "Team creation will be available in the next update." });
+                              }}>
+                                <Plus className="w-4 h-4 mr-2" />
+                                Create New Team
+                              </Button>
+                              <Link href="/teams">
+                                <Button variant="outline" className="flex-1">
+                                  <ExternalLink className="w-4 h-4 mr-2" />
+                                  Browse All Teams
+                                </Button>
+                              </Link>
+                            </div>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
                       <Dialog>
                         <DialogTrigger asChild>
                           <Button className="bg-green-600 hover:bg-green-700" data-testid="button-create-team">
@@ -1066,29 +1222,230 @@ export default function Dashboard() {
 
                 {/* Quick Action Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                  <Card className="hover:shadow-md transition-shadow cursor-pointer" data-testid="card-quick-action-submit">
-                    <Link href="/submit">
-                      <CardContent className="p-6 text-center">
-                        <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                          <Upload className="w-6 h-6 text-blue-600" />
+                  {/* Submit Project Action */}
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Card className="hover:shadow-md transition-shadow cursor-pointer" data-testid="card-quick-action-submit">
+                        <CardContent className="p-6 text-center">
+                          <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                            <Upload className="w-6 h-6 text-blue-600" />
+                          </div>
+                          <h3 className="font-medium text-gray-900 mb-1">Submit Project</h3>
+                          <p className="text-sm text-gray-600">Upload your latest creation</p>
+                        </CardContent>
+                      </Card>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                      <DialogHeader>
+                        <DialogTitle>Submit New Project</DialogTitle>
+                      </DialogHeader>
+                      <div className="space-y-6">
+                        <div className="space-y-4">
+                          <div>
+                            <label className="text-sm font-medium mb-2 block">Project Title</label>
+                            <Input placeholder="Enter your project title" data-testid="input-project-title" />
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium mb-2 block">Tagline</label>
+                            <Input placeholder="A brief description of your project" data-testid="input-project-tagline" />
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium mb-2 block">Select Event</label>
+                            <Select>
+                              <SelectTrigger data-testid="select-project-event">
+                                <SelectValue placeholder="Choose hackathon event" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {events?.filter(e => e.status === 'active' || e.status === 'upcoming').map(event => (
+                                  <SelectItem key={event.id} value={event.id}>{event.title}</SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium mb-2 block">Team (Optional)</label>
+                            <Select>
+                              <SelectTrigger data-testid="select-project-team">
+                                <SelectValue placeholder="Solo project or select team" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="solo">Solo Project</SelectItem>
+                                {userTeams.map(team => (
+                                  <SelectItem key={team.id} value={team.id}>{team.name}</SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium mb-2 block">Description</label>
+                            <Textarea placeholder="Describe your project, what it does, and how you built it..." rows={4} data-testid="textarea-project-description" />
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <label className="text-sm font-medium mb-2 block">GitHub URL</label>
+                              <Input placeholder="https://github.com/username/repo" data-testid="input-project-github" />
+                            </div>
+                            <div>
+                              <label className="text-sm font-medium mb-2 block">Demo URL</label>
+                              <Input placeholder="https://yourproject.com" data-testid="input-project-demo" />
+                            </div>
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium mb-2 block">Technologies Used</label>
+                            <Input placeholder="React, Node.js, Python, etc. (comma separated)" data-testid="input-project-tech" />
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium mb-2 block">Tags</label>
+                            <Input placeholder="AI, Web Development, Mobile, etc. (comma separated)" data-testid="input-project-tags" />
+                          </div>
                         </div>
-                        <h3 className="font-medium text-gray-900 mb-1">Submit Project</h3>
-                        <p className="text-sm text-gray-600">Upload your latest creation</p>
-                      </CardContent>
-                    </Link>
-                  </Card>
+                        
+                        <div className="flex gap-3 pt-4 border-t">
+                          <Button className="flex-1" onClick={() => {
+                            toast({ title: "Project submitted successfully!", description: "Your project is now live on the platform." });
+                          }} data-testid="button-submit-project-form">
+                            <Upload className="w-4 h-4 mr-2" />
+                            Submit Project
+                          </Button>
+                          <Button variant="outline" className="flex-1" data-testid="button-save-draft">
+                            <FileText className="w-4 h-4 mr-2" />
+                            Save as Draft
+                          </Button>
+                        </div>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
                   
-                  <Card className="hover:shadow-md transition-shadow cursor-pointer" data-testid="card-quick-action-teams">
-                    <Link href="/teams">
-                      <CardContent className="p-6 text-center">
-                        <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                          <UserPlus className="w-6 h-6 text-green-600" />
+                  {/* Find Teams Action */}
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Card className="hover:shadow-md transition-shadow cursor-pointer" data-testid="card-quick-action-teams">
+                        <CardContent className="p-6 text-center">
+                          <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                            <UserPlus className="w-6 h-6 text-green-600" />
+                          </div>
+                          <h3 className="font-medium text-gray-900 mb-1">Find Teams</h3>
+                          <p className="text-sm text-gray-600">Join or create a team</p>
+                        </CardContent>
+                      </Card>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+                      <DialogHeader>
+                        <DialogTitle>Find & Join Teams</DialogTitle>
+                      </DialogHeader>
+                      <div className="space-y-6">
+                        {/* Search and Filter */}
+                        <div className="flex gap-4 items-center">
+                          <div className="relative flex-1">
+                            <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                            <Input placeholder="Search teams by name, skills, or event..." className="pl-10" data-testid="input-search-teams" />
+                          </div>
+                          <Select>
+                            <SelectTrigger className="w-40" data-testid="select-team-event-filter">
+                              <SelectValue placeholder="All Events" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="all">All Events</SelectItem>
+                              {events?.filter(e => e.status === 'active' || e.status === 'upcoming').map(event => (
+                                <SelectItem key={event.id} value={event.id}>{event.title}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <Select>
+                            <SelectTrigger className="w-32" data-testid="select-team-status-filter">
+                              <SelectValue placeholder="Status" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="all">All Status</SelectItem>
+                              <SelectItem value="recruiting">Recruiting</SelectItem>
+                              <SelectItem value="full">Team Full</SelectItem>
+                            </SelectContent>
+                          </Select>
                         </div>
-                        <h3 className="font-medium text-gray-900 mb-1">Find Teams</h3>
-                        <p className="text-sm text-gray-600">Join or create a team</p>
-                      </CardContent>
-                    </Link>
-                  </Card>
+                        
+                        {/* Available Teams */}
+                        <div className="space-y-4">
+                          <h3 className="font-medium text-gray-900">Available Teams</h3>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
+                            {teams?.filter(team => !team.members.includes(user.id) && team.status === 'recruiting').map(team => {
+                              const eventName = events?.find(e => e.id === team.eventId)?.title || 'Unknown Event';
+                              const teamMembers = allUsers?.filter(u => team.members.includes(u.id)) || [];
+                              
+                              return (
+                                <Card key={team.id} className="hover:shadow-sm transition-shadow">
+                                  <CardContent className="p-4">
+                                    <div className="space-y-3">
+                                      <div className="flex items-start justify-between">
+                                        <div>
+                                          <h4 className="font-medium text-gray-900">{team.name}</h4>
+                                          <p className="text-sm text-gray-600 mt-1">{team.description}</p>
+                                        </div>
+                                        <Badge className="bg-blue-100 text-blue-800">Recruiting</Badge>
+                                      </div>
+                                      
+                                      <div className="text-sm text-gray-600">
+                                        <div className="flex items-center gap-2 mb-1">
+                                          <Calendar className="w-4 h-4" />
+                                          <span>{eventName}</span>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                          <Users className="w-4 h-4" />
+                                          <span>{team.members.length}/{team.maxSize} members</span>
+                                        </div>
+                                      </div>
+                                      
+                                      {team.lookingFor.length > 0 && (
+                                        <div>
+                                          <h5 className="text-xs font-medium text-gray-700 mb-1">Looking for:</h5>
+                                          <div className="flex flex-wrap gap-1">
+                                            {team.lookingFor.slice(0, 3).map(skill => (
+                                              <Badge key={skill} variant="outline" className="text-xs">{skill}</Badge>
+                                            ))}
+                                            {team.lookingFor.length > 3 && (
+                                              <Badge variant="outline" className="text-xs">+{team.lookingFor.length - 3}</Badge>
+                                            )}
+                                          </div>
+                                        </div>
+                                      )}
+                                      
+                                      <div className="flex gap-2 pt-2">
+                                        <Button size="sm" className="flex-1" onClick={() => {
+                                          toast({ title: "Join request sent!", description: `You've requested to join ${team.name}` });
+                                        }} data-testid={`button-join-team-${team.id}`}>
+                                          <UserPlus className="w-4 h-4 mr-1" />
+                                          Join Team
+                                        </Button>
+                                        <Button size="sm" variant="outline" onClick={() => {
+                                          toast({ title: "Team details copied", description: "Join code and details copied to clipboard" });
+                                        }}>
+                                          <Share2 className="w-4 h-4" />
+                                        </Button>
+                                      </div>
+                                    </div>
+                                  </CardContent>
+                                </Card>
+                              );
+                            })}
+                          </div>
+                        </div>
+                        
+                        <Separator />
+                        
+                        <div className="flex gap-3">
+                          <Button variant="outline" className="flex-1">
+                            <Plus className="w-4 h-4 mr-2" />
+                            Create New Team
+                          </Button>
+                          <Link href="/teams">
+                            <Button variant="outline" className="flex-1">
+                              <ExternalLink className="w-4 h-4 mr-2" />
+                              Browse All Teams
+                            </Button>
+                          </Link>
+                        </div>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
                   
                   <Card className="hover:shadow-md transition-shadow cursor-pointer" data-testid="card-quick-action-explore">
                     <Link href="/explore">
