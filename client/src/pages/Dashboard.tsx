@@ -271,13 +271,11 @@ export default function Dashboard() {
 
         {/* Content Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-6 bg-gray-50 p-1 rounded-lg mb-8">
+          <TabsList className="grid w-full grid-cols-4 bg-gray-50 p-1 rounded-lg mb-8">
             <TabsTrigger value="overview" className="rounded-md">Overview</TabsTrigger>
             <TabsTrigger value="projects" className="rounded-md">My Projects</TabsTrigger>
             <TabsTrigger value="teams" className="rounded-md">My Teams</TabsTrigger>
-            <TabsTrigger value="active" className="rounded-md">Active Events</TabsTrigger>
-            <TabsTrigger value="upcoming" className="rounded-md">Upcoming</TabsTrigger>
-            <TabsTrigger value="completed" className="rounded-md">History</TabsTrigger>
+            <TabsTrigger value="events" className="rounded-md">My Events</TabsTrigger>
           </TabsList>
 
           <TabsContent value="projects" className="space-y-6">
@@ -1632,150 +1630,154 @@ export default function Dashboard() {
             )}
           </TabsContent>
 
-          <TabsContent value="active" className="space-y-6">
+          <TabsContent value="events" className="space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-medium text-gray-900">Active Events</h2>
-            </div>
-            
-            {activeEvents.length === 0 ? (
-              <div className="text-center py-16">
-                <p className="text-gray-600">No active events</p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {activeEvents.map(event => (
-                  <Card key={event.id} className="border border-green-200 bg-green-50">
-                    <CardHeader>
-                      <div className="flex items-center justify-between">
-                        <CardTitle className="text-lg">{event.title}</CardTitle>
-                        <Badge className="bg-green-100 text-green-800">Active</Badge>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-gray-600 mb-4">{event.description}</p>
-                      <div className="space-y-2 text-sm">
-                        <div className="flex items-center gap-2">
-                          <Calendar className="w-4 h-4 text-gray-500" />
-                          <span>Ends {formatDate(event.endDate)}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Trophy className="w-4 h-4 text-gray-500" />
-                          <span>${(event.prizePool / 1000).toFixed(0)}k prize pool</span>
-                        </div>
-                      </div>
-                      <div className="flex gap-2 mt-4">
-                        <Link href={`/e/${event.slug}`}>
-                          <Button size="sm" className="bg-green-600 hover:bg-green-700">
-                            View Event
-                          </Button>
-                        </Link>
-                        <Link href={`/e/${event.slug}/submit`}>
-                          <Button size="sm" variant="outline">
-                            Submit Project
-                          </Button>
-                        </Link>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            )}
-          </TabsContent>
-
-          <TabsContent value="upcoming" className="space-y-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-medium text-gray-900">Upcoming Events</h2>
-            </div>
-            
-            {upcomingEvents.length === 0 ? (
-              <div className="text-center py-16">
-                <p className="text-gray-600 mb-4">No upcoming events</p>
+              <h2 className="text-xl font-medium text-gray-900">My Events</h2>
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-600">{registeredEvents.length} registered events</span>
                 <Link href="/explore">
-                  <Button variant="outline">Find Events to Join</Button>
+                  <Button variant="outline" size="sm">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Find More Events
+                  </Button>
+                </Link>
+              </div>
+            </div>
+            
+            {registeredEvents.length === 0 ? (
+              <div className="text-center py-16">
+                <div className="text-6xl mb-4">🎯</div>
+                <h3 className="text-xl font-medium text-gray-900 mb-2">No events registered</h3>
+                <p className="text-gray-600 mb-6">Start your hackathon journey by exploring and registering for events</p>
+                <Link href="/explore">
+                  <Button className="bg-gray-900 hover:bg-gray-800">
+                    <Rocket className="w-4 h-4 mr-2" />
+                    Explore Events
+                  </Button>
                 </Link>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {upcomingEvents.map(event => (
-                  <Card key={event.id}>
-                    <CardHeader>
-                      <div className="flex items-center justify-between">
-                        <CardTitle className="text-lg">{event.title}</CardTitle>
-                        <Badge className={getStatusColor(event.status)}>
-                          {event.status.replace('_', ' ')}
-                        </Badge>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-gray-600 mb-4">{event.description}</p>
-                      <div className="space-y-2 text-sm mb-4">
-                        <div className="flex items-center gap-2">
-                          <Calendar className="w-4 h-4 text-gray-500" />
-                          <span>Starts {formatDate(event.startDate)}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <MapPin className="w-4 h-4 text-gray-500" />
-                          <span>{event.location}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Trophy className="w-4 h-4 text-gray-500" />
-                          <span>${(event.prizePool / 1000).toFixed(0)}k prize pool</span>
-                        </div>
-                      </div>
-                      <div className="flex gap-2">
-                        <Link href={`/e/${event.slug}`}>
-                          <Button size="sm">View Details</Button>
-                        </Link>
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          onClick={() => handleUnregister(event.id, event.title)}
-                        >
-                          Unregister
-                        </Button>
+              <div className="space-y-6">
+                {/* Event Status Overview */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <Card>
+                    <CardContent className="p-4 text-center">
+                      <div className="text-2xl font-semibold text-green-600 mb-1">{activeEvents.length}</div>
+                      <div className="text-sm text-gray-600">Active Now</div>
+                      <div className="text-xs text-gray-500 mt-1">
+                        <Activity className="w-3 h-3 inline mr-1" />Ongoing events
                       </div>
                     </CardContent>
                   </Card>
-                ))}
-              </div>
-            )}
-          </TabsContent>
-
-          <TabsContent value="completed" className="space-y-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-medium text-gray-900">Completed Events</h2>
-            </div>
-            
-            {completedEvents.length === 0 ? (
-              <div className="text-center py-16">
-                <p className="text-gray-600">No completed events yet</p>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {completedEvents.map(event => (
-                  <Card key={event.id}>
-                    <CardContent className="p-6">
-                      <div className="flex items-center justify-between">
-                        <div className="flex-1">
-                          <h3 className="font-medium text-gray-900 mb-1">{event.title}</h3>
-                          <p className="text-sm text-gray-600 mb-2">{event.description}</p>
-                          <div className="flex items-center gap-4 text-sm text-gray-500">
-                            <span>Completed {formatDate(event.endDate)}</span>
-                            <span>${(event.prizePool / 1000).toFixed(0)}k prize pool</span>
+                  <Card>
+                    <CardContent className="p-4 text-center">
+                      <div className="text-2xl font-semibold text-blue-600 mb-1">{upcomingEvents.length}</div>
+                      <div className="text-sm text-gray-600">Upcoming</div>
+                      <div className="text-xs text-gray-500 mt-1">
+                        <Calendar className="w-3 h-3 inline mr-1" />Starting soon
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardContent className="p-4 text-center">
+                      <div className="text-2xl font-semibold text-purple-600 mb-1">{completedEvents.length}</div>
+                      <div className="text-sm text-gray-600">Completed</div>
+                      <div className="text-xs text-gray-500 mt-1">
+                        <Trophy className="w-3 h-3 inline mr-1" />Finished
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+                
+                {/* All Events List */}
+                <div className="space-y-4">
+                  {registeredEvents.map(event => {
+                    const isActive = event.status === 'active';
+                    const isUpcoming = event.status === 'upcoming' || event.status === 'registration_open';
+                    const isCompleted = event.status === 'completed';
+                    
+                    return (
+                      <Card key={event.id} className={`hover:shadow-md transition-shadow ${
+                        isActive ? 'border-green-200 bg-green-50' :
+                        isUpcoming ? 'border-blue-200 bg-blue-50' :
+                        isCompleted ? 'border-gray-200 bg-gray-50' : ''
+                      }`}>
+                        <CardContent className="p-6">
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-3 mb-2">
+                                <h3 className="text-lg font-medium text-gray-900">{event.title}</h3>
+                                <Badge className={getStatusColor(event.status)}>
+                                  {isActive ? 'Active' :
+                                   isUpcoming ? 'Upcoming' :
+                                   isCompleted ? 'Completed' :
+                                   event.status.replace('_', ' ')}
+                                </Badge>
+                              </div>
+                              
+                              <p className="text-gray-600 mb-4">{event.description}</p>
+                              
+                              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600">
+                                <div className="flex items-center gap-2">
+                                  <Calendar className="w-4 h-4" />
+                                  <span>
+                                    {isActive ? `Ends ${formatDate(event.endDate)}` :
+                                     isUpcoming ? `Starts ${formatDate(event.startDate)}` :
+                                     `Completed ${formatDate(event.endDate)}`}
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <MapPin className="w-4 h-4" />
+                                  <span>{event.location}</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <Trophy className="w-4 h-4" />
+                                  <span>${(event.prizePool / 1000).toFixed(0)}k prize pool</span>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            <div className="flex flex-col gap-2 ml-4">
+                              <Link href={`/e/${event.slug}`}>
+                                <Button size="sm" variant={isActive ? 'default' : 'outline'}>
+                                  <Eye className="w-4 h-4 mr-1" />
+                                  View Event
+                                </Button>
+                              </Link>
+                              
+                              {isActive && (
+                                <Link href={`/e/${event.slug}/submit`}>
+                                  <Button size="sm" className="bg-green-600 hover:bg-green-700">
+                                    <Upload className="w-4 h-4 mr-1" />
+                                    Submit Project
+                                  </Button>
+                                </Link>
+                              )}
+                              
+                              {isUpcoming && (
+                                <Button 
+                                  size="sm" 
+                                  variant="outline"
+                                  onClick={() => handleUnregister(event.id, event.title)}
+                                >
+                                  <XCircle className="w-4 h-4 mr-1" />
+                                  Unregister
+                                </Button>
+                              )}
+                              
+                              {isCompleted && (
+                                <Button size="sm" variant="outline">
+                                  <Award className="w-4 h-4 mr-1" />
+                                  View Results
+                                </Button>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Badge className="bg-gray-100 text-gray-800">Completed</Badge>
-                          <Link href={`/e/${event.slug}`}>
-                            <Button size="sm" variant="outline">
-                              <ExternalLink className="w-4 h-4" />
-                            </Button>
-                          </Link>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+                </div>
               </div>
             )}
           </TabsContent>
