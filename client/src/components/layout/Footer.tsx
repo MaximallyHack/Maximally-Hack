@@ -29,8 +29,8 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/organizer/events/new" className="hover:text-coral transition-colors" data-testid="footer-create">
-                  Create Hackathon
+                <Link href="/organizer" className="hover:text-coral transition-colors" data-testid="footer-organize">
+                  Organize with Us
                 </Link>
               </li>
               <li>

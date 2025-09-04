@@ -148,8 +148,8 @@ export default function EnhancedEventDetail() {
                 Register
               </Button>
               
-              {event.links?.discord && (
-                <Button variant="outline" className="border-sky text-sky hover:bg-sky/10" onClick={() => window.open(event.links.discord, '_blank')}>
+              {event.links && event.links.discord && (
+                <Button variant="outline" className="border-sky text-sky hover:bg-sky/10" onClick={() => window.open(event.links!.discord!, '_blank')}>
                   <SiDiscord className="w-4 h-4 mr-2" />
                   Discord
                 </Button>
@@ -183,17 +183,17 @@ export default function EnhancedEventDetail() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div>
               {/* Cover Image or Video */}
-              {event.hero?.coverImage && (
+              {event.hero && event.hero.coverImage && (
                 <div className="relative rounded-2xl overflow-hidden shadow-soft mb-8">
                   <img 
                     src={event.hero.coverImage} 
                     alt={`${event.title} cover`}
                     className="w-full h-64 object-cover"
                   />
-                  {event.hero.promoVideo && (
+                  {event.hero && event.hero.promoVideo && (
                     <Button 
                       className="absolute inset-0 bg-black/50 text-white hover:bg-black/70 w-full h-full flex items-center justify-center"
-                      onClick={() => window.open(event.hero.promoVideo, '_blank')}
+                      onClick={() => window.open(event.hero!.promoVideo!, '_blank')}
                     >
                       <Play className="w-12 h-12" />
                     </Button>
@@ -202,7 +202,7 @@ export default function EnhancedEventDetail() {
               )}
               
               {/* Countdown Timer */}
-              {event.hero?.countdown && (
+              {event.hero && event.hero.countdown && (
                 <Card className="bg-white/80 backdrop-blur-sm border-coral shadow-soft">
                   <CardContent className="p-6 text-center">
                     <h3 className="font-heading font-semibold text-lg text-text-dark mb-4">Event Starts In:</h3>
@@ -490,30 +490,30 @@ export default function EnhancedEventDetail() {
                     </h2>
                     
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      {event.community?.discord && (
+                      {event.community && event.community.discord && (
                         <Button 
                           className="h-24 bg-indigo-600 hover:bg-indigo-700 text-white flex-col"
-                          onClick={() => window.open(event.community.discord, '_blank')}
+                          onClick={() => window.open(event.community!.discord!, '_blank')}
                         >
                           <SiDiscord className="w-8 h-8 mb-2" />
                           <span>Join Discord</span>
                         </Button>
                       )}
                       
-                      {event.community?.telegram && (
+                      {event.community && event.community.telegram && (
                         <Button 
                           className="h-24 bg-blue-500 hover:bg-blue-600 text-white flex-col"
-                          onClick={() => window.open(event.community.telegram, '_blank')}
+                          onClick={() => window.open(event.community!.telegram!, '_blank')}
                         >
                           <SiTelegram className="w-8 h-8 mb-2" />
                           <span>Telegram Group</span>
                         </Button>
                       )}
                       
-                      {event.community?.forum && (
+                      {event.community && event.community.forum && (
                         <Button 
                           className="h-24 bg-coral hover:bg-coral/80 text-white flex-col"
-                          onClick={() => window.open(event.community.forum, '_blank')}
+                          onClick={() => window.open(event.community!.forum!, '_blank')}
                         >
                           <Globe className="w-8 h-8 mb-2" />
                           <span>Community Forum</span>
@@ -521,10 +521,10 @@ export default function EnhancedEventDetail() {
                       )}
                     </div>
                     
-                    {event.community?.responseTime && (
+                    {event.community && event.community.responseTime && (
                       <div className="mt-6 p-4 bg-yellow/10 rounded-lg border border-yellow/20">
                         <p className="text-text-dark text-center">
-                          <strong>⚡ Quick Response:</strong> Our team responds within {event.community.responseTime}
+                          <strong>⚡ Quick Response:</strong> Our team responds within {event.community!.responseTime}
                         </p>
                       </div>
                     )}
@@ -639,11 +639,11 @@ export default function EnhancedEventDetail() {
           >
             Register Now
           </Button>
-          {event.links?.discord && (
+          {event.links && event.links.discord && (
             <Button 
               variant="outline"
               className="border-sky text-sky"
-              onClick={() => window.open(event.links.discord, '_blank')}
+              onClick={() => window.open(event.links!.discord!, '_blank')}
             >
               <SiDiscord className="w-4 h-4" />
             </Button>

@@ -106,7 +106,7 @@ export default function EventDetail() {
       {/* Event Tabs */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-7 bg-white rounded-xl border border-soft-gray p-1">
+          <TabsList className="grid w-full grid-cols-7 bg-white rounded-xl border border-soft-gray p-1 mb-6">
             <TabsTrigger value="about" className="rounded-lg" data-testid="tab-about">About</TabsTrigger>
             <TabsTrigger value="prizes" className="rounded-lg" data-testid="tab-prizes">Prizes</TabsTrigger>
             <TabsTrigger value="rules" className="rounded-lg" data-testid="tab-rules">Rules</TabsTrigger>
@@ -117,10 +117,10 @@ export default function EventDetail() {
           </TabsList>
 
           {/* About Tab */}
-          <TabsContent value="about" className="mt-8">
+          <TabsContent value="about" className="mt-6">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               <div className="lg:col-span-2">
-                <div className="prose max-w-none">
+                <div className="bg-white rounded-2xl p-8 shadow-soft border border-soft-gray mb-6">
                   <h2 className="font-heading font-bold text-2xl text-text-dark mb-4">About the Challenge</h2>
                   <CrayonSquiggle className="mb-6" />
                   <p className="text-text-muted mb-6">{event.longDescription}</p>
@@ -215,7 +215,7 @@ export default function EventDetail() {
           </TabsContent>
 
           {/* Prizes Tab */}
-          <TabsContent value="prizes" className="mt-8">
+          <TabsContent value="prizes" className="mt-6">
             <div className="text-center mb-12">
               <h2 className="font-heading font-bold text-3xl text-text-dark mb-4">
                 Prize Pool: ${(event.prizePool / 1000).toFixed(0)}k
@@ -279,7 +279,7 @@ export default function EventDetail() {
           </TabsContent>
 
           {/* Rules Tab */}
-          <TabsContent value="rules" className="mt-8">
+          <TabsContent value="rules" className="mt-6">
             <div className="bg-white rounded-2xl p-8 shadow-soft border border-soft-gray">
               <h2 className="font-heading font-bold text-2xl text-text-dark mb-6">Competition Rules</h2>
               <div className="space-y-4">
@@ -296,7 +296,7 @@ export default function EventDetail() {
           </TabsContent>
 
           {/* Timeline Tab */}
-          <TabsContent value="timeline" className="mt-8">
+          <TabsContent value="timeline" className="mt-6">
             <div className="bg-white rounded-2xl p-8 shadow-soft border border-soft-gray">
               <h2 className="font-heading font-bold text-2xl text-text-dark mb-6">Event Timeline</h2>
               <div className="space-y-6">
@@ -317,7 +317,7 @@ export default function EventDetail() {
           </TabsContent>
 
           {/* Judges Tab */}
-          <TabsContent value="judges" className="mt-8">
+          <TabsContent value="judges" className="mt-6">
             <div className="text-center mb-12">
               <h2 className="font-heading font-bold text-2xl text-text-dark mb-4">Meet Our Expert Judges</h2>
               <CrayonSquiggle className="mx-auto mb-6" />
@@ -332,7 +332,7 @@ export default function EventDetail() {
           </TabsContent>
 
           {/* Teams Tab */}
-          <TabsContent value="teams" className="mt-8">
+          <TabsContent value="teams" className="mt-6">
             <div className="flex justify-between items-center mb-8">
               <div>
                 <h2 className="font-heading font-bold text-2xl text-text-dark mb-2">Team Formation</h2>
@@ -360,7 +360,7 @@ export default function EventDetail() {
           </TabsContent>
 
           {/* Submissions Tab */}
-          <TabsContent value="submissions" className="mt-8">
+          <TabsContent value="submissions" className="mt-6">
             <div className="flex justify-between items-center mb-8">
               <div>
                 <h2 className="font-heading font-bold text-2xl text-text-dark mb-2">Project Submissions</h2>
