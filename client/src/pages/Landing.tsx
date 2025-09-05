@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
@@ -6,10 +7,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Search, Plus, Rocket, Users, Trophy } from "lucide-react";
 import EventCard from "@/components/event/EventCard";
 import { FloatingElement, DecorativeElements, CrayonSquiggle } from "@/components/ui/floating-elements";
+import { JudgeApplicationModal } from "@/components/judge/JudgeApplicationModal";
 import { api } from "@/lib/api";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Landing() {
+  const [isJudgeModalOpen, setIsJudgeModalOpen] = useState(false);
+  
   const { data: featuredEvents, isLoading: eventsLoading } = useQuery({
     queryKey: ['featured-events'],
     queryFn: api.getFeaturedEvents,
@@ -350,14 +354,22 @@ export default function Landing() {
           {/* Call to Action */}
           <div className="text-center mt-12">
             <p className="text-text-muted mb-4">Join our community of expert judges and innovative builders</p>
-            <Link href="/judge/register">
-              <Button className="bg-coral text-white px-6 py-3 rounded-full font-medium hover-scale hover:bg-coral/80 transition-colors" data-testid="button-become-judge">
-                Become a Judge
-              </Button>
-            </Link>
+            <Button 
+              onClick={() => setIsJudgeModalOpen(true)}
+              className="bg-coral text-white px-6 py-3 rounded-full font-medium hover-scale hover:bg-coral/80 transition-colors" 
+              data-testid="button-become-judge"
+            >
+              Become a Judge
+            </Button>
           </div>
         </div>
       </section>
+
+      {/* Judge Application Modal */}
+      <JudgeApplicationModal 
+        isOpen={isJudgeModalOpen}
+        onClose={() => setIsJudgeModalOpen(false)}
+      />
     </div>
   );
 }
