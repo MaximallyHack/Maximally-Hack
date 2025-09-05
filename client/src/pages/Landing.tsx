@@ -199,37 +199,34 @@ export default function Landing() {
             </div>
           </div>
           
-          {/* Enhanced Testimonial Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative">
+          {/* Symmetrical Testimonial Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             
-            {/* Featured Large Testimonial */}
-            <div className="lg:col-span-2 lg:row-span-2 bg-gradient-to-br from-coral/10 to-coral/5 border border-coral/20 rounded-2xl p-8 shadow-soft hover-scale transition-all duration-300 group" data-testid="testimonial-featured">
-              <div className="flex items-start gap-4 mb-6">
-                <Avatar className="w-16 h-16 border-3 border-coral/30">
-                  <AvatarImage src="https://images.unsplash.com/photo-1494790108755-2616b612b829?w=64&h=64&fit=crop&crop=face" alt="Dr. Sarah Chen" />
+            <div className="bg-gradient-to-br from-coral/10 to-coral/5 border border-coral/20 rounded-2xl p-6 shadow-soft hover-scale transition-all duration-300 group h-full flex flex-col" data-testid="testimonial-sarah">
+              <div className="flex items-start gap-3 mb-4">
+                <Avatar className="w-12 h-12 border-2 border-coral/30">
+                  <AvatarImage src="https://images.unsplash.com/photo-1494790108755-2616b612b829?w=48&h=48&fit=crop&crop=face" alt="Dr. Sarah Chen" />
                   <AvatarFallback>SC</AvatarFallback>
                 </Avatar>
                 <div className="flex-1">
-                  <h4 className="font-heading font-bold text-xl text-text-dark mb-1">Dr. Sarah Chen</h4>
-                  <p className="text-coral font-semibold mb-1">AI Research Director</p>
-                  <p className="text-text-muted text-sm">Google • 25 Events Judged</p>
-                  <div className="flex items-center gap-2 mt-2">
-                    <div className="text-yellow text-sm">★★★★★</div>
-                    <span className="text-text-muted text-sm">4.9/5</span>
+                  <h4 className="font-heading font-bold text-lg text-text-dark">Dr. Sarah Chen</h4>
+                  <p className="text-coral font-semibold text-sm">AI Research Director, Google</p>
+                  <div className="flex items-center gap-1 mt-1">
+                    <div className="text-yellow text-xs">★★★★★</div>
+                    <span className="text-text-muted text-xs">4.9/5</span>
                   </div>
                 </div>
               </div>
-              <blockquote className="text-text-dark text-lg leading-relaxed mb-6">
-                "The caliber of AI projects I've seen here is remarkable. Maximally Hack attracts the most innovative minds in tech. I've discovered solutions that genuinely advance the field of artificial intelligence."
+              <blockquote className="text-text-dark mb-4 flex-grow">
+                "The caliber of AI projects I've seen here is remarkable. Maximally Hack attracts the most innovative minds in tech."
               </blockquote>
-              <div className="flex flex-wrap gap-2">
-                <Badge className="bg-coral/20 text-coral border-coral/30 hover:bg-coral hover:text-white transition-colors">AI Expert</Badge>
-                <Badge className="bg-sky/20 text-sky border-sky/30 hover:bg-sky hover:text-white transition-colors">Research Pioneer</Badge>
+              <div className="flex flex-wrap gap-1">
+                <Badge className="bg-coral/30 text-coral text-xs">AI Expert</Badge>
+                <Badge className="bg-text-dark/10 text-text-dark text-xs">25 Events</Badge>
               </div>
             </div>
 
-            {/* Regular Testimonials */}
-            <div className="bg-gradient-to-br from-mint/10 to-mint/5 border border-mint/20 rounded-2xl p-6 shadow-soft hover-scale transition-all duration-300 group" data-testid="testimonial-mark">
+            <div className="bg-gradient-to-br from-mint/10 to-mint/5 border border-mint/20 rounded-2xl p-6 shadow-soft hover-scale transition-all duration-300 group h-full flex flex-col" data-testid="testimonial-mark">
               <div className="flex items-start gap-3 mb-4">
                 <Avatar className="w-12 h-12 border-2 border-mint/30">
                   <AvatarImage src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=48&h=48&fit=crop&crop=face" alt="Mark Rodriguez" />
@@ -244,7 +241,7 @@ export default function Landing() {
                   </div>
                 </div>
               </div>
-              <blockquote className="text-text-dark mb-4">
+              <blockquote className="text-text-dark mb-4 flex-grow">
                 "This platform makes judging a joy. The submission process is seamless and the community is genuinely supportive."
               </blockquote>
               <div className="flex flex-wrap gap-1">
@@ -253,7 +250,7 @@ export default function Landing() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-sky/10 to-sky/5 border border-sky/20 rounded-2xl p-6 shadow-soft hover-scale transition-all duration-300 group" data-testid="testimonial-lisa">
+            <div className="bg-gradient-to-br from-sky/10 to-sky/5 border border-sky/20 rounded-2xl p-6 shadow-soft hover-scale transition-all duration-300 group h-full flex flex-col" data-testid="testimonial-lisa">
               <div className="flex items-start gap-3 mb-4">
                 <Avatar className="w-12 h-12 border-2 border-sky/30">
                   <AvatarImage src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=48&h=48&fit=crop&crop=face" alt="Lisa Thompson" />
@@ -268,7 +265,7 @@ export default function Landing() {
                   </div>
                 </div>
               </div>
-              <blockquote className="text-text-dark mb-4">
+              <blockquote className="text-text-dark mb-4 flex-grow">
                 "I've discovered groundbreaking climate tech solutions here. The focus on real-world impact is incredible."
               </blockquote>
               <div className="flex flex-wrap gap-1">
@@ -277,7 +274,7 @@ export default function Landing() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-yellow/10 to-yellow/5 border border-yellow/30 rounded-2xl p-6 shadow-soft hover-scale transition-all duration-300 group" data-testid="testimonial-maria">
+            <div className="bg-gradient-to-br from-yellow/10 to-yellow/5 border border-yellow/30 rounded-2xl p-6 shadow-soft hover-scale transition-all duration-300 group h-full flex flex-col" data-testid="testimonial-maria">
               <div className="flex items-start gap-3 mb-4">
                 <Avatar className="w-12 h-12 border-2 border-yellow/50">
                   <AvatarImage src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=48&h=48&fit=crop&crop=face" alt="Dr. Maria Gonzalez" />
@@ -292,7 +289,7 @@ export default function Landing() {
                   </div>
                 </div>
               </div>
-              <blockquote className="text-text-dark mb-4">
+              <blockquote className="text-text-dark mb-4 flex-grow">
                 "The AI safety awareness shown by participants gives me hope for the future of technology."
               </blockquote>
               <div className="flex flex-wrap gap-1">
@@ -301,7 +298,7 @@ export default function Landing() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-text-dark/5 to-text-dark/10 border border-text-dark/10 rounded-2xl p-6 shadow-soft hover-scale transition-all duration-300 group" data-testid="testimonial-james">
+            <div className="bg-gradient-to-br from-text-dark/5 to-text-dark/10 border border-text-dark/10 rounded-2xl p-6 shadow-soft hover-scale transition-all duration-300 group h-full flex flex-col" data-testid="testimonial-james">
               <div className="flex items-start gap-3 mb-4">
                 <Avatar className="w-12 h-12 border-2 border-text-dark/20">
                   <AvatarImage src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=48&h=48&fit=crop&crop=face" alt="James Wilson" />
@@ -316,7 +313,7 @@ export default function Landing() {
                   </div>
                 </div>
               </div>
-              <blockquote className="text-text-dark mb-4">
+              <blockquote className="text-text-dark mb-4 flex-grow">
                 "I've found my next investment opportunities right here. The entrepreneurial spirit is infectious."
               </blockquote>
               <div className="flex flex-wrap gap-1">
@@ -325,7 +322,7 @@ export default function Landing() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-coral/8 to-mint/8 border border-coral/15 rounded-2xl p-6 shadow-soft hover-scale transition-all duration-300 group" data-testid="testimonial-priya">
+            <div className="bg-gradient-to-br from-coral/8 to-mint/8 border border-coral/15 rounded-2xl p-6 shadow-soft hover-scale transition-all duration-300 group h-full flex flex-col" data-testid="testimonial-priya">
               <div className="flex items-start gap-3 mb-4">
                 <Avatar className="w-12 h-12 border-2 border-coral/20">
                   <AvatarImage src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=48&h=48&fit=crop&crop=face" alt="Dr. Priya Patel" />
@@ -340,7 +337,7 @@ export default function Landing() {
                   </div>
                 </div>
               </div>
-              <blockquote className="text-text-dark mb-4">
+              <blockquote className="text-text-dark mb-4 flex-grow">
                 "The healthcare innovations coming out of these hackathons genuinely advance patient care."
               </blockquote>
               <div className="flex flex-wrap gap-1">
