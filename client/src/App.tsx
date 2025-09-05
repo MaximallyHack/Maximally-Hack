@@ -10,6 +10,7 @@ import Footer from "@/components/layout/Footer";
 import Landing from "@/pages/Landing";
 import SimpleExplore from "@/pages/SimpleExplore";
 import SimpleEventDetail from "@/pages/SimpleEventDetail";
+import NewEnhancedEventDetail from "@/pages/NewEnhancedEventDetail";
 import ProjectsGallery from "@/pages/ProjectsGallery";
 import ProjectDetail from "@/pages/ProjectDetail";
 import PublishProject from "@/pages/PublishProject";
@@ -54,7 +55,7 @@ function Router() {
         <Switch>
         <Route path="/" component={Landing} />
         <Route path="/explore" component={SimpleExplore} />
-        <Route path="/e/:slug" component={SimpleEventDetail} />
+        <Route path="/e/:slug" component={NewEnhancedEventDetail} />
         <Route path="/e/:slug/submit" component={Submit} />
         <Route path="/projects" component={ProjectsGallery} />
         <Route path="/projects/:id" component={ProjectDetail} />
