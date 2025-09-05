@@ -44,10 +44,10 @@ export default function EventHeader({ event }: EventHeaderProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
           <div className="flex-1">
-            <h1 className="font-heading font-bold text-4xl lg:text-5xl text-text-dark mb-4 float-animation">
+            <h1 className="font-heading font-bold text-4xl lg:text-5xl text-foreground mb-4 float-animation">
               {event.title}
             </h1>
-            <p className="text-lg text-text-muted mb-6 max-w-3xl">
+            <p className="text-lg text-muted-foreground mb-6 max-w-3xl">
               {event.longDescription || event.description}
             </p>
             
@@ -57,7 +57,7 @@ export default function EventHeader({ event }: EventHeaderProps) {
                 <Calendar className="w-4 h-4 mr-2" />
                 {formatDate(event.startDate)} - {formatDate(event.endDate)}
               </Badge>
-              <Badge className="bg-mint text-text-dark px-4 py-2 rounded-full font-medium text-sm">
+              <Badge className="bg-mint text-foreground px-4 py-2 rounded-full font-medium text-sm">
                 <Globe className="w-4 h-4 mr-2" />
                 {event.location}
               </Badge>
@@ -98,21 +98,21 @@ export default function EventHeader({ event }: EventHeaderProps) {
         )}
         
         {/* Event Stats */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 mt-8 border border-soft-gray">
+        <div className="bg-card/80 backdrop-blur-sm rounded-2xl p-6 mt-8 border border-border">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
             <div>
               <div className="text-3xl font-bold text-coral mb-2">{event.participantCount.toLocaleString()}</div>
-              <div className="text-sm text-text-muted">Participants</div>
+              <div className="text-sm text-muted-foreground">Participants</div>
             </div>
             <div>
               <div className="text-3xl font-bold text-sky mb-2">
                 {Math.floor((new Date(event.endDate).getTime() - new Date(event.startDate).getTime()) / (1000 * 60 * 60))}
               </div>
-              <div className="text-sm text-text-muted">Hours Duration</div>
+              <div className="text-sm text-muted-foreground">Hours Duration</div>
             </div>
             <div>
               <div className="text-3xl font-bold text-mint mb-2">{event.tracks.length}</div>
-              <div className="text-sm text-text-muted">Prize Tracks</div>
+              <div className="text-sm text-muted-foreground">Prize Tracks</div>
             </div>
           </div>
         </div>

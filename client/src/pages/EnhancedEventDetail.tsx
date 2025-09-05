@@ -82,8 +82,8 @@ export default function EnhancedEventDetail() {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <div className="text-8xl mb-6">🤖</div>
-          <h1 className="font-heading font-bold text-3xl text-text-dark mb-4">Event Not Found</h1>
-          <p className="text-text-muted text-lg mb-8">The hackathon you're looking for doesn't exist.</p>
+          <h1 className="font-heading font-bold text-3xl text-card-foreground mb-4">Event Not Found</h1>
+          <p className="text-muted-foreground text-lg mb-8">The hackathon you're looking for doesn't exist.</p>
           <Link href="/explore">
             <Button className="bg-coral text-white hover:bg-coral/80 px-8 py-3 text-lg">
               Discover Events
@@ -125,13 +125,13 @@ export default function EnhancedEventDetail() {
       <Confetti />
       
       {/* Header Strip */}
-      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-lg border-b border-soft-gray">
+      <header className="sticky top-0 z-50 bg-card/95 backdrop-blur-lg border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div className="flex-1">
-              <h1 className="font-heading font-bold text-2xl md:text-3xl text-text-dark">{event.title}</h1>
+              <h1 className="font-heading font-bold text-2xl md:text-3xl text-card-foreground">{event.title}</h1>
               {event.tagline && (
-                <p className="text-text-muted mt-1 text-lg">{event.tagline}</p>
+                <p className="text-muted-foreground mt-1 text-lg">{event.tagline}</p>
               )}
             </div>
             
@@ -159,8 +159,8 @@ export default function EnhancedEventDetail() {
           
           {/* Social Icons Row */}
           {event.socials && Object.keys(event.socials).length > 0 && (
-            <div className="flex items-center gap-3 mt-4 pt-4 border-t border-soft-gray">
-              <span className="text-text-muted text-sm">Follow us:</span>
+            <div className="flex items-center gap-3 mt-4 pt-4 border-t border-border">
+              <span className="text-muted-foreground text-sm">Follow us:</span>
               {Object.entries(event.socials).map(([platform, url]) => (
                 <SocialIcon key={platform} platform={platform} url={url as string} />
               ))}
@@ -168,7 +168,7 @@ export default function EnhancedEventDetail() {
                 variant="ghost"
                 size="sm"
                 onClick={shareEvent}
-                className="ml-auto text-text-muted hover:text-text-dark"
+                className="ml-auto text-muted-foreground hover:text-card-foreground"
               >
                 <Share2 className="w-4 h-4" />
               </Button>
@@ -203,9 +203,9 @@ export default function EnhancedEventDetail() {
               
               {/* Countdown Timer */}
               {event.hero && event.hero.countdown && (
-                <Card className="bg-white/80 backdrop-blur-sm border-coral shadow-soft">
+                <Card className="bg-card/80 backdrop-blur-sm border-coral shadow-soft">
                   <CardContent className="p-6 text-center">
-                    <h3 className="font-heading font-semibold text-lg text-text-dark mb-4">Event Starts In:</h3>
+                    <h3 className="font-heading font-semibold text-lg text-card-foreground mb-4">Event Starts In:</h3>
                     <Countdown targetDate={event.startDate} />
                   </CardContent>
                 </Card>
@@ -241,7 +241,7 @@ export default function EnhancedEventDetail() {
           <div className="lg:col-span-3">
             {/* Tabs Navigation */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid w-full grid-cols-4 md:grid-cols-8 bg-white rounded-xl border border-soft-gray p-1 mb-6">
+              <TabsList className="grid w-full grid-cols-4 md:grid-cols-8 bg-card rounded-xl border border-border p-1 mb-6">
                 <TabsTrigger value="overview" className="rounded-lg text-xs md:text-sm">Overview</TabsTrigger>
                 <TabsTrigger value="schedule" className="rounded-lg text-xs md:text-sm">Schedule</TabsTrigger>
                 <TabsTrigger value="prizes" className="rounded-lg text-xs md:text-sm">Prizes</TabsTrigger>
@@ -256,14 +256,14 @@ export default function EnhancedEventDetail() {
               <TabsContent value="overview" id="overview">
                 <div className="space-y-6">
                   {/* Description */}
-                  <Card className="bg-white shadow-soft border border-soft-gray">
+                  <Card className="bg-card shadow-soft border border-border">
                     <CardContent className="p-6">
                       <div className="prose max-w-none">
-                        <h2 className="font-heading font-bold text-xl text-text-dark mb-4 flex items-center">
+                        <h2 className="font-heading font-bold text-xl text-card-foreground mb-4 flex items-center">
                           <Target className="w-6 h-6 text-coral mr-3" />
                           About the Challenge
                         </h2>
-                        <div className="text-text-muted whitespace-pre-line leading-relaxed">
+                        <div className="text-muted-foreground whitespace-pre-line leading-relaxed">
                           {event.longDescription}
                         </div>
                       </div>
@@ -274,15 +274,15 @@ export default function EnhancedEventDetail() {
                   {event.whyJoin && (
                     <Card className="bg-gradient-to-br from-mint/10 to-sky/10 border border-mint/20 shadow-soft">
                       <CardContent className="p-6">
-                        <h3 className="font-heading font-bold text-lg text-text-dark mb-4 flex items-center">
+                        <h3 className="font-heading font-bold text-lg text-card-foreground mb-4 flex items-center">
                           <Rocket className="w-5 h-5 text-mint mr-3" />
                           Why Join This Challenge?
                         </h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                           {event.whyJoin.map((reason: string, index: number) => (
-                            <div key={index} className="flex items-start gap-3 bg-white/50 rounded-lg p-3">
+                            <div key={index} className="flex items-start gap-3 bg-card/50 rounded-lg p-3">
                               <CheckCircle className="w-4 h-4 text-mint mt-0.5 flex-shrink-0" />
-                              <span className="text-text-dark text-sm">{reason}</span>
+                              <span className="text-card-foreground text-sm">{reason}</span>
                             </div>
                           ))}
                         </div>
@@ -292,9 +292,9 @@ export default function EnhancedEventDetail() {
 
                   {/* Quick Links Grid */}
                   {event.links && (
-                    <Card className="bg-white shadow-soft border border-soft-gray">
+                    <Card className="bg-card shadow-soft border border-border">
                       <CardContent className="p-6">
-                        <h3 className="font-heading font-bold text-lg text-text-dark mb-4 flex items-center">
+                        <h3 className="font-heading font-bold text-lg text-card-foreground mb-4 flex items-center">
                           <ExternalLink className="w-5 h-5 text-sky mr-3" />
                           Quick Links
                         </h3>
@@ -312,16 +312,16 @@ export default function EnhancedEventDetail() {
                   )}
 
                   {/* Tracks */}
-                  <Card className="bg-white shadow-soft border border-soft-gray">
+                  <Card className="bg-card shadow-soft border border-border">
                     <CardContent className="p-6">
-                      <h3 className="font-heading font-bold text-lg text-text-dark mb-4 flex items-center">
+                      <h3 className="font-heading font-bold text-lg text-card-foreground mb-4 flex items-center">
                         <Code className="w-5 h-5 text-yellow mr-3" />
                         Challenge Tracks
                       </h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {event.tracks.map((track: string) => (
                           <div key={track} className="bg-gradient-to-r from-yellow/10 to-coral/10 border border-yellow/20 rounded-xl p-4 hover-scale">
-                            <h4 className="font-heading font-semibold text-lg text-text-dark">{track}</h4>
+                            <h4 className="font-heading font-semibold text-lg text-card-foreground">{track}</h4>
                           </div>
                         ))}
                       </div>
@@ -332,9 +332,9 @@ export default function EnhancedEventDetail() {
 
               {/* Schedule Section */}
               <TabsContent value="schedule" id="schedule">
-                <Card className="bg-white shadow-soft border border-soft-gray">
+                <Card className="bg-card shadow-soft border border-border">
                   <CardContent className="p-8">
-                    <h2 className="font-heading font-bold text-2xl text-text-dark mb-8 flex items-center">
+                    <h2 className="font-heading font-bold text-2xl text-card-foreground mb-8 flex items-center">
                       <Clock className="w-6 h-6 text-coral mr-3" />
                       Event Timeline
                     </h2>
@@ -358,10 +358,10 @@ export default function EnhancedEventDetail() {
               <TabsContent value="prizes" id="prizes">
                 <div className="space-y-8">
                   <div className="text-center">
-                    <h2 className="font-heading font-bold text-3xl text-text-dark mb-4">
+                    <h2 className="font-heading font-bold text-3xl text-card-foreground mb-4">
                       Total Prize Pool: ${(event.prizePool / 1000).toFixed(0)}k
                     </h2>
-                    <p className="text-text-muted text-lg">Life-changing rewards for world-changing solutions</p>
+                    <p className="text-muted-foreground text-lg">Life-changing rewards for world-changing solutions</p>
                   </div>
 
                   {/* Main Prizes */}
@@ -400,9 +400,9 @@ export default function EnhancedEventDetail() {
 
               {/* Judges Section */}
               <TabsContent value="judges" id="judges">
-                <Card className="bg-white shadow-soft border border-soft-gray">
+                <Card className="bg-card shadow-soft border border-border">
                   <CardContent className="p-8">
-                    <h2 className="font-heading font-bold text-2xl text-text-dark mb-6 flex items-center">
+                    <h2 className="font-heading font-bold text-2xl text-card-foreground mb-6 flex items-center">
                       <Star className="w-6 h-6 text-coral mr-3" />
                       Expert Judge Panel
                     </h2>
@@ -410,7 +410,7 @@ export default function EnhancedEventDetail() {
                     {/* Judging Criteria */}
                     {event.criteria && (
                       <div className="mb-8">
-                        <h3 className="font-heading font-semibold text-lg text-text-dark mb-4">Evaluation Criteria</h3>
+                        <h3 className="font-heading font-semibold text-lg text-card-foreground mb-4">Evaluation Criteria</h3>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                           {event.criteria.map((criterion: any, index: number) => (
                             <CriteriaBar
@@ -427,12 +427,12 @@ export default function EnhancedEventDetail() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                       {eventJudges.map(judge => (
                         <div key={judge.id} className="text-center hover-scale">
-                          <div className="bg-gradient-to-br from-sky/10 to-coral/10 rounded-xl p-6 border border-soft-gray">
+                          <div className="bg-gradient-to-br from-sky/10 to-coral/10 rounded-xl p-6 border border-border">
                             <div className="w-16 h-16 bg-coral rounded-full mx-auto mb-4 flex items-center justify-center text-white font-bold text-xl">
                               {judge.name.charAt(0)}
                             </div>
-                            <h4 className="font-heading font-semibold text-lg text-text-dark">{judge.name}</h4>
-                            <p className="text-text-muted text-sm">{judge.title}</p>
+                            <h4 className="font-heading font-semibold text-lg text-card-foreground">{judge.name}</h4>
+                            <p className="text-muted-foreground text-sm">{judge.title}</p>
                             <p className="text-sky text-sm font-medium">{judge.company}</p>
                           </div>
                         </div>
@@ -444,9 +444,9 @@ export default function EnhancedEventDetail() {
 
               {/* Rules Section */}
               <TabsContent value="rules" id="rules">
-                <Card className="bg-white shadow-soft border border-soft-gray">
+                <Card className="bg-card shadow-soft border border-border">
                   <CardContent className="p-8">
-                    <h2 className="font-heading font-bold text-2xl text-text-dark mb-8 flex items-center">
+                    <h2 className="font-heading font-bold text-2xl text-card-foreground mb-8 flex items-center">
                       <CheckCircle className="w-6 h-6 text-mint mr-3" />
                       Rules & Eligibility
                     </h2>
@@ -455,14 +455,14 @@ export default function EnhancedEventDetail() {
                       {event.rules?.map((rule: string, index: number) => (
                         <div key={index} className="flex items-start gap-3 bg-mint/5 rounded-lg p-4">
                           <CheckCircle className="w-5 h-5 text-mint mt-0.5 flex-shrink-0" />
-                          <span className="text-text-dark">{rule}</span>
+                          <span className="text-card-foreground">{rule}</span>
                         </div>
                       ))}
                     </div>
 
                     {event.eligibility && (
                       <div className="mt-8 p-6 bg-sky/5 rounded-xl border border-sky/20">
-                        <h3 className="font-heading font-semibold text-lg text-text-dark mb-4">Key Requirements</h3>
+                        <h3 className="font-heading font-semibold text-lg text-card-foreground mb-4">Key Requirements</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                           <div><strong>Age Limit:</strong> {event.eligibility.age}</div>
                           <div><strong>Team Size:</strong> {event.eligibility.teamSize}</div>
@@ -482,9 +482,9 @@ export default function EnhancedEventDetail() {
 
               {/* Community Section */}
               <TabsContent value="community" id="community">
-                <Card className="bg-white shadow-soft border border-soft-gray">
+                <Card className="bg-card shadow-soft border border-border">
                   <CardContent className="p-8">
-                    <h2 className="font-heading font-bold text-2xl text-text-dark mb-8 flex items-center">
+                    <h2 className="font-heading font-bold text-2xl text-card-foreground mb-8 flex items-center">
                       <MessageCircle className="w-6 h-6 text-sky mr-3" />
                       Join Our Community
                     </h2>
@@ -523,7 +523,7 @@ export default function EnhancedEventDetail() {
                     
                     {event.community && event.community.responseTime && (
                       <div className="mt-6 p-4 bg-yellow/10 rounded-lg border border-yellow/20">
-                        <p className="text-text-dark text-center">
+                        <p className="text-card-foreground text-center">
                           <strong>⚡ Quick Response:</strong> Our team responds within {event.community!.responseTime}
                         </p>
                       </div>
@@ -534,9 +534,9 @@ export default function EnhancedEventDetail() {
 
               {/* Gallery Section */}
               <TabsContent value="gallery" id="gallery">
-                <Card className="bg-white shadow-soft border border-soft-gray">
+                <Card className="bg-card shadow-soft border border-border">
                   <CardContent className="p-8">
-                    <h2 className="font-heading font-bold text-2xl text-text-dark mb-8 flex items-center">
+                    <h2 className="font-heading font-bold text-2xl text-card-foreground mb-8 flex items-center">
                       <Play className="w-6 h-6 text-coral mr-3" />
                       Event Gallery
                     </h2>
@@ -546,8 +546,8 @@ export default function EnhancedEventDetail() {
                     ) : (
                       <div className="text-center py-16">
                         <div className="text-6xl mb-4">📷</div>
-                        <h3 className="font-heading font-semibold text-xl text-text-dark mb-2">Gallery Coming Soon</h3>
-                        <p className="text-text-muted">Check back for amazing photos and videos from the event!</p>
+                        <h3 className="font-heading font-semibold text-xl text-card-foreground mb-2">Gallery Coming Soon</h3>
+                        <p className="text-muted-foreground">Check back for amazing photos and videos from the event!</p>
                       </div>
                     )}
                   </CardContent>
@@ -556,9 +556,9 @@ export default function EnhancedEventDetail() {
 
               {/* Contact Section */}
               <TabsContent value="contact" id="contact">
-                <Card className="bg-white shadow-soft border border-soft-gray">
+                <Card className="bg-card shadow-soft border border-border">
                   <CardContent className="p-8">
-                    <h2 className="font-heading font-bold text-2xl text-text-dark mb-8 flex items-center">
+                    <h2 className="font-heading font-bold text-2xl text-card-foreground mb-8 flex items-center">
                       <Mail className="w-6 h-6 text-mint mr-3" />
                       Get In Touch
                     </h2>
@@ -571,7 +571,7 @@ export default function EnhancedEventDetail() {
                               <Mail className="w-5 h-5 text-white" />
                             </div>
                             <div>
-                              <p className="font-semibold text-text-dark">Email</p>
+                              <p className="font-semibold text-card-foreground">Email</p>
                               <a href={`mailto:${event.contact.email}`} className="text-coral hover:underline">
                                 {event.contact.email}
                               </a>
@@ -584,7 +584,7 @@ export default function EnhancedEventDetail() {
                                 <Phone className="w-5 h-5 text-white" />
                               </div>
                               <div>
-                                <p className="font-semibold text-text-dark">Phone</p>
+                                <p className="font-semibold text-card-foreground">Phone</p>
                                 <a href={`tel:${event.contact.phone}`} className="text-sky hover:underline">
                                   {event.contact.phone}
                                 </a>
@@ -595,19 +595,19 @@ export default function EnhancedEventDetail() {
                           {event.contact.organizer && (
                             <div className="flex items-center gap-3">
                               <div className="w-10 h-10 bg-mint rounded-full flex items-center justify-center">
-                                <Users className="w-5 h-5 text-text-dark" />
+                                <Users className="w-5 h-5 text-card-foreground" />
                               </div>
                               <div>
-                                <p className="font-semibold text-text-dark">Organizer</p>
-                                <p className="text-text-muted">{event.contact.organizer}</p>
+                                <p className="font-semibold text-card-foreground">Organizer</p>
+                                <p className="text-muted-foreground">{event.contact.organizer}</p>
                               </div>
                             </div>
                           )}
                         </div>
                         
                         <div className="bg-gradient-to-br from-coral/10 to-sky/10 rounded-xl p-6">
-                          <h3 className="font-heading font-semibold text-lg text-text-dark mb-4">Need Help?</h3>
-                          <p className="text-text-muted mb-4">
+                          <h3 className="font-heading font-semibold text-lg text-card-foreground mb-4">Need Help?</h3>
+                          <p className="text-muted-foreground mb-4">
                             Have questions about the event, technical setup, or anything else? We're here to help!
                           </p>
                           <Button className="w-full bg-coral text-white hover:bg-coral/80">
@@ -631,7 +631,7 @@ export default function EnhancedEventDetail() {
       </div>
 
       {/* Mobile Sticky Bottom Bar */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-soft-gray p-4 z-50">
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-lg border-t border-border p-4 z-50">
         <div className="flex gap-3">
           <Button 
             onClick={handleRegister}

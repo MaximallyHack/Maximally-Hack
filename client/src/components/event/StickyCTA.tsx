@@ -10,11 +10,11 @@ interface StickyCTAProps {
 
 export default function StickyCTA({ event, onRegister, className }: StickyCTAProps) {
   return (
-    <div className={`bg-white/95 backdrop-blur-lg border border-soft-gray rounded-2xl p-6 shadow-soft sticky top-6 ${className}`} data-testid="sticky-cta">
+    <div className={`bg-card/95 backdrop-blur-lg border border-border rounded-2xl p-6 shadow-soft sticky top-6 ${className}`} data-testid="sticky-cta">
       <div className="space-y-4">
         <div className="text-center">
-          <h3 className="font-heading font-bold text-lg text-text-dark mb-2">{event.title}</h3>
-          <p className="text-sm text-text-muted">Ready to join?</p>
+          <h3 className="font-heading font-bold text-lg text-card-foreground mb-2">{event.title}</h3>
+          <p className="text-sm text-muted-foreground">Ready to join?</p>
         </div>
         
         <div className="space-y-3">
@@ -50,8 +50,8 @@ export default function StickyCTA({ event, onRegister, className }: StickyCTAPro
           </Button>
         </div>
         
-        <div className="text-center pt-4 border-t border-soft-gray">
-          <p className="text-xs text-text-muted">
+        <div className="text-center pt-4 border-t border-border">
+          <p className="text-xs text-muted-foreground">
             Prize Pool: <span className="font-bold text-coral">${(event.prizePool / 1000).toFixed(0)}k</span>
           </p>
         </div>

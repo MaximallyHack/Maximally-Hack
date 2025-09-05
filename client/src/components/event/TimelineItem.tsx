@@ -16,7 +16,7 @@ export default function TimelineItem({ time, title, description, isActive, isCom
           ? "bg-mint text-white shadow-lg" 
           : isActive 
             ? "bg-coral text-white shadow-lg animate-pulse" 
-            : "bg-soft-gray text-text-muted group-hover:bg-sky/20 group-hover:text-sky"
+            : "bg-muted text-muted-foreground group-hover:bg-sky/20 group-hover:text-sky"
       }`}>
         <Clock className="w-5 h-5" />
         {isActive && (
@@ -24,10 +24,10 @@ export default function TimelineItem({ time, title, description, isActive, isCom
         )}
       </div>
       <div className="flex-1 min-w-0">
-        <div className="bg-white rounded-xl p-4 shadow-soft border border-soft-gray group-hover:shadow-lg transition-all">
-          <h3 className="font-heading font-semibold text-lg text-text-dark mb-1">{title}</h3>
+        <div className="bg-card rounded-xl p-4 shadow-soft border border-border group-hover:shadow-lg transition-all">
+          <h3 className="font-heading font-semibold text-lg text-card-foreground mb-1">{title}</h3>
           <p className="text-coral font-medium text-sm mb-2">{time}</p>
-          <p className="text-text-muted text-sm">{description}</p>
+          <p className="text-muted-foreground text-sm">{description}</p>
         </div>
       </div>
     </div>

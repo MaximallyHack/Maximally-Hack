@@ -20,8 +20,8 @@ export default function EnhancedPrizeCard({ place, track, amount, title, descrip
   const getColors = () => {
     if (place === 1) return "from-coral via-coral/80 to-coral text-white border-coral";
     if (place === 2) return "from-sky via-sky/80 to-sky text-white border-sky";
-    if (place === 3) return "from-mint via-mint/80 to-mint text-text-dark border-mint";
-    return "from-yellow via-yellow/80 to-yellow text-text-dark border-yellow";
+    if (place === 3) return "from-mint via-mint/80 to-mint text-foreground border-mint";
+    return "from-yellow via-yellow/80 to-yellow text-foreground border-yellow";
   };
 
   const getSize = () => {
@@ -40,12 +40,12 @@ export default function EnhancedPrizeCard({ place, track, amount, title, descrip
       {/* Floating decoration */}
       {place === 1 && (
         <div className="absolute -top-3 -right-3 w-8 h-8 bg-yellow rounded-full flex items-center justify-center animate-pulse">
-          <span className="text-text-dark font-bold text-sm">★</span>
+          <span className="text-foreground font-bold text-sm">★</span>
         </div>
       )}
       
       <div className="text-center">
-        <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mx-auto mb-4">
+        <div className="w-16 h-16 rounded-full bg-card/20 backdrop-blur-sm flex items-center justify-center mx-auto mb-4">
           {getIcon()}
         </div>
         
@@ -62,8 +62,8 @@ export default function EnhancedPrizeCard({ place, track, amount, title, descrip
         )}
         
         {place && (
-          <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-white rounded-full w-8 h-8 flex items-center justify-center shadow-lg">
-            <span className="font-bold text-text-dark">{place}</span>
+          <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-card rounded-full w-8 h-8 flex items-center justify-center shadow-lg">
+            <span className="font-bold text-foreground">{place}</span>
           </div>
         )}
       </div>
