@@ -3,7 +3,7 @@ import { Rocket } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="bg-soft-gray border-t border-soft-gray mt-16">
+    <footer className="bg-muted border-t border-border mt-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
@@ -12,17 +12,17 @@ export default function Footer() {
               <div className="w-8 h-8 bg-coral rounded-full flex items-center justify-center">
                 <Rocket className="w-4 h-4 text-white" />
               </div>
-              <span className="font-heading font-bold text-xl text-text-dark">Maximally Hack</span>
+              <span className="font-heading font-bold text-xl text-foreground">Maximally Hack</span>
             </div>
-            <p className="text-text-muted text-sm">
+            <p className="text-muted-foreground text-sm">
               The friendliest hackathon platform where great ideas come to life.
             </p>
           </div>
 
           {/* Platform */}
           <div>
-            <h3 className="font-heading font-semibold text-text-dark mb-4">Platform</h3>
-            <ul className="space-y-2 text-sm text-text-muted">
+            <h3 className="font-heading font-semibold text-foreground mb-4">Platform</h3>
+            <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
                 <Link href="/explore" className="hover:text-coral transition-colors" data-testid="footer-explore">
                   Explore Events
@@ -53,8 +53,8 @@ export default function Footer() {
 
           {/* Community */}
           <div>
-            <h3 className="font-heading font-semibold text-text-dark mb-4">Community</h3>
-            <ul className="space-y-2 text-sm text-text-muted">
+            <h3 className="font-heading font-semibold text-foreground mb-4">Community</h3>
+            <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
                 <a href="#" className="hover:text-coral transition-colors" data-testid="footer-discord">
                   Discord
@@ -80,8 +80,8 @@ export default function Footer() {
 
           {/* Support */}
           <div>
-            <h3 className="font-heading font-semibold text-text-dark mb-4">Support</h3>
-            <ul className="space-y-2 text-sm text-text-muted">
+            <h3 className="font-heading font-semibold text-foreground mb-4">Support</h3>
+            <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
                 <Link href="/help" className="hover:text-coral transition-colors" data-testid="footer-help">
                   Help Center
@@ -110,7 +110,7 @@ export default function Footer() {
         <div className="crayon-squiggle my-8"></div>
 
         {/* Bottom */}
-        <div className="flex flex-col md:flex-row justify-between items-center text-sm text-text-muted">
+        <div className="flex flex-col md:flex-row justify-between items-center text-sm text-muted-foreground">
           <p>&copy; 2024 Maximally Hack. Made with ❤️ for the hacker community.</p>
           <div className="flex space-x-4 mt-4 md:mt-0">
             <a href="#" className="hover:text-coral transition-colors" data-testid="footer-social-twitter">

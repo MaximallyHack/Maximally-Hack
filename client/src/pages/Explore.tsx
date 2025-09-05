@@ -60,28 +60,28 @@ export default function Explore() {
   const availableTags = ['AI', 'Healthcare', 'Education', 'Climate', 'Blockchain', 'Web3', 'Mobile', 'IoT'];
 
   return (
-    <div className="min-h-screen bg-cream py-8" data-testid="explore-page">
+    <div className="min-h-screen bg-background py-8" data-testid="explore-page">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="font-heading font-bold text-4xl text-text-dark mb-8">Explore Hackathons</h1>
+        <h1 className="font-heading font-bold text-4xl text-card-foreground mb-8">Explore Hackathons</h1>
         
         {/* Search and Filters */}
-        <div className="bg-white rounded-2xl p-6 shadow-soft mb-8 border border-soft-gray">
+        <div className="bg-card rounded-2xl p-6 shadow-soft mb-8 border border-border">
           <div className="flex flex-col lg:flex-row gap-4 mb-6">
             <div className="flex-1">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-muted w-5 h-5" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
                 <Input
                   type="text"
                   placeholder="Search hackathons..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-soft-gray rounded-xl focus:ring-2 focus:ring-sky focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-3 border border-border rounded-xl focus:ring-2 focus:ring-sky focus:border-transparent"
                   data-testid="input-search"
                 />
               </div>
             </div>
             <Select value={filters.sortBy} onValueChange={(value) => handleFilterChange('sortBy', value)}>
-              <SelectTrigger className="w-48 border-soft-gray rounded-xl" data-testid="select-sort">
+              <SelectTrigger className="w-48 border-border rounded-xl" data-testid="select-sort">
                 <SelectValue placeholder="Sort by" />
               </SelectTrigger>
               <SelectContent>
@@ -114,7 +114,7 @@ export default function Explore() {
                 </Badge>
               ))}
               {filters.status && (
-                <Badge className="bg-mint text-text-dark px-3 py-1 rounded-full text-sm flex items-center">
+                <Badge className="bg-mint text-card-foreground px-3 py-1 rounded-full text-sm flex items-center">
                   {filters.status}
                   <Button
                     variant="ghost"
@@ -128,7 +128,7 @@ export default function Explore() {
                 </Badge>
               )}
               {filters.prizeMin > 0 && (
-                <Badge className="bg-yellow text-text-dark px-3 py-1 rounded-full text-sm flex items-center">
+                <Badge className="bg-yellow text-card-foreground px-3 py-1 rounded-full text-sm flex items-center">
                   ${filters.prizeMin}k+ Prize
                   <Button
                     variant="ghost"
@@ -144,7 +144,7 @@ export default function Explore() {
               <Button
                 variant="ghost"
                 onClick={clearFilters}
-                className="text-text-muted hover:text-text-dark"
+                className="text-muted-foreground hover:text-card-foreground"
                 data-testid="button-clear-filters"
               >
                 Clear All
@@ -157,12 +157,12 @@ export default function Explore() {
         <div className="lg:flex gap-8">
           {/* Filter Sidebar */}
           <div className="w-72 hidden lg:block">
-            <div className="bg-white rounded-2xl p-6 shadow-soft sticky top-24 border border-soft-gray">
-              <h3 className="font-heading font-semibold text-lg text-text-dark mb-4">Filters</h3>
+            <div className="bg-card rounded-2xl p-6 shadow-soft sticky top-24 border border-border">
+              <h3 className="font-heading font-semibold text-lg text-card-foreground mb-4">Filters</h3>
               
               {/* Time Filter */}
               <div className="mb-6">
-                <h4 className="font-medium text-text-dark mb-3">Time</h4>
+                <h4 className="font-medium text-card-foreground mb-3">Time</h4>
                 <div className="space-y-2">
                   {[
                     { value: 'upcoming', label: 'Upcoming' },
@@ -178,7 +178,7 @@ export default function Explore() {
                         }
                         data-testid={`checkbox-time-${option.value}`}
                       />
-                      <label htmlFor={`time-${option.value}`} className="text-text-muted text-sm">
+                      <label htmlFor={`time-${option.value}`} className="text-muted-foreground text-sm">
                         {option.label}
                       </label>
                     </div>
@@ -188,7 +188,7 @@ export default function Explore() {
 
               {/* Format Filter */}
               <div className="mb-6">
-                <h4 className="font-medium text-text-dark mb-3">Format</h4>
+                <h4 className="font-medium text-card-foreground mb-3">Format</h4>
                 <div className="space-y-2">
                   {[
                     { value: 'online', label: 'Online' },
@@ -204,7 +204,7 @@ export default function Explore() {
                         }
                         data-testid={`checkbox-format-${option.value}`}
                       />
-                      <label htmlFor={`format-${option.value}`} className="text-text-muted text-sm">
+                      <label htmlFor={`format-${option.value}`} className="text-muted-foreground text-sm">
                         {option.label}
                       </label>
                     </div>
@@ -214,7 +214,7 @@ export default function Explore() {
 
               {/* Tags */}
               <div className="mb-6">
-                <h4 className="font-medium text-text-dark mb-3">Topics</h4>
+                <h4 className="font-medium text-card-foreground mb-3">Topics</h4>
                 <div className="flex flex-wrap gap-2">
                   {availableTags.map(tag => (
                     <Badge
@@ -222,7 +222,7 @@ export default function Explore() {
                       className={`cursor-pointer transition-colors ${
                         filters.tags.includes(tag)
                           ? 'bg-sky text-white'
-                          : 'bg-soft-gray text-text-muted hover:bg-sky/20'
+                          : 'bg-soft-gray text-muted-foreground hover:bg-sky/20'
                       } px-2 py-1 rounded-full text-xs border-0`}
                       onClick={() => 
                         filters.tags.includes(tag) ? removeTag(tag) : addTag(tag)
@@ -237,7 +237,7 @@ export default function Explore() {
 
               {/* Prize Range */}
               <div className="mb-6">
-                <h4 className="font-medium text-text-dark mb-3">Minimum Prize</h4>
+                <h4 className="font-medium text-card-foreground mb-3">Minimum Prize</h4>
                 <Slider
                   value={[filters.prizeMin]}
                   onValueChange={([value]) => handleFilterChange('prizeMin', value)}
@@ -246,7 +246,7 @@ export default function Explore() {
                   className="w-full"
                   data-testid="slider-prize"
                 />
-                <div className="flex justify-between text-sm text-text-muted mt-2">
+                <div className="flex justify-between text-sm text-muted-foreground mt-2">
                   <span>$0</span>
                   <span>${filters.prizeMin}k</span>
                   <span>$100k+</span>
@@ -258,7 +258,7 @@ export default function Explore() {
           {/* Results */}
           <div className="flex-1">
             <div className="flex justify-between items-center mb-6">
-              <p className="text-text-muted" data-testid="results-count">
+              <p className="text-muted-foreground" data-testid="results-count">
                 {isLoading ? 'Loading...' : `Showing ${events?.length || 0} hackathons`}
               </p>
               <div className="flex gap-2">
@@ -266,7 +266,7 @@ export default function Explore() {
                   variant={viewMode === 'grid' ? 'default' : 'outline'}
                   size="icon"
                   onClick={() => setViewMode('grid')}
-                  className="p-2 border border-soft-gray rounded-lg"
+                  className="p-2 border border-border rounded-lg"
                   data-testid="button-grid-view"
                 >
                   <Grid className="w-4 h-4" />
@@ -275,7 +275,7 @@ export default function Explore() {
                   variant={viewMode === 'list' ? 'default' : 'outline'}
                   size="icon"
                   onClick={() => setViewMode('list')}
-                  className="p-2 border border-soft-gray rounded-lg"
+                  className="p-2 border border-border rounded-lg"
                   data-testid="button-list-view"
                 >
                   <List className="w-4 h-4" />
@@ -287,7 +287,7 @@ export default function Explore() {
             {isLoading ? (
               <div className={`grid ${viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'} gap-6`}>
                 {Array.from({ length: 6 }).map((_, i) => (
-                  <div key={i} className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray">
+                  <div key={i} className="bg-card rounded-2xl p-6 shadow-soft border border-border">
                     <Skeleton className="h-4 w-20 mb-4" />
                     <Skeleton className="h-6 w-3/4 mb-2" />
                     <Skeleton className="h-4 w-full mb-4" />
@@ -311,8 +311,8 @@ export default function Explore() {
             ) : (
               <div className="text-center py-16">
                 <div className="text-6xl mb-4">🔍</div>
-                <h3 className="font-heading font-semibold text-xl text-text-dark mb-2">No hackathons found</h3>
-                <p className="text-text-muted mb-6">
+                <h3 className="font-heading font-semibold text-xl text-card-foreground mb-2">No hackathons found</h3>
+                <p className="text-muted-foreground mb-6">
                   {searchQuery || Object.values(filters).some(f => f && (Array.isArray(f) ? f.length > 0 : true))
                     ? "Try adjusting your search or filters"
                     : "Check back soon for new events!"

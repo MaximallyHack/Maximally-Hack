@@ -61,10 +61,10 @@ export default function JuryBoard() {
 
   if (id && specificJudge) {
     return (
-      <div className="min-h-screen bg-cream py-8" data-testid="judge-detail-page">
+      <div className="min-h-screen bg-background py-8" data-testid="judge-detail-page">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Judge Hero */}
-          <div className="bg-white rounded-2xl p-8 shadow-soft border border-soft-gray mb-8">
+          <div className="bg-card rounded-2xl p-8 shadow-soft border border-border mb-8">
             <div className="flex flex-col md:flex-row items-center gap-8">
               <Avatar className="w-32 h-32">
                 <AvatarImage src={specificJudge.avatar} alt={specificJudge.name} />
@@ -74,15 +74,15 @@ export default function JuryBoard() {
               </Avatar>
               
               <div className="text-center md:text-left flex-1">
-                <h1 className="font-heading font-bold text-3xl text-text-dark mb-2">{specificJudge.name}</h1>
-                <p className="text-xl text-text-muted mb-4">{specificJudge.title} at {specificJudge.company}</p>
+                <h1 className="font-heading font-bold text-3xl text-card-foreground mb-2">{specificJudge.name}</h1>
+                <p className="text-xl text-muted-foreground mb-4">{specificJudge.title} at {specificJudge.company}</p>
                 
                 <div className="flex items-center justify-center md:justify-start gap-4 mb-4">
                   <div className="flex items-center gap-1">
                     <Star className="w-4 h-4 text-yellow" fill="currentColor" />
                     <span className="font-medium">{specificJudge.rating}</span>
                   </div>
-                  <div className="flex items-center gap-1 text-text-muted text-sm">
+                  <div className="flex items-center gap-1 text-muted-foreground text-sm">
                     <MapPin className="w-4 h-4" />
                     <span>{specificJudge.location}</span>
                   </div>
@@ -121,12 +121,12 @@ export default function JuryBoard() {
           {/* Judge Details */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
-              <div className="bg-white rounded-2xl p-8 shadow-soft border border-soft-gray mb-8">
-                <h2 className="font-heading font-bold text-2xl text-text-dark mb-4">About</h2>
-                <p className="text-text-muted mb-6">{specificJudge.bio}</p>
+              <div className="bg-card rounded-2xl p-8 shadow-soft border border-border mb-8">
+                <h2 className="font-heading font-bold text-2xl text-card-foreground mb-4">About</h2>
+                <p className="text-muted-foreground mb-6">{specificJudge.bio}</p>
                 
                 {specificJudge.quote && (
-                  <blockquote className="border-l-4 border-mint pl-6 italic text-text-muted">
+                  <blockquote className="border-l-4 border-mint pl-6 italic text-muted-foreground">
                     "{specificJudge.quote}"
                   </blockquote>
                 )}
@@ -134,8 +134,8 @@ export default function JuryBoard() {
             </div>
 
             <div>
-              <div className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray mb-6">
-                <h3 className="font-heading font-semibold text-lg text-text-dark mb-4">Expertise</h3>
+              <div className="bg-card rounded-2xl p-6 shadow-soft border border-border mb-6">
+                <h3 className="font-heading font-semibold text-lg text-card-foreground mb-4">Expertise</h3>
                 <div className="flex flex-wrap gap-2">
                   {specificJudge.expertise.map(skill => (
                     <Badge key={skill} className="bg-sky/20 text-sky px-2 py-1 rounded-full text-xs border-0">
@@ -145,18 +145,18 @@ export default function JuryBoard() {
                 </div>
               </div>
 
-              <div className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray mb-6">
-                <h3 className="font-heading font-semibold text-lg text-text-dark mb-4">Experience</h3>
+              <div className="bg-card rounded-2xl p-6 shadow-soft border border-border mb-6">
+                <h3 className="font-heading font-semibold text-lg text-card-foreground mb-4">Experience</h3>
                 <div className="space-y-3">
                   <div className="text-center">
                     <div className="text-2xl font-bold text-coral">{specificJudge.eventsJudged}</div>
-                    <div className="text-sm text-text-muted">Events Judged</div>
+                    <div className="text-sm text-muted-foreground">Events Judged</div>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray">
-                <h3 className="font-heading font-semibold text-lg text-text-dark mb-4">Badges</h3>
+              <div className="bg-card rounded-2xl p-6 shadow-soft border border-border">
+                <h3 className="font-heading font-semibold text-lg text-card-foreground mb-4">Badges</h3>
                 <div className="flex flex-wrap gap-2">
                   {specificJudge.badges.map(badge => (
                     <Badge key={badge} className="bg-mint/20 text-mint px-2 py-1 rounded-full text-xs border-0">
@@ -181,33 +181,33 @@ export default function JuryBoard() {
   }
 
   return (
-    <div className="min-h-screen bg-cream py-8" data-testid="judges-page">
+    <div className="min-h-screen bg-background py-8" data-testid="judges-page">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h1 className="font-heading font-bold text-4xl text-text-dark mb-4">The Jury Board</h1>
+          <h1 className="font-heading font-bold text-4xl text-card-foreground mb-4">The Jury Board</h1>
           <CrayonSquiggle className="mx-auto mb-6" />
-          <p className="text-text-muted text-lg">Connect with industry leaders and invite them to join your jury board</p>
+          <p className="text-muted-foreground text-lg">Connect with industry leaders and invite them to join your jury board</p>
         </div>
         
         {/* Search and Filters */}
-        <div className="bg-white rounded-2xl p-6 shadow-soft mb-8 border border-soft-gray">
+        <div className="bg-card rounded-2xl p-6 shadow-soft mb-8 border border-border">
           <div className="flex flex-col lg:flex-row gap-4">
             <div className="flex-1">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-muted w-5 h-5" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
                 <Input
                   type="text"
                   placeholder="Search jury members by name, company, or expertise..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-soft-gray rounded-xl focus:ring-2 focus:ring-sky focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-3 border border-border rounded-xl focus:ring-2 focus:ring-sky focus:border-transparent"
                   data-testid="input-search-jury-members"
                 />
               </div>
             </div>
             
             <Select value={selectedExpertise} onValueChange={setSelectedExpertise}>
-              <SelectTrigger className="w-48 border-soft-gray rounded-xl" data-testid="select-expertise">
+              <SelectTrigger className="w-48 border-border rounded-xl" data-testid="select-expertise">
                 <SelectValue placeholder="Expertise" />
               </SelectTrigger>
               <SelectContent>
@@ -219,7 +219,7 @@ export default function JuryBoard() {
             </Select>
             
             <Select value={selectedAvailability} onValueChange={setSelectedAvailability}>
-              <SelectTrigger className="w-48 border-soft-gray rounded-xl" data-testid="select-availability">
+              <SelectTrigger className="w-48 border-border rounded-xl" data-testid="select-availability">
                 <SelectValue placeholder="Availability" />
               </SelectTrigger>
               <SelectContent>
@@ -236,7 +236,7 @@ export default function JuryBoard() {
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {Array.from({ length: 9 }).map((_, i) => (
-              <div key={i} className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray text-center">
+              <div key={i} className="bg-card rounded-2xl p-6 shadow-soft border border-border text-center">
                 <Skeleton className="w-20 h-20 rounded-full mx-auto mb-4" />
                 <Skeleton className="h-6 w-3/4 mx-auto mb-2" />
                 <Skeleton className="h-4 w-1/2 mx-auto mb-4" />
@@ -264,8 +264,8 @@ export default function JuryBoard() {
         ) : (
           <div className="text-center py-16">
             <div className="text-6xl mb-4">👨‍💼</div>
-            <h3 className="font-heading font-semibold text-xl text-text-dark mb-2">No jury members found</h3>
-            <p className="text-text-muted mb-6">
+            <h3 className="font-heading font-semibold text-xl text-card-foreground mb-2">No jury members found</h3>
+            <p className="text-muted-foreground mb-6">
               {searchQuery || selectedExpertise || selectedAvailability
                 ? "Try adjusting your search or filters"
                 : "Our jury board network is growing. Check back soon!"
@@ -287,7 +287,7 @@ export default function JuryBoard() {
 
         {/* Judge Detail Modal */}
         <Dialog open={!!selectedJudge} onOpenChange={() => setSelectedJudge(null)}>
-          <DialogContent className="max-w-2xl bg-white" data-testid="judge-detail-modal">
+          <DialogContent className="max-w-2xl bg-card" data-testid="judge-detail-modal">
             {selectedJudge && (
               <>
                 <DialogHeader>
@@ -299,10 +299,10 @@ export default function JuryBoard() {
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <DialogTitle className="font-heading font-bold text-xl text-text-dark">
+                      <DialogTitle className="font-heading font-bold text-xl text-card-foreground">
                         {selectedJudge.name}
                       </DialogTitle>
-                      <DialogDescription className="text-text-muted">
+                      <DialogDescription className="text-muted-foreground">
                         {selectedJudge.title} at {selectedJudge.company}
                       </DialogDescription>
                     </div>
@@ -311,12 +311,12 @@ export default function JuryBoard() {
                 
                 <div className="space-y-6">
                   <div>
-                    <h3 className="font-semibold text-text-dark mb-2">About</h3>
-                    <p className="text-text-muted text-sm">{selectedJudge.bio}</p>
+                    <h3 className="font-semibold text-card-foreground mb-2">About</h3>
+                    <p className="text-muted-foreground text-sm">{selectedJudge.bio}</p>
                   </div>
                   
                   <div>
-                    <h3 className="font-semibold text-text-dark mb-2">Expertise</h3>
+                    <h3 className="font-semibold text-card-foreground mb-2">Expertise</h3>
                     <div className="flex flex-wrap gap-2">
                       {selectedJudge.expertise.slice(0, 6).map(skill => (
                         <Badge key={skill} className="bg-sky/20 text-sky px-2 py-1 rounded-full text-xs border-0">
@@ -326,7 +326,7 @@ export default function JuryBoard() {
                     </div>
                   </div>
                   
-                  <div className="flex justify-between items-center pt-4 border-t border-soft-gray">
+                  <div className="flex justify-between items-center pt-4 border-t border-border">
                     <div className="flex gap-2">
                       {selectedJudge.social.linkedin && (
                         <Button variant="outline" size="icon" className="border-sky text-sky hover:bg-sky/10" asChild>

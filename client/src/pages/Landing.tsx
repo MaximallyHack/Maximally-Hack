@@ -16,18 +16,18 @@ export default function Landing() {
   });
 
   return (
-    <div className="min-h-screen bg-cream" data-testid="landing-page">
+    <div className="min-h-screen bg-background" data-testid="landing-page">
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-cream via-sky/10 to-mint/10 py-20">
         <DecorativeElements />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <FloatingElement>
-            <h1 className="font-heading font-bold text-5xl md:text-6xl text-text-dark mb-6">
+            <h1 className="font-heading font-bold text-5xl md:text-6xl text-foreground mb-6">
               Where Great Ideas
               <span className="text-coral"> Come to Life</span>
             </h1>
           </FloatingElement>
-          <p className="text-xl text-text-muted mb-8 max-w-2xl mx-auto">
+          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
             Join the friendliest hackathon community. Create, collaborate, and compete in events that celebrate innovation and creativity.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -38,7 +38,7 @@ export default function Landing() {
               </Button>
             </Link>
             <Link href="/organizer/events/new">
-              <Button variant="outline" size="lg" className="border-2 border-mint text-text-dark px-8 py-4 rounded-full font-medium text-lg hover-scale hover:bg-mint/20 transition-colors" data-testid="button-join-community">
+              <Button variant="outline" size="lg" className="border-2 border-mint text-foreground px-8 py-4 rounded-full font-medium text-lg hover-scale hover:bg-mint/20 transition-colors" data-testid="button-join-community">
                 <Plus className="w-5 h-5 mr-2" />
                 Join Our Community
               </Button>
@@ -54,10 +54,10 @@ export default function Landing() {
             <Badge className="bg-sky text-white px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer" data-testid="category-ai">
               🤖 AI & ML
             </Badge>
-            <Badge className="bg-mint text-text-dark px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer" data-testid="category-student">
+            <Badge className="bg-mint text-foreground px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer" data-testid="category-student">
               🎓 Student
             </Badge>
-            <Badge className="bg-yellow text-text-dark px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer" data-testid="category-beginner">
+            <Badge className="bg-yellow text-foreground px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer" data-testid="category-beginner">
               👶 Beginner
             </Badge>
             <Badge className="bg-coral text-white px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer" data-testid="category-weekend">
@@ -74,15 +74,15 @@ export default function Landing() {
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="font-heading font-bold text-3xl text-text-dark mb-4">Featured Hackathons</h2>
+            <h2 className="font-heading font-bold text-3xl text-foreground mb-4">Featured Hackathons</h2>
             <CrayonSquiggle className="mx-auto mb-6" />
-            <p className="text-text-muted text-lg">Join these exciting events happening now</p>
+            <p className="text-muted-foreground text-lg">Join these exciting events happening now</p>
           </div>
           
           {eventsLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray">
+                <div key={i} className="bg-card rounded-2xl p-6 shadow-soft border border-border">
                   <Skeleton className="h-4 w-20 mb-4" />
                   <Skeleton className="h-6 w-3/4 mb-2" />
                   <Skeleton className="h-4 w-full mb-4" />
@@ -107,8 +107,8 @@ export default function Landing() {
           ) : (
             <div className="text-center py-16">
               <div className="text-6xl mb-4">🎯</div>
-              <h3 className="font-heading font-semibold text-xl text-text-dark mb-2">No Featured Events</h3>
-              <p className="text-text-muted mb-6">Check back soon for exciting hackathons!</p>
+              <h3 className="font-heading font-semibold text-xl text-foreground mb-2">No Featured Events</h3>
+              <p className="text-muted-foreground mb-6">Check back soon for exciting hackathons!</p>
               <Link href="/explore">
                 <Button className="bg-coral text-white hover:bg-coral/80">Explore All Events</Button>
               </Link>
@@ -130,9 +130,9 @@ export default function Landing() {
       <section className="py-16 bg-soft-gray/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="font-heading font-bold text-3xl text-text-dark mb-4">How It Works</h2>
+            <h2 className="font-heading font-bold text-3xl text-foreground mb-4">How It Works</h2>
             <CrayonSquiggle className="mx-auto mb-6" />
-            <p className="text-text-muted text-lg">Three simple steps to hackathon success</p>
+            <p className="text-muted-foreground text-lg">Three simple steps to hackathon success</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -142,17 +142,17 @@ export default function Landing() {
                   <Search className="w-6 h-6 text-white" />
                 </div>
               </FloatingElement>
-              <h3 className="font-heading font-semibold text-xl text-text-dark mb-2">1. Discover</h3>
-              <p className="text-text-muted">Browse exciting hackathons, filter by your interests, and find the perfect challenge for your skills.</p>
+              <h3 className="font-heading font-semibold text-xl text-foreground mb-2">1. Discover</h3>
+              <p className="text-muted-foreground">Browse exciting hackathons, filter by your interests, and find the perfect challenge for your skills.</p>
             </div>
             <div className="text-center">
               <FloatingElement delay={0.5}>
                 <div className="bg-mint w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 hover-scale">
-                  <Users className="w-6 h-6 text-text-dark" />
+                  <Users className="w-6 h-6 text-foreground" />
                 </div>
               </FloatingElement>
-              <h3 className="font-heading font-semibold text-xl text-text-dark mb-2">2. Team Up</h3>
-              <p className="text-text-muted">Join existing teams or create your own. Connect with like-minded builders and form the dream team.</p>
+              <h3 className="font-heading font-semibold text-xl text-foreground mb-2">2. Team Up</h3>
+              <p className="text-muted-foreground">Join existing teams or create your own. Connect with like-minded builders and form the dream team.</p>
             </div>
             <div className="text-center">
               <FloatingElement delay={1}>
@@ -160,8 +160,8 @@ export default function Landing() {
                   <Trophy className="w-6 h-6 text-white" />
                 </div>
               </FloatingElement>
-              <h3 className="font-heading font-semibold text-xl text-text-dark mb-2">3. Build & Win</h3>
-              <p className="text-text-muted">Create amazing projects, submit your work, and compete for prizes while learning from the community.</p>
+              <h3 className="font-heading font-semibold text-xl text-foreground mb-2">3. Build & Win</h3>
+              <p className="text-muted-foreground">Create amazing projects, submit your work, and compete for prizes while learning from the community.</p>
             </div>
           </div>
         </div>
@@ -171,7 +171,7 @@ export default function Landing() {
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="font-heading font-bold text-3xl text-text-dark mb-4">Trusted by Amazing Judges</h2>
+            <h2 className="font-heading font-bold text-3xl text-foreground mb-4">Trusted by Amazing Judges</h2>
             <CrayonSquiggle className="mx-auto mb-6" />
           </div>
           
@@ -190,20 +190,20 @@ export default function Landing() {
                 </Avatar>
               ))}
             </div>
-            <span className="text-text-muted">200+ Expert Judges</span>
+            <span className="text-muted-foreground">200+ Expert Judges</span>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white rounded-2xl p-6 shadow-soft text-center">
-              <p className="text-text-muted italic mb-4">"The most welcoming hackathon platform I've ever used. The community here is incredible!"</p>
+            <div className="bg-card rounded-2xl p-6 shadow-soft text-center">
+              <p className="text-muted-foreground italic mb-4">"The most welcoming hackathon platform I've ever used. The community here is incredible!"</p>
               <div className="text-yellow">⭐⭐⭐⭐⭐</div>
             </div>
-            <div className="bg-white rounded-2xl p-6 shadow-soft text-center">
-              <p className="text-text-muted italic mb-4">"Maximally Hack makes organizing events a breeze. The tools are intuitive and powerful."</p>
+            <div className="bg-card rounded-2xl p-6 shadow-soft text-center">
+              <p className="text-muted-foreground italic mb-4">"Maximally Hack makes organizing events a breeze. The tools are intuitive and powerful."</p>
               <div className="text-yellow">⭐⭐⭐⭐⭐</div>
             </div>
-            <div className="bg-white rounded-2xl p-6 shadow-soft text-center">
-              <p className="text-text-muted italic mb-4">"Amazing projects, talented people, and fair judging. This is where innovation happens!"</p>
+            <div className="bg-card rounded-2xl p-6 shadow-soft text-center">
+              <p className="text-muted-foreground italic mb-4">"Amazing projects, talented people, and fair judging. This is where innovation happens!"</p>
               <div className="text-yellow">⭐⭐⭐⭐⭐</div>
             </div>
           </div>

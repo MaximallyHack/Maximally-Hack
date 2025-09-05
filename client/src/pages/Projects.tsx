@@ -133,10 +133,10 @@ ${specificProject.techStack.map(tech => `- ${tech}`).join('\n')}
 We welcome contributions! Please see our contributing guidelines for more details.`;
 
     return (
-      <div className="min-h-screen bg-cream py-8" data-testid="project-detail-page">
+      <div className="min-h-screen bg-background py-8" data-testid="project-detail-page">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Project Hero */}
-          <div className="bg-white rounded-2xl p-8 shadow-soft border border-soft-gray mb-8">
+          <div className="bg-card rounded-2xl p-8 shadow-soft border border-border mb-8">
             {/* Cover Image */}
             {specificProject.images && specificProject.images.length > 0 && (
               <div className="aspect-video rounded-xl overflow-hidden mb-6">
@@ -150,8 +150,8 @@ We welcome contributions! Please see our contributing guidelines for more detail
             
             <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
               <div className="flex-1">
-                <h1 className="font-heading font-bold text-4xl text-text-dark mb-3">{specificProject.title}</h1>
-                <p className="text-xl text-text-muted mb-4">{specificProject.tagline}</p>
+                <h1 className="font-heading font-bold text-4xl text-card-foreground mb-3">{specificProject.title}</h1>
+                <p className="text-xl text-muted-foreground mb-4">{specificProject.tagline}</p>
                 
                 {/* Tag Chips */}
                 <div className="flex flex-wrap gap-2 mb-6">
@@ -202,8 +202,8 @@ We welcome contributions! Please see our contributing guidelines for more detail
             {/* Main Content */}
             <div className="lg:col-span-3">
               {/* Team Section */}
-              <div className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray mb-8">
-                <h2 className="font-heading font-bold text-xl text-text-dark mb-4">Team</h2>
+              <div className="bg-card rounded-2xl p-6 shadow-soft border border-border mb-8">
+                <h2 className="font-heading font-bold text-xl text-card-foreground mb-4">Team</h2>
                 <div className="flex flex-wrap gap-4">
                   {mockTeamMembers.map((member) => (
                     <div key={member.id} className="flex items-center gap-3">
@@ -214,8 +214,8 @@ We welcome contributions! Please see our contributing guidelines for more detail
                         </AvatarFallback>
                       </Avatar>
                       <div>
-                        <div className="font-medium text-text-dark">{member.name}</div>
-                        <div className="text-xs text-text-muted">{member.role}</div>
+                        <div className="font-medium text-card-foreground">{member.name}</div>
+                        <div className="text-xs text-muted-foreground">{member.role}</div>
                       </div>
                     </div>
                   ))}
@@ -224,8 +224,8 @@ We welcome contributions! Please see our contributing guidelines for more detail
               
               {/* Screenshots Strip */}
               {specificProject.images && specificProject.images.length > 1 && (
-                <div className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray mb-8">
-                  <h2 className="font-heading font-bold text-xl text-text-dark mb-4">Screenshots</h2>
+                <div className="bg-card rounded-2xl p-6 shadow-soft border border-border mb-8">
+                  <h2 className="font-heading font-bold text-xl text-card-foreground mb-4">Screenshots</h2>
                   <div className="flex gap-4 overflow-x-auto pb-2">
                     {specificProject.images.slice(1).map((image, index) => (
                       <div key={index} className="flex-shrink-0 w-64 aspect-video rounded-lg overflow-hidden">
@@ -241,9 +241,9 @@ We welcome contributions! Please see our contributing guidelines for more detail
               )}
               
               {/* README */}
-              <div className="bg-white rounded-2xl p-8 shadow-soft border border-soft-gray">
-                <h2 className="font-heading font-bold text-xl text-text-dark mb-4">README</h2>
-                <div className="prose max-w-none text-text-muted">
+              <div className="bg-card rounded-2xl p-8 shadow-soft border border-border">
+                <h2 className="font-heading font-bold text-xl text-card-foreground mb-4">README</h2>
+                <div className="prose max-w-none text-muted-foreground">
                   <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed">{mockReadme}</pre>
                 </div>
               </div>
@@ -252,26 +252,26 @@ We welcome contributions! Please see our contributing guidelines for more detail
             {/* Sidebar */}
             <div className="space-y-6">
               {/* Event Info */}
-              <div className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray">
-                <h3 className="font-heading font-semibold text-lg text-text-dark mb-4">Event</h3>
+              <div className="bg-card rounded-2xl p-6 shadow-soft border border-border">
+                <h3 className="font-heading font-semibold text-lg text-card-foreground mb-4">Event</h3>
                 <Badge className="bg-mint/20 text-mint px-3 py-2 rounded-full text-sm border-0 mb-2">
                   {specificProject.track}
                 </Badge>
-                <div className="flex items-center gap-2 text-text-muted text-sm">
+                <div className="flex items-center gap-2 text-muted-foreground text-sm">
                   <Calendar className="w-4 h-4" />
                   <span>{formatDate(specificProject.submittedAt)}</span>
                 </div>
                 {specificProject.averageScore && (
                   <div className="flex items-center gap-2 mt-2">
                     <Star className="w-4 h-4 text-yellow" fill="currentColor" />
-                    <span className="text-text-dark font-medium">{specificProject.averageScore.toFixed(1)} / 10</span>
+                    <span className="text-card-foreground font-medium">{specificProject.averageScore.toFixed(1)} / 10</span>
                   </div>
                 )}
               </div>
               
               {/* Tech Stack */}
-              <div className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray">
-                <h3 className="font-heading font-semibold text-lg text-text-dark mb-4">Tech Stack</h3>
+              <div className="bg-card rounded-2xl p-6 shadow-soft border border-border">
+                <h3 className="font-heading font-semibold text-lg text-card-foreground mb-4">Tech Stack</h3>
                 <div className="flex flex-wrap gap-2">
                   {specificProject.techStack.map(tech => (
                     <Badge key={tech} className="bg-sky/20 text-sky px-2 py-1 rounded-full text-xs border-0">
@@ -283,8 +283,8 @@ We welcome contributions! Please see our contributing guidelines for more detail
               </div>
               
               {/* Share */}
-              <div className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray">
-                <h3 className="font-heading font-semibold text-lg text-text-dark mb-4">Share</h3>
+              <div className="bg-card rounded-2xl p-6 shadow-soft border border-border">
+                <h3 className="font-heading font-semibold text-lg text-card-foreground mb-4">Share</h3>
                 <Button 
                   onClick={() => {
                     navigator.clipboard.writeText(window.location.href);
@@ -305,34 +305,34 @@ We welcome contributions! Please see our contributing guidelines for more detail
   }
 
   return (
-    <div className="min-h-screen bg-cream py-8" data-testid="projects-page">
+    <div className="min-h-screen bg-background py-8" data-testid="projects-page">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h1 className="font-heading font-bold text-4xl text-text-dark mb-4">Project Gallery</h1>
+          <h1 className="font-heading font-bold text-4xl text-card-foreground mb-4">Project Gallery</h1>
           <CrayonSquiggle className="mx-auto mb-6" />
-          <p className="text-text-muted text-lg">Discover amazing projects built by our community</p>
+          <p className="text-muted-foreground text-lg">Discover amazing projects built by our community</p>
         </div>
         
         {/* Search and Filters */}
-        <div className="bg-white rounded-2xl p-6 shadow-soft mb-8 border border-soft-gray">
+        <div className="bg-card rounded-2xl p-6 shadow-soft mb-8 border border-border">
           {/* Top Row - Search, Tech, Sort, Reset */}
           <div className="flex flex-col lg:flex-row gap-4 mb-6">
             <div className="flex-1">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-muted w-5 h-5" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
                 <Input
                   type="text"
                   placeholder="Search projects, technologies, or descriptions..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-soft-gray rounded-xl focus:ring-2 focus:ring-sky focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-3 border border-border rounded-xl focus:ring-2 focus:ring-sky focus:border-transparent"
                   data-testid="input-search-projects"
                 />
               </div>
             </div>
             
             <Select value={selectedTech} onValueChange={setSelectedTech}>
-              <SelectTrigger className="w-48 border-soft-gray rounded-xl" data-testid="select-tech-stack">
+              <SelectTrigger className="w-48 border-border rounded-xl" data-testid="select-tech-stack">
                 <SelectValue placeholder="Tech Stack" />
               </SelectTrigger>
               <SelectContent>
@@ -344,7 +344,7 @@ We welcome contributions! Please see our contributing guidelines for more detail
             </Select>
             
             <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-48 border-soft-gray rounded-xl" data-testid="select-sort-by">
+              <SelectTrigger className="w-48 border-border rounded-xl" data-testid="select-sort-by">
                 <SelectValue placeholder="Sort by" />
               </SelectTrigger>
               <SelectContent>
@@ -369,7 +369,7 @@ We welcome contributions! Please see our contributing guidelines for more detail
           {/* Tags Row */}
           {allTags.length > 0 && (
             <div>
-              <h3 className="text-sm font-medium text-text-dark mb-3">Filter by Tags</h3>
+              <h3 className="text-sm font-medium text-card-foreground mb-3">Filter by Tags</h3>
               <div className="flex flex-wrap gap-2">
                 {allTags.map((tag) => (
                   <Badge
@@ -378,7 +378,7 @@ We welcome contributions! Please see our contributing guidelines for more detail
                     className={`cursor-pointer transition-colors px-3 py-2 rounded-full border-0 text-sm ${
                       selectedTags.includes(tag)
                         ? 'bg-sky text-white'
-                        : 'bg-soft-gray text-text-dark hover:bg-soft-gray/80'
+                        : 'bg-soft-gray text-card-foreground hover:bg-soft-gray/80'
                     }`}
                     data-testid={`tag-${tag.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}
                   >
@@ -394,7 +394,7 @@ We welcome contributions! Please see our contributing guidelines for more detail
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {Array.from({ length: 9 }).map((_, i) => (
-              <div key={i} className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray">
+              <div key={i} className="bg-card rounded-2xl p-6 shadow-soft border border-border">
                 <Skeleton className="h-4 w-20 mb-4" />
                 <Skeleton className="h-6 w-3/4 mb-2" />
                 <Skeleton className="h-4 w-full mb-4" />
@@ -425,8 +425,8 @@ We welcome contributions! Please see our contributing guidelines for more detail
         ) : (
           <div className="text-center py-16">
             <div className="text-6xl mb-4">🔍</div>
-            <h3 className="font-heading font-semibold text-xl text-text-dark mb-2">No projects match your filters</h3>
-            <p className="text-text-muted mb-6">
+            <h3 className="font-heading font-semibold text-xl text-card-foreground mb-2">No projects match your filters</h3>
+            <p className="text-muted-foreground mb-6">
               {hasActiveFilters
                 ? "Try adjusting your search or filters to see more projects"
                 : "Projects will appear here as they are submitted to hackathons"
@@ -446,14 +446,14 @@ We welcome contributions! Please see our contributing guidelines for more detail
 
         {/* Project Detail Modal */}
         <Dialog open={!!selectedProject} onOpenChange={() => setSelectedProject(null)}>
-          <DialogContent className="max-w-4xl bg-white" data-testid="project-detail-modal">
+          <DialogContent className="max-w-4xl bg-card" data-testid="project-detail-modal">
             {selectedProject && (
               <>
                 <DialogHeader>
-                  <DialogTitle className="font-heading font-bold text-2xl text-text-dark">
+                  <DialogTitle className="font-heading font-bold text-2xl text-card-foreground">
                     {selectedProject.title}
                   </DialogTitle>
-                  <DialogDescription className="text-text-muted">
+                  <DialogDescription className="text-muted-foreground">
                     {selectedProject.tagline}
                   </DialogDescription>
                 </DialogHeader>
@@ -470,7 +470,7 @@ We welcome contributions! Please see our contributing guidelines for more detail
                   )}
                   
                   <div>
-                    <p className="text-text-muted mb-4">{selectedProject.description}</p>
+                    <p className="text-muted-foreground mb-4">{selectedProject.description}</p>
                     
                     <div className="flex flex-wrap gap-2 mb-4">
                       {selectedProject.techStack.slice(0, 6).map(tech => (

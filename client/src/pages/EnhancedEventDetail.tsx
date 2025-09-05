@@ -61,7 +61,7 @@ export default function EnhancedEventDetail() {
 
   if (eventLoading) {
     return (
-      <div className="min-h-screen bg-cream">
+      <div className="min-h-screen bg-background">
         <div className="bg-gradient-to-br from-sky/20 via-coral/10 to-mint/20 py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <Skeleton className="h-16 w-3/4 mb-6" />
@@ -79,7 +79,7 @@ export default function EnhancedEventDetail() {
 
   if (!event) {
     return (
-      <div className="min-h-screen bg-cream flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <div className="text-8xl mb-6">🤖</div>
           <h1 className="font-heading font-bold text-3xl text-text-dark mb-4">Event Not Found</h1>
@@ -121,7 +121,7 @@ export default function EnhancedEventDetail() {
   };
 
   return (
-    <div className="min-h-screen bg-cream" data-testid="enhanced-event-detail">
+    <div className="min-h-screen bg-background" data-testid="enhanced-event-detail">
       <Confetti />
       
       {/* Header Strip */}

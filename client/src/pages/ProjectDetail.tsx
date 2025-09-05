@@ -195,7 +195,7 @@ Already helping 10,000+ users reduce their carbon footprint by an average of 25%
 
   if (isLoading || !project) {
     return (
-      <div className="min-h-screen bg-cream py-8">
+      <div className="min-h-screen bg-background py-8">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="animate-pulse">
             <div className="h-8 bg-soft-gray rounded mb-4 w-1/4"></div>
@@ -211,12 +211,12 @@ Already helping 10,000+ users reduce their carbon footprint by an average of 25%
   }
 
   return (
-    <div className="min-h-screen bg-cream py-8">
+    <div className="min-h-screen bg-background py-8">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Back Navigation */}
         <div className="mb-6">
           <Link href="/projects">
-            <Button variant="ghost" className="text-text-muted hover:text-text-dark" data-testid="button-back">
+            <Button variant="ghost" className="text-muted-foreground hover:text-card-foreground" data-testid="button-back">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Projects
             </Button>
@@ -242,7 +242,7 @@ Already helping 10,000+ users reduce their carbon footprint by an average of 25%
                   {project.badges?.map((badge) => (
                     <Badge 
                       key={badge} 
-                      className="bg-yellow text-text-dark shadow-soft"
+                      className="bg-yellow text-card-foreground shadow-soft"
                       data-testid={`badge-${badge}`}
                     >
                       {badgeIcons[badge as keyof typeof badgeIcons]}
@@ -253,11 +253,11 @@ Already helping 10,000+ users reduce their carbon footprint by an average of 25%
 
                 {/* Stats */}
                 <div className="absolute bottom-4 right-4 flex gap-2">
-                  <Badge className="bg-white/90 text-text-dark">
+                  <Badge className="bg-card/90 text-card-foreground">
                     <Eye className="w-3 h-3 mr-1" />
                     {project.viewCount}
                   </Badge>
-                  <Badge className="bg-white/90 text-text-dark">
+                  <Badge className="bg-card/90 text-card-foreground">
                     <Star className="w-3 h-3 mr-1" />
                     {project.starCount}
                   </Badge>
@@ -265,19 +265,19 @@ Already helping 10,000+ users reduce their carbon footprint by an average of 25%
               </div>
 
               <FloatingElement>
-                <h1 className="font-heading font-bold text-3xl text-text-dark mb-3">
+                <h1 className="font-heading font-bold text-3xl text-card-foreground mb-3">
                   {project.title}
                 </h1>
               </FloatingElement>
               
-              <p className="text-xl text-text-muted mb-4">
+              <p className="text-xl text-muted-foreground mb-4">
                 {project.oneLiner}
               </p>
 
               {/* Tags */}
               <div className="flex flex-wrap gap-2 mb-6">
                 {project.tags?.map((tag) => (
-                  <Badge key={tag} className="bg-mint/20 text-text-dark">
+                  <Badge key={tag} className="bg-mint/20 text-card-foreground">
                     {tag}
                   </Badge>
                 ))}
@@ -316,9 +316,9 @@ Already helping 10,000+ users reduce their carbon footprint by an average of 25%
             </div>
 
             {/* About Section */}
-            <Card className="bg-white shadow-soft border-soft-gray">
+            <Card className="bg-card shadow-soft border-border">
               <CardHeader>
-                <CardTitle className="font-heading text-xl text-text-dark">
+                <CardTitle className="font-heading text-xl text-card-foreground">
                   About the Project
                 </CardTitle>
               </CardHeader>
@@ -335,9 +335,9 @@ Already helping 10,000+ users reduce their carbon footprint by an average of 25%
 
             {/* Screenshots */}
             {project.screenshots && project.screenshots.length > 0 && (
-              <Card className="bg-white shadow-soft border-soft-gray">
+              <Card className="bg-card shadow-soft border-border">
                 <CardHeader>
-                  <CardTitle className="font-heading text-xl text-text-dark">
+                  <CardTitle className="font-heading text-xl text-card-foreground">
                     Screenshots
                   </CardTitle>
                 </CardHeader>
@@ -359,9 +359,9 @@ Already helping 10,000+ users reduce their carbon footprint by an average of 25%
 
             {/* Tasks Preview */}
             {project.tasks && project.tasks.length > 0 && (
-              <Card className="bg-white shadow-soft border-soft-gray">
+              <Card className="bg-card shadow-soft border-border">
                 <CardHeader>
-                  <CardTitle className="font-heading text-xl text-text-dark">
+                  <CardTitle className="font-heading text-xl text-card-foreground">
                     Sample Tasks
                   </CardTitle>
                 </CardHeader>
@@ -371,12 +371,12 @@ Already helping 10,000+ users reduce their carbon footprint by an average of 25%
                       <div key={task.id} className="flex items-center justify-between p-3 bg-soft-gray/30 rounded-lg">
                         <div className="flex items-center space-x-3">
                           {statusIcons[task.status as keyof typeof statusIcons]}
-                          <span className="text-sm text-text-dark">{task.title}</span>
+                          <span className="text-sm text-card-foreground">{task.title}</span>
                         </div>
                         <Badge className={`text-xs ${
                           task.priority === 'high' ? 'bg-coral text-white' :
-                          task.priority === 'medium' ? 'bg-yellow text-text-dark' :
-                          'bg-mint text-text-dark'
+                          task.priority === 'medium' ? 'bg-yellow text-card-foreground' :
+                          'bg-mint text-card-foreground'
                         }`}>
                           {task.priority}
                         </Badge>
@@ -385,7 +385,7 @@ Already helping 10,000+ users reduce their carbon footprint by an average of 25%
                   </div>
                   
                   {project.lookingForContributors && (
-                    <div className="mt-4 pt-4 border-t border-soft-gray">
+                    <div className="mt-4 pt-4 border-t border-border">
                       <Button 
                         onClick={() => setShowJoinModal(true)}
                         className="bg-coral text-white hover:bg-coral/80 w-full"
@@ -403,9 +403,9 @@ Already helping 10,000+ users reduce their carbon footprint by an average of 25%
           {/* Sidebar */}
           <div className="lg:col-span-1 space-y-6">
             {/* Team */}
-            <Card className="bg-white shadow-soft border-soft-gray">
+            <Card className="bg-card shadow-soft border-border">
               <CardHeader>
-                <CardTitle className="font-heading text-lg text-text-dark">
+                <CardTitle className="font-heading text-lg text-card-foreground">
                   Team
                 </CardTitle>
               </CardHeader>
@@ -419,12 +419,12 @@ Already helping 10,000+ users reduce their carbon footprint by an average of 25%
                       </Avatar>
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
-                          <p className="font-medium text-sm text-text-dark">{member.name}</p>
+                          <p className="font-medium text-sm text-card-foreground">{member.name}</p>
                           {member.isOwner && (
                             <Badge className="bg-coral text-white text-xs">Owner</Badge>
                           )}
                         </div>
-                        <p className="text-xs text-text-muted">{member.role}</p>
+                        <p className="text-xs text-muted-foreground">{member.role}</p>
                       </div>
                     </div>
                   ))}
@@ -434,18 +434,18 @@ Already helping 10,000+ users reduce their carbon footprint by an average of 25%
 
             {/* Open Roles */}
             {project.lookingForContributors && project.openRoles && project.openRoles.length > 0 && (
-              <Card className="bg-white shadow-soft border-soft-gray">
+              <Card className="bg-card shadow-soft border-border">
                 <CardHeader>
-                  <CardTitle className="font-heading text-lg text-text-dark">
+                  <CardTitle className="font-heading text-lg text-card-foreground">
                     We Need Help With
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
                     {project.openRoles.map((role) => (
-                      <div key={role.id} className="border border-soft-gray rounded-lg p-3">
-                        <h4 className="font-medium text-sm text-text-dark mb-1">{role.title}</h4>
-                        <p className="text-xs text-text-muted mb-2">{role.description}</p>
+                      <div key={role.id} className="border border-border rounded-lg p-3">
+                        <h4 className="font-medium text-sm text-card-foreground mb-1">{role.title}</h4>
+                        <p className="text-xs text-muted-foreground mb-2">{role.description}</p>
                         <div className="flex flex-wrap gap-1">
                           {role.skills?.map((skill) => (
                             <Badge key={skill} className="bg-sky/20 text-sky text-xs">
@@ -488,30 +488,30 @@ Already helping 10,000+ users reduce their carbon footprint by an average of 25%
             )}
 
             {/* Project Info */}
-            <Card className="bg-white shadow-soft border-soft-gray">
+            <Card className="bg-card shadow-soft border-border">
               <CardHeader>
-                <CardTitle className="font-heading text-lg text-text-dark">
+                <CardTitle className="font-heading text-lg text-card-foreground">
                   Project Info
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 {project.eventName && (
                   <div className="flex items-center space-x-2">
-                    <Calendar className="w-4 h-4 text-text-muted" />
-                    <span className="text-sm text-text-muted">{project.eventName}</span>
+                    <Calendar className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm text-muted-foreground">{project.eventName}</span>
                   </div>
                 )}
                 
                 <div className="flex items-center space-x-2">
-                  <Calendar className="w-4 h-4 text-text-muted" />
-                  <span className="text-sm text-text-muted">
+                  <Calendar className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-sm text-muted-foreground">
                     Published {new Date(project.publishedAt).toLocaleDateString()}
                   </span>
                 </div>
 
                 {/* Tech Stack */}
                 <div>
-                  <p className="text-sm font-medium text-text-dark mb-2">Tech Stack</p>
+                  <p className="text-sm font-medium text-card-foreground mb-2">Tech Stack</p>
                   <div className="flex flex-wrap gap-1">
                     {project.techStack?.map((tech) => (
                       <Badge key={tech} className="bg-text-dark text-white text-xs">
