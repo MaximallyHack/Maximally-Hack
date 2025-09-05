@@ -28,11 +28,11 @@ export default function Navbar() {
   return (
     <>
       {/* Test Mode Badge */}
-      <div className="bg-mint text-text-dark text-center py-1 px-4 text-sm font-medium">
+      <div className="bg-mint text-foreground text-center py-1 px-4 text-sm font-medium">
         🧪 Test Mode - All data is simulated for preview
       </div>
       
-      <nav className="sticky top-0 z-50 bg-cream/95 backdrop-blur-sm border-b border-soft-gray">
+      <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
@@ -40,7 +40,7 @@ export default function Navbar() {
             <div className="w-8 h-8 bg-coral rounded-full flex items-center justify-center">
               <Rocket className="w-4 h-4 text-white" />
             </div>
-            <span className="font-heading font-bold text-xl text-text-dark">Maximally Hack</span>
+            <span className="font-heading font-bold text-xl text-foreground">Maximally Hack</span>
             </Link>
 
             {/* Desktop Navigation */}
@@ -48,7 +48,7 @@ export default function Navbar() {
             {navItems.map((item) => (
               <Link key={item.href} href={item.href} data-testid={item.testId}>
                 <span className={`transition-colors hover:text-coral ${
-                  isActive(item.href) ? "text-coral font-medium" : "text-text-dark"
+                  isActive(item.href) ? "text-coral font-medium" : "text-foreground"
                 }`}>
                   {item.label}
                 </span>
@@ -123,10 +123,10 @@ export default function Navbar() {
                   <Menu className="w-5 h-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="bg-cream">
+              <SheetContent side="right">
                 <div className="flex flex-col space-y-4 mt-8">
                   <div className="flex items-center justify-between pb-2">
-                    <span className="font-medium text-text-dark">Theme</span>
+                    <span className="font-medium text-foreground">Theme</span>
                     <ThemeToggle />
                   </div>
                   {navItems.map((item) => (
@@ -137,18 +137,18 @@ export default function Navbar() {
                       data-testid={`mobile-${item.testId}`}
                     >
                       <span className={`block py-2 transition-colors hover:text-coral ${
-                        isActive(item.href) ? "text-coral font-medium" : "text-text-dark"
+                        isActive(item.href) ? "text-coral font-medium" : "text-foreground"
                       }`}>
                         {item.label}
                       </span>
                     </Link>
                   ))}
-                  <div className="pt-4 border-t border-soft-gray space-y-3">
+                  <div className="pt-4 border-t border-border space-y-3">
                     {isLoggedIn ? (
                       <>
                         <div className="px-2 py-2">
-                          <p className="font-medium text-text-dark">{user?.fullName || user?.username}</p>
-                          <p className="text-sm text-text-muted">{user?.email}</p>
+                          <p className="font-medium text-foreground">{user?.fullName || user?.username}</p>
+                          <p className="text-sm text-muted-foreground">{user?.email}</p>
                         </div>
                         <Link href="/dashboard" onClick={() => setIsOpen(false)}>
                           <Button variant="outline" className="w-full border-coral text-coral hover:bg-coral/10">

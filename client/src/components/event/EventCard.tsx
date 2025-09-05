@@ -55,7 +55,7 @@ export default function EventCard({ event, showActions = true }: EventCardProps)
   };
 
   return (
-    <Card className="group bg-white rounded-2xl p-6 shadow-soft hover-scale cursor-pointer border border-soft-gray transition-all duration-200" data-testid={`event-card-${event.slug}`}>
+    <Card className="group bg-card rounded-2xl p-6 shadow-soft hover-scale cursor-pointer border border-border transition-all duration-200" data-testid={`event-card-${event.slug}`}>
       <Link href={`/e/${event.slug}`}>
         <div className="space-y-4">
           {/* Header */}
@@ -70,7 +70,7 @@ export default function EventCard({ event, showActions = true }: EventCardProps)
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 text-text-muted hover:text-coral"
+                  className="h-8 w-8 text-muted-foreground hover:text-coral"
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
@@ -82,7 +82,7 @@ export default function EventCard({ event, showActions = true }: EventCardProps)
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 text-text-muted hover:text-sky"
+                  className="h-8 w-8 text-muted-foreground hover:text-sky"
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
@@ -97,10 +97,10 @@ export default function EventCard({ event, showActions = true }: EventCardProps)
 
           {/* Content */}
           <div>
-            <h3 className="font-heading font-semibold text-xl text-text-dark mb-2 group-hover:text-coral transition-colors">
+            <h3 className="font-heading font-semibold text-xl text-card-foreground mb-2 group-hover:text-coral transition-colors">
               {event.title}
             </h3>
-            <p className="text-text-muted text-sm mb-4 line-clamp-2">
+            <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
               {event.description}
             </p>
 
@@ -116,14 +116,14 @@ export default function EventCard({ event, showActions = true }: EventCardProps)
                 </Badge>
               ))}
               {event.tags.length > 3 && (
-                <Badge variant="secondary" className="bg-soft-gray text-text-muted px-2 py-1 rounded-full text-xs border-0">
+                <Badge variant="secondary" className="bg-muted text-muted-foreground px-2 py-1 rounded-full text-xs border-0">
                   +{event.tags.length - 3}
                 </Badge>
               )}
             </div>
 
             {/* Stats */}
-            <div className="flex items-center justify-between text-sm text-text-muted mb-4">
+            <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
               <div className="flex items-center gap-1">
                 <Calendar className="w-4 h-4" />
                 <span>{getTimeLeft()}</span>
@@ -145,9 +145,9 @@ export default function EventCard({ event, showActions = true }: EventCardProps)
                 size="sm" 
                 className={`rounded-full px-4 py-2 text-sm font-medium transition-colors
                   ${event.status === 'active' ? 'bg-coral hover:bg-coral/80 text-white' :
-                    event.status === 'upcoming' ? 'bg-mint hover:bg-mint/80 text-text-dark' :
+                    event.status === 'upcoming' ? 'bg-mint hover:bg-mint/80 text-foreground' :
                     event.status === 'registration_open' ? 'bg-sky hover:bg-sky/80 text-white' :
-                    'bg-soft-gray hover:bg-soft-gray/80 text-text-muted'
+                    'bg-muted hover:bg-muted/80 text-muted-foreground'
                   }`}
                 onClick={(e) => {
                   e.preventDefault();

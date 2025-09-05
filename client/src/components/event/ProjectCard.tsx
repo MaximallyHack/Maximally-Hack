@@ -33,7 +33,7 @@ export default function ProjectCard({ project, teamMembers = [], showScore = fal
   };
 
   return (
-    <Card className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray hover-scale cursor-pointer transition-all duration-200" data-testid={`project-card-${project.id}`}>
+    <Card className="bg-card rounded-2xl p-6 shadow-soft border border-border hover-scale cursor-pointer transition-all duration-200" data-testid={`project-card-${project.id}`}>
       <div className="space-y-4">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -49,7 +49,7 @@ export default function ProjectCard({ project, teamMembers = [], showScore = fal
           )}
           
           {showScore && project.averageScore && (
-            <div className="flex items-center text-sm text-text-muted">
+            <div className="flex items-center text-sm text-muted-foreground">
               <Star className="w-4 h-4 mr-1 text-yellow" fill="currentColor" />
               <span>Score: {project.averageScore.toFixed(1)}</span>
             </div>
@@ -69,10 +69,10 @@ export default function ProjectCard({ project, teamMembers = [], showScore = fal
 
         {/* Content */}
         <div>
-          <h3 className="font-heading font-semibold text-lg text-text-dark mb-2 group-hover:text-coral transition-colors">
+          <h3 className="font-heading font-semibold text-lg text-card-foreground mb-2 group-hover:text-coral transition-colors">
             {project.title}
           </h3>
-          <p className="text-text-muted text-sm mb-3 line-clamp-2">
+          <p className="text-muted-foreground text-sm mb-3 line-clamp-2">
             {project.tagline || project.description}
           </p>
 
@@ -84,7 +84,7 @@ export default function ProjectCard({ project, teamMembers = [], showScore = fal
               </Badge>
             ))}
             {project.techStack.length > 3 && (
-              <Badge className="bg-soft-gray text-text-muted px-2 py-1 rounded-full text-xs border-0">
+              <Badge className="bg-muted text-muted-foreground px-2 py-1 rounded-full text-xs border-0">
                 +{project.techStack.length - 3}
               </Badge>
             )}
@@ -93,7 +93,7 @@ export default function ProjectCard({ project, teamMembers = [], showScore = fal
           {/* Features */}
           {project.features && project.features.length > 0 && (
             <div className="mb-4">
-              <ul className="text-xs text-text-muted space-y-1">
+              <ul className="text-xs text-muted-foreground space-y-1">
                 {project.features.slice(0, 2).map((feature, index) => (
                   <li key={index} className="flex items-start">
                     <span className="text-success mr-2">•</span>
@@ -110,7 +110,7 @@ export default function ProjectCard({ project, teamMembers = [], showScore = fal
           {/* Team Members */}
           <div className="flex -space-x-2">
             {teamMembers.slice(0, 3).map((member) => (
-              <Avatar key={member.id} className="w-6 h-6 border-2 border-white">
+              <Avatar key={member.id} className="w-6 h-6 border-2 border-background">
                 <AvatarImage src={member.avatar} alt={member.name} />
                 <AvatarFallback className="bg-mint text-white text-xs">
                   {member.name.split(' ').map(n => n[0]).join('')}
@@ -118,7 +118,7 @@ export default function ProjectCard({ project, teamMembers = [], showScore = fal
               </Avatar>
             ))}
             {teamMembers.length > 3 && (
-              <div className="w-6 h-6 rounded-full bg-soft-gray border-2 border-white flex items-center justify-center text-xs text-text-muted">
+              <div className="w-6 h-6 rounded-full bg-muted border-2 border-background flex items-center justify-center text-xs text-muted-foreground">
                 +{teamMembers.length - 3}
               </div>
             )}
@@ -130,7 +130,7 @@ export default function ProjectCard({ project, teamMembers = [], showScore = fal
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-8 w-8 text-text-muted hover:text-sky"
+                className="h-8 w-8 text-muted-foreground hover:text-sky"
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
@@ -145,7 +145,7 @@ export default function ProjectCard({ project, teamMembers = [], showScore = fal
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-8 w-8 text-text-muted hover:text-coral"
+                className="h-8 w-8 text-muted-foreground hover:text-coral"
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();

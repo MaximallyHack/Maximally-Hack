@@ -21,7 +21,7 @@ export default function JuryMemberCard({ judge, showContactButton = false }: Jud
   };
 
   return (
-    <Card className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray hover-scale cursor-pointer transition-all duration-200" data-testid={`judge-card-${judge.id}`}>
+    <Card className="bg-card rounded-2xl p-6 shadow-soft border border-border hover-scale cursor-pointer transition-all duration-200" data-testid={`judge-card-${judge.id}`}>
       <div className="text-center space-y-4">
         {/* Avatar */}
         <Avatar className="w-20 h-20 mx-auto">
@@ -33,13 +33,13 @@ export default function JuryMemberCard({ judge, showContactButton = false }: Jud
 
         {/* Basic Info */}
         <div>
-          <h3 className="font-heading font-semibold text-lg text-text-dark mb-1">{judge.name}</h3>
-          <p className="text-text-muted text-sm mb-2">{judge.title} at {judge.company}</p>
-          <p className="text-text-muted text-xs">{judge.location}</p>
+          <h3 className="font-heading font-semibold text-lg text-card-foreground mb-1">{judge.name}</h3>
+          <p className="text-muted-foreground text-sm mb-2">{judge.title} at {judge.company}</p>
+          <p className="text-muted-foreground text-xs">{judge.location}</p>
         </div>
 
         {/* Bio */}
-        <p className="text-text-muted text-sm line-clamp-3">{judge.bio}</p>
+        <p className="text-muted-foreground text-sm line-clamp-3">{judge.bio}</p>
 
         {/* Expertise Tags */}
         <div className="flex flex-wrap gap-2 justify-center">
@@ -49,7 +49,7 @@ export default function JuryMemberCard({ judge, showContactButton = false }: Jud
             </Badge>
           ))}
           {judge.expertise.length > 3 && (
-            <Badge className="bg-soft-gray text-text-muted px-2 py-1 rounded-full text-xs border-0">
+            <Badge className="bg-muted text-muted-foreground px-2 py-1 rounded-full text-xs border-0">
               +{judge.expertise.length - 3}
             </Badge>
           )}
@@ -59,14 +59,14 @@ export default function JuryMemberCard({ judge, showContactButton = false }: Jud
         <div className="flex justify-center gap-4 text-center">
           <div>
             <div className="text-lg font-bold text-coral">{judge.eventsJudged}</div>
-            <div className="text-xs text-text-muted">Events Judged</div>
+            <div className="text-xs text-muted-foreground">Events Judged</div>
           </div>
           <div>
             <div className="flex items-center justify-center gap-1">
               <span className="text-lg font-bold text-yellow">{judge.rating}</span>
               <Star className="w-4 h-4 text-yellow" fill="currentColor" />
             </div>
-            <div className="text-xs text-text-muted">Rating</div>
+            <div className="text-xs text-muted-foreground">Rating</div>
           </div>
         </div>
 
@@ -77,7 +77,7 @@ export default function JuryMemberCard({ judge, showContactButton = false }: Jud
 
         {/* Quote */}
         {judge.quote && (
-          <blockquote className="text-text-muted italic text-sm border-l-4 border-mint pl-4 text-left">
+          <blockquote className="text-muted-foreground italic text-sm border-l-4 border-mint pl-4 text-left">
             "{judge.quote}"
           </blockquote>
         )}
@@ -97,7 +97,7 @@ export default function JuryMemberCard({ judge, showContactButton = false }: Jud
             <Button
               variant="ghost"
               size="icon"
-              className="h-8 w-8 text-text-muted hover:text-sky"
+              className="h-8 w-8 text-muted-foreground hover:text-sky"
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -112,7 +112,7 @@ export default function JuryMemberCard({ judge, showContactButton = false }: Jud
             <Button
               variant="ghost"
               size="icon"
-              className="h-8 w-8 text-text-muted hover:text-sky"
+              className="h-8 w-8 text-muted-foreground hover:text-sky"
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -127,7 +127,7 @@ export default function JuryMemberCard({ judge, showContactButton = false }: Jud
             <Button
               variant="ghost"
               size="icon"
-              className="h-8 w-8 text-text-muted hover:text-coral"
+              className="h-8 w-8 text-muted-foreground hover:text-coral"
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
