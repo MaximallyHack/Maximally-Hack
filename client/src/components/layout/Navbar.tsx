@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Rocket, Menu, User, LogOut, Settings } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -57,6 +58,7 @@ export default function Navbar() {
 
             {/* Desktop Actions */}
             <div className="hidden md:flex items-center space-x-3">
+              <ThemeToggle />
               {isLoggedIn ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -123,6 +125,10 @@ export default function Navbar() {
               </SheetTrigger>
               <SheetContent side="right" className="bg-cream">
                 <div className="flex flex-col space-y-4 mt-8">
+                  <div className="flex items-center justify-between pb-2">
+                    <span className="font-medium text-text-dark">Theme</span>
+                    <ThemeToggle />
+                  </div>
                   {navItems.map((item) => (
                     <Link 
                       key={item.href} 
