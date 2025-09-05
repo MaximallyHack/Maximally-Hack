@@ -40,3 +40,4 @@ externalPort = 80
 exposeLocalhost = true
 
 [agent]
+expertMode = true
