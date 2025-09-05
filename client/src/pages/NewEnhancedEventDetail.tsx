@@ -8,6 +8,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { api } from "@/lib/api";
@@ -15,7 +19,9 @@ import {
   Calendar, Clock, Globe, Users, Trophy, MapPin, ExternalLink, 
   ArrowRight, Star, CheckCircle, AlertCircle, Plus, Upload,
   Code, Award, BookOpen, HelpCircle, Briefcase, Gift,
-  Building, MessageSquare, Target, Zap, Play, User
+  Building, MessageSquare, Target, Zap, Play, User, Search,
+  Filter, UserPlus, Settings, Mail, Phone, Video, ChevronRight,
+  Shield, Flag, Send, X, Edit, ChevronDown, Sparkles
 } from "lucide-react";
 
 // Types for enhanced functionality
@@ -24,6 +30,79 @@ interface EventStats {
   totalSubmissions: number;
   teamsFormed: number;
   mentorsAvailable: number;
+}
+
+interface Team {
+  id: string;
+  name: string;
+  description: string;
+  leaderId: string;
+  leaderName: string;
+  members: TeamMember[];
+  lookingFor: string[];
+  skills: string[];
+  maxSize: number;
+  status: 'recruiting' | 'full' | 'closed';
+  track?: string;
+  eventId: string;
+  created: string;
+}
+
+interface TeamMember {
+  id: string;
+  name: string;
+  role: string;
+  skills: string[];
+  avatar?: string;
+}
+
+interface Mentor {
+  id: string;
+  name: string;
+  role: string;
+  company: string;
+  skills: string[];
+  bio: string;
+  availability: string[];
+  nextAvailable?: string;
+  rating: number;
+  sessionsCompleted: number;
+}
+
+interface Judge {
+  id: string;
+  name: string;
+  title: string;
+  company: string;
+  expertise: string[];
+  lookingFor: string[];
+  judgingDates: string[];
+  bio: string;
+}
+
+interface Speaker {
+  id: string;
+  name: string;
+  title: string;
+  company: string;
+  topic: string;
+  sessionDate: string;
+  sessionTime: string;
+  description: string;
+}
+
+interface HelpTicket {
+  id: string;
+  title: string;
+  description: string;
+  category: 'tech' | 'design' | 'product' | 'team' | 'rules';
+  status: 'new' | 'claimed' | 'resolved';
+  priority: 'low' | 'medium' | 'high';
+  submittedBy: string;
+  submittedAt: string;
+  claimedBy?: string;
+  claimedAt?: string;
+  resolvedAt?: string;
 }
 
 interface Announcement {
@@ -200,6 +279,194 @@ export default function NewEnhancedEventDetail() {
     teamsFormed: teams?.length || 0,
     mentorsAvailable: 12
   };
+
+  // Teams mock data
+  const mockTeams: Team[] = [
+    {
+      id: 'team-1',
+      name: 'AI Climate Solutions',
+      description: 'Building ML models to predict and prevent climate disasters. Looking for passionate developers!',
+      leaderId: 'user-1',
+      leaderName: 'Sarah Chen',
+      members: [
+        { id: 'user-1', name: 'Sarah Chen', role: 'Team Lead & AI Engineer', skills: ['Python', 'TensorFlow', 'Climate Data'] },
+        { id: 'user-2', name: 'Marcus Rodriguez', role: 'Backend Developer', skills: ['Node.js', 'PostgreSQL', 'APIs'] }
+      ],
+      lookingFor: ['Frontend Developer', 'UI/UX Designer', 'Data Scientist'],
+      skills: ['Python', 'TensorFlow', 'Node.js', 'PostgreSQL'],
+      maxSize: 5,
+      status: 'recruiting',
+      track: 'Climate & Sustainability',
+      eventId: event?.id || '',
+      created: '2024-01-15T10:00:00Z'
+    },
+    {
+      id: 'team-2',
+      name: 'EduTech Revolution',
+      description: 'Creating accessible learning tools for students with disabilities.',
+      leaderId: 'user-3',
+      leaderName: 'Alex Kim',
+      members: [
+        { id: 'user-3', name: 'Alex Kim', role: 'Product Manager', skills: ['Product Strategy', 'User Research', 'Accessibility'] },
+        { id: 'user-4', name: 'Jordan Lee', role: 'Full Stack Developer', skills: ['React', 'Express', 'MongoDB'] },
+        { id: 'user-5', name: 'Taylor Swift', role: 'UX Designer', skills: ['Figma', 'User Testing', 'Accessibility Design'] }
+      ],
+      lookingFor: ['Mobile Developer', 'Accessibility Expert'],
+      skills: ['React', 'Express', 'MongoDB', 'Figma', 'Accessibility'],
+      maxSize: 4,
+      status: 'recruiting',
+      track: 'Education & Learning',
+      eventId: event?.id || '',
+      created: '2024-01-15T14:30:00Z'
+    },
+    {
+      id: 'team-3',
+      name: 'HealthConnect',
+      description: 'Platform connecting rural patients with urban healthcare providers.',
+      leaderId: 'user-6',
+      leaderName: 'Dr. Priya Patel',
+      members: [
+        { id: 'user-6', name: 'Dr. Priya Patel', role: 'Healthcare Expert & PM', skills: ['Healthcare', 'Telemedicine', 'Compliance'] },
+        { id: 'user-7', name: 'Kevin Zhang', role: 'Frontend Developer', skills: ['Vue.js', 'TypeScript', 'WebRTC'] },
+        { id: 'user-8', name: 'Maya Johnson', role: 'Backend Developer', skills: ['Python', 'FastAPI', 'Healthcare APIs'] },
+        { id: 'user-9', name: 'Lisa Wong', role: 'Security Engineer', skills: ['HIPAA', 'Encryption', 'Security Audits'] }
+      ],
+      lookingFor: [],
+      skills: ['Vue.js', 'TypeScript', 'Python', 'FastAPI', 'Healthcare', 'HIPAA'],
+      maxSize: 4,
+      status: 'full',
+      track: 'Healthcare & Wellness',
+      eventId: event?.id || '',
+      created: '2024-01-14T09:15:00Z'
+    }
+  ];
+
+  // Mentors mock data
+  const mockMentors: Mentor[] = [
+    {
+      id: 'mentor-1',
+      name: 'Jennifer Adams',
+      role: 'Senior Engineering Manager',
+      company: 'Google',
+      skills: ['Machine Learning', 'System Design', 'Team Leadership', 'Python', 'Kubernetes'],
+      bio: 'Former startup founder turned tech lead at Google. Passionate about AI ethics and scalable systems.',
+      availability: ['2024-01-16 14:00', '2024-01-16 16:00', '2024-01-17 10:00'],
+      nextAvailable: '2024-01-16 14:00',
+      rating: 4.9,
+      sessionsCompleted: 47
+    },
+    {
+      id: 'mentor-2',
+      name: 'Carlos Rodriguez',
+      role: 'Principal Designer',
+      company: 'Figma',
+      skills: ['UX Research', 'Product Design', 'Design Systems', 'Accessibility', 'Prototyping'],
+      bio: 'Design leader with 10+ years creating inclusive digital experiences. Expert in design systems and accessibility.',
+      availability: ['2024-01-16 13:00', '2024-01-17 15:00'],
+      nextAvailable: '2024-01-16 13:00',
+      rating: 4.8,
+      sessionsCompleted: 32
+    },
+    {
+      id: 'mentor-3',
+      name: 'Dr. Aisha Johnson',
+      role: 'Chief Technology Officer',
+      company: 'Climate.AI',
+      skills: ['Climate Tech', 'Data Science', 'Startup Strategy', 'Fundraising', 'R&D'],
+      bio: 'Climate tech veteran and former researcher. Helping teams build impactful solutions for environmental challenges.',
+      availability: ['2024-01-17 09:00', '2024-01-17 11:00'],
+      nextAvailable: '2024-01-17 09:00',
+      rating: 5.0,
+      sessionsCompleted: 28
+    }
+  ];
+
+  // Judges mock data
+  const mockJudges: Judge[] = [
+    {
+      id: 'judge-1',
+      name: 'Michael Chen',
+      title: 'VP of Engineering',
+      company: 'Stripe',
+      expertise: ['Fintech', 'Distributed Systems', 'API Design', 'Scalability'],
+      lookingFor: ['Technical Innovation', 'Real-world Impact', 'Scalable Architecture'],
+      judgingDates: ['2024-01-18', '2024-01-19'],
+      bio: 'Engineering leader focused on building robust financial infrastructure.'
+    },
+    {
+      id: 'judge-2',
+      name: 'Dr. Rebecca Liu',
+      title: 'Director of AI Research',
+      company: 'OpenAI',
+      expertise: ['Artificial Intelligence', 'Machine Learning', 'Ethics', 'Research'],
+      lookingFor: ['AI Innovation', 'Ethical Considerations', 'Practical Applications'],
+      judgingDates: ['2024-01-18', '2024-01-19'],
+      bio: 'AI researcher passionate about responsible AI development and deployment.'
+    }
+  ];
+
+  // Speakers mock data
+  const mockSpeakers: Speaker[] = [
+    {
+      id: 'speaker-1',
+      name: 'David Kim',
+      title: 'Founder & CEO',
+      company: 'TechStars',
+      topic: 'Building Startups That Scale',
+      sessionDate: '2024-01-16',
+      sessionTime: '18:00',
+      description: 'Learn key strategies for taking your hackathon project to the next level.'
+    },
+    {
+      id: 'speaker-2',
+      name: 'Sarah Williams',
+      title: 'Head of Developer Relations',
+      company: 'Vercel',
+      topic: 'Modern Web Development with Next.js',
+      sessionDate: '2024-01-17',
+      sessionTime: '16:00',
+      description: 'Technical deep-dive into building fast, scalable web applications.'
+    }
+  ];
+
+  // Help tickets mock data
+  const mockTickets: HelpTicket[] = [
+    {
+      id: 'ticket-1',
+      title: 'Need help with API integration',
+      description: 'Struggling to connect our frontend to the payment API. Getting CORS errors.',
+      category: 'tech',
+      status: 'new',
+      priority: 'medium',
+      submittedBy: 'user-10',
+      submittedAt: '2024-01-16T10:30:00Z'
+    },
+    {
+      id: 'ticket-2',
+      title: 'Team formation guidance',
+      description: 'Looking for advice on finding the right co-founder for our healthcare project.',
+      category: 'team',
+      status: 'claimed',
+      priority: 'low',
+      submittedBy: 'user-11',
+      submittedAt: '2024-01-16T09:15:00Z',
+      claimedBy: 'mentor-1',
+      claimedAt: '2024-01-16T09:30:00Z'
+    },
+    {
+      id: 'ticket-3',
+      title: 'Clarification on submission requirements',
+      description: 'Do we need to deploy our app or is a local demo sufficient?',
+      category: 'rules',
+      status: 'resolved',
+      priority: 'high',
+      submittedBy: 'user-12',
+      submittedAt: '2024-01-15T16:00:00Z',
+      claimedBy: 'organizer-1',
+      claimedAt: '2024-01-15T16:05:00Z',
+      resolvedAt: '2024-01-15T16:15:00Z'
+    }
+  ];
 
   const announcements: Announcement[] = [
     {
@@ -672,37 +939,566 @@ export default function NewEnhancedEventDetail() {
             </Card>
           </TabsContent>
 
-          <TabsContent value="teams">
-            <Card>
-              <CardHeader>
-                <CardTitle>Teams</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-500">Team finder coming soon...</p>
-              </CardContent>
-            </Card>
+          <TabsContent value="teams" className="space-y-6">
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-medium">Teams</h2>
+              <div className="flex gap-2">
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button>
+                      <Plus className="w-4 h-4 mr-2" />
+                      Create Team
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-md">
+                    <DialogHeader>
+                      <DialogTitle>Create New Team</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="text-sm font-medium mb-2 block">Team Name</label>
+                        <Input placeholder="Enter team name" />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium mb-2 block">Description</label>
+                        <Textarea placeholder="What are you building?" rows={3} />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium mb-2 block">Track</label>
+                        <Select>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select track" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="ai">AI & Machine Learning</SelectItem>
+                            <SelectItem value="climate">Climate & Sustainability</SelectItem>
+                            <SelectItem value="education">Education & Learning</SelectItem>
+                            <SelectItem value="healthcare">Healthcare & Wellness</SelectItem>
+                            <SelectItem value="fintech">Fintech</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium mb-2 block">Looking For</label>
+                        <Input placeholder="Frontend Developer, UX Designer..." />
+                      </div>
+                      <Button className="w-full">Create Team</Button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              </div>
+            </div>
+
+            {/* Team Filter */}
+            <div className="flex items-center gap-4">
+              <div className="relative flex-1 max-w-md">
+                <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <Input placeholder="Search teams by name or skills..." className="pl-10" />
+              </div>
+              <Select defaultValue="all">
+                <SelectTrigger className="w-40">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Teams</SelectItem>
+                  <SelectItem value="recruiting">Recruiting</SelectItem>
+                  <SelectItem value="full">Full Teams</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select defaultValue="all-tracks">
+                <SelectTrigger className="w-48">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all-tracks">All Tracks</SelectItem>
+                  <SelectItem value="ai">AI & Machine Learning</SelectItem>
+                  <SelectItem value="climate">Climate & Sustainability</SelectItem>
+                  <SelectItem value="education">Education & Learning</SelectItem>
+                  <SelectItem value="healthcare">Healthcare & Wellness</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Teams Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {mockTeams.map(team => (
+                <Card key={team.id} className="hover:shadow-lg transition-shadow">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <CardTitle className="text-lg">{team.name}</CardTitle>
+                          <Badge className={
+                            team.status === 'recruiting' ? 'bg-green-100 text-green-800' :
+                            team.status === 'full' ? 'bg-blue-100 text-blue-800' :
+                            'bg-gray-100 text-gray-800'
+                          }>
+                            {team.status === 'recruiting' ? 'Recruiting' : 
+                             team.status === 'full' ? 'Full' : 'Closed'}
+                          </Badge>
+                        </div>
+                        <p className="text-sm text-gray-600 mb-3">{team.description}</p>
+                        {team.track && (
+                          <Badge variant="outline" className="text-xs mb-3">{team.track}</Badge>
+                        )}
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {/* Team Members */}
+                    <div>
+                      <h4 className="text-sm font-medium text-gray-900 mb-2 flex items-center justify-between">
+                        Team Members
+                        <span className="text-xs text-gray-500 font-normal">
+                          {team.members.length}/{team.maxSize}
+                        </span>
+                      </h4>
+                      <div className="flex items-center gap-2 mb-3">
+                        {team.members.map(member => (
+                          <div key={member.id} className="relative group">
+                            <Avatar className="w-8 h-8 border-2 border-white">
+                              <AvatarFallback className="text-xs">
+                                {member.name.split(' ').map(n => n[0]).join('')}
+                              </AvatarFallback>
+                            </Avatar>
+                          </div>
+                        ))}
+                        {team.status === 'recruiting' && team.members.length < team.maxSize && (
+                          <div className="w-8 h-8 border-2 border-dashed border-blue-300 rounded-full flex items-center justify-center text-blue-500">
+                            <Plus className="w-4 h-4" />
+                          </div>
+                        )}
+                      </div>
+                      <p className="text-xs text-gray-600">
+                        Led by <span className="font-medium">{team.leaderName}</span>
+                      </p>
+                    </div>
+
+                    {/* Skills */}
+                    {team.skills.length > 0 && (
+                      <div>
+                        <h5 className="text-xs font-medium text-gray-700 mb-2">Team Skills:</h5>
+                        <div className="flex flex-wrap gap-1">
+                          {team.skills.slice(0, 3).map(skill => (
+                            <Badge key={skill} className="bg-green-50 text-green-700 border-green-200 text-xs">
+                              {skill}
+                            </Badge>
+                          ))}
+                          {team.skills.length > 3 && (
+                            <Badge variant="outline" className="text-xs">+{team.skills.length - 3}</Badge>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Looking For */}
+                    {team.lookingFor.length > 0 && (
+                      <div>
+                        <h5 className="text-xs font-medium text-gray-700 mb-2 flex items-center gap-1">
+                          <UserPlus className="w-3 h-3" />
+                          Looking For:
+                        </h5>
+                        <div className="flex flex-wrap gap-1">
+                          {team.lookingFor.map(role => (
+                            <Badge key={role} className="bg-blue-50 text-blue-700 border-blue-200 text-xs">
+                              {role}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    <Separator />
+
+                    {/* Actions */}
+                    <div className="flex items-center justify-between pt-2">
+                      <div className="flex gap-2">
+                        <Button size="sm" variant="outline">
+                          <MessageSquare className="w-4 h-4 mr-1" />
+                          Contact
+                        </Button>
+                        {team.status === 'recruiting' && (
+                          <Button size="sm">
+                            <UserPlus className="w-4 h-4 mr-1" />
+                            Join Team
+                          </Button>
+                        )}
+                      </div>
+                      <p className="text-xs text-gray-500">
+                        Created {new Date(team.created).toLocaleDateString()}
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </TabsContent>
 
-          <TabsContent value="people">
-            <Card>
-              <CardHeader>
-                <CardTitle>People</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-500">Mentors, judges, and speakers coming soon...</p>
-              </CardContent>
-            </Card>
+          <TabsContent value="people" className="space-y-6">
+            <div className="space-y-8">
+              {/* Mentors Section */}
+              <div>
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-medium">Mentors</h2>
+                  <p className="text-sm text-gray-600">{mockMentors.length} mentors available</p>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {mockMentors.map(mentor => (
+                    <Card key={mentor.id} className="hover:shadow-lg transition-shadow">
+                      <CardHeader className="pb-3">
+                        <div className="flex items-start gap-3">
+                          <Avatar className="w-12 h-12">
+                            <AvatarFallback className="bg-blue-100 text-blue-600 font-medium">
+                              {mentor.name.split(' ').map(n => n[0]).join('')}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className="flex-1">
+                            <CardTitle className="text-lg">{mentor.name}</CardTitle>
+                            <p className="text-sm text-gray-600">{mentor.role}</p>
+                            <p className="text-sm font-medium text-blue-600">{mentor.company}</p>
+                          </div>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <p className="text-sm text-gray-600">{mentor.bio}</p>
+                        
+                        {/* Skills */}
+                        <div>
+                          <h5 className="text-xs font-medium text-gray-700 mb-2">Expertise:</h5>
+                          <div className="flex flex-wrap gap-1">
+                            {mentor.skills.slice(0, 3).map(skill => (
+                              <Badge key={skill} variant="outline" className="text-xs">
+                                {skill}
+                              </Badge>
+                            ))}
+                            {mentor.skills.length > 3 && (
+                              <Badge variant="outline" className="text-xs">+{mentor.skills.length - 3}</Badge>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Stats */}
+                        <div className="flex items-center gap-4 text-xs text-gray-600">
+                          <div className="flex items-center gap-1">
+                            <Star className="w-3 h-3 text-yellow-500" />
+                            <span>{mentor.rating}</span>
+                          </div>
+                          <div>
+                            {mentor.sessionsCompleted} sessions
+                          </div>
+                        </div>
+
+                        {/* Availability */}
+                        {mentor.nextAvailable && (
+                          <div className="text-xs text-green-600">
+                            Next available: {new Date(mentor.nextAvailable).toLocaleDateString('en-US', { 
+                              month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' 
+                            })}
+                          </div>
+                        )}
+
+                        <div className="flex gap-2 pt-2">
+                          <Button size="sm" className="flex-1">
+                            <Calendar className="w-4 h-4 mr-1" />
+                            Book Session
+                          </Button>
+                          <Button size="sm" variant="outline">
+                            <MessageSquare className="w-4 h-4 mr-1" />
+                            Message
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+
+              <Separator />
+
+              {/* Judges Section */}
+              <div>
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-medium">Judges</h2>
+                  <p className="text-sm text-gray-600">{mockJudges.length} judges</p>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {mockJudges.map(judge => (
+                    <Card key={judge.id}>
+                      <CardHeader className="pb-3">
+                        <div className="flex items-start gap-3">
+                          <Avatar className="w-12 h-12">
+                            <AvatarFallback className="bg-purple-100 text-purple-600 font-medium">
+                              {judge.name.split(' ').map(n => n[0]).join('')}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className="flex-1">
+                            <CardTitle className="text-lg">{judge.name}</CardTitle>
+                            <p className="text-sm text-gray-600">{judge.title}</p>
+                            <p className="text-sm font-medium text-purple-600">{judge.company}</p>
+                          </div>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <p className="text-sm text-gray-600">{judge.bio}</p>
+                        
+                        {/* Expertise */}
+                        <div>
+                          <h5 className="text-xs font-medium text-gray-700 mb-2">Expertise:</h5>
+                          <div className="flex flex-wrap gap-1">
+                            {judge.expertise.map(skill => (
+                              <Badge key={skill} variant="outline" className="text-xs">
+                                {skill}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Looking For */}
+                        <div>
+                          <h5 className="text-xs font-medium text-gray-700 mb-2">Looking For:</h5>
+                          <div className="flex flex-wrap gap-1">
+                            {judge.lookingFor.map(criteria => (
+                              <Badge key={criteria} className="bg-green-50 text-green-700 border-green-200 text-xs">
+                                {criteria}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Judging Dates */}
+                        <div className="text-xs text-gray-600">
+                          Judging: {judge.judgingDates.map(date => 
+                            new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+                          ).join(', ')}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+
+              <Separator />
+
+              {/* Speakers Section */}
+              <div>
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-medium">Speakers</h2>
+                  <p className="text-sm text-gray-600">{mockSpeakers.length} sessions</p>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {mockSpeakers.map(speaker => (
+                    <Card key={speaker.id}>
+                      <CardHeader className="pb-3">
+                        <div className="flex items-start gap-3">
+                          <Avatar className="w-12 h-12">
+                            <AvatarFallback className="bg-green-100 text-green-600 font-medium">
+                              {speaker.name.split(' ').map(n => n[0]).join('')}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className="flex-1">
+                            <CardTitle className="text-lg">{speaker.name}</CardTitle>
+                            <p className="text-sm text-gray-600">{speaker.title}</p>
+                            <p className="text-sm font-medium text-green-600">{speaker.company}</p>
+                          </div>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <div>
+                          <h4 className="font-medium text-gray-900 mb-1">{speaker.topic}</h4>
+                          <p className="text-sm text-gray-600">{speaker.description}</p>
+                        </div>
+                        
+                        <div className="flex items-center gap-4 text-sm text-gray-600">
+                          <div className="flex items-center gap-1">
+                            <Calendar className="w-4 h-4" />
+                            <span>{new Date(speaker.sessionDate).toLocaleDateString('en-US', { 
+                              month: 'short', day: 'numeric' 
+                            })}</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Clock className="w-4 h-4" />
+                            <span>{speaker.sessionTime}</span>
+                          </div>
+                        </div>
+
+                        <div className="flex gap-2 pt-2">
+                          <Button size="sm" className="flex-1">
+                            <Calendar className="w-4 h-4 mr-1" />
+                            Add to Calendar
+                          </Button>
+                          <Button size="sm" variant="outline">
+                            <Play className="w-4 h-4 mr-1" />
+                            Watch Live
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            </div>
           </TabsContent>
 
-          <TabsContent value="help">
-            <Card>
-              <CardHeader>
-                <CardTitle>Help & Support</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-500">Help desk coming soon...</p>
-              </CardContent>
-            </Card>
+          <TabsContent value="help" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Submit Ticket Form */}
+              <div className="lg:col-span-1">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <HelpCircle className="w-5 h-5 text-blue-500" />
+                      Get Help
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">Category</label>
+                      <Select>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select category" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="tech">Technical</SelectItem>
+                          <SelectItem value="design">Design</SelectItem>
+                          <SelectItem value="product">Product</SelectItem>
+                          <SelectItem value="team">Team</SelectItem>
+                          <SelectItem value="rules">Rules</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">Title</label>
+                      <Input placeholder="Brief description of your issue" />
+                    </div>
+                    
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">Description</label>
+                      <Textarea placeholder="Provide more details about your question or issue..." rows={4} />
+                    </div>
+                    
+                    <Button className="w-full">
+                      <Send className="w-4 h-4 mr-2" />
+                      Submit Ticket
+                    </Button>
+
+                    <Separator />
+
+                    {/* Quick Links */}
+                    <div className="space-y-2">
+                      <h4 className="text-sm font-medium text-gray-900">Quick Links</h4>
+                      <Button variant="ghost" size="sm" className="w-full justify-start">
+                        <MessageSquare className="w-4 h-4 mr-2" />
+                        Discord Help Channel
+                      </Button>
+                      <Button variant="ghost" size="sm" className="w-full justify-start">
+                        <Mail className="w-4 h-4 mr-2" />
+                        Email Support
+                      </Button>
+                      <Button variant="ghost" size="sm" className="w-full justify-start">
+                        <BookOpen className="w-4 h-4 mr-2" />
+                        Documentation
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Ticket Board */}
+              <div className="lg:col-span-2">
+                <Card>
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <CardTitle>Help Desk Board</CardTitle>
+                      <div className="flex gap-2">
+                        <Select defaultValue="all">
+                          <SelectTrigger className="w-32">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="all">All Tickets</SelectItem>
+                            <SelectItem value="new">New</SelectItem>
+                            <SelectItem value="claimed">In Progress</SelectItem>
+                            <SelectItem value="resolved">Resolved</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      {mockTickets.map(ticket => (
+                        <Card key={ticket.id} className="border-l-4 border-l-blue-500">
+                          <CardContent className="p-4">
+                            <div className="flex items-start justify-between mb-3">
+                              <div className="flex-1">
+                                <h4 className="font-medium text-gray-900 mb-1">{ticket.title}</h4>
+                                <p className="text-sm text-gray-600 mb-2">{ticket.description}</p>
+                                <div className="flex items-center gap-3 text-xs text-gray-500">
+                                  <Badge variant="outline" className="text-xs">
+                                    {ticket.category}
+                                  </Badge>
+                                  <span>
+                                    {new Date(ticket.submittedAt).toLocaleDateString('en-US', { 
+                                      month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' 
+                                    })}
+                                  </span>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <Badge className={
+                                  ticket.priority === 'high' ? 'bg-red-100 text-red-800' :
+                                  ticket.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+                                  'bg-green-100 text-green-800'
+                                }>
+                                  {ticket.priority}
+                                </Badge>
+                                <Badge className={
+                                  ticket.status === 'new' ? 'bg-blue-100 text-blue-800' :
+                                  ticket.status === 'claimed' ? 'bg-orange-100 text-orange-800' :
+                                  'bg-green-100 text-green-800'
+                                }>
+                                  {ticket.status === 'new' ? 'New' :
+                                   ticket.status === 'claimed' ? 'In Progress' : 'Resolved'}
+                                </Badge>
+                              </div>
+                            </div>
+                            
+                            {ticket.status === 'claimed' && ticket.claimedBy && (
+                              <div className="text-xs text-gray-600 mb-2">
+                                Claimed by mentor • {new Date(ticket.claimedAt!).toLocaleDateString()}
+                              </div>
+                            )}
+                            
+                            {ticket.status === 'resolved' && ticket.resolvedAt && (
+                              <div className="text-xs text-green-600 mb-2">
+                                Resolved • {new Date(ticket.resolvedAt).toLocaleDateString()}
+                              </div>
+                            )}
+
+                            <div className="flex gap-2">
+                              {ticket.status === 'new' && (
+                                <Button size="sm" variant="outline">
+                                  <Shield className="w-4 h-4 mr-1" />
+                                  Claim Ticket
+                                </Button>
+                              )}
+                              <Button size="sm" variant="ghost">
+                                <MessageSquare className="w-4 h-4 mr-1" />
+                                Comment
+                              </Button>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
           </TabsContent>
 
           <TabsContent value="resources">
