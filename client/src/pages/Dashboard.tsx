@@ -175,7 +175,7 @@ export default function Dashboard() {
                                 </div>
                                 <div className="flex items-center gap-1">
                                   <MapPin className="w-4 h-4" />
-                                  <span>{event.mode}</span>
+                                  <span>{event.location}</span>
                                 </div>
                               </div>
                               <div className="flex items-center justify-between pt-2">
@@ -230,7 +230,7 @@ export default function Dashboard() {
                                 </div>
                                 <div className="flex items-center gap-1">
                                   <MapPin className="w-4 h-4" />
-                                  <span>{event.mode}</span>
+                                  <span>{event.location}</span>
                                 </div>
                               </div>
                               <div className="flex items-center justify-between pt-2">

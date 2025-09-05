@@ -31,6 +31,8 @@ import Help from "@/pages/Help";
 import Submit from "@/pages/Submit";
 import Profile from "@/pages/Profile";
 import Dashboard from "@/pages/Dashboard";
+import CreateProject from "@/pages/CreateProject";
+import EditProject from "@/pages/EditProject";
 import NotFound from "@/pages/not-found";
 
 function ScrollToTop() {
@@ -68,6 +70,8 @@ function Router() {
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
         <Route path="/dashboard" component={Dashboard} />
+        <Route path="/projects/create" component={CreateProject} />
+        <Route path="/projects/:id/edit" component={EditProject} />
         <Route path="/onboarding" component={Onboarding} />
         <Route path="/organizer" component={OrganizerDashboard} />
         <Route path="/organizer/events/new" component={CreateEvent} />
