@@ -1,0 +1,139 @@
+maximally hack – event page upgrades
+
+goal: make the event page the single source of truth. less discord hopping, less guessing.
+
+global
+
+sticky action bar that changes by state
+upcoming: register
+live: submit project
+judging: view submissions
+closed: winners
+
+overview adds quick start checklist, email support card, live announcements feed, and create project button
+
+right rail shows venue bits for hybrid, plus sponsor links
+
+no photos for people anywhere – use monogram avatars or simple icons only
+
+tabs
+
+overview
+
+timeline
+
+prizes
+
+rules
+
+judging – rubric, what judges care about, disqualifiers
+
+submissions – grid + submission checklist, drafts, preflight check
+
+teams – team finder, create team, looking for teammates toggle
+
+people – mentors, judges, speakers
+
+help – ticket board for mentor help
+
+resources – guides, api kits, templates, assets
+
+hiring – partner roles, winner fast-track tag, filters
+
+perks & swag – claim flow for credits and merch
+
+sponsors – logos, deck link, contact, sponsor briefs
+
+faq – top 12 questions
+
+people
+
+mentors: name, role, skills chips, time windows, book button, ask on discord button
+
+judges: name, title, expertise chips, what they look for, judging dates
+
+speakers: session list with add-to-calendar and watch link
+
+all cards use monogram avatars only
+
+help
+
+open ticket form with tags: tech, design, product, team, rules
+
+ticket board with status chips: new, claimed, resolved
+
+quick links: discord help channel, email support, docs
+
+submissions
+
+preflight check: video, repo, readme, team list, category, safety checkbox
+
+drafts with autosave
+
+build logs – short updates teams can add during the event
+
+people’s choice voting with clear window and one-account-one-vote
+
+judging
+
+scoring matrix: creativity 40, execution 25, use of ai 20, value 10, demo clarity 5
+
+tips from judges section
+
+conflict policy and disqualifiers
+
+timeline
+
+each row has add-to-calendar
+
+show live now badge when active
+
+resources
+
+three big cards at top: hackathon guide, submission guidelines, judging criteria
+
+api kits, code templates, design pack grid
+
+footer: join discord, email support, docs
+
+hiring
+
+role cards with stipend, location, skills, apply link
+
+toggle for teams to be discoverable to recruiters
+
+perks & swag
+
+claim flow: verify team then reveal code or request link
+
+size picker for merch or pickup info for local
+
+sponsors
+
+logos by tier, what they offer, office hour slots
+
+links: deck, media kit, contact
+
+sponsor briefs as mini-challenges
+
+smart stuff to wire
+
+mentor request queue – ticket creates a discord ping to skill-matched mentors, claim state shows on site, auto-close if no response in X min
+
+office hours booking – calendly or gcal embed, local time, cap per team
+
+judge orientation – mini page with rubric, sample scores, 5 min walkthrough video, judging calendar
+
+side quests – small optional prompts on overview with tiny badges
+
+announcement composer – organizer posts once, shows on site feed and pushes to discord and email
+
+safety & ip center – simple checklist, links to forms
+
+local hub – wifi, power, help desk qr, local schedule block
+
+badge & certificate center – auto generate judge and mentor certs, participant proof
+
+submission spotlight – highlight 3 builds on overview during the event
+
+live ticker – time left and number of submissions
