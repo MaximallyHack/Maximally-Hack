@@ -167,45 +167,197 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Social Proof */}
-      <section className="py-16">
+      {/* Enhanced Testimonials */}
+      <section className="py-16 bg-gradient-to-br from-cream via-soft-gray/20 to-mint/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="font-heading font-bold text-3xl text-text-dark mb-4">Trusted by Amazing Judges</h2>
-            <CrayonSquiggle className="mx-auto mb-6" />
+            <h2 className="font-heading font-bold text-3xl text-text-dark mb-4">Loved by Industry Leaders</h2>
+            <CrayonSquiggle className="mx-auto mb-4" />
+            <p className="text-text-muted text-lg">What our expert judges say about the platform</p>
           </div>
           
-          <div className="flex flex-wrap justify-center items-center gap-4 mb-8">
-            <div className="flex -space-x-2">
+          {/* Judge Avatar Row */}
+          <div className="flex flex-wrap justify-center items-center gap-4 mb-12">
+            <div className="flex -space-x-3">
               {[
-                "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face",
-                "https://images.unsplash.com/photo-1494790108755-2616b612b829?w=32&h=32&fit=crop&crop=face",
-                "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=32&h=32&fit=crop&crop=face",
-                "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=32&h=32&fit=crop&crop=face",
-                "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=32&h=32&fit=crop&crop=face"
-              ].map((src, i) => (
-                <Avatar key={i} className="w-8 h-8 border-2 border-white">
-                  <AvatarImage src={src} alt={`Judge ${i + 1}`} />
-                  <AvatarFallback>J{i + 1}</AvatarFallback>
+                { src: "https://images.unsplash.com/photo-1494790108755-2616b612b829?w=40&h=40&fit=crop&crop=face", name: "Dr. Sarah Chen" },
+                { src: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face", name: "Mark Rodriguez" },
+                { src: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face", name: "Lisa Thompson" },
+                { src: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=40&h=40&fit=crop&crop=face", name: "Dr. Maria Gonzalez" },
+                { src: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=40&h=40&fit=crop&crop=face", name: "James Wilson" },
+                { src: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=40&h=40&fit=crop&crop=face", name: "Dr. Priya Patel" }
+              ].map((judge, i) => (
+                <Avatar key={i} className="w-10 h-10 border-3 border-white hover-scale transition-transform duration-300 cursor-pointer">
+                  <AvatarImage src={judge.src} alt={judge.name} />
+                  <AvatarFallback className="text-xs">{judge.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                 </Avatar>
               ))}
             </div>
-            <span className="text-text-muted">200+ Expert Judges</span>
+            <div className="text-center">
+              <span className="text-text-dark font-semibold">200+ Expert Judges</span>
+              <div className="text-yellow text-sm">★★★★★ 4.9/5 Platform Rating</div>
+            </div>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white rounded-2xl p-6 shadow-soft text-center">
-              <p className="text-text-muted italic mb-4">"The most welcoming hackathon platform I've ever used. The community here is incredible!"</p>
-              <div className="text-yellow">⭐⭐⭐⭐⭐</div>
+          {/* Enhanced Testimonial Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative">
+            
+            {/* Featured Large Testimonial */}
+            <div className="lg:col-span-2 lg:row-span-2 bg-gradient-to-br from-coral/10 to-coral/5 border border-coral/20 rounded-2xl p-8 shadow-soft hover-scale transition-all duration-300 group" data-testid="testimonial-featured">
+              <div className="flex items-start gap-4 mb-6">
+                <Avatar className="w-16 h-16 border-3 border-coral/30">
+                  <AvatarImage src="https://images.unsplash.com/photo-1494790108755-2616b612b829?w=64&h=64&fit=crop&crop=face" alt="Dr. Sarah Chen" />
+                  <AvatarFallback>SC</AvatarFallback>
+                </Avatar>
+                <div className="flex-1">
+                  <h4 className="font-heading font-bold text-xl text-text-dark mb-1">Dr. Sarah Chen</h4>
+                  <p className="text-coral font-semibold mb-1">AI Research Director</p>
+                  <p className="text-text-muted text-sm">Google • 25 Events Judged</p>
+                  <div className="flex items-center gap-2 mt-2">
+                    <div className="text-yellow text-sm">★★★★★</div>
+                    <span className="text-text-muted text-sm">4.9/5</span>
+                  </div>
+                </div>
+              </div>
+              <blockquote className="text-text-dark text-lg leading-relaxed mb-6">
+                "The caliber of AI projects I've seen here is remarkable. Maximally Hack attracts the most innovative minds in tech. I've discovered solutions that genuinely advance the field of artificial intelligence."
+              </blockquote>
+              <div className="flex flex-wrap gap-2">
+                <Badge className="bg-coral/20 text-coral border-coral/30 hover:bg-coral hover:text-white transition-colors">AI Expert</Badge>
+                <Badge className="bg-sky/20 text-sky border-sky/30 hover:bg-sky hover:text-white transition-colors">Research Pioneer</Badge>
+              </div>
             </div>
-            <div className="bg-white rounded-2xl p-6 shadow-soft text-center">
-              <p className="text-text-muted italic mb-4">"Maximally Hack makes organizing events a breeze. The tools are intuitive and powerful."</p>
-              <div className="text-yellow">⭐⭐⭐⭐⭐</div>
+
+            {/* Regular Testimonials */}
+            <div className="bg-gradient-to-br from-mint/10 to-mint/5 border border-mint/20 rounded-2xl p-6 shadow-soft hover-scale transition-all duration-300 group" data-testid="testimonial-mark">
+              <div className="flex items-start gap-3 mb-4">
+                <Avatar className="w-12 h-12 border-2 border-mint/30">
+                  <AvatarImage src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=48&h=48&fit=crop&crop=face" alt="Mark Rodriguez" />
+                  <AvatarFallback>MR</AvatarFallback>
+                </Avatar>
+                <div className="flex-1">
+                  <h4 className="font-heading font-bold text-lg text-text-dark">Mark Rodriguez</h4>
+                  <p className="text-mint font-semibold text-sm">CTO, HealthTech Innovations</p>
+                  <div className="flex items-center gap-1 mt-1">
+                    <div className="text-yellow text-xs">★★★★★</div>
+                    <span className="text-text-muted text-xs">4.8/5</span>
+                  </div>
+                </div>
+              </div>
+              <blockquote className="text-text-dark mb-4">
+                "This platform makes judging a joy. The submission process is seamless and the community is genuinely supportive."
+              </blockquote>
+              <div className="flex flex-wrap gap-1">
+                <Badge className="bg-mint/30 text-mint text-xs">HealthTech</Badge>
+                <Badge className="bg-text-dark/10 text-text-dark text-xs">18 Events</Badge>
+              </div>
             </div>
-            <div className="bg-white rounded-2xl p-6 shadow-soft text-center">
-              <p className="text-text-muted italic mb-4">"Amazing projects, talented people, and fair judging. This is where innovation happens!"</p>
-              <div className="text-yellow">⭐⭐⭐⭐⭐</div>
+
+            <div className="bg-gradient-to-br from-sky/10 to-sky/5 border border-sky/20 rounded-2xl p-6 shadow-soft hover-scale transition-all duration-300 group" data-testid="testimonial-lisa">
+              <div className="flex items-start gap-3 mb-4">
+                <Avatar className="w-12 h-12 border-2 border-sky/30">
+                  <AvatarImage src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=48&h=48&fit=crop&crop=face" alt="Lisa Thompson" />
+                  <AvatarFallback>LT</AvatarFallback>
+                </Avatar>
+                <div className="flex-1">
+                  <h4 className="font-heading font-bold text-lg text-text-dark">Lisa Thompson</h4>
+                  <p className="text-sky font-semibold text-sm">Head of Sustainability, Microsoft</p>
+                  <div className="flex items-center gap-1 mt-1">
+                    <div className="text-yellow text-xs">★★★★★</div>
+                    <span className="text-text-muted text-xs">4.9/5</span>
+                  </div>
+                </div>
+              </div>
+              <blockquote className="text-text-dark mb-4">
+                "I've discovered groundbreaking climate tech solutions here. The focus on real-world impact is incredible."
+              </blockquote>
+              <div className="flex flex-wrap gap-1">
+                <Badge className="bg-sky/30 text-sky text-xs">Climate Tech</Badge>
+                <Badge className="bg-text-dark/10 text-text-dark text-xs">22 Events</Badge>
+              </div>
             </div>
+
+            <div className="bg-gradient-to-br from-yellow/10 to-yellow/5 border border-yellow/30 rounded-2xl p-6 shadow-soft hover-scale transition-all duration-300 group" data-testid="testimonial-maria">
+              <div className="flex items-start gap-3 mb-4">
+                <Avatar className="w-12 h-12 border-2 border-yellow/50">
+                  <AvatarImage src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=48&h=48&fit=crop&crop=face" alt="Dr. Maria Gonzalez" />
+                  <AvatarFallback>MG</AvatarFallback>
+                </Avatar>
+                <div className="flex-1">
+                  <h4 className="font-heading font-bold text-lg text-text-dark">Dr. Maria Gonzalez</h4>
+                  <p className="text-yellow-600 font-semibold text-sm">Research Scientist, OpenAI</p>
+                  <div className="flex items-center gap-1 mt-1">
+                    <div className="text-yellow text-xs">★★★★★</div>
+                    <span className="text-text-muted text-xs">4.9/5</span>
+                  </div>
+                </div>
+              </div>
+              <blockquote className="text-text-dark mb-4">
+                "The AI safety awareness shown by participants gives me hope for the future of technology."
+              </blockquote>
+              <div className="flex flex-wrap gap-1">
+                <Badge className="bg-yellow/30 text-yellow-700 text-xs">AI Safety</Badge>
+                <Badge className="bg-text-dark/10 text-text-dark text-xs">20 Events</Badge>
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-br from-text-dark/5 to-text-dark/10 border border-text-dark/10 rounded-2xl p-6 shadow-soft hover-scale transition-all duration-300 group" data-testid="testimonial-james">
+              <div className="flex items-start gap-3 mb-4">
+                <Avatar className="w-12 h-12 border-2 border-text-dark/20">
+                  <AvatarImage src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=48&h=48&fit=crop&crop=face" alt="James Wilson" />
+                  <AvatarFallback>JW</AvatarFallback>
+                </Avatar>
+                <div className="flex-1">
+                  <h4 className="font-heading font-bold text-lg text-text-dark">James Wilson</h4>
+                  <p className="text-text-dark font-semibold text-sm">CEO, EcoTech Ventures</p>
+                  <div className="flex items-center gap-1 mt-1">
+                    <div className="text-yellow text-xs">★★★★☆</div>
+                    <span className="text-text-muted text-xs">4.6/5</span>
+                  </div>
+                </div>
+              </div>
+              <blockquote className="text-text-dark mb-4">
+                "I've found my next investment opportunities right here. The entrepreneurial spirit is infectious."
+              </blockquote>
+              <div className="flex flex-wrap gap-1">
+                <Badge className="bg-text-dark/20 text-text-dark text-xs">Investor</Badge>
+                <Badge className="bg-mint/20 text-mint text-xs">12 Events</Badge>
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-br from-coral/8 to-mint/8 border border-coral/15 rounded-2xl p-6 shadow-soft hover-scale transition-all duration-300 group" data-testid="testimonial-priya">
+              <div className="flex items-start gap-3 mb-4">
+                <Avatar className="w-12 h-12 border-2 border-coral/20">
+                  <AvatarImage src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=48&h=48&fit=crop&crop=face" alt="Dr. Priya Patel" />
+                  <AvatarFallback>PP</AvatarFallback>
+                </Avatar>
+                <div className="flex-1">
+                  <h4 className="font-heading font-bold text-lg text-text-dark">Dr. Priya Patel</h4>
+                  <p className="text-coral font-semibold text-sm">CMO, Teladoc Health</p>
+                  <div className="flex items-center gap-1 mt-1">
+                    <div className="text-yellow text-xs">★★★★★</div>
+                    <span className="text-text-muted text-xs">4.8/5</span>
+                  </div>
+                </div>
+              </div>
+              <blockquote className="text-text-dark mb-4">
+                "The healthcare innovations coming out of these hackathons genuinely advance patient care."
+              </blockquote>
+              <div className="flex flex-wrap gap-1">
+                <Badge className="bg-coral/20 text-coral text-xs">Digital Health</Badge>
+                <Badge className="bg-text-dark/10 text-text-dark text-xs">16 Events</Badge>
+              </div>
+            </div>
+          </div>
+
+          {/* Call to Action */}
+          <div className="text-center mt-12">
+            <p className="text-text-muted mb-4">Join our community of expert judges and innovative builders</p>
+            <Link href="/judge/register">
+              <Button className="bg-coral text-white px-6 py-3 rounded-full font-medium hover-scale hover:bg-coral/80 transition-colors" data-testid="button-become-judge">
+                Become a Judge
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
