@@ -1,306 +1,424 @@
 
 # Maximally Hack 🎉
 
-A frontend-only hackathon platform designed with a playful minimal aesthetic using pastel crayon colors. Maximally Hack provides a complete hackathon ecosystem including event discovery, team formation, project submission, judging interfaces, and community features.
+A complete frontend-only hackathon platform designed with a playful minimal aesthetic using pastel crayon colors. Maximally Hack provides a comprehensive hackathon ecosystem including event discovery, team formation, project submission, judging interfaces, and community features - all without requiring a backend database.
 
-## ✨ Features
+## ✨ What We're Building
+
+### Vision
+Maximally Hack aims to be the friendliest, most approachable hackathon platform that removes barriers to participation while celebrating creativity and technical excellence. Think Devpost meets friendly design - a place where great ideas come to life.
+
+### Core Philosophy
+- **Frontend-First**: Complete platform functionality using JSON fixtures and local storage
+- **Playful Design**: Pastel crayon colors with soft, rounded interfaces
+- **Inclusive Community**: Welcoming to beginners while powerful for experts
+- **Zero Friction**: No complex setup - just visit and start hacking
+
+## 🎯 Platform Features
 
 ### For Participants
-- **Event Discovery**: Browse and filter hackathons by interests, skills, and categories
-- **Team Formation**: Connect with other participants and form teams with complementary skills
-- **Project Submission**: Submit projects with demos, code repositories, and comprehensive documentation
-- **Real-time Updates**: Live project tracking and submission status updates
-- **Profile Management**: Showcase your skills, experience, and project portfolio
+- **Event Discovery** (`/explore`) - Browse hackathons with smart filtering by interests, skills, and categories
+- **Enhanced Event Pages** (`/event/:id`) - Comprehensive event command centers with:
+  - 11-tab navigation system (Overview, Timeline, Submissions, Teams, People, Help, etc.)
+  - Real-time countdowns and submission tracking
+  - Team formation and mentor booking
+  - Resource libraries and sponsor showcases
+- **Project Management** - Full project lifecycle from creation to submission
+  - Rich text editing with markdown support
+  - Media upload for demos and screenshots
+  - Version control and submission tracking
+- **Team Formation** - Connect with teammates and build diverse teams
+- **Profile System** (`/profile`) - Showcase skills, experience, and project portfolios
 
 ### For Judges
-- **Judging Dashboard**: Comprehensive interface for reviewing and scoring submissions
-- **Multi-criteria Scoring**: Score projects across innovation, technical implementation, design, and impact
-- **Feedback System**: Provide detailed feedback to help participants improve
-- **Judge Registration**: Simple onboarding process with expertise verification
+- **Judge Dashboard** (`/judge`) - Comprehensive review interface with:
+  - Multi-criteria scoring system (Innovation, Execution, Design, Impact)
+  - Detailed feedback forms
+  - Progress tracking across assigned submissions
+- **Judge Directory** (`/judges`) - Public showcase of expert judges
+- **Judge Registration** (`/judge/register`) - Streamlined onboarding process
 
 ### For Organizers
-- **Event Management**: Create and configure hackathon events with custom rules and timelines
-- **Submission Tracking**: Monitor participant submissions and project progress
-- **Prize Track Management**: Set up sponsored challenges and award categories
-- **Analytics Dashboard**: Track event engagement and participation metrics
+- **Event Creation** (`/organizer/create`) - Comprehensive event setup wizard
+- **Event Management** (`/organizer/edit/:id`) - Full-featured editing interface with:
+  - Basic info, timeline, and location management
+  - Prize track configuration
+  - Judge and mentor assignment
+  - Social media and community links
+  - Sponsor showcase management
+- **Organizer Dashboard** (`/organizer`) - Event analytics and management hub
 
 ### Community Features
-- **Leaderboards**: Competition rankings and achievement tracking
-- **Sponsor Showcases**: Highlight sponsor contributions and prize opportunities
-- **Project Gallery**: Browse and discover innovative submitted projects
-- **Help & Support**: Comprehensive guidance for all platform users
+- **Leaderboards** (`/leaderboards`) - Competition rankings and achievements
+- **Sponsor Showcase** (`/sponsors`) - Partner highlights and opportunities
+- **Help Center** (`/help`) - Comprehensive guidance and FAQ system
+- **Project Gallery** (`/projects`) - Browse innovative submitted projects
 
-## 🎨 Design Philosophy
-
-Maximally Hack features a friendly, approachable design with:
+## 🎨 Design System
 
 ### Color Palette
-- **Cream Base**: `#FFFDF7` - Warm, welcoming background
-- **Sky Blue**: `#A3D5FF` - Trust and innovation
-- **Coral**: `#FF8C8C` - Energy and creativity  
-- **Yellow**: `#FFE680` - Optimism and achievement
-- **Mint**: `#A8E6CF` - Growth and collaboration
+```css
+--cream: #FFFDF7        /* Warm, welcoming background */
+--sky: #A3D5FF          /* Trust and innovation */
+--coral: #FF8C8C        /* Energy and creativity */
+--yellow: #FFE680       /* Optimism and achievement */
+--mint: #A8E6CF         /* Growth and collaboration */
+--soft-gray: #F8F9FA    /* Subtle accents */
+--text-dark: #2D3748    /* Primary text */
+--text-muted: #718096   /* Secondary text */
+```
 
 ### Typography
 - **Headings**: Fredoka/Baloo 2 for friendly, approachable headers
 - **Body Text**: Inter/Nunito for excellent readability
 - **Code**: Monospace fonts for technical content
 
-### Visual Elements
-- **Cards**: 16px border radius with soft shadows
-- **Buttons**: Pill-shaped with hover animations
-- **Components**: Consistent spacing on 4px grid system
-- **Animations**: Floating elements and smooth hover effects powered by Framer Motion
+### Component Standards
+- **16px border radius** - Consistent rounded corners
+- **4px grid system** - Consistent spacing and alignment
+- **Soft shadows** - Subtle depth with `shadow-soft` class
+- **Pill-shaped buttons** - Friendly, approachable interactions
+- **Hover animations** - Powered by Framer Motion with `hover-scale` class
 
-## 🚀 Tech Stack
+## 🚀 Technical Architecture
 
-### Frontend Architecture
+### Frontend Stack
 - **React 18** with TypeScript for type safety and modern development
 - **Wouter** for lightweight, declarative client-side routing
-- **TanStack Query** for server state management, caching, and synchronization
+- **TanStack Query** for server state management and caching
 - **Shadcn/ui** components built on accessible Radix UI primitives
 - **Tailwind CSS** with custom design system and utility classes
 - **Framer Motion** for smooth animations and micro-interactions
-- **Vite** for lightning-fast development and optimized production builds
+- **Vite** for lightning-fast development and optimized builds
 
-### Backend Architecture
-- **Express.js** with TypeScript for robust API endpoints
-- **Drizzle ORM** for type-safe database operations
-- **PostgreSQL** database with Neon/Supabase integration
-- **Session management** with secure authentication flows
+### Backend Simulation
+- **Express.js** with TypeScript for API endpoints (development only)
+- **JSON Fixtures** - Comprehensive mock data in `client/src/lib/fixtures/`
+- **Local Storage** - Client-side persistence for user data
+- **Mock APIs** - Realistic API responses without database dependency
 
-### Development Tools
-- **ESLint & TypeScript** for code quality and type checking
-- **Tailwind Merge** for dynamic class management
-- **React Hook Form** with validation for form handling
-- **Lucide React** for consistent iconography
-
-### Deployment & Infrastructure
-- **Replit** for integrated development and deployment
-- **Static Deployments** for cost-effective frontend hosting
-- **Environment Configuration** via Replit Secrets
-
-📋 **[Complete Tech Stack Documentation](TECH_STACK.md)** - Detailed breakdown of all technologies, libraries, and architectural decisions.
+### Data Architecture
+```
+client/src/lib/fixtures/
+├── events.json       # Hackathon events with full configuration
+├── judges.json       # Expert judges with expertise areas
+├── submissions.json  # Project submissions with rich metadata
+├── teams.json        # Team formations and member management
+├── users.json        # User profiles and authentication data
+└── scorecards.json   # Judging scores and feedback
+```
 
 ## 📁 Project Structure
 
 ```
 maximally-hack/
-├── client/                 # Frontend React application
+├── client/                    # Frontend React application
 │   ├── src/
-│   │   ├── components/     # Reusable UI components
-│   │   │   ├── event/      # Event-specific components
-│   │   │   ├── judge/      # Judge dashboard components  
-│   │   │   ├── layout/     # Navigation and layout
-│   │   │   ├── project/    # Project-related components
-│   │   │   └── ui/         # Base UI component library
-│   │   ├── pages/          # Page components and routes
-│   │   │   ├── auth/       # Authentication flows
-│   │   │   ├── judge/      # Judge-specific pages
-│   │   │   └── organizer/  # Organizer dashboard pages
-│   │   ├── lib/            # Utilities and fixtures
-│   │   ├── hooks/          # Custom React hooks
-│   │   └── contexts/       # React context providers
-├── server/                 # Backend Express server
-├── shared/                 # Shared types and schemas
+│   │   ├── components/        # Reusable UI components
+│   │   │   ├── event/         # Event-specific components
+│   │   │   │   ├── EventCard.tsx
+│   │   │   │   ├── EventHeader.tsx
+│   │   │   │   ├── Countdown.tsx
+│   │   │   │   ├── JudgeCard.tsx
+│   │   │   │   ├── ProjectCard.tsx
+│   │   │   │   ├── TeamCard.tsx
+│   │   │   │   └── ...
+│   │   │   ├── judge/         # Judge dashboard components
+│   │   │   │   └── ScorePanel.tsx
+│   │   │   ├── layout/        # Navigation and layout
+│   │   │   │   ├── Navbar.tsx
+│   │   │   │   └── Footer.tsx
+│   │   │   ├── project/       # Project-related components
+│   │   │   │   ├── ContactModal.tsx
+│   │   │   │   └── JoinRequestModal.tsx
+│   │   │   └── ui/            # Base UI component library (Shadcn)
+│   │   ├── pages/             # Page components and routes
+│   │   │   ├── auth/          # Authentication flows
+│   │   │   │   ├── Login.tsx
+│   │   │   │   ├── Signup.tsx
+│   │   │   │   └── Onboarding.tsx
+│   │   │   ├── judge/         # Judge-specific pages
+│   │   │   │   ├── JudgeDashboard.tsx
+│   │   │   │   └── JudgeRegister.tsx
+│   │   │   ├── organizer/     # Organizer dashboard pages
+│   │   │   │   ├── CreateEvent.tsx
+│   │   │   │   ├── EditHackathon.tsx
+│   │   │   │   ├── ManageEvent.tsx
+│   │   │   │   └── OrganizerDashboard.tsx
+│   │   │   ├── Landing.tsx          # Homepage with hero and features
+│   │   │   ├── Explore.tsx          # Event discovery with filters
+│   │   │   ├── EventDetail.tsx      # Individual event pages
+│   │   │   ├── NewEnhancedEventDetail.tsx  # Advanced event hub
+│   │   │   ├── Projects.tsx         # Project gallery
+│   │   │   ├── ProjectDetail.tsx    # Individual project pages
+│   │   │   ├── CreateProject.tsx    # Project submission
+│   │   │   ├── Dashboard.tsx        # User dashboard
+│   │   │   ├── Profile.tsx          # User profiles
+│   │   │   ├── Judges.tsx           # Judge directory
+│   │   │   ├── Sponsors.tsx         # Sponsor showcase
+│   │   │   ├── Help.tsx             # Help center
+│   │   │   └── Leaderboards.tsx     # Competition rankings
+│   │   ├── lib/               # Utilities and fixtures
+│   │   │   ├── fixtures/      # Mock data and JSON files
+│   │   │   ├── api.ts         # API client and mock responses
+│   │   │   ├── auth.ts        # Authentication utilities
+│   │   │   ├── utils.ts       # General utilities
+│   │   │   └── theme.ts       # Design system utilities
+│   │   ├── hooks/             # Custom React hooks
+│   │   └── contexts/          # React context providers
+│   │       └── AuthContext.tsx
+├── server/                    # Development server (Express)
+│   ├── index.ts              # Server entry point
+│   ├── routes.ts             # API route definitions
+│   ├── storage.ts            # Mock data persistence
+│   └── vite.ts               # Vite development setup
+├── shared/                    # Shared types and schemas
+│   └── schema.ts             # TypeScript type definitions
 └── ...
 ```
+
+## 🌟 Key Features Showcase
+
+### Event Management System
+Our event pages serve as comprehensive hackathon command centers:
+
+#### Featured Event: AI Shipathon 2025
+- **48-hour global hackathon** focused on AI innovation
+- **Multi-criteria judging**: Innovation, execution, clarity, AI use, beginner spirit
+- **$50,000+ in prizes** across multiple tracks
+- **Expert judge panel** from leading tech companies
+- **Real-time submission tracking** and countdown timers
+
+#### Enhanced Event Detail Pages
+- **11-tab navigation system**:
+  - Overview: Quick start checklist and live announcements
+  - Timeline: Interactive timeline with current status
+  - Submissions: Real-time project gallery with voting
+  - Teams: Team formation and skill matching
+  - People: Mentors, judges, and speakers directory
+  - Help: Integrated support system
+  - Resources: API kits, templates, and guides
+  - Judging: Scoring interface and criteria
+  - Sponsors: Partner showcases and challenges
+  - Hiring: Job board and recruitment
+  - Perks: Swag claims and partner credits
+
+### Project Submission System
+- **Rich documentation** with markdown support
+- **Media upload** for screenshots, demo videos, and project galleries
+- **Event association** - link projects to specific hackathons
+- **Team collaboration** with role-based permissions
+- **Version tracking** and submission history
+- **Public/private** visibility controls
+
+### Judge Interface
+- **Comprehensive scoring** across multiple criteria
+- **Detailed feedback** system with structured comments
+- **Progress tracking** with assignment management
+- **Collaboration tools** for judge discussion
+- **Conflict of interest** management
+
+### Community Features
+- **Team finder** with skill-based matching
+- **Mentor booking** system with availability calendars
+- **Sponsor showcases** with tier-based visibility
+- **Achievement system** with leaderboards and badges
+- **Help desk** with ticket routing and resolution
 
 ## 🛠️ Getting Started
 
 ### Prerequisites
-- Node.js 20+ 
+- Node.js 20+
 - npm package manager
 
 ### Quick Start
 
-1. **Fork this Repl** or create a new Repl using this template
-
-2. **Dependencies are automatically installed** by Replit
-
-3. **Start the development server**:
+1. **Fork this Repl** or clone the repository
+2. **Dependencies auto-install** on Replit
+3. **Start development**:
    ```bash
    npm run dev
    ```
-
-4. **Open your browser** to see the application running
+4. **Visit** `http://localhost:5000` to see the application
 
 ### Available Scripts
-
-- `npm run dev` - Start development server with hot module reloading
+- `npm run dev` - Start development server with hot reloading
 - `npm run build` - Create optimized production build
 - `npm run start` - Start production server
 - `npm run check` - Run TypeScript type checking
 
-## 📱 Platform Pages
+## 📱 Complete Page Map
 
-### Core User Experience
-- **Landing** (`/`) - Platform overview and call-to-action
-- **Explore** (`/explore`) - Browse available hackathons with filters
-- **Event Detail** (`/event/:id`) - Individual hackathon information and registration
-- **Projects** (`/projects`) - Browse submitted projects and portfolios
-- **Submit** (`/submit`) - Project submission interface with preview
-- **Upload Project** (`/upload`) - Enhanced project upload with media support
-- **Profile** (`/profile`) - User profiles, achievements, and project history
-- **Dashboard** (`/dashboard`) - Personalized user dashboard
+### Public Pages
+- **Landing** (`/`) - Hero section with featured events and testimonials
+- **Explore** (`/explore`) - Event discovery with advanced filtering
+- **Event Detail** (`/event/:id`) - Comprehensive event information hub
+- **Projects** (`/projects`) - Public project gallery with search
+- **Project Detail** (`/project/:id`) - Individual project showcase
+- **Judges** (`/judges`) - Expert judge directory and profiles
+- **Sponsors** (`/sponsors`) - Sponsor showcase and partnerships
+- **Help** (`/help`) - FAQ and platform guidance
 
-### Specialized Interfaces  
-- **Judge Dashboard** (`/judge`) - Project review and scoring interface
-- **Judge Registration** (`/judge/register`) - Judge onboarding and verification
-- **Organizer Dashboard** (`/organizer`) - Event management and analytics
-- **Create Event** (`/organizer/create`) - Event setup and configuration
-- **Edit Event** (`/organizer/edit/:id`) - Event modification interface
-- **Leaderboards** (`/leaderboards`) - Competition rankings and achievements
+### User Dashboard
+- **Dashboard** (`/dashboard`) - Personalized user hub
+- **Profile** (`/profile`) - User profile and portfolio management
+- **Create Project** (`/submit`) - Project submission interface
+- **Edit Project** (`/project/:id/edit`) - Project editing and updates
 
-### Community & Support
-- **Judges** (`/judges`) - Judge directory and expertise showcase
-- **Sponsors** (`/sponsors`) - Sponsor showcase and partnership opportunities
-- **Help** (`/help`) - Platform guidance and FAQ
+### Judge Interface
+- **Judge Dashboard** (`/judge`) - Project review and scoring
+- **Judge Registration** (`/judge/register`) - Expert onboarding
 
-## 👥 User Roles & Workflows
+### Organizer Tools
+- **Organizer Dashboard** (`/organizer`) - Event management hub
+- **Create Event** (`/organizer/create`) - Event setup wizard
+- **Edit Event** (`/organizer/edit/:id`) - Comprehensive event editor
+- **Manage Event** (`/organizer/manage/:id`) - Live event management
 
-### Participants
-1. **Discover**: Browse hackathons and find events matching interests
-2. **Register**: Join events and connect with potential teammates  
-3. **Build**: Develop projects within event timeframes
-4. **Submit**: Upload project details, demos, and documentation
-5. **Present**: Showcase work to judges and community
+### Authentication
+- **Login** (`/login`) - User authentication
+- **Signup** (`/signup`) - User registration
+- **Onboarding** (`/onboarding`) - New user setup
 
-### Judges
-1. **Register**: Apply with expertise verification
-2. **Review**: Evaluate submissions across scoring criteria
-3. **Score**: Provide numerical ratings and detailed feedback
-4. **Deliberate**: Collaborate with other judges on final decisions
+### Special Features
+- **Leaderboards** (`/leaderboards`) - Competition rankings
+- **Enhanced Event Detail** (`/event/:id/enhanced`) - Advanced event hub prototype
 
-### Organizers  
-1. **Create**: Set up events with custom rules and timelines
-2. **Promote**: Attract participants and sponsors
-3. **Monitor**: Track submissions and participant engagement
-4. **Evaluate**: Coordinate judging process and announce winners
+## 🎯 Demo Data & Fixtures
 
-## 🔧 Development Guidelines
+### Sample Events
+- **AI Shipathon 2025** - Global AI innovation challenge
+- **Student Code Quest** - Beginner-friendly programming contest
+- **Green Tech Challenge** - Sustainability-focused hackathon
+- **Local Innovation Day** - Community-based maker event
 
-### Adding New Features
+### Mock Users
+- **Participants** with diverse skill sets and experience levels
+- **Expert Judges** from leading tech companies
+- **Event Organizers** with comprehensive event management needs
+- **Mentors** with specialized expertise areas
 
-1. **Components**: Create reusable components in `client/src/components/`
-2. **Pages**: Add new routes in `client/src/pages/`
-3. **API Routes**: Extend backend functionality in `server/routes.ts`
-4. **Styling**: Follow Tailwind utility patterns and design system
-
-### Code Quality Standards
-
-- **TypeScript**: Maintain strict type safety throughout
-- **Component Structure**: Use functional components with hooks
-- **Responsive Design**: Mobile-first approach with Tailwind breakpoints
-- **Accessibility**: Implement ARIA standards and keyboard navigation
-- **Performance**: Optimize bundle size and runtime performance
-
-### State Management Patterns
-
-- **Server State**: Use TanStack Query for API data and caching
-- **Local State**: React useState and useReducer for component state
-- **Form State**: React Hook Form with validation schemas
-- **Route State**: Wouter for navigation and URL parameter management
+### Sample Projects
+- **EcoTracker** - Carbon footprint monitoring app
+- **StudyBuddy** - AI-powered learning companion
+- **HealthSync** - Telemedicine platform
+- **CommunityMap** - Local business discovery tool
 
 ## 🚢 Deployment
 
 ### Replit Deployment (Recommended)
+1. **Click Deploy** in the Replit interface
+2. **Configure domain** (optional)
+3. **Auto-scaling** based on traffic
+4. **SSL** and custom domain support
 
-1. **Click the Deploy button** in your Repl interface
-2. **Configure custom domain** (optional) 
-3. **Set environment variables** via Replit Secrets if needed
+### Production Features
+- **Optimized builds** with code splitting
+- **Static asset** optimization
+- **Progressive enhancement** for performance
+- **Mobile-responsive** design
 
-The deployment automatically:
-- Builds the optimized React frontend
-- Configures the Express server for production
-- Sets up SSL and custom domain routing
-- Enables auto-scaling based on traffic
+## 🎨 Design Guidelines
 
-### Environment Configuration
+### Component Patterns
+- **Card-based layouts** with consistent 16px radius
+- **Pill-shaped buttons** with hover animations
+- **Floating elements** for visual interest
+- **Gradient backgrounds** with pastel accents
+- **Soft shadows** for subtle depth
 
-Set these environment variables in Replit Secrets:
-- `NODE_ENV=production`
-- `PORT=5000` (default)
+### Accessibility Standards
+- **WCAG 2.1 AA** compliance target
+- **Keyboard navigation** for all interactive elements
+- **Screen reader** compatibility
+- **High contrast** mode support
+- **Semantic HTML** structure
+
+### Performance Optimizations
+- **Lazy loading** for route components
+- **Image optimization** with proper sizing
+- **Bundle splitting** for faster load times
+- **Caching strategies** with TanStack Query
+
+## 🌈 Future Enhancements
+
+### Advanced Features (Planned)
+- **AI-powered team matching** based on skills and interests
+- **Real-time collaboration** tools for team projects
+- **Video conferencing** integration for mentorship
+- **Automated project** categorization and tagging
+- **Smart resource** recommendations based on project needs
+
+### Integration Opportunities
+- **GitHub integration** for automatic repository setup
+- **Discord/Slack** workspace creation and management
+- **Calendar integration** for event timeline synchronization
+- **Payment processing** for prize distribution
+- **Corporate partnerships** with API integrations
+
+### Analytics & Insights
+- **Event performance** dashboards for organizers
+- **Participant journey** mapping and optimization
+- **Predictive analytics** for event success factors
+- **ROI tracking** for sponsors and partners
 
 ## 🤝 Contributing
 
-### Getting Involved
-
-1. **Fork the repository** and create a feature branch
-2. **Follow coding standards** and run type checking
-3. **Test thoroughly** across different user roles
-4. **Document changes** in commit messages
-5. **Submit pull request** with detailed description
-
 ### Development Workflow
+1. **Fork** the repository and create feature branches
+2. **Follow** TypeScript strict mode and ESLint rules
+3. **Test** across all user roles and scenarios
+4. **Document** changes with clear commit messages
+5. **Submit** pull requests with detailed descriptions
 
-1. **Issues**: Use GitHub issues for bug reports and feature requests
-2. **Branches**: Create descriptive branch names (`feature/judge-feedback`)
-3. **Commits**: Write clear, concise commit messages
-4. **Testing**: Verify functionality across all user roles
-5. **Documentation**: Update README and inline code comments
+### Code Quality Standards
+- **100% TypeScript** coverage with strict typing
+- **Component reusability** following Shadcn patterns
+- **Responsive design** with mobile-first approach
+- **Accessibility** compliance with ARIA standards
+- **Performance optimization** with bundle analysis
 
 ## 📊 Platform Statistics
 
 ### Current Implementation
-- **25+ Pages** - Complete user journey coverage
-- **60+ Components** - Reusable UI component library  
-- **4 User Roles** - Participants, Judges, Organizers, Sponsors
-- **Mock Data** - Comprehensive fixtures for development
-- **Responsive Design** - Mobile-first, cross-device compatibility
+- **50+ React components** - Comprehensive UI library
+- **25+ pages** - Complete user journey coverage
+- **4 user roles** - Participants, Judges, Organizers, Sponsors
+- **6 JSON fixtures** - Rich mock data for development
+- **11-tab event system** - Advanced event management
 
 ### Technical Metrics
-- **Type Safety**: 100% TypeScript coverage
-- **Performance**: Optimized bundle splitting and lazy loading
-- **Accessibility**: WCAG 2.1 AA compliance target
-- **Browser Support**: Modern browsers with fallbacks
-
-## 🎯 Key Features Showcase
-
-### Event Management
-- **AI Shipathon 2025**: Featured hackathon with complete timeline and judging criteria
-- **Multi-criteria Scoring**: Innovation, execution, clarity, AI use, and beginner spirit
-- **Prize Tracks**: Multiple award categories with sponsor integration
-- **Real-time Updates**: Live countdown and submission tracking
-
-### Project Submission System
-- **Rich Documentation**: Markdown support for README files
-- **Media Upload**: Screenshots, demo videos, and project galleries
-- **Version Control**: Project history and submission tracking
-- **Preview Mode**: Real-time preview of project submissions
-
-### Judge Interface
-- **Comprehensive Scoring**: Multi-criteria evaluation system
-- **Feedback Tools**: Detailed comment and suggestion system
-- **Progress Tracking**: Judge assignment and completion status
-- **Collaboration**: Judge discussion and consensus building
+- **Type safety**: 100% TypeScript coverage
+- **Performance**: Optimized Vite builds with lazy loading
+- **Accessibility**: Keyboard navigation and screen reader support
+- **Mobile support**: Responsive design across all devices
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT License - See [LICENSE](LICENSE) file for details.
 
 ## 🙋‍♀️ Support & Community
 
 ### Getting Help
-- **Documentation**: Comprehensive guides in this README
-- **Issues**: Report bugs and request features via GitHub issues
-- **Community**: Join discussions and share your hackathon experiences
-- **Replit Support**: Leverage Replit's development and deployment tools
+- **Comprehensive documentation** in this README
+- **Replit community** support and discussions
+- **GitHub issues** for bug reports and feature requests
+- **Built-in help system** within the platform
 
 ### Resources
 - [Replit Documentation](https://docs.replit.com/)
-- [React Documentation](https://react.dev/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Hackathon Best Practices](https://hackathon.guide/)
+- [React 18 Documentation](https://react.dev/)
+- [Tailwind CSS Documentation](https://tailwindcss.com/)
+- [Shadcn/ui Components](https://ui.shadcn.com/)
 
 ---
 
 **Built with ❤️ on Replit**
 
-*Ready to revolutionize hackathons? Start building the future of collaborative innovation!* 🚀
+*Ready to revolutionize hackathons? Join the friendliest hackathon community and start building the future of collaborative innovation!* 🚀
 
 ### 🎯 Vision Statement
 
-Maximally Hack aims to democratize hackathon participation by providing an intuitive, accessible platform that connects creators, judges, and sponsors in a vibrant ecosystem of innovation. We believe that great ideas can come from anywhere, and our platform removes barriers to participation while celebrating creativity and technical excellence.
+Maximally Hack democratizes hackathon participation by providing an intuitive, accessible platform that connects creators, judges, and sponsors in a vibrant ecosystem of innovation. We believe great ideas can come from anywhere, and our platform removes barriers while celebrating creativity and technical excellence.
 
 **Join the community. Build the future. Hack maximally.** ✨
