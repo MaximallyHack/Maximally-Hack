@@ -84,52 +84,72 @@ function EventLayoutWrapper() {
   
   if (!slug) return <NotFound />;
   
-  // Determine which component to render based on the current path
-  const getEventComponent = () => {
-    const path = location.pathname.replace(`/e/${slug}`, '') || '/';
-    
-    const Component = (() => {
-      switch (path) {
-        case '/':
-          return EventOverview;
-        case '/timeline':
-          return EventTimeline;
-        case '/prizes':
-          return EventPrizes;
-        case '/rules':
-          return EventRules;
-        case '/judging':
-          return EventJudging;
-        case '/submissions':
-          return EventSubmissionsList;
-        case '/teams':
-          return EventTeamsList;
-        case '/people':
-          return EventPeopleHome;
-        case '/help':
-          return EventHelp;
-        case '/resources':
-          return EventResources;
-        case '/sponsors':
-          return EventSponsors;
-        case '/about':
-          return EventAbout;
-        default:
-          return () => <NotFound />;
-      }
-    })();
-
-    return (
-      <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}>
-        <Component />
-      </Suspense>
-    );
-  };
-  
   return (
     <EventProvider slug={slug}>
       <EventLayout>
-        {getEventComponent()}
+        <Routes>
+          <Route index element={
+            <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}>
+              <EventOverview />
+            </Suspense>
+          } />
+          <Route path="timeline" element={
+            <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}>
+              <EventTimeline />
+            </Suspense>
+          } />
+          <Route path="prizes" element={
+            <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}>
+              <EventPrizes />
+            </Suspense>
+          } />
+          <Route path="rules" element={
+            <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}>
+              <EventRules />
+            </Suspense>
+          } />
+          <Route path="judging" element={
+            <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}>
+              <EventJudging />
+            </Suspense>
+          } />
+          <Route path="submissions" element={
+            <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}>
+              <EventSubmissionsList />
+            </Suspense>
+          } />
+          <Route path="teams" element={
+            <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}>
+              <EventTeamsList />
+            </Suspense>
+          } />
+          <Route path="people" element={
+            <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}>
+              <EventPeopleHome />
+            </Suspense>
+          } />
+          <Route path="help" element={
+            <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}>
+              <EventHelp />
+            </Suspense>
+          } />
+          <Route path="resources" element={
+            <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}>
+              <EventResources />
+            </Suspense>
+          } />
+          <Route path="sponsors" element={
+            <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}>
+              <EventSponsors />
+            </Suspense>
+          } />
+          <Route path="about" element={
+            <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}>
+              <EventAbout />
+            </Suspense>
+          } />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </EventLayout>
     </EventProvider>
   );
