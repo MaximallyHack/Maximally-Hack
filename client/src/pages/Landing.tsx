@@ -62,7 +62,7 @@ export default function Landing() {
             <Badge className="bg-[#dc2626] dark:bg-coral text-white px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer" data-testid="category-weekend">
               ⚡ Weekend
             </Badge>
-            <Badge className="bg-[#374151] dark:bg-text-dark text-white px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer" data-testid="category-prize">
+            <Badge className="bg-[#374151] dark:bg-text-dark px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer text-[#060606]" data-testid="category-prize">
               💰 Prize $10k+
             </Badge>
           </div>
