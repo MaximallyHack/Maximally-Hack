@@ -225,8 +225,8 @@ export default function Landing() {
                   <Users className="w-6 h-6 text-white dark:text-foreground" />
                 </div>
               </FloatingElement>
-              <h3 className="font-heading font-semibold text-xl text-foreground mb-2">2. Team Up</h3>
-              <p className="text-muted-foreground">Join existing teams or create your own. Connect with like-minded builders and form the dream team.</p>
+              <h3 className="font-heading font-semibold text-xl text-foreground mb-2">2. Form Your Dream Team</h3>
+              <p className="text-muted-foreground">Find teammates with complementary skills, join forces with passionate builders, or start your own team. Build connections that last beyond the hackathon.</p>
             </div>
             <div className="text-center">
               <FloatingElement delay={1}>
