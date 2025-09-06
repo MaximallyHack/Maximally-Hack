@@ -68,7 +68,7 @@ function ProjectCard({ project }: ProjectCardProps) {
   };
 
   return (
-    <Card className="bg-white shadow-soft border-soft-gray hover-scale transition-all duration-200 group" data-testid={`project-card-${project.id}`}>
+    <Card className="bg-white dark:bg-gray-700 shadow-soft border-soft-gray hover-scale transition-all duration-200 group" data-testid={`project-card-${project.id}`}>
       <CardContent className="p-0">
         <div className="aspect-video bg-gradient-to-br from-sky/20 to-mint/20 relative overflow-hidden">
           {project.coverImage && (
@@ -105,22 +105,22 @@ function ProjectCard({ project }: ProjectCardProps) {
         </div>
         
         <div className="p-4">
-          <h3 className="font-heading font-semibold text-lg text-text-dark mb-1">
+          <h3 className="font-heading font-semibold text-lg text-text-dark dark:text-gray-100 mb-1">
             {project.title}
           </h3>
-          <p className="text-sm text-text-muted mb-3 line-clamp-2">
+          <p className="text-sm text-text-muted dark:text-gray-300 mb-3 line-clamp-2">
             {project.oneLiner}
           </p>
           
           {/* Tags */}
           <div className="flex flex-wrap gap-1 mb-3">
             {project.tags?.slice(0, 3).map((tag) => (
-              <Badge key={tag} className="bg-mint/20 text-text-dark text-xs">
+              <Badge key={tag} className="bg-mint/20 text-text-dark dark:text-gray-800 text-xs">
                 {tag}
               </Badge>
             ))}
             {project.tags && project.tags.length > 3 && (
-              <Badge className="bg-soft-gray text-text-muted text-xs">
+              <Badge className="bg-soft-gray text-text-muted dark:text-gray-300 text-xs">
                 +{project.tags.length - 3}
               </Badge>
             )}
@@ -133,7 +133,7 @@ function ProjectCard({ project }: ProjectCardProps) {
                 <AvatarImage src={project.ownerAvatar || ""} />
                 <AvatarFallback>{project.ownerName.split(' ').map(n => n[0]).join('')}</AvatarFallback>
               </Avatar>
-              <span className="text-sm text-text-muted">
+              <span className="text-sm text-text-muted dark:text-gray-300">
                 {project.ownerName}
               </span>
               {project.teamCount > 1 && (
@@ -144,7 +144,7 @@ function ProjectCard({ project }: ProjectCardProps) {
             </div>
             
             {project.lookingForContributors && project.openRolesCount > 0 && (
-              <Badge className="bg-yellow text-text-dark text-xs">
+              <Badge className="bg-yellow text-text-dark dark:text-gray-800 text-xs">
                 <Users className="w-3 h-3 mr-1" />
                 {project.openRolesCount} roles
               </Badge>
