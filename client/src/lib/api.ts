@@ -1,6 +1,6 @@
 import { queryClient } from "./queryClient";
 
-// Simulate API delay for realistic loading states
+// Optimized delay for better performance
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 // Import fixtures
@@ -173,7 +173,7 @@ export interface Judge {
 export const api = {
   // Events
   getEvents: async (): Promise<Event[]> => {
-    await delay(100);
+    await delay(50);
     return eventsData as Event[];
   },
 
@@ -183,13 +183,13 @@ export const api = {
   },
 
   getFeaturedEvents: async (): Promise<Event[]> => {
-    await delay(400);
+    await delay(100);
     return eventsData.slice(0, 6) as Event[];
   },
 
   // Users
   getUsers: async (): Promise<User[]> => {
-    await delay(300);
+    await delay(100);
     return usersData as User[];
   },
 
@@ -297,9 +297,9 @@ export const api = {
     }
   },
 
-  // Search and filter
+  // Search and filter - optimized for fast response
   searchEvents: async (query: string, filters: any = {}) => {
-    await delay(300);
+    await delay(50);
     let events = eventsData as Event[];
     
     if (query) {

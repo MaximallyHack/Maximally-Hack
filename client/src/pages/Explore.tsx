@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -29,35 +29,37 @@ export default function Explore() {
     sortBy: 'date',
   });
 
-  const { data: events, isLoading } = useQuery({
+  const { data: events, isLoading, isFetching } = useQuery({
     queryKey: ['events', searchQuery, filters],
     queryFn: () => api.searchEvents(searchQuery, filters),
+    staleTime: 5 * 60 * 1000, // Cache for 5 minutes
+    refetchOnWindowFocus: false,
   });
 
-  const handleFilterChange = (key: keyof Filters, value: any) => {
+  const handleFilterChange = useCallback((key: keyof Filters, value: any) => {
     setFilters(prev => ({ ...prev, [key]: value }));
-  };
+  }, []);
 
-  const addTag = (tag: string) => {
+  const addTag = useCallback((tag: string) => {
     if (!filters.tags.includes(tag)) {
       handleFilterChange('tags', [...filters.tags, tag]);
     }
-  };
+  }, [filters.tags, handleFilterChange]);
 
-  const removeTag = (tag: string) => {
+  const removeTag = useCallback((tag: string) => {
     handleFilterChange('tags', filters.tags.filter(t => t !== tag));
-  };
+  }, [filters.tags, handleFilterChange]);
 
-  const clearFilters = () => {
+  const clearFilters = useCallback(() => {
     setFilters({
       tags: [],
       prizeMin: 0,
       sortBy: 'date',
     });
     setSearchQuery("");
-  };
+  }, []);
 
-  const availableTags = ['AI', 'Healthcare', 'Education', 'Climate', 'Blockchain', 'Web3', 'Mobile', 'IoT'];
+  const availableTags = useMemo(() => ['AI', 'Healthcare', 'Education', 'Climate', 'Blockchain', 'Web3', 'Mobile', 'IoT'], []);
 
   return (
     <div className="min-h-screen bg-background py-8" data-testid="explore-page">
@@ -259,7 +261,7 @@ export default function Explore() {
           <div className="flex-1">
             <div className="flex justify-between items-center mb-6">
               <p className="text-muted-foreground" data-testid="results-count">
-                {isLoading ? 'Loading...' : `Showing ${events?.length || 0} hackathons`}
+                {isLoading ? 'Loading...' : isFetching ? 'Updating...' : `Showing ${events?.length || 0} hackathons`}
               </p>
               <div className="flex gap-2">
                 <Button
