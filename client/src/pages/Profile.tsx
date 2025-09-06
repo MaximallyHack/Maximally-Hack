@@ -8,7 +8,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { CrayonSquiggle } from "@/components/ui/floating-elements";
-import ProjectCard from "@/components/event/ProjectCard";
 import EventCard from "@/components/event/EventCard";
 import { 
   MapPin,
@@ -33,7 +32,7 @@ import type { User } from "@/lib/api";
 
 export default function Profile() {
   const { handle } = useParams();
-  const [activeTab, setActiveTab] = useState("projects");
+  const [activeTab, setActiveTab] = useState("hackathons");
 
   const { data: user, isLoading: userLoading } = useQuery({
     queryKey: ['user', handle],
@@ -41,15 +40,6 @@ export default function Profile() {
     enabled: !!handle,
   });
 
-  const { data: userProjects, isLoading: projectsLoading } = useQuery({
-    queryKey: ['user-projects', user?.id],
-    queryFn: async () => {
-      if (!user?.projects) return [];
-      const projects = await api.getFeaturedProjects();
-      return projects.filter(p => user.projects.includes(p.id));
-    },
-    enabled: !!user,
-  });
 
   const { data: userEvents, isLoading: eventsLoading } = useQuery({
     queryKey: ['user-events', user?.id],
@@ -243,11 +233,7 @@ export default function Profile() {
 
         {/* Profile Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-4 bg-white rounded-xl border border-soft-gray p-1 mb-8">
-            <TabsTrigger value="projects" className="rounded-lg" data-testid="tab-projects">
-              <Code className="w-4 h-4 mr-2" />
-              Projects
-            </TabsTrigger>
+          <TabsList className="grid w-full grid-cols-3 bg-white rounded-xl border border-soft-gray p-1 mb-8">
             <TabsTrigger value="hackathons" className="rounded-lg" data-testid="tab-hackathons">
               <Calendar className="w-4 h-4 mr-2" />
               Events
@@ -262,41 +248,6 @@ export default function Profile() {
             </TabsTrigger>
           </TabsList>
 
-          {/* Projects Tab */}
-          <TabsContent value="projects">
-            {projectsLoading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {Array.from({ length: 6 }).map((_, i) => (
-                  <div key={i} className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray">
-                    <Skeleton className="h-4 w-20 mb-4" />
-                    <Skeleton className="h-6 w-3/4 mb-2" />
-                    <Skeleton className="h-4 w-full mb-4" />
-                    <div className="flex gap-2 mb-4">
-                      <Skeleton className="h-6 w-12" />
-                      <Skeleton className="h-6 w-16" />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : userProjects && userProjects.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {userProjects.map((project) => (
-                  <ProjectCard key={project.id} project={project} showScore />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-16">
-                <div className="text-6xl mb-4">💻</div>
-                <h3 className="font-heading font-semibold text-xl text-text-dark mb-2">No projects yet</h3>
-                <p className="text-text-muted">
-                  {user.role === 'participant' 
-                    ? "Projects will appear here when this user submits to hackathons"
-                    : "No projects have been shared publicly"
-                  }
-                </p>
-              </div>
-            )}
-          </TabsContent>
 
           {/* Hackathons Tab */}
           <TabsContent value="hackathons">

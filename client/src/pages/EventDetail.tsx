@@ -9,8 +9,6 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { useToast } from "@/hooks/use-toast";
 import EventHeader from "@/components/event/EventHeader";
 import TeamCard from "@/components/event/TeamCard";
-import ProjectCard from "@/components/event/ProjectCard";
-import JudgeCard from "@/components/event/JudgeCard";
 import { CrayonSquiggle } from "@/components/ui/floating-elements";
 import { useConfetti } from "@/components/ui/confetti";
 import { Trophy, Users, Star, Calendar, Clock, Globe, Check } from "lucide-react";
@@ -35,16 +33,7 @@ export default function EventDetail() {
     enabled: !!event?.id,
   });
 
-  const { data: submissions } = useQuery({
-    queryKey: ['submissions', event?.id],
-    queryFn: () => api.getSubmissions(event?.id),
-    enabled: !!event?.id,
-  });
 
-  const { data: judges } = useQuery({
-    queryKey: ['judges'],
-    queryFn: api.getJudges,
-  });
 
   if (eventLoading) {
     return (
@@ -79,7 +68,6 @@ export default function EventDetail() {
     );
   }
 
-  const eventJudges = judges?.filter(judge => event.judges.includes(judge.id)) || [];
 
   const handleJoinEvent = () => {
     toast({
@@ -106,14 +94,12 @@ export default function EventDetail() {
       {/* Event Tabs */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-7 bg-white rounded-xl border border-soft-gray p-1 mb-6">
+          <TabsList className="grid w-full grid-cols-5 bg-white rounded-xl border border-soft-gray p-1 mb-6">
             <TabsTrigger value="about" className="rounded-lg" data-testid="tab-about">About</TabsTrigger>
             <TabsTrigger value="prizes" className="rounded-lg" data-testid="tab-prizes">Prizes</TabsTrigger>
             <TabsTrigger value="rules" className="rounded-lg" data-testid="tab-rules">Rules</TabsTrigger>
             <TabsTrigger value="timeline" className="rounded-lg" data-testid="tab-timeline">Timeline</TabsTrigger>
-            <TabsTrigger value="judges" className="rounded-lg" data-testid="tab-judges">Judges</TabsTrigger>
             <TabsTrigger value="teams" className="rounded-lg" data-testid="tab-teams">Teams</TabsTrigger>
-            <TabsTrigger value="submissions" className="rounded-lg" data-testid="tab-submissions">Submissions</TabsTrigger>
           </TabsList>
 
           {/* About Tab */}
@@ -316,20 +302,6 @@ export default function EventDetail() {
             </div>
           </TabsContent>
 
-          {/* Judges Tab */}
-          <TabsContent value="judges" className="mt-6">
-            <div className="text-center mb-12">
-              <h2 className="font-heading font-bold text-2xl text-text-dark mb-4">Meet Our Expert Judges</h2>
-              <CrayonSquiggle className="mx-auto mb-6" />
-              <p className="text-text-muted">Industry leaders who will evaluate your projects</p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {eventJudges.map(judge => (
-                <JudgeCard key={judge.id} judge={judge} />
-              ))}
-            </div>
-          </TabsContent>
 
           {/* Teams Tab */}
           <TabsContent value="teams" className="mt-6">
@@ -359,37 +331,6 @@ export default function EventDetail() {
             )}
           </TabsContent>
 
-          {/* Submissions Tab */}
-          <TabsContent value="submissions" className="mt-6">
-            <div className="flex justify-between items-center mb-8">
-              <div>
-                <h2 className="font-heading font-bold text-2xl text-text-dark mb-2">Project Submissions</h2>
-                <p className="text-text-muted">Amazing projects built during this hackathon</p>
-              </div>
-              <Link href={`/e/${event.slug}/submit`}>
-                <Button className="bg-coral text-white px-6 py-3 rounded-full font-medium hover-scale hover:bg-coral/80" data-testid="button-submit-project">
-                  Submit Project
-                </Button>
-              </Link>
-            </div>
-
-            {submissions && submissions.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {submissions.map(submission => (
-                  <ProjectCard key={submission.id} project={submission} showScore />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-16">
-                <div className="text-6xl mb-4">💻</div>
-                <h3 className="font-heading font-semibold text-xl text-text-dark mb-2">No submissions yet</h3>
-                <p className="text-text-muted mb-6">Projects will appear here once the submission period opens.</p>
-                <Link href={`/e/${event.slug}/submit`}>
-                  <Button className="bg-coral text-white hover:bg-coral/80">Submit First Project</Button>
-                </Link>
-              </div>
-            )}
-          </TabsContent>
 
           {/* FAQs Tab */}
           <TabsContent value="faqs" className="mt-8">
