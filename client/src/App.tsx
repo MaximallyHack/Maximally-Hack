@@ -119,8 +119,9 @@ function Router() {
       <div className="min-h-screen bg-cream">
         <ScrollToTop />
         <HashRedirect />
+        <Navbar />
         <Switch>
-          {/* Event Routes - Direct matching with no nested Switch */}
+          {/* Event Routes */}
           <Route path="/e/:slug" component={EventLayoutWrapper} />
           <Route path="/e/:slug/timeline" component={EventLayoutWrapper} />
           <Route path="/e/:slug/prizes" component={EventLayoutWrapper} />
@@ -133,42 +134,37 @@ function Router() {
           <Route path="/e/:slug/resources" component={EventLayoutWrapper} />
           <Route path="/e/:slug/sponsors" component={EventLayoutWrapper} />
           <Route path="/e/:slug/about" component={EventLayoutWrapper} />
+          <Route path="/e/:slug/submit" component={Submit} />
           
-          {/* Regular Routes - With Navbar/Footer */}
-          <Route>
-            <Navbar />
-            <Switch>
-              <Route path="/" component={Landing} />
-              <Route path="/explore" component={SimpleExplore} />
-              <Route path="/projects" component={ProjectsGallery} />
-              <Route path="/projects/:id" component={ProjectDetail} />
-              <Route path="/publish" component={PublishProject} />
-              <Route path="/upload" component={UploadProject} />
-              <Route path="/profiles/:handle" component={Profile} />
-              <Route path="/judges" component={JuryBoard} />
-              <Route path="/judges/:id" component={JuryBoard} />
-              <Route path="/judge-register" component={JudgeRegister} />
-              <Route path="/leaders" component={Leaderboards} />
-              <Route path="/sponsors" component={Sponsors} />
-              <Route path="/help" component={Help} />
-              <Route path="/login" component={Login} />
-              <Route path="/signup" component={Signup} />
-              <Route path="/dashboard" component={Dashboard} />
-              <Route path="/projects/create" component={CreateProject} />
-              <Route path="/projects/:id/edit" component={EditProject} />
-              <Route path="/onboarding" component={Onboarding} />
-              <Route path="/organizer" component={OrganizerDashboard} />
-              <Route path="/organizer/events/new" component={CreateEvent} />
-              <Route path="/organizer/events/:id/overview" component={ManageEvent} />
-              <Route path="/organizer/events/:id/edit" component={EditEvent} />
-              <Route path="/organizer/events/:id/edit-hackathon" component={EditHackathon} />
-              <Route path="/judge" component={JudgeDashboard} />
-              <Route path="/e/:slug/submit" component={Submit} />
-              <Route component={NotFound} />
-            </Switch>
-            <Footer />
-          </Route>
+          {/* Regular Routes */}
+          <Route path="/" component={Landing} />
+          <Route path="/explore" component={SimpleExplore} />
+          <Route path="/projects" component={ProjectsGallery} />
+          <Route path="/projects/:id" component={ProjectDetail} />
+          <Route path="/publish" component={PublishProject} />
+          <Route path="/upload" component={UploadProject} />
+          <Route path="/profiles/:handle" component={Profile} />
+          <Route path="/judges" component={JuryBoard} />
+          <Route path="/judges/:id" component={JuryBoard} />
+          <Route path="/judge-register" component={JudgeRegister} />
+          <Route path="/leaders" component={Leaderboards} />
+          <Route path="/sponsors" component={Sponsors} />
+          <Route path="/help" component={Help} />
+          <Route path="/login" component={Login} />
+          <Route path="/signup" component={Signup} />
+          <Route path="/dashboard" component={Dashboard} />
+          <Route path="/projects/create" component={CreateProject} />
+          <Route path="/projects/:id/edit" component={EditProject} />
+          <Route path="/onboarding" component={Onboarding} />
+          <Route path="/organizer" component={OrganizerDashboard} />
+          <Route path="/organizer/events/new" component={CreateEvent} />
+          <Route path="/organizer/events/:id/overview" component={ManageEvent} />
+          <Route path="/organizer/events/:id/edit" component={EditEvent} />
+          <Route path="/organizer/events/:id/edit-hackathon" component={EditHackathon} />
+          <Route path="/judge" component={JudgeDashboard} />
+          <Route component={NotFound} />
         </Switch>
+        <Footer />
       </div>
     </AuthProvider>
   );
