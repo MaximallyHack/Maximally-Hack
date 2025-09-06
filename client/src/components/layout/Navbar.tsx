@@ -82,7 +82,7 @@ export default function Navbar() {
               <ThemeToggle />
               {isLoggedIn ? (
                 <div className="flex items-center space-x-3">
-                  {user?.role === 'organizer' && (
+                  {user && (user as any)?.role === 'organizer' && (
                     <Link href="/organizer/dashboard">
                       <Button variant="outline" size="sm" className="border-mint text-mint hover:bg-mint/10 font-medium">
                         <Calendar className="w-4 h-4 mr-2" />
@@ -112,7 +112,7 @@ export default function Navbar() {
                           <p className="font-semibold text-foreground">{user?.fullName || user?.username}</p>
                           <p className="text-sm text-muted-foreground truncate">{user?.email}</p>
                           <Badge variant="secondary" className="mt-1 text-xs">
-                            {user?.role === 'organizer' ? '🎯 Organizer' : '👨‍💻 Participant'}
+                            {(user as any)?.role === 'organizer' ? '🎯 Organizer' : '👨‍💻 Participant'}
                           </Badge>
                         </div>
                       </div>
@@ -223,7 +223,7 @@ export default function Navbar() {
                             </div>
                           </div>
                           
-                          {user?.role === 'organizer' && (
+                          {user && (user as any)?.role === 'organizer' && (
                             <Link href="/organizer/dashboard" onClick={() => setIsOpen(false)}>
                               <Button variant="outline" className="w-full border-mint text-mint hover:bg-mint/10">
                                 <Calendar className="w-4 h-4 mr-2" />

@@ -25,6 +25,7 @@ import Help from "@/pages/Help";
 import Submit from "@/pages/Submit";
 import Profile from "@/pages/Profile";
 import Dashboard from "@/pages/Dashboard";
+import Organize from "@/pages/Organize";
 import NotFound from "@/pages/not-found";
 
 // Event Layout and Components
@@ -130,6 +131,7 @@ function Router() {
           {/* Regular Routes */}
           <Route path="/" component={Landing} />
           <Route path="/explore" component={SimpleExplore} />
+          <Route path="/organize" component={Organize} />
           <Route path="/profiles/:handle" component={Profile} />
           <Route path="/leaders" component={Leaderboards} />
           <Route path="/sponsors" component={Sponsors} />
