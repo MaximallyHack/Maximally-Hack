@@ -79,14 +79,14 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center py-12 px-4">
       <div className="w-full max-w-md">
-        <Card className="bg-card border-border">
-          <CardHeader className="text-center">
+        <Card className="bg-card rounded-2xl p-6 shadow-soft border border-border">
+          <CardHeader className="text-center p-0 mb-6">
             <CardTitle className="text-2xl font-medium text-card-foreground">Welcome Back</CardTitle>
             <CardDescription className="text-muted-foreground">
               Sign in to your account to register for hackathons and track your progress
             </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-0">
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <Label htmlFor="username" className="text-card-foreground">Username or Email</Label>
