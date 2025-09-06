@@ -93,33 +93,33 @@ export default function SimpleExplore() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-green-100 text-green-800';
-      case 'upcoming': return 'bg-blue-100 text-blue-800';
-      case 'registration_open': return 'bg-yellow-100 text-yellow-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'active': return 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300';
+      case 'upcoming': return 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300';
+      case 'registration_open': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300';
+      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-800/50 dark:text-gray-300';
     }
   };
 
   return (
-    <div className="min-h-screen bg-white" data-testid="simple-explore-page">
+    <div className="min-h-screen bg-background" data-testid="simple-explore-page">
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-medium text-gray-900 mb-3">Explore Hackathons</h1>
-          <p className="text-gray-600">Discover amazing events and join the community</p>
+          <h1 className="text-3xl font-medium text-foreground mb-3">Explore Hackathons</h1>
+          <p className="text-muted-foreground">Discover amazing events and join the community</p>
         </div>
 
         {/* Search and Quick Filters */}
         <div className="mb-8">
           <div className="flex flex-col sm:flex-row gap-4 mb-6">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
               <Input
                 type="text"
                 placeholder="Search hackathons..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 h-12 border-gray-200 focus:border-gray-400"
+                className="pl-10 h-12 border-border focus:border-ring"
               />
             </div>
             <div className="flex items-center gap-3">
@@ -127,12 +127,12 @@ export default function SimpleExplore() {
                 variant="outline"
                 size="sm"
                 onClick={() => setShowFilters(!showFilters)}
-                className="h-12 border-gray-200"
+                className="h-12 border-border"
               >
                 <SlidersHorizontal className="w-4 h-4 mr-2" />
                 Filters
                 {(filters.tags.length > 0 || filters.prizeMin > 0) && (
-                  <Badge className="ml-2 bg-gray-900 text-white rounded-full w-5 h-5 p-0 flex items-center justify-center text-xs">
+                  <Badge className="ml-2 bg-foreground text-background rounded-full w-5 h-5 p-0 flex items-center justify-center text-xs">
                     {filters.tags.length + (filters.prizeMin > 0 ? 1 : 0)}
                   </Badge>
                 )}
@@ -141,7 +141,7 @@ export default function SimpleExplore() {
                 variant="outline"
                 size="sm"
                 onClick={() => setViewMode(viewMode === 'grid' ? 'list' : 'grid')}
-                className="h-12 border-gray-200"
+                className="h-12 border-border"
               >
                 {viewMode === 'grid' ? <List className="w-4 h-4" /> : <Grid className="w-4 h-4" />}
               </Button>
@@ -150,12 +150,12 @@ export default function SimpleExplore() {
 
           {/* Category Tabs */}
           <Tabs value={activeCategory} onValueChange={setActiveCategory} className="w-full">
-            <TabsList className="bg-gray-50 p-1 rounded-lg w-full justify-start">
+            <TabsList className="bg-muted p-1 rounded-lg w-full justify-start">
               {categories.map(category => (
                 <TabsTrigger 
                   key={category.id} 
                   value={category.id}
-                  className="rounded-md data-[state=active]:bg-white"
+                  className="rounded-md data-[state=active]:bg-background"
                 >
                   {category.label}
                   <Badge variant="secondary" className="ml-2 text-xs">
@@ -168,9 +168,9 @@ export default function SimpleExplore() {
 
           {/* Advanced Filters */}
           {showFilters && (
-            <div className="mt-6 p-6 bg-gray-50 rounded-lg space-y-4">
+            <div className="mt-6 p-6 bg-muted rounded-lg space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="font-medium text-gray-900">Filters</h3>
+                <h3 className="font-medium text-foreground">Filters</h3>
                 <Button variant="ghost" size="sm" onClick={clearFilters}>
                   Clear all
                 </Button>
@@ -178,7 +178,7 @@ export default function SimpleExplore() {
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <label className="text-sm font-medium text-gray-700 mb-2 block">Format</label>
+                  <label className="text-sm font-medium text-foreground mb-2 block">Format</label>
                   <Select value={filters.format} onValueChange={(value) => handleFilterChange('format', value)}>
                     <SelectTrigger>
                       <SelectValue placeholder="Any format" />
@@ -192,7 +192,7 @@ export default function SimpleExplore() {
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium text-gray-700 mb-2 block">Sort by</label>
+                  <label className="text-sm font-medium text-foreground mb-2 block">Sort by</label>
                   <Select value={filters.sortBy} onValueChange={(value) => handleFilterChange('sortBy', value)}>
                     <SelectTrigger>
                       <SelectValue />
@@ -206,7 +206,7 @@ export default function SimpleExplore() {
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium text-gray-700 mb-2 block">Min Prize</label>
+                  <label className="text-sm font-medium text-foreground mb-2 block">Min Prize</label>
                   <Select value={filters.prizeMin.toString()} onValueChange={(value) => handleFilterChange('prizeMin', parseInt(value))}>
                     <SelectTrigger>
                       <SelectValue placeholder="Any amount" />
@@ -223,7 +223,7 @@ export default function SimpleExplore() {
               </div>
 
               <div>
-                <label className="text-sm font-medium text-gray-700 mb-2 block">Tags</label>
+                <label className="text-sm font-medium text-foreground mb-2 block">Tags</label>
                 <div className="flex flex-wrap gap-2 mb-3">
                   {availableTags.map(tag => (
                     <Button
@@ -256,22 +256,22 @@ export default function SimpleExplore() {
           <div className={`grid gap-6 ${viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'}`}>
             {filteredEvents.map(event => (
               <Link key={event.id} href={`/e/${event.slug}`}>
-                <Card className="border border-gray-200 hover:border-gray-300 transition-colors cursor-pointer">
+                <Card className="border border-border hover:border-ring transition-colors cursor-pointer">
                   <CardContent className={`p-6 ${viewMode === 'list' ? 'flex items-center gap-6' : ''}`}>
                     <div className={viewMode === 'list' ? 'flex-1' : ''}>
                       <div className="flex items-center justify-between mb-3">
                         <Badge className={`${getStatusColor(event.status)} rounded-full text-xs font-medium`}>
                           {event.status.replace('_', ' ')}
                         </Badge>
-                        <div className="text-sm font-medium text-gray-900">
+                        <div className="text-sm font-medium text-foreground">
                           ${(event.prizePool / 1000).toFixed(0)}k
                         </div>
                       </div>
 
-                      <h3 className="font-medium text-gray-900 mb-2 line-clamp-1">{event.title}</h3>
-                      <p className="text-sm text-gray-600 mb-4 line-clamp-2">{event.description}</p>
+                      <h3 className="font-medium text-foreground mb-2 line-clamp-1">{event.title}</h3>
+                      <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{event.description}</p>
 
-                      <div className="flex items-center justify-between text-sm text-gray-500">
+                      <div className="flex items-center justify-between text-sm text-muted-foreground">
                         <div className="flex items-center gap-4">
                           <div className="flex items-center gap-1">
                             <Calendar className="w-4 h-4" />
@@ -288,10 +288,10 @@ export default function SimpleExplore() {
 
                     {viewMode === 'list' && (
                       <div className="text-right">
-                        <div className="text-sm font-medium text-gray-900 mb-1">
+                        <div className="text-sm font-medium text-foreground mb-1">
                           {event.format}
                         </div>
-                        <div className="text-sm text-gray-500">
+                        <div className="text-sm text-muted-foreground">
                           {event.location}
                         </div>
                       </div>
@@ -303,8 +303,8 @@ export default function SimpleExplore() {
           </div>
         ) : (
           <div className="text-center py-16">
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No hackathons found</h3>
-            <p className="text-gray-600 mb-6">Try adjusting your search or filters</p>
+            <h3 className="text-lg font-medium text-foreground mb-2">No hackathons found</h3>
+            <p className="text-muted-foreground mb-6">Try adjusting your search or filters</p>
             <Button variant="outline" onClick={clearFilters}>
               Clear filters
             </Button>
