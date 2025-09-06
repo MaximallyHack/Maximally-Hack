@@ -112,27 +112,27 @@ export default function Organize() {
       </section>
 
       {/* Features Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-900">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="font-heading font-bold text-3xl text-text-dark mb-4">
+            <h2 className="font-heading font-bold text-3xl text-text-dark dark:text-white mb-4">
               Everything You Need to Run Amazing Hackathons
             </h2>
-            <p className="text-lg text-text-muted max-w-2xl mx-auto">
+            <p className="text-lg text-text-muted dark:text-gray-300 max-w-2xl mx-auto">
               Our platform provides all the tools and support you need to create memorable hackathon experiences
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map((feature, index) => (
-              <Card key={index} className="group hover:shadow-lg transition-all duration-300 border-soft-gray bg-white rounded-2xl">
+              <Card key={index} className="group hover:shadow-lg transition-all duration-300 border-soft-gray bg-white dark:bg-slate-800 dark:border-slate-700 rounded-2xl">
                 <CardHeader className="text-center pb-4">
                   <div className={`w-12 h-12 mx-auto rounded-xl flex items-center justify-center mb-4 bg-${feature.color}/20 text-${feature.color} group-hover:scale-110 transition-transform duration-300`}>
                     {feature.icon}
                   </div>
-                  <CardTitle className="text-lg font-semibold text-text-dark">{feature.title}</CardTitle>
+                  <CardTitle className="text-lg font-semibold text-text-dark dark:text-white">{feature.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-text-muted text-center">{feature.description}</p>
+                  <p className="text-text-muted dark:text-gray-300 text-center">{feature.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -145,17 +145,17 @@ export default function Organize() {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="font-heading font-bold text-3xl text-text-dark mb-6">
+              <h2 className="font-heading font-bold text-3xl text-text-dark dark:text-white mb-6">
                 Why Choose Our Platform?
               </h2>
-              <p className="text-lg text-text-muted mb-8">
+              <p className="text-lg text-text-muted dark:text-gray-300 mb-8">
                 Join hundreds of successful organizers who trust Maximally Hack to power their events.
               </p>
               <div className="space-y-4">
                 {benefits.map((benefit, index) => (
                   <div key={index} className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-mint mt-1 flex-shrink-0" />
-                    <p className="text-text-dark">{benefit}</p>
+                    <p className="text-text-dark dark:text-gray-300">{benefit}</p>
                   </div>
                 ))}
               </div>
@@ -169,10 +169,10 @@ export default function Organize() {
                   <Star className="w-5 h-5 text-yellow fill-current" />
                   <Star className="w-5 h-5 text-yellow fill-current" />
                 </div>
-                <blockquote className="text-lg font-medium text-text-dark italic mb-4">
+                <blockquote className="text-lg font-medium text-text-dark dark:text-white italic mb-4">
                   "Maximally Hack made our first hackathon incredibly smooth. The team formation feature was a game-changer!"
                 </blockquote>
-                <p className="text-text-muted">— Sarah Chen, Tech Innovators Hackathon</p>
+                <p className="text-text-muted dark:text-gray-300">— Sarah Chen, Tech Innovators Hackathon</p>
               </div>
             </div>
           </div>
@@ -180,23 +180,23 @@ export default function Organize() {
       </section>
 
       {/* Contact Form Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-900">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="font-heading font-bold text-3xl text-text-dark mb-4">
+            <h2 className="font-heading font-bold text-3xl text-text-dark dark:text-white mb-4">
               Ready to Get Started?
             </h2>
-            <p className="text-lg text-text-muted">
+            <p className="text-lg text-text-muted dark:text-gray-300">
               Tell us about your hackathon idea and we'll help bring it to life
             </p>
           </div>
 
-          <Card className="bg-white rounded-2xl shadow-lg border-soft-gray">
+          <Card className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border-soft-gray dark:border-slate-700">
             <CardHeader>
-              <CardTitle className="text-2xl font-bold text-text-dark text-center">
+              <CardTitle className="text-2xl font-bold text-text-dark dark:text-white text-center">
                 Partner With Us
               </CardTitle>
-              <CardDescription className="text-center text-text-muted">
+              <CardDescription className="text-center text-text-muted dark:text-gray-300">
                 Fill out this form and our team will get back to you within 24 hours
               </CardDescription>
             </CardHeader>
@@ -204,7 +204,7 @@ export default function Organize() {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <Label htmlFor="organizationName" className="text-text-dark font-medium">
+                    <Label htmlFor="organizationName" className="text-text-dark dark:text-white font-medium">
                       Organization Name *
                     </Label>
                     <div className="relative">
@@ -222,7 +222,7 @@ export default function Organize() {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="email" className="text-text-dark font-medium">
+                    <Label htmlFor="email" className="text-text-dark dark:text-white font-medium">
                       Email Address *
                     </Label>
                     <div className="relative">
@@ -244,7 +244,7 @@ export default function Organize() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <Label htmlFor="phone" className="text-text-dark font-medium">
+                    <Label htmlFor="phone" className="text-text-dark dark:text-white font-medium">
                       Phone Number
                     </Label>
                     <div className="relative">
@@ -261,7 +261,7 @@ export default function Organize() {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="website" className="text-text-dark font-medium">
+                    <Label htmlFor="website" className="text-text-dark dark:text-white font-medium">
                       Website
                     </Label>
                     <div className="relative">
@@ -282,7 +282,7 @@ export default function Organize() {
                 <Separator />
 
                 <div className="space-y-2">
-                  <Label htmlFor="eventName" className="text-text-dark font-medium">
+                  <Label htmlFor="eventName" className="text-text-dark dark:text-white font-medium">
                     Proposed Event Name *
                   </Label>
                   <Input
@@ -298,7 +298,7 @@ export default function Organize() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="description" className="text-text-dark font-medium">
+                  <Label htmlFor="description" className="text-text-dark dark:text-white font-medium">
                     Event Description *
                   </Label>
                   <Textarea
@@ -315,7 +315,7 @@ export default function Organize() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <Label htmlFor="expectedParticipants" className="text-text-dark font-medium">
+                    <Label htmlFor="expectedParticipants" className="text-text-dark dark:text-white font-medium">
                       Expected Participants
                     </Label>
                     <Input
@@ -329,7 +329,7 @@ export default function Organize() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="timeline" className="text-text-dark font-medium">
+                    <Label htmlFor="timeline" className="text-text-dark dark:text-white font-medium">
                       Proposed Timeline
                     </Label>
                     <Input
@@ -364,10 +364,10 @@ export default function Organize() {
       {/* CTA Section */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-coral/5 via-sky/5 to-mint/5">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="font-heading font-bold text-3xl text-text-dark mb-4">
+          <h2 className="font-heading font-bold text-3xl text-text-dark dark:text-white mb-4">
             Questions? We're Here to Help
           </h2>
-          <p className="text-lg text-text-muted mb-8">
+          <p className="text-lg text-text-muted dark:text-gray-300 mb-8">
             Our team is ready to discuss your hackathon vision and answer any questions you have
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
