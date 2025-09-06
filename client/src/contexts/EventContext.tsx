@@ -1,6 +1,7 @@
-import { createContext, useContext, ReactNode } from 'react';
+import { createContext, useContext, ReactNode, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@/lib/api';
+import { queryClient } from '@/lib/queryClient';
 
 interface EventContextType {
   event: any | null;
@@ -21,6 +22,24 @@ export function EventProvider({ children, slug }: EventProviderProps) {
     queryFn: () => api.getEvent(slug),
     enabled: !!slug,
   });
+
+  // Prefetch related data when event loads to improve sub-page navigation
+  useEffect(() => {
+    if (event?.id) {
+      // Prefetch teams and submissions data
+      queryClient.prefetchQuery({
+        queryKey: ['teams', event.id],
+        queryFn: () => api.getTeams(event.id),
+        staleTime: 5 * 60 * 1000,
+      });
+
+      queryClient.prefetchQuery({
+        queryKey: ['submissions', event.id],
+        queryFn: () => api.getSubmissions(event.id),
+        staleTime: 5 * 60 * 1000,
+      });
+    }
+  }, [event?.id]);
 
   return (
     <EventContext.Provider value={{ event, isLoading, error }}>

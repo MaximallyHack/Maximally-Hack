@@ -49,18 +49,21 @@ import TeamRoles from "@/components/teams/TeamRoles";
 
 // Event Layout and Components
 import EventLayout from "@/pages/event/_layout/EventLayout";
-import EventOverview from "@/pages/event/Overview";
-import EventTimeline from "@/pages/event/Timeline";
-import EventPrizes from "@/pages/event/Prizes";
-import EventRules from "@/pages/event/Rules";
-import EventJudging from "@/pages/event/Judging";
-import EventSubmissionsList from "@/pages/event/submissions/List";
-import EventTeamsList from "@/pages/event/teams/List";
-import EventPeopleHome from "@/pages/event/people/PeopleHome";
-import EventHelp from "@/pages/event/Help";
-import EventResources from "@/pages/event/Resources";
-import EventSponsors from "@/pages/event/Sponsors";
-import EventAbout from "@/pages/event/About";
+import { lazy, Suspense } from "react";
+
+// Lazy load event components for better performance
+const EventOverview = lazy(() => import("@/pages/event/Overview"));
+const EventTimeline = lazy(() => import("@/pages/event/Timeline"));
+const EventPrizes = lazy(() => import("@/pages/event/Prizes"));
+const EventRules = lazy(() => import("@/pages/event/Rules"));
+const EventJudging = lazy(() => import("@/pages/event/Judging"));
+const EventSubmissionsList = lazy(() => import("@/pages/event/submissions/List"));
+const EventTeamsList = lazy(() => import("@/pages/event/teams/List"));
+const EventPeopleHome = lazy(() => import("@/pages/event/people/PeopleHome"));
+const EventHelp = lazy(() => import("@/pages/event/Help"));
+const EventResources = lazy(() => import("@/pages/event/Resources"));
+const EventSponsors = lazy(() => import("@/pages/event/Sponsors"));
+const EventAbout = lazy(() => import("@/pages/event/About"));
 import { HashRedirect } from "@/components/utils/HashRedirect";
 
 function ScrollToTop() {
@@ -85,34 +88,42 @@ function EventLayoutWrapper() {
   const getEventComponent = () => {
     const path = location.pathname.replace(`/e/${slug}`, '') || '/';
     
-    switch (path) {
-      case '/':
-        return <EventOverview />;
-      case '/timeline':
-        return <EventTimeline />;
-      case '/prizes':
-        return <EventPrizes />;
-      case '/rules':
-        return <EventRules />;
-      case '/judging':
-        return <EventJudging />;
-      case '/submissions':
-        return <EventSubmissionsList />;
-      case '/teams':
-        return <EventTeamsList />;
-      case '/people':
-        return <EventPeopleHome />;
-      case '/help':
-        return <EventHelp />;
-      case '/resources':
-        return <EventResources />;
-      case '/sponsors':
-        return <EventSponsors />;
-      case '/about':
-        return <EventAbout />;
-      default:
-        return <NotFound />;
-    }
+    const Component = (() => {
+      switch (path) {
+        case '/':
+          return EventOverview;
+        case '/timeline':
+          return EventTimeline;
+        case '/prizes':
+          return EventPrizes;
+        case '/rules':
+          return EventRules;
+        case '/judging':
+          return EventJudging;
+        case '/submissions':
+          return EventSubmissionsList;
+        case '/teams':
+          return EventTeamsList;
+        case '/people':
+          return EventPeopleHome;
+        case '/help':
+          return EventHelp;
+        case '/resources':
+          return EventResources;
+        case '/sponsors':
+          return EventSponsors;
+        case '/about':
+          return EventAbout;
+        default:
+          return () => <NotFound />;
+      }
+    })();
+
+    return (
+      <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}>
+        <Component />
+      </Suspense>
+    );
   };
   
   return (
@@ -150,18 +161,7 @@ function Router() {
             <Route path="/teams/:id/roles" element={<TeamRoles />} />
             
             {/* Event Routes */}
-            <Route path="/e/:slug" element={<EventLayoutWrapper />} />
-            <Route path="/e/:slug/timeline" element={<EventLayoutWrapper />} />
-            <Route path="/e/:slug/prizes" element={<EventLayoutWrapper />} />
-            <Route path="/e/:slug/rules" element={<EventLayoutWrapper />} />
-            <Route path="/e/:slug/judging" element={<EventLayoutWrapper />} />
-            <Route path="/e/:slug/submissions" element={<EventLayoutWrapper />} />
-            <Route path="/e/:slug/teams" element={<EventLayoutWrapper />} />
-            <Route path="/e/:slug/people" element={<EventLayoutWrapper />} />
-            <Route path="/e/:slug/help" element={<EventLayoutWrapper />} />
-            <Route path="/e/:slug/resources" element={<EventLayoutWrapper />} />
-            <Route path="/e/:slug/sponsors" element={<EventLayoutWrapper />} />
-            <Route path="/e/:slug/about" element={<EventLayoutWrapper />} />
+            <Route path="/e/:slug/*" element={<EventLayoutWrapper />} />
             <Route path="/e/:slug/submit" element={<Submit />} />
             
             {/* Regular Routes */}

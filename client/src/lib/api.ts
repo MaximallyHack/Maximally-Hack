@@ -173,12 +173,12 @@ export interface Judge {
 export const api = {
   // Events
   getEvents: async (): Promise<Event[]> => {
-    await delay(500);
+    await delay(100);
     return eventsData as Event[];
   },
 
   getEvent: async (slug: string): Promise<Event | null> => {
-    await delay(300);
+    await delay(50);
     const event = eventsData.find(e => e.slug === slug);
     return event ? (event as Event) : null;
   },
@@ -208,7 +208,7 @@ export const api = {
 
   // Teams
   getTeams: async (eventId?: string): Promise<Team[]> => {
-    await delay(300);
+    await delay(50);
     let teams = teamsData as Team[];
     if (eventId) {
       teams = teams.filter(t => t.eventId === eventId);
@@ -244,7 +244,7 @@ export const api = {
 
   // Submissions
   getSubmissions: async (eventId?: string): Promise<Submission[]> => {
-    await delay(400);
+    await delay(50);
     let submissions = submissionsData as Submission[];
     if (eventId) {
       submissions = submissions.filter(s => s.eventId === eventId);
