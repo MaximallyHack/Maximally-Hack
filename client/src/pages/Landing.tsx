@@ -3,7 +3,7 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Search, Plus, Rocket, Users, Trophy } from "lucide-react";
+import { Search, Plus, Rocket, Users, Trophy, UserPlus, MessageCircle, ArrowRight } from "lucide-react";
 import EventCard from "@/components/event/EventCard";
 import { FloatingElement, DecorativeElements, CrayonSquiggle } from "@/components/ui/floating-elements";
 import { api } from "@/lib/api";
@@ -123,6 +123,83 @@ export default function Landing() {
           </div>
         </div>
       </section>
+
+      {/* Teams Section */}
+      <section className="py-16 bg-gradient-to-br from-mint/5 via-sky/5 to-coral/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="font-heading font-bold text-3xl text-foreground mb-4">Build with Amazing Teams</h2>
+            <CrayonSquiggle className="mx-auto mb-6" />
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+              Find talented teammates, create diverse teams, and collaborate on projects that make a real impact. 
+              Together, you'll build something extraordinary.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <div className="bg-card rounded-2xl p-8 shadow-soft border border-border hover-scale transition-all duration-300 hover:shadow-lg">
+              <FloatingElement delay={0}>
+                <div className="bg-sky w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Users className="w-8 h-8 text-white" />
+                </div>
+              </FloatingElement>
+              <h3 className="font-heading font-semibold text-xl text-foreground mb-4 text-center">Find Teammates</h3>
+              <p className="text-muted-foreground text-center mb-6">
+                Browse team listings, filter by skills and interests, and connect with builders who share your vision and passion.
+              </p>
+              <div className="text-center">
+                <Badge className="bg-sky/20 text-sky px-3 py-1 rounded-full text-sm border-0">
+                  🔍 Smart Matching
+                </Badge>
+              </div>
+            </div>
+
+            <div className="bg-card rounded-2xl p-8 shadow-soft border border-border hover-scale transition-all duration-300 hover:shadow-lg">
+              <FloatingElement delay={0.3}>
+                <div className="bg-coral w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <UserPlus className="w-8 h-8 text-white" />
+                </div>
+              </FloatingElement>
+              <h3 className="font-heading font-semibold text-xl text-foreground mb-4 text-center">Create Teams</h3>
+              <p className="text-muted-foreground text-center mb-6">
+                Start your own team, set your project vision, and invite talented individuals to join your hackathon journey.
+              </p>
+              <div className="text-center">
+                <Badge className="bg-coral/20 text-coral px-3 py-1 rounded-full text-sm border-0">
+                  ⭐ Team Builder
+                </Badge>
+              </div>
+            </div>
+
+            <div className="bg-card rounded-2xl p-8 shadow-soft border border-border hover-scale transition-all duration-300 hover:shadow-lg">
+              <FloatingElement delay={0.6}>
+                <div className="bg-mint w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <MessageCircle className="w-8 h-8 text-white" />
+                </div>
+              </FloatingElement>
+              <h3 className="font-heading font-semibold text-xl text-foreground mb-4 text-center">Collaborate</h3>
+              <p className="text-muted-foreground text-center mb-6">
+                Use built-in tools to communicate, share progress, and coordinate your team's efforts throughout the hackathon.
+              </p>
+              <div className="text-center">
+                <Badge className="bg-mint/20 text-mint px-3 py-1 rounded-full text-sm border-0">
+                  💬 Team Chat
+                </Badge>
+              </div>
+            </div>
+          </div>
+
+          <div className="text-center">
+            <Link href="/teams">
+              <Button size="lg" className="bg-mint text-white px-8 py-4 rounded-full font-medium text-lg hover-scale hover:bg-mint/80 transition-colors" data-testid="button-explore-teams">
+                <ArrowRight className="w-5 h-5 mr-2" />
+                Explore Teams
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* How It Works */}
       <section className="py-16 bg-soft-gray/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
