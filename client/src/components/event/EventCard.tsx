@@ -143,12 +143,7 @@ export default function EventCard({ event, showActions = true }: EventCardProps)
               
               <Button 
                 size="sm" 
-                className={`rounded-full px-4 py-2 text-sm font-medium transition-colors
-                  ${event.status === 'active' ? 'bg-coral hover:bg-coral/80 text-white' :
-                    event.status === 'upcoming' ? 'bg-mint hover:bg-mint/80 text-foreground' :
-                    event.status === 'registration_open' ? 'bg-sky hover:bg-sky/80 text-white' :
-                    'bg-muted hover:bg-muted/80 text-muted-foreground'
-                  }`}
+                className="inline-flex items-center justify-center gap-2 whitespace-nowrap ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 h-9 rounded-full px-4 py-2 text-sm font-medium transition-colors hover:bg-mint/80 bg-[#67a183] text-[#e6e8ed]"
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
