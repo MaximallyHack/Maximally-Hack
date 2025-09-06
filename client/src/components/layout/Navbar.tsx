@@ -139,11 +139,27 @@ export default function Navbar() {
                 </div>
               ) : (
                 <div className="flex items-center space-x-3">
-                  <Link to="/login">
-                    <Button variant="outline" className="border-coral text-coral hover:bg-coral/10 font-medium transition-all duration-300 hover:shadow-sm" data-testid="button-login">
-                      Login
-                    </Button>
-                  </Link>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" className="border-coral text-coral hover:bg-coral/10 font-medium transition-all duration-300 hover:shadow-sm" data-testid="button-login">
+                        Login
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-48">
+                      <DropdownMenuItem asChild>
+                        <Link to="/auth/login" className="flex items-center">
+                          <User className="mr-2 h-4 w-4" />
+                          Participant Login
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link to="/auth/organizer" className="flex items-center">
+                          <Calendar className="mr-2 h-4 w-4" />
+                          Organizer Login
+                        </Link>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                   <Link to="/signup">
                     <Button className="bg-gradient-to-r from-coral to-coral/90 hover:from-coral/90 hover:to-coral/80 text-white font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105" data-testid="button-signup">
                       <Sparkles className="w-4 h-4 mr-2" />

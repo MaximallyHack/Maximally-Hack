@@ -22,6 +22,8 @@ import CreateEvent from "@/pages/organizer/CreateEvent";
 import ManageEvent from "@/pages/organizer/ManageEvent";
 import EditEvent from "@/pages/organizer/EditEvent";
 import EditHackathon from "@/pages/organizer/EditHackathon";
+import EventContentEditor from "@/pages/organizer/EventContentEditor";
+import JudgeManagement from "@/pages/organizer/JudgeManagement";
 import Help from "@/pages/Help";
 import Submit from "@/pages/Submit";
 import Profile from "@/pages/Profile";
@@ -178,9 +180,12 @@ function Router() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/onboarding" element={<Onboarding />} />
             <Route path="/organizer" element={<OrganizerDashboard />} />
+            <Route path="/organizer/dashboard" element={<OrganizerDashboard />} />
             <Route path="/organizer/events/new" element={<CreateEvent />} />
             <Route path="/organizer/events/:id/overview" element={<ManageEvent />} />
             <Route path="/organizer/events/:id/edit" element={<EditEvent />} />
+            <Route path="/organizer/events/:id/content" element={<EventContentEditor />} />
+            <Route path="/organizer/events/:id/judges" element={<JudgeManagement />} />
             <Route path="/organizer/events/:id/edit-hackathon" element={<EditHackathon />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
