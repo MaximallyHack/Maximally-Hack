@@ -191,7 +191,7 @@ export default function Landing() {
 
           <div className="text-center">
             <Link href="/teams">
-              <Button size="lg" className="bg-mint text-white px-8 py-4 rounded-full font-medium text-lg hover-scale hover:bg-mint/80 transition-colors" data-testid="button-explore-teams">
+              <Button size="lg" className="bg-mint text-green-800 dark:text-green-900 px-8 py-4 rounded-full font-medium text-lg hover-scale hover:bg-mint/80 transition-colors" data-testid="button-explore-teams">
                 <ArrowRight className="w-5 h-5 mr-2" />
                 Explore Teams
               </Button>
