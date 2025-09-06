@@ -20,10 +20,10 @@ export default function MyTeams() {
     const teams = teamsData.teams.filter(team => 
       team.members.some(member => member.userId === currentUserId)
     );
-    
+
     const leading = teams.filter(team => team.leaderId === currentUserId);
     const member = teams.filter(team => team.leaderId !== currentUserId);
-    
+
     setUserTeams(teams);
     setLeadingTeams(leading);
     setMemberTeams(member);
@@ -44,7 +44,7 @@ export default function MyTeams() {
     const members = getTeamMembers(team);
     const isLeader = team.leaderId === currentUserId;
     const availableSpots = team.maxSize - team.members.length;
-    
+
     return (
       <Card className="hover:shadow-md transition-shadow" data-testid={`team-card-${team.id}`}>
         <CardContent className="p-6">
@@ -59,7 +59,7 @@ export default function MyTeams() {
                   {team.status === 'recruiting' ? 'Recruiting' : team.status === 'full' ? 'Full' : 'Closed'}
                 </Badge>
               </div>
-              <p className="text-sm text-muted-foreground mb-1">{getTeamRole(team)}</p>
+              <p className="text-sm text-[#6C6C6C] dark:text-muted-foreground mb-2">{getTeamRole(team)}</p>
               <p className="text-muted-foreground mb-3 line-clamp-2">{team.description}</p>
             </div>
             {showActions && (
@@ -93,7 +93,7 @@ export default function MyTeams() {
           <div className="mb-4">
             <div className="flex items-center gap-2 mb-2">
               <h4 className="text-sm font-medium text-foreground">Team Members</h4>
-              <span className="text-xs text-muted-foreground">({team.members.length}/{team.maxSize})</span>
+              <span className="text-xs text-[#6C6C6C] dark:text-muted-foreground">({team.members.length}/{team.maxSize} members)</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="flex -space-x-2">

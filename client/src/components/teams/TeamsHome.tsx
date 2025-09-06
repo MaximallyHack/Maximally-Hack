@@ -54,7 +54,7 @@ export default function TeamsHome() {
     const date = new Date(timestamp);
     const now = new Date();
     const diffInHours = Math.floor((now - date) / (1000 * 60 * 60));
-    
+
     if (diffInHours < 24) {
       return `${diffInHours}h ago`;
     }
@@ -156,13 +156,13 @@ export default function TeamsHome() {
                         <Link to={`/teams/${team.id}`} className="font-semibold text-foreground hover:text-coral transition-colors">
                           {team.name}
                         </Link>
-                        <p className="text-sm text-muted-foreground mt-1">{getTeamRole(team)}</p>
+                        <p className="text-sm text-[#6C6C6C] dark:text-muted-foreground mb-2">{getTeamRole(team)}</p>
                       </div>
                       <Badge variant={team.status === 'recruiting' ? 'default' : 'secondary'} className="bg-mint/10 text-mint">
                         {team.status === 'recruiting' ? 'Recruiting' : 'Full'}
                       </Badge>
                     </div>
-                    <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{team.description}</p>
+                    <p className="text-sm text-[#6C6C6C] dark:text-muted-foreground mb-4 line-clamp-2">{team.description}</p>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <div className="flex -space-x-2">
@@ -182,7 +182,7 @@ export default function TeamsHome() {
                             </div>
                           )}
                         </div>
-                        <span className="text-sm text-muted-foreground">{team.members.length}/{team.maxSize} members</span>
+                        <span className="text-sm text-[#6C6C6C] dark:text-muted-foreground ml-2">{team.members.length}/5 members</span>
                       </div>
                       <Link to={`/teams/${team.id}`}>
                         <Button size="sm" variant="outline" className="border-sky text-sky hover:bg-sky/10">
