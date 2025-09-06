@@ -35,6 +35,7 @@ export class MemStorage implements IStorage {
       id,
       avatar: insertUser.avatar || null,
       bio: insertUser.bio || null,
+      role: insertUser.role ?? "user",
       organizationName: insertUser.organizationName || null,
       website: insertUser.website || null,
       linkedin: insertUser.linkedin || null,
