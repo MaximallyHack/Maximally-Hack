@@ -86,7 +86,7 @@ export default function TeamDetail() {
               <Badge variant={team.status === 'recruiting' ? 'default' : 'secondary'} className="bg-mint/10 text-mint">
                 {team.status === 'recruiting' ? `${availableSpots} spots available` : team.status === 'full' ? 'Team Full' : 'Closed'}
               </Badge>
-              {isCurrentUserMember && <Crown className="w-5 h-5 text-yellow" title="You are a member" />}
+              {isCurrentUserMember && <Crown className="w-5 h-5 text-yellow" />}
             </div>
             <p className="text-lg text-muted-foreground mb-4">{team.description}</p>
             {isCurrentUserMember && (
