@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, useLocation, useParams } from "react-router-dom";
+import { Router, Route, Switch, useLocation, useParams } from "wouter";
 import { useEffect } from "react";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -67,7 +67,7 @@ const EventAbout = lazy(() => import("@/pages/event/About"));
 import { HashRedirect } from "@/components/utils/HashRedirect";
 
 function ScrollToTop() {
-  const location = useLocation();
+  const [location] = useLocation();
   
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -76,143 +76,114 @@ function ScrollToTop() {
   return null;
 }
 
-
-// Main Event Layout Wrapper
-function EventLayoutWrapper() {
-  const { slug } = useParams<{ slug: string }>();
-  const location = useLocation();
+// Event Layout Wrapper for sub-routes
+function EventLayoutWrapper({ params }: { params: { slug: string } }) {
+  const { slug } = params;
+  const [location] = useLocation();
   
   if (!slug) return <NotFound />;
+  
+  const getEventContent = () => {
+    const path = location.replace(`/e/${slug}`, '') || '/';
+    
+    switch (path) {
+      case '/':
+        return <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}><EventOverview /></Suspense>;
+      case '/timeline':
+        return <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}><EventTimeline /></Suspense>;
+      case '/prizes':
+        return <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}><EventPrizes /></Suspense>;
+      case '/rules':
+        return <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}><EventRules /></Suspense>;
+      case '/judging':
+        return <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}><EventJudging /></Suspense>;
+      case '/submissions':
+        return <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}><EventSubmissionsList /></Suspense>;
+      case '/teams':
+        return <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}><EventTeamsList /></Suspense>;
+      case '/people':
+        return <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}><EventPeopleHome /></Suspense>;
+      case '/help':
+        return <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}><EventHelp /></Suspense>;
+      case '/resources':
+        return <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}><EventResources /></Suspense>;
+      case '/sponsors':
+        return <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}><EventSponsors /></Suspense>;
+      case '/about':
+        return <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}><EventAbout /></Suspense>;
+      default:
+        return <NotFound />;
+    }
+  };
   
   return (
     <EventProvider slug={slug}>
       <EventLayout>
-        <Routes>
-          <Route index element={
-            <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}>
-              <EventOverview />
-            </Suspense>
-          } />
-          <Route path="timeline" element={
-            <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}>
-              <EventTimeline />
-            </Suspense>
-          } />
-          <Route path="prizes" element={
-            <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}>
-              <EventPrizes />
-            </Suspense>
-          } />
-          <Route path="rules" element={
-            <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}>
-              <EventRules />
-            </Suspense>
-          } />
-          <Route path="judging" element={
-            <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}>
-              <EventJudging />
-            </Suspense>
-          } />
-          <Route path="submissions" element={
-            <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}>
-              <EventSubmissionsList />
-            </Suspense>
-          } />
-          <Route path="teams" element={
-            <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}>
-              <EventTeamsList />
-            </Suspense>
-          } />
-          <Route path="people" element={
-            <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}>
-              <EventPeopleHome />
-            </Suspense>
-          } />
-          <Route path="help" element={
-            <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}>
-              <EventHelp />
-            </Suspense>
-          } />
-          <Route path="resources" element={
-            <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}>
-              <EventResources />
-            </Suspense>
-          } />
-          <Route path="sponsors" element={
-            <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}>
-              <EventSponsors />
-            </Suspense>
-          } />
-          <Route path="about" element={
-            <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}>
-              <EventAbout />
-            </Suspense>
-          } />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        {getEventContent()}
       </EventLayout>
     </EventProvider>
   );
 }
 
-function Router() {
+function AppRouter() {
   return (
-    <BrowserRouter>
+    <Router>
       <AuthProvider>
         <div className="min-h-screen bg-cream">
           <ScrollToTop />
           <HashRedirect />
           <Navbar />
-          <Routes>
+          <Switch>
             {/* Team Routes */}
-            <Route path="/teams" element={<TeamsHome />} />
-            <Route path="/teams/create" element={<CreateTeam />} />
-            <Route path="/teams/find" element={<FindTeam />} />
-            <Route path="/teams/match" element={<TeamMatch />} />
-            <Route path="/teams/lfg" element={<TeamsLFG />} />
-            <Route path="/teams/my" element={<MyTeams />} />
-            <Route path="/teams/invites" element={<TeamInvites />} />
-            <Route path="/teams/requests" element={<TeamRequests />} />
-            <Route path="/teams/:id" element={<TeamDetail />} />
-            <Route path="/teams/:id/manage" element={<TeamManage />} />
-            <Route path="/teams/:id/apply" element={<TeamApply />} />
-            <Route path="/teams/:id/chat" element={<TeamChat />} />
-            <Route path="/teams/:id/settings" element={<TeamSettings />} />
-            <Route path="/teams/:id/roles" element={<TeamRoles />} />
+            <Route path="/teams" component={TeamsHome} />
+            <Route path="/teams/create" component={CreateTeam} />
+            <Route path="/teams/find" component={FindTeam} />
+            <Route path="/teams/match" component={TeamMatch} />
+            <Route path="/teams/lfg" component={TeamsLFG} />
+            <Route path="/teams/my" component={MyTeams} />
+            <Route path="/teams/invites" component={TeamInvites} />
+            <Route path="/teams/requests" component={TeamRequests} />
+            <Route path="/teams/:id" component={TeamDetail} />
+            <Route path="/teams/:id/manage" component={TeamManage} />
+            <Route path="/teams/:id/apply" component={TeamApply} />
+            <Route path="/teams/:id/chat" component={TeamChat} />
+            <Route path="/teams/:id/settings" component={TeamSettings} />
+            <Route path="/teams/:id/roles" component={TeamRoles} />
             
             {/* Event Routes */}
-            <Route path="/e/:slug/*" element={<EventLayoutWrapper />} />
-            <Route path="/e/:slug/submit" element={<Submit />} />
+            <Route path="/e/:slug" component={EventLayoutWrapper} />
+            <Route path="/e/:slug/*" component={EventLayoutWrapper} />
+            <Route path="/e/:slug/submit" component={Submit} />
             
             {/* Regular Routes */}
-            <Route path="/" element={<Landing />} />
-            <Route path="/explore" element={<SimpleExplore />} />
-            <Route path="/organize" element={<Organize />} />
-            <Route path="/profiles/:handle" element={<Profile />} />
-            <Route path="/leaders" element={<Leaderboards />} />
-            <Route path="/sponsors" element={<Sponsors />} />
-            <Route path="/help" element={<Help />} />
-            <Route path="/auth/login" element={<Login />} />
-            <Route path="/auth/signup" element={<Signup />} />
-            <Route path="/auth/organizer" element={<OrganizerSignin />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/onboarding" element={<Onboarding />} />
-            <Route path="/organizer" element={<OrganizerDashboard />} />
-            <Route path="/organizer/dashboard" element={<OrganizerDashboard />} />
-            <Route path="/organizer/events/new" element={<CreateEvent />} />
-            <Route path="/organizer/events/:id/overview" element={<ManageEvent />} />
-            <Route path="/organizer/events/:id/edit" element={<EditEvent />} />
-            <Route path="/organizer/events/:id/content" element={<EventContentEditor />} />
-            <Route path="/organizer/events/:id/judges" element={<JudgeManagement />} />
-            <Route path="/organizer/events/:id/edit-hackathon" element={<EditHackathon />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+            <Route path="/" component={Landing} />
+            <Route path="/explore" component={SimpleExplore} />
+            <Route path="/organize" component={Organize} />
+            <Route path="/profiles/:handle" component={Profile} />
+            <Route path="/leaders" component={Leaderboards} />
+            <Route path="/sponsors" component={Sponsors} />
+            <Route path="/help" component={Help} />
+            <Route path="/auth/login" component={Login} />
+            <Route path="/auth/signup" component={Signup} />
+            <Route path="/auth/organizer" component={OrganizerSignin} />
+            <Route path="/login" component={Login} />
+            <Route path="/signup" component={Signup} />
+            <Route path="/dashboard" component={Dashboard} />
+            <Route path="/onboarding" component={Onboarding} />
+            <Route path="/organizer" component={OrganizerDashboard} />
+            <Route path="/organizer/dashboard" component={OrganizerDashboard} />
+            <Route path="/organizer/events/new" component={CreateEvent} />
+            <Route path="/organizer/events/:id/overview" component={ManageEvent} />
+            <Route path="/organizer/events/:id/edit" component={EditEvent} />
+            <Route path="/organizer/events/:id/content" component={EventContentEditor} />
+            <Route path="/organizer/events/:id/judges" component={JudgeManagement} />
+            <Route path="/organizer/events/:id/edit-hackathon" component={EditHackathon} />
+            <Route component={NotFound} />
+          </Switch>
           <Footer />
         </div>
       </AuthProvider>
-    </BrowserRouter>
+    </Router>
   );
 }
 
@@ -222,7 +193,7 @@ function App() {
       <ThemeProvider>
         <TooltipProvider>
           <Toaster />
-          <Router />
+          <AppRouter />
         </TooltipProvider>
       </ThemeProvider>
     </QueryClientProvider>
