@@ -268,7 +268,7 @@ export default function Navbar() {
                             </Button>
                           </Link>
                           <Link to="/signup" onClick={() => setIsOpen(false)}>
-                            <Button className="w-full bg-gradient-to-r from-coral to-coral/90 text-white font-medium" data-testid="mobile-button-signup">
+                            <Button className="w-full bg-gradient-to-r from-coral to-coral/90 hover:bg-primary/90 text-white font-medium hover:bg-primary/90 pt-[9px] pb-[9px]" data-testid="mobile-button-signup">
                               <Sparkles className="w-4 h-4 mr-2" />
                               Join Now
                             </Button>
