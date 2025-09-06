@@ -49,7 +49,7 @@ export default function Landing() {
       {/* Category Pills */}
       <section className="py-8 bg-soft-gray/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap gap-3 justify-center text-[#6d6d6d]">
+          <div className="flex flex-wrap gap-3 justify-center text-[#0d1322] bg-[transparent]">
             <Badge className="bg-sky text-white px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer" data-testid="category-ai">
               🤖 AI & ML
             </Badge>
