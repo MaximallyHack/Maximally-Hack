@@ -73,28 +73,38 @@ export default function Explore() {
   const availableTags = useMemo(() => ['AI', 'Healthcare', 'Education', 'Climate', 'Blockchain', 'Web3', 'Mobile', 'IoT'], []);
 
   return (
-    <div className="min-h-screen bg-background py-8" data-testid="explore-page">
+    <div className="min-h-screen bg-background py-4 sm:py-8" data-testid="explore-page">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="font-heading font-bold text-4xl text-[#2a2d3a] dark:text-card-foreground mb-8">Explore Hackathons</h1>
+        <div className="animate-in fade-in slide-in-from-top-4 duration-700">
+          <h1 className="font-heading font-bold text-2xl sm:text-4xl text-[#2a2d3a] dark:text-card-foreground mb-6 sm:mb-8">Explore Hackathons</h1>
+        </div>
         
         {/* Search and Filters */}
-        <div className="bg-card rounded-2xl p-6 shadow-soft mb-8 border border-border">
-          <div className="flex flex-col lg:flex-row gap-4 mb-6">
+        <div className="bg-card rounded-2xl p-4 sm:p-6 shadow-soft mb-6 sm:mb-8 border border-border transition-all duration-200">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-4 sm:mb-6">
             <div className="flex-1">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4 sm:w-5 sm:h-5" />
                 <Input
                   type="text"
                   placeholder="Search hackathons..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-border rounded-xl focus:ring-2 focus:ring-sky focus:border-transparent"
+                  className="w-full pl-9 sm:pl-10 pr-4 py-2.5 sm:py-3 text-sm sm:text-base border border-border rounded-xl focus:ring-2 focus:ring-sky focus:border-transparent transition-all duration-200"
                   data-testid="input-search"
                 />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
               </div>
             </div>
             <Select value={filters.sortBy} onValueChange={(value) => handleFilterChange('sortBy', value)}>
-              <SelectTrigger className="w-48 border-border rounded-xl" data-testid="select-sort">
+              <SelectTrigger className="w-full sm:w-48 border-border rounded-xl h-10 sm:h-auto" data-testid="select-sort">
                 <SelectValue placeholder="Sort by" />
               </SelectTrigger>
               <SelectContent>
@@ -103,9 +113,9 @@ export default function Explore() {
                 <SelectItem value="prize">Sort by Prize</SelectItem>
               </SelectContent>
             </Select>
-            <Button className="bg-coral text-white px-6 py-3 rounded-xl hover-scale hover:bg-coral/80" data-testid="button-filters">
-              <Filter className="w-5 h-5 mr-2" />
-              Filters
+            <Button className="bg-coral text-white px-4 sm:px-6 py-2 sm:py-3 rounded-xl hover:scale-[1.02] hover:bg-coral/90 transition-all duration-200" data-testid="button-filters">
+              <Filter className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" />
+              <span className="hidden sm:inline">Filters</span>
             </Button>
           </div>
           
@@ -167,9 +177,21 @@ export default function Explore() {
         </div>
 
         {/* Filter Sidebar and Results */}
-        <div className="lg:flex gap-8">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
+          {/* Mobile Filter Toggle */}
+          <div className="lg:hidden mb-4">
+            <Button 
+              variant="outline" 
+              className="w-full justify-start rounded-xl py-3"
+              onClick={() => {/* TODO: Add mobile filter toggle */}}
+            >
+              <Filter className="w-4 h-4 mr-2" />
+              Show Filters
+            </Button>
+          </div>
+          
           {/* Filter Sidebar */}
-          <div className="w-72 hidden lg:block">
+          <div className="w-full lg:w-72 hidden lg:block">
             <div className="bg-card rounded-2xl p-6 shadow-soft sticky top-24 border border-border">
               <h3 className="font-heading font-semibold text-lg text-card-foreground mb-4">Filters</h3>
               
@@ -270,7 +292,7 @@ export default function Explore() {
 
           {/* Results */}
           <div className="flex-1">
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
               <div className="flex items-center gap-2">
                 <p className="text-muted-foreground" data-testid="results-count">
                   {isLoading ? 'Loading...' : `Showing ${events?.length || 0} hackathons`}
@@ -284,7 +306,7 @@ export default function Explore() {
                   variant={viewMode === 'grid' ? 'default' : 'outline'}
                   size="icon"
                   onClick={() => setViewMode('grid')}
-                  className="p-2 border border-border rounded-lg"
+                  className="p-2 border border-border rounded-lg transition-all duration-200 hover:scale-105"
                   data-testid="button-grid-view"
                 >
                   <Grid className="w-4 h-4" />
@@ -293,7 +315,7 @@ export default function Explore() {
                   variant={viewMode === 'list' ? 'default' : 'outline'}
                   size="icon"
                   onClick={() => setViewMode('list')}
-                  className="p-2 border border-border rounded-lg"
+                  className="p-2 border border-border rounded-lg transition-all duration-200 hover:scale-105"
                   data-testid="button-list-view"
                 >
                   <List className="w-4 h-4" />
@@ -342,28 +364,35 @@ export default function Explore() {
                 ))}
               </div>
             ) : events && events.length > 0 ? (
-              <div className={`grid ${viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3' : 'grid-cols-1'} gap-6 transition-all duration-300`}>
+              <div className={`grid ${viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3' : 'grid-cols-1'} gap-4 sm:gap-6 transition-all duration-500 ease-out`}>
                 {events.map((event: Event, index) => (
                   <div 
                     key={event.id} 
-                    className="animate-in slide-in-from-bottom-4 duration-500"
-                    style={{ animationDelay: `${index * 50}ms` }}
+                    className="animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out transform hover:scale-[1.01] transition-transform"
+                    style={{ 
+                      animationDelay: `${Math.min(index * 75, 1000)}ms`,
+                      animationFillMode: 'both'
+                    }}
                   >
                     <EventCard event={event} />
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="text-center py-16">
-                <div className="text-6xl mb-4">🔍</div>
-                <h3 className="font-heading font-semibold text-xl text-card-foreground mb-2">No hackathons found</h3>
-                <p className="text-muted-foreground mb-6">
+              <div className="text-center py-12 sm:py-16 animate-in fade-in duration-500">
+                <div className="text-4xl sm:text-6xl mb-4 animate-bounce">🔍</div>
+                <h3 className="font-heading font-semibold text-lg sm:text-xl text-card-foreground mb-2">No hackathons found</h3>
+                <p className="text-muted-foreground mb-6 text-sm sm:text-base max-w-md mx-auto">
                   {searchQuery || Object.values(filters).some(f => f && (Array.isArray(f) ? f.length > 0 : true))
                     ? "Try adjusting your search or filters"
                     : "Check back soon for new events!"
                   }
                 </p>
-                <Button onClick={clearFilters} className="bg-coral text-white hover:bg-coral/80" data-testid="button-reset-search">
+                <Button 
+                  onClick={clearFilters} 
+                  className="bg-coral text-white hover:bg-coral/80 hover:scale-105 transition-all duration-200" 
+                  data-testid="button-reset-search"
+                >
                   Reset Search
                 </Button>
               </div>
