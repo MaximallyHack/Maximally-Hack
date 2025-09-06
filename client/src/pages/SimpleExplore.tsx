@@ -13,7 +13,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/lib/api";
 import type { Event } from "@/lib/api";
-import { Link } from "react-router-dom";
+import { Link } from "wouter";
 
 interface Filters {
   status?: string;

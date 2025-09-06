@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -10,7 +10,7 @@ import { Rocket, Menu, User, LogOut, Settings, Search, Calendar, Users, Sparkles
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function Navbar() {
-  const location = useLocation();
+  const [location] = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const { user, isLoggedIn, logout } = useAuth();
 
@@ -21,8 +21,8 @@ export default function Navbar() {
   ];
 
   const isActive = (href: string) => {
-    if (href === "/" && location.pathname === "/") return true;
-    if (href !== "/" && location.pathname.startsWith(href)) return true;
+    if (href === "/" && location === "/") return true;
+    if (href !== "/" && location.startsWith(href)) return true;
     return false;
   };
 
