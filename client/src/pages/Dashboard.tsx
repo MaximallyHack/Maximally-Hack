@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "wouter";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -34,7 +34,7 @@ export default function Dashboard() {
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-medium text-gray-900 mb-4">Please log in</h1>
-          <Link href="/login">
+          <Link to="/login">
             <Button>Go to Login</Button>
           </Link>
         </div>
@@ -108,7 +108,7 @@ export default function Dashboard() {
               </h1>
               <p className="text-gray-600 mt-1">Track your hackathons and projects</p>
             </div>
-            <Link href="/profile">
+            <Link to="/profile">
               <Button variant="outline" size="sm">
                 <Settings className="w-4 h-4 mr-2" />
                 Settings
@@ -122,7 +122,7 @@ export default function Dashboard() {
           <section>
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-medium text-gray-900">My Hackathons</h2>
-              <Link href="/explore">
+              <Link to="/explore">
                 <Button variant="outline">
                   <Plus className="w-4 h-4 mr-2" />
                   Browse Hackathons
@@ -136,7 +136,7 @@ export default function Dashboard() {
                   <div className="text-6xl mb-4">🚀</div>
                   <h3 className="text-xl font-medium text-gray-900 mb-2">No hackathons yet</h3>
                   <p className="text-gray-600 mb-6">Start your journey by registering for hackathons</p>
-                  <Link href="/explore">
+                  <Link to="/explore">
                     <Button>
                       Explore Hackathons
                     </Button>
@@ -179,13 +179,13 @@ export default function Dashboard() {
                                 </div>
                               </div>
                               <div className="flex items-center justify-between pt-2">
-                                <Link href={`/e/${event.slug}`}>
+                                <Link to={`/e/${event.slug}`}>
                                   <Button size="sm" variant="outline">
                                     <Eye className="w-4 h-4 mr-1" />
                                     View Event
                                   </Button>
                                 </Link>
-                                <Link href={`/e/${event.slug}/submit`}>
+                                <Link to={`/e/${event.slug}/submit`}>
                                   <Button size="sm">
                                     <Code className="w-4 h-4 mr-1" />
                                     Submit Project
@@ -234,7 +234,7 @@ export default function Dashboard() {
                                 </div>
                               </div>
                               <div className="flex items-center justify-between pt-2">
-                                <Link href={`/e/${event.slug}`}>
+                                <Link to={`/e/${event.slug}`}>
                                   <Button size="sm" variant="outline">
                                     <Eye className="w-4 h-4 mr-1" />
                                     View Event
@@ -266,7 +266,7 @@ export default function Dashboard() {
           <section>
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-medium text-gray-900">My Projects</h2>
-              <Link href="/projects/create">
+              <Link to="/projects/create">
                 <Button>
                   <Plus className="w-4 h-4 mr-2" />
                   Create Project
@@ -280,7 +280,7 @@ export default function Dashboard() {
                   <div className="text-6xl mb-4">💡</div>
                   <h3 className="text-xl font-medium text-gray-900 mb-2">No projects yet</h3>
                   <p className="text-gray-600 mb-6">Start building something amazing</p>
-                  <Link href="/projects/create">
+                  <Link to="/projects/create">
                     <Button>
                       <Code className="w-4 h-4 mr-2" />
                       Create Your First Project

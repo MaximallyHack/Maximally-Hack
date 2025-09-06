@@ -1,4 +1,4 @@
-import { Link } from "wouter";
+import { Link } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -56,7 +56,7 @@ export default function EventCard({ event, showActions = true }: EventCardProps)
 
   return (
     <Card className="group bg-card rounded-2xl p-6 shadow-soft hover-scale cursor-pointer border border-border transition-all duration-200" data-testid={`event-card-${event.slug}`}>
-      <Link href={`/e/${event.slug}`}>
+      <Link to={`/e/${event.slug}`}>
         <div className="space-y-4">
           {/* Header */}
           <div className="flex items-center justify-between">

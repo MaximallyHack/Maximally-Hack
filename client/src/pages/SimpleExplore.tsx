@@ -13,7 +13,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/lib/api";
 import type { Event } from "@/lib/api";
-import { Link } from "wouter";
+import { Link } from "react-router-dom";
 
 interface Filters {
   status?: string;
@@ -255,7 +255,7 @@ export default function SimpleExplore() {
         ) : filteredEvents.length > 0 ? (
           <div className={`grid gap-6 ${viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'}`}>
             {filteredEvents.map(event => (
-              <Link key={event.id} href={`/e/${event.slug}`}>
+              <Link key={event.id} to={`/e/${event.slug}`}>
                 <Card className="border border-border hover:border-ring transition-colors cursor-pointer">
                   <CardContent className={`p-6 ${viewMode === 'list' ? 'flex items-center gap-6' : ''}`}>
                     <div className={viewMode === 'list' ? 'flex-1' : ''}>
