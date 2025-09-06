@@ -1,0 +1,282 @@
+export interface User {
+  id: string;
+  username: string;
+  fullName: string;
+  email: string;
+  avatar: string;
+  skills: string[];
+  bio: string;
+  lookingForTeam: boolean;
+  preferredRole: string;
+}
+
+export interface TeamMember {
+  userId: string;
+  role: string;
+  joinedAt: string;
+  status: 'active' | 'inactive';
+}
+
+export interface Team {
+  id: string;
+  name: string;
+  description: string;
+  projectIdea: string;
+  leaderId: string;
+  members: TeamMember[];
+  requiredSkills: string[];
+  lookingForRoles: string[];
+  maxSize: number;
+  status: 'recruiting' | 'full' | 'closed';
+  createdAt: string;
+  lastActivity: string;
+  isPublic: boolean;
+  tags: string[];
+}
+
+export interface TeamRequest {
+  id: string;
+  teamId: string;
+  userId: string;
+  role: string;
+  message: string;
+  status: 'pending' | 'approved' | 'rejected';
+  appliedAt: string;
+}
+
+export interface LFGPost {
+  id: string;
+  type: 'individual' | 'team';
+  userId?: string;
+  teamId?: string;
+  title: string;
+  description: string;
+  skills?: string[];
+  lookingFor?: string[];
+  preferredRoles?: string[];
+  availability?: string;
+  postedAt: string;
+  status: 'active' | 'closed';
+}
+
+export interface Activity {
+  id: string;
+  type: 'team_created' | 'member_joined' | 'application_received' | 'member_left';
+  teamId: string;
+  userId: string;
+  message: string;
+  timestamp: string;
+}
+
+export interface TeamsData {
+  users: User[];
+  teams: Team[];
+  teamRequests: TeamRequest[];
+  lfgPosts: LFGPost[];
+  activities: Activity[];
+}
+
+const teamsData: TeamsData = {
+  users: [
+    {
+      id: "1",
+      username: "alexcoder",
+      fullName: "Alex Chen",
+      email: "alex@example.com",
+      avatar: "AC",
+      skills: ["React", "Node.js", "TypeScript"],
+      bio: "Full-stack developer passionate about building innovative solutions",
+      lookingForTeam: false,
+      preferredRole: "Frontend Developer"
+    },
+    {
+      id: "2",
+      username: "saradesigner",
+      fullName: "Sara Rodriguez",
+      email: "sara@example.com",
+      avatar: "SR",
+      skills: ["UI/UX Design", "Figma", "Adobe Creative Suite"],
+      bio: "UX designer who loves creating intuitive user experiences",
+      lookingForTeam: true,
+      preferredRole: "UI/UX Designer"
+    },
+    {
+      id: "3",
+      username: "mikemachine",
+      fullName: "Mike Johnson",
+      email: "mike@example.com",
+      avatar: "MJ",
+      skills: ["Python", "Machine Learning", "TensorFlow"],
+      bio: "ML engineer with expertise in AI and data science",
+      lookingForTeam: false,
+      preferredRole: "ML Engineer"
+    },
+    {
+      id: "4",
+      username: "emmaentrepreneur",
+      fullName: "Emma Wilson",
+      email: "emma@example.com",
+      avatar: "EW",
+      skills: ["Business Strategy", "Marketing", "Product Management"],
+      bio: "Product manager with startup experience",
+      lookingForTeam: true,
+      preferredRole: "Product Manager"
+    }
+  ],
+  teams: [
+    {
+      id: "team-1",
+      name: "CodeCrafters",
+      description: "Building the next generation of developer tools to streamline coding workflows and boost productivity.",
+      projectIdea: "A VS Code extension with AI-powered code suggestions",
+      leaderId: "1",
+      members: [
+        {
+          userId: "1",
+          role: "Team Lead & Frontend Developer",
+          joinedAt: "2024-01-15",
+          status: "active"
+        },
+        {
+          userId: "3",
+          role: "ML Engineer",
+          joinedAt: "2024-01-16",
+          status: "active"
+        }
+      ],
+      requiredSkills: ["React", "Python", "Machine Learning"],
+      lookingForRoles: ["UI/UX Designer", "Backend Developer"],
+      maxSize: 5,
+      status: "recruiting",
+      createdAt: "2024-01-15",
+      lastActivity: "2024-01-20",
+      isPublic: true,
+      tags: ["AI", "Developer Tools", "Productivity"]
+    },
+    {
+      id: "team-2",
+      name: "EcoTracker",
+      description: "Sustainable living app that helps users track their carbon footprint and discover eco-friendly alternatives.",
+      projectIdea: "Mobile app for environmental impact tracking",
+      leaderId: "2",
+      members: [
+        {
+          userId: "2",
+          role: "Team Lead & Designer",
+          joinedAt: "2024-01-14",
+          status: "active"
+        },
+        {
+          userId: "4",
+          role: "Product Manager",
+          joinedAt: "2024-01-17",
+          status: "active"
+        }
+      ],
+      requiredSkills: ["React Native", "UI/UX Design", "Environmental Science"],
+      lookingForRoles: ["Mobile Developer", "Data Scientist"],
+      maxSize: 4,
+      status: "recruiting",
+      createdAt: "2024-01-14",
+      lastActivity: "2024-01-19",
+      isPublic: true,
+      tags: ["Sustainability", "Mobile", "Environment"]
+    },
+    {
+      id: "team-3",
+      name: "HealthTech Innovators",
+      description: "Revolutionary healthcare platform connecting patients with personalized treatment recommendations.",
+      projectIdea: "AI-powered health diagnosis and treatment platform",
+      leaderId: "3",
+      members: [
+        {
+          userId: "3",
+          role: "Team Lead & ML Engineer",
+          joinedAt: "2024-01-13",
+          status: "active"
+        }
+      ],
+      requiredSkills: ["Machine Learning", "Healthcare", "Python", "React"],
+      lookingForRoles: ["Frontend Developer", "Healthcare Specialist", "UI/UX Designer"],
+      maxSize: 6,
+      status: "recruiting",
+      createdAt: "2024-01-13",
+      lastActivity: "2024-01-18",
+      isPublic: true,
+      tags: ["HealthTech", "AI", "Medical"]
+    }
+  ],
+  teamRequests: [
+    {
+      id: "req-1",
+      teamId: "team-1",
+      userId: "2",
+      role: "UI/UX Designer",
+      message: "I'd love to join your team! I have 5+ years of experience in designing developer tools and would bring great UX expertise to your project.",
+      status: "pending",
+      appliedAt: "2024-01-19"
+    },
+    {
+      id: "req-2",
+      teamId: "team-2",
+      userId: "3",
+      role: "Data Scientist",
+      message: "Your environmental project aligns perfectly with my interests. I can help with ML models for carbon footprint calculations.",
+      status: "pending",
+      appliedAt: "2024-01-18"
+    }
+  ],
+  lfgPosts: [
+    {
+      id: "lfg-1",
+      type: "individual",
+      userId: "4",
+      title: "Product Manager seeking innovative team",
+      description: "I'm an experienced PM looking to join a team working on AI, HealthTech, or FinTech solutions. Strong background in user research and go-to-market strategy.",
+      skills: ["Product Management", "User Research", "Go-to-Market"],
+      preferredRoles: ["Product Manager", "Business Analyst"],
+      availability: "Full-time",
+      postedAt: "2024-01-19",
+      status: "active"
+    },
+    {
+      id: "lfg-2",
+      type: "team",
+      teamId: "team-3",
+      title: "HealthTech team seeking Frontend Developer",
+      description: "We're building an AI-powered healthcare platform and need a skilled React developer to create beautiful, accessible user interfaces for patients and doctors.",
+      lookingFor: ["Frontend Developer", "UI/UX Designer"],
+      skills: ["React", "TypeScript", "Healthcare UI"],
+      postedAt: "2024-01-18",
+      status: "active"
+    }
+  ],
+  activities: [
+    {
+      id: "act-1",
+      type: "team_created",
+      teamId: "team-1",
+      userId: "1",
+      message: "created CodeCrafters team",
+      timestamp: "2024-01-15T10:00:00Z"
+    },
+    {
+      id: "act-2",
+      type: "member_joined",
+      teamId: "team-1",
+      userId: "3",
+      message: "joined CodeCrafters as ML Engineer",
+      timestamp: "2024-01-16T14:30:00Z"
+    },
+    {
+      id: "act-3",
+      type: "application_received",
+      teamId: "team-1",
+      userId: "2",
+      message: "applied to join CodeCrafters as UI/UX Designer",
+      timestamp: "2024-01-19T09:15:00Z"
+    }
+  ]
+};
+
+export default teamsData;

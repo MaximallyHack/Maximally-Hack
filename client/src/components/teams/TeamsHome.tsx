@@ -6,13 +6,13 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { Users, Plus, Search, MessageCircle, Calendar, TrendingUp, Award } from "lucide-react";
-import teamsData from "@/lib/fixtures/teamsData.json";
+import teamsData, { type Team, type Activity, type User } from "@/lib/fixtures/teamsData";
 
 const currentUserId = "1"; // Mock current user
 
 export default function TeamsHome() {
-  const [userTeams, setUserTeams] = useState([]);
-  const [recentActivity, setRecentActivity] = useState([]);
+  const [userTeams, setUserTeams] = useState<Team[]>([]);
+  const [recentActivity, setRecentActivity] = useState<Activity[]>([]);
   const [stats, setStats] = useState({ totalTeams: 0, activeApplications: 0, invitations: 0 });
 
   useEffect(() => {
@@ -36,12 +36,12 @@ export default function TeamsHome() {
     setStats({ totalTeams, activeApplications, invitations: 2 });
   }, []);
 
-  const getTeamRole = (team) => {
+  const getTeamRole = (team: Team) => {
     const member = team.members.find(m => m.userId === currentUserId);
     return member?.role || "Member";
   };
 
-  const getActivityIcon = (type) => {
+  const getActivityIcon = (type: string) => {
     switch (type) {
       case 'team_created': return <Plus className="w-4 h-4 text-coral" />;
       case 'member_joined': return <Users className="w-4 h-4 text-mint" />;
@@ -50,7 +50,7 @@ export default function TeamsHome() {
     }
   };
 
-  const formatTimeAgo = (timestamp) => {
+  const formatTimeAgo = (timestamp: string) => {
     const date = new Date(timestamp);
     const now = new Date();
     const diffInHours = Math.floor((now - date) / (1000 * 60 * 60));
