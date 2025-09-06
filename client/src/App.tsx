@@ -50,6 +50,7 @@ import EventHelp from "@/pages/event/Help";
 import EventResources from "@/pages/event/Resources";
 import EventSponsors from "@/pages/event/Sponsors";
 import EventAbout from "@/pages/event/About";
+import { HashRedirect } from "@/components/utils/HashRedirect";
 
 function ScrollToTop() {
   const [location] = useLocation();
@@ -96,6 +97,7 @@ function Router() {
     <AuthProvider>
       <div className="min-h-screen bg-cream">
         <ScrollToTop />
+        <HashRedirect />
         <Switch>
           {/* Event Routes - No Navbar/Footer */}
           <Route path="/e/:slug*" component={EventLayoutWrapper} />
