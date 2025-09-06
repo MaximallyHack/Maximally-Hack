@@ -1,4 +1,4 @@
-import { Switch, Route, useLocation, useParams } from "wouter";
+import { BrowserRouter, Routes, Route, useLocation, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -28,6 +28,22 @@ import Dashboard from "@/pages/Dashboard";
 import Organize from "@/pages/Organize";
 import NotFound from "@/pages/not-found";
 
+// Team Components
+import TeamsHome from "@/components/teams/TeamsHome";
+import CreateTeam from "@/components/teams/CreateTeam";
+import FindTeam from "@/components/teams/FindTeam";
+import TeamMatch from "@/components/teams/TeamMatch";
+import TeamsLFG from "@/components/teams/TeamsLFG";
+import MyTeams from "@/components/teams/MyTeams";
+import TeamInvites from "@/components/teams/TeamInvites";
+import TeamRequests from "@/components/teams/TeamRequests";
+import TeamDetail from "@/components/teams/TeamDetail";
+import TeamManage from "@/components/teams/TeamManage";
+import TeamApply from "@/components/teams/TeamApply";
+import TeamChat from "@/components/teams/TeamChat";
+import TeamSettings from "@/components/teams/TeamSettings";
+import TeamRoles from "@/components/teams/TeamRoles";
+
 // Event Layout and Components
 import EventLayout from "@/pages/event/_layout/EventLayout";
 import EventOverview from "@/pages/event/Overview";
@@ -45,7 +61,7 @@ import EventAbout from "@/pages/event/About";
 import { HashRedirect } from "@/components/utils/HashRedirect";
 
 function ScrollToTop() {
-  const [location] = useLocation();
+  const location = useLocation();
   
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -57,14 +73,14 @@ function ScrollToTop() {
 
 // Main Event Layout Wrapper
 function EventLayoutWrapper() {
-  const { slug } = useParams();
-  const [location] = useLocation();
+  const { slug } = useParams<{ slug: string }>();
+  const location = useLocation();
   
   if (!slug) return <NotFound />;
   
   // Determine which component to render based on the current path
   const getEventComponent = () => {
-    const path = location.replace(`/e/${slug}`, '') || '/';
+    const path = location.pathname.replace(`/e/${slug}`, '') || '/';
     
     switch (path) {
       case '/':
@@ -107,49 +123,67 @@ function EventLayoutWrapper() {
 
 function Router() {
   return (
-    <AuthProvider>
-      <div className="min-h-screen bg-cream">
-        <ScrollToTop />
-        <HashRedirect />
-        <Navbar />
-        <Switch>
-          {/* Event Routes */}
-          <Route path="/e/:slug" component={EventLayoutWrapper} />
-          <Route path="/e/:slug/timeline" component={EventLayoutWrapper} />
-          <Route path="/e/:slug/prizes" component={EventLayoutWrapper} />
-          <Route path="/e/:slug/rules" component={EventLayoutWrapper} />
-          <Route path="/e/:slug/judging" component={EventLayoutWrapper} />
-          <Route path="/e/:slug/submissions" component={EventLayoutWrapper} />
-          <Route path="/e/:slug/teams" component={EventLayoutWrapper} />
-          <Route path="/e/:slug/people" component={EventLayoutWrapper} />
-          <Route path="/e/:slug/help" component={EventLayoutWrapper} />
-          <Route path="/e/:slug/resources" component={EventLayoutWrapper} />
-          <Route path="/e/:slug/sponsors" component={EventLayoutWrapper} />
-          <Route path="/e/:slug/about" component={EventLayoutWrapper} />
-          <Route path="/e/:slug/submit" component={Submit} />
-          
-          {/* Regular Routes */}
-          <Route path="/" component={Landing} />
-          <Route path="/explore" component={SimpleExplore} />
-          <Route path="/organize" component={Organize} />
-          <Route path="/profiles/:handle" component={Profile} />
-          <Route path="/leaders" component={Leaderboards} />
-          <Route path="/sponsors" component={Sponsors} />
-          <Route path="/help" component={Help} />
-          <Route path="/login" component={Login} />
-          <Route path="/signup" component={Signup} />
-          <Route path="/dashboard" component={Dashboard} />
-          <Route path="/onboarding" component={Onboarding} />
-          <Route path="/organizer" component={OrganizerDashboard} />
-          <Route path="/organizer/events/new" component={CreateEvent} />
-          <Route path="/organizer/events/:id/overview" component={ManageEvent} />
-          <Route path="/organizer/events/:id/edit" component={EditEvent} />
-          <Route path="/organizer/events/:id/edit-hackathon" component={EditHackathon} />
-          <Route component={NotFound} />
-        </Switch>
-        <Footer />
-      </div>
-    </AuthProvider>
+    <BrowserRouter>
+      <AuthProvider>
+        <div className="min-h-screen bg-cream">
+          <ScrollToTop />
+          <HashRedirect />
+          <Navbar />
+          <Routes>
+            {/* Team Routes */}
+            <Route path="/teams" element={<TeamsHome />} />
+            <Route path="/teams/create" element={<CreateTeam />} />
+            <Route path="/teams/find" element={<FindTeam />} />
+            <Route path="/teams/match" element={<TeamMatch />} />
+            <Route path="/teams/lfg" element={<TeamsLFG />} />
+            <Route path="/teams/my" element={<MyTeams />} />
+            <Route path="/teams/invites" element={<TeamInvites />} />
+            <Route path="/teams/requests" element={<TeamRequests />} />
+            <Route path="/teams/:id" element={<TeamDetail />} />
+            <Route path="/teams/:id/manage" element={<TeamManage />} />
+            <Route path="/teams/:id/apply" element={<TeamApply />} />
+            <Route path="/teams/:id/chat" element={<TeamChat />} />
+            <Route path="/teams/:id/settings" element={<TeamSettings />} />
+            <Route path="/teams/:id/roles" element={<TeamRoles />} />
+            
+            {/* Event Routes */}
+            <Route path="/e/:slug" element={<EventLayoutWrapper />} />
+            <Route path="/e/:slug/timeline" element={<EventLayoutWrapper />} />
+            <Route path="/e/:slug/prizes" element={<EventLayoutWrapper />} />
+            <Route path="/e/:slug/rules" element={<EventLayoutWrapper />} />
+            <Route path="/e/:slug/judging" element={<EventLayoutWrapper />} />
+            <Route path="/e/:slug/submissions" element={<EventLayoutWrapper />} />
+            <Route path="/e/:slug/teams" element={<EventLayoutWrapper />} />
+            <Route path="/e/:slug/people" element={<EventLayoutWrapper />} />
+            <Route path="/e/:slug/help" element={<EventLayoutWrapper />} />
+            <Route path="/e/:slug/resources" element={<EventLayoutWrapper />} />
+            <Route path="/e/:slug/sponsors" element={<EventLayoutWrapper />} />
+            <Route path="/e/:slug/about" element={<EventLayoutWrapper />} />
+            <Route path="/e/:slug/submit" element={<Submit />} />
+            
+            {/* Regular Routes */}
+            <Route path="/" element={<Landing />} />
+            <Route path="/explore" element={<SimpleExplore />} />
+            <Route path="/organize" element={<Organize />} />
+            <Route path="/profiles/:handle" element={<Profile />} />
+            <Route path="/leaders" element={<Leaderboards />} />
+            <Route path="/sponsors" element={<Sponsors />} />
+            <Route path="/help" element={<Help />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/onboarding" element={<Onboarding />} />
+            <Route path="/organizer" element={<OrganizerDashboard />} />
+            <Route path="/organizer/events/new" element={<CreateEvent />} />
+            <Route path="/organizer/events/:id/overview" element={<ManageEvent />} />
+            <Route path="/organizer/events/:id/edit" element={<EditEvent />} />
+            <Route path="/organizer/events/:id/edit-hackathon" element={<EditHackathon />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+          <Footer />
+        </div>
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 
