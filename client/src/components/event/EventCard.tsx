@@ -60,7 +60,7 @@ export default function EventCard({ event, showActions = true }: EventCardProps)
         <div className="space-y-4">
           {/* Header */}
           <div className="flex items-center justify-between">
-            <Badge className="inline-flex items-center transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 bg-yellow/20 px-3 py-1 rounded-full text-sm font-medium border-0 text-[#ff0000]">
+            <Badge className="inline-flex items-center transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 bg-yellow/20 px-3 py-1 rounded-full text-sm font-medium border-0 text-[#67a183]">
               <span className="mr-1">{getStatusIcon()}</span>
               {event.status.charAt(0).toUpperCase() + event.status.slice(1).replace('_', ' ')}
             </Badge>
