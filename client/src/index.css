@@ -7,9 +7,9 @@
 :root {
   /* Theme Colors */
   --cream: hsl(48, 100%, 98%);
-  --soft-gray: hsl(0, 0%, 96%);
+  --soft-gray: hsl(0, 0%, 90%);
   --text-dark: hsl(0, 0%, 18%);
-  --text-muted: hsl(0, 0%, 42%);
+  --text-muted: hsl(0, 0%, 32%);
   --sky: hsl(204, 100%, 82%);
   --coral: hsl(0, 69%, 78%);
   --yellow: hsl(49, 100%, 75%);
@@ -20,22 +20,22 @@
   /* Shadcn Variables */
   --background: hsl(48, 100%, 98%);
   --foreground: hsl(0, 0%, 18%);
-  --card: hsl(0, 0%, 96%);
-  --card-foreground: hsl(0, 0%, 18%);
+  --card: hsl(0, 0%, 92%);
+  --card-foreground: hsl(0, 0%, 15%);
   --popover: hsl(48, 100%, 98%);
   --popover-foreground: hsl(0, 0%, 18%);
   --primary: hsl(0, 69%, 78%);
   --primary-foreground: hsl(0, 0%, 100%);
   --secondary: hsl(142, 52%, 77%);
   --secondary-foreground: hsl(0, 0%, 18%);
-  --muted: hsl(0, 0%, 96%);
-  --muted-foreground: hsl(0, 0%, 42%);
+  --muted: hsl(0, 0%, 88%);
+  --muted-foreground: hsl(0, 0%, 32%);
   --accent: hsl(204, 100%, 82%);
   --accent-foreground: hsl(0, 0%, 18%);
   --destructive: hsl(0, 69%, 71%);
   --destructive-foreground: hsl(0, 0%, 100%);
-  --border: hsl(0, 0%, 96%);
-  --input: hsl(0, 0%, 96%);
+  --border: hsl(0, 0%, 85%);
+  --input: hsl(0, 0%, 92%);
   --ring: hsl(204, 100%, 82%);
   --radius: 1rem;
   
