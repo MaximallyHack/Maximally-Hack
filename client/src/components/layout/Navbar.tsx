@@ -263,7 +263,7 @@ export default function Navbar() {
                       ) : (
                         <div className="space-y-4">
                           <Link to="/login" onClick={() => setIsOpen(false)}>
-                            <Button variant="outline" className="w-full border-coral text-coral hover:bg-coral/10" data-testid="mobile-button-login">
+                            <Button variant="outline" className="w-full border-coral hover:bg-coral/10 text-[#b3b3b3] bg-[#0b101e] pt-[7px] pb-[7px]" data-testid="mobile-button-login">
                               Login
                             </Button>
                           </Link>
