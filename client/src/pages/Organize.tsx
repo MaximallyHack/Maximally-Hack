@@ -81,7 +81,7 @@ export default function Organize() {
   };
 
   return (
-    <div className="min-h-screen bg-cream" data-testid="organize-page">
+    <div className="min-h-screen bg-cream dark:bg-gray-900" data-testid="organize-page">
       {/* Hero Section */}
       <section className="py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
