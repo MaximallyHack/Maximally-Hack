@@ -21,7 +21,11 @@ import {
   TrendingUp,
   Clock,
   Star,
-  Shield
+  Shield,
+  ChevronDown,
+  Play,
+  Pause,
+  CheckCircle
 } from "lucide-react";
 import { api } from "@/lib/api";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -77,6 +81,12 @@ const mockStats = {
 export default function OrganizerDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
   const [timeFilter, setTimeFilter] = useState("all");
+
+  const handleStatusChange = (eventId: string, newStatus: string) => {
+    // Update event status logic would go here
+    console.log(`Changing event ${eventId} status to ${newStatus}`);
+    // In a real app, this would make an API call
+  };
 
   const { data: events, isLoading } = useQuery({
     queryKey: ['organizer-events'],
@@ -341,9 +351,54 @@ export default function OrganizerDashboard() {
                         <div className="flex-1">
                           <div className="flex items-center gap-3 mb-2">
                             <h4 className="font-heading font-semibold text-lg text-text-dark">{event.title}</h4>
-                            <Badge className={`bg-${getStatusColor(event.status)}/20 text-${getStatusColor(event.status)} px-2 py-1 rounded-full text-xs border-0`}>
-                              {event.status}
-                            </Badge>
+                            <div className="flex items-center gap-2">
+                              <Badge className={`bg-${getStatusColor(event.status)}/20 text-${getStatusColor(event.status)} px-2 py-1 rounded-full text-xs border-0`}>
+                                {event.status}
+                              </Badge>
+                              <Select value={event.status} onValueChange={(newStatus) => handleStatusChange(event.id, newStatus)}>
+                                <SelectTrigger className="w-8 h-8 p-1 border-none bg-transparent hover:bg-soft-gray/30" data-testid={`status-dropdown-${event.id}`}>
+                                  <ChevronDown className="w-3 h-3" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="draft">
+                                    <div className="flex items-center gap-2">
+                                      <div className="w-2 h-2 rounded-full bg-mint"></div>
+                                      Draft
+                                    </div>
+                                  </SelectItem>
+                                  <SelectItem value="upcoming">
+                                    <div className="flex items-center gap-2">
+                                      <Clock className="w-3 h-3" />
+                                      Upcoming
+                                    </div>
+                                  </SelectItem>
+                                  <SelectItem value="registration_open">
+                                    <div className="flex items-center gap-2">
+                                      <Play className="w-3 h-3" />
+                                      Registration Open
+                                    </div>
+                                  </SelectItem>
+                                  <SelectItem value="active">
+                                    <div className="flex items-center gap-2">
+                                      <div className="w-2 h-2 rounded-full bg-success"></div>
+                                      Active
+                                    </div>
+                                  </SelectItem>
+                                  <SelectItem value="judging">
+                                    <div className="flex items-center gap-2">
+                                      <Trophy className="w-3 h-3" />
+                                      Judging
+                                    </div>
+                                  </SelectItem>
+                                  <SelectItem value="completed">
+                                    <div className="flex items-center gap-2">
+                                      <CheckCircle className="w-3 h-3" />
+                                      Completed
+                                    </div>
+                                  </SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
                           </div>
                           
                           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-text-muted">
