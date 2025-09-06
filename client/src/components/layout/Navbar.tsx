@@ -6,7 +6,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Badge } from "@/components/ui/badge";
-import { Rocket, Menu, User, LogOut, Settings, Search, Calendar, Users, Trophy, HelpCircle, Heart, Sparkles } from "lucide-react";
+import { Rocket, Menu, User, LogOut, Settings, Search, Calendar, Users, Sparkles, UserPlus } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function Navbar() {
@@ -15,10 +15,8 @@ export default function Navbar() {
   const { user, isLoggedIn, logout } = useAuth();
 
   const navItems = [
-    { href: "/explore", label: "Explore Events", icon: Search, testId: "nav-explore" },
-    { href: "/leaderboards", label: "Leaderboards", icon: Trophy, testId: "nav-leaderboards" },
-    { href: "/sponsors", label: "Sponsors", icon: Heart, testId: "nav-sponsors" },
-    { href: "/help", label: "Help", icon: HelpCircle, testId: "nav-help" },
+    { href: "/explore", label: "Explore Hackathons", icon: Search, testId: "nav-explore" },
+    { href: "/organize", label: "Organize with Us", icon: UserPlus, testId: "nav-organize" },
   ];
 
   const isActive = (href: string) => {
