@@ -105,7 +105,7 @@ export default function SimpleExplore() {
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-medium mb-3 text-[#e6e8ed] bg-[transparent]">Explore Hackathons</h1>
+          <h1 className="text-3xl font-medium mb-3 text-[#2a2d3a] dark:text-[#e6e8ed]">Explore Hackathons</h1>
           <p className="text-muted-foreground">Discover amazing events and join the community</p>
         </div>
 
