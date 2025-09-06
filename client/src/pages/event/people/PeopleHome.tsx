@@ -60,8 +60,8 @@ export default function PeopleHome() {
         {peopleCategories.map((category) => {
           const IconComponent = category.icon;
           return (
-            <Card key={category.id} className="hover:shadow-lg transition-shadow cursor-pointer" asChild>
-              <Link href={category.href}>
+            <Link key={category.id} href={category.href}>
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer">
                 <div>
                   <CardHeader className="text-center pb-4">
                     <div className={`w-16 h-16 rounded-full ${category.bgColor} flex items-center justify-center mx-auto mb-4`}>
@@ -81,8 +81,8 @@ export default function PeopleHome() {
                     </Button>
                   </CardContent>
                 </div>
-              </Link>
-            </Card>
+              </Card>
+            </Link>
           );
         })}
       </div>
