@@ -365,19 +365,19 @@ export default function CreateEvent() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Form Section */}
           <div className="lg:col-span-2">
-            <Card className="bg-white rounded-2xl p-8 shadow-soft border border-soft-gray">
+            <Card className="bg-white dark:bg-gray-900 rounded-2xl p-8 shadow-soft border border-soft-gray dark:border-gray-700">
               {/* Step 1: Basic Info */}
               {step === 1 && (
                 <div>
                   <div className="text-center mb-8">
-                    <h2 className="font-heading font-bold text-2xl text-text-dark mb-2">Basic Information</h2>
+                    <h2 className="font-heading font-bold text-2xl text-text-dark dark:text-white mb-2">Basic Information</h2>
                     <CrayonSquiggle className="mx-auto mb-4" />
-                    <p className="text-text-muted">Let's start with the essentials</p>
+                    <p className="text-text-muted dark:text-gray-300">Let's start with the essentials</p>
                   </div>
 
                   <div className="space-y-6">
                     <div>
-                      <label className="block text-sm font-medium text-text-dark mb-2">Event Title *</label>
+                      <label className="block text-sm font-medium text-text-dark dark:text-white mb-2">Event Title *</label>
                       <Input
                         value={data.title}
                         onChange={(e) => handleTitleChange(e.target.value)}
@@ -386,12 +386,12 @@ export default function CreateEvent() {
                         data-testid="input-title"
                       />
                       {data.slug && (
-                        <p className="text-xs text-text-muted mt-1">URL: maximallyhack.com/e/{data.slug}</p>
+                        <p className="text-xs text-text-muted dark:text-gray-400 mt-1">URL: maximallyhack.com/e/{data.slug}</p>
                       )}
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-text-dark mb-2">Short Description *</label>
+                      <label className="block text-sm font-medium text-text-dark dark:text-white mb-2">Short Description *</label>
                       <Textarea
                         value={data.description}
                         onChange={(e) => setData(prev => ({ ...prev, description: e.target.value }))}
@@ -404,7 +404,7 @@ export default function CreateEvent() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-text-dark mb-2">Start Date *</label>
+                        <label className="block text-sm font-medium text-text-dark dark:text-white mb-2">Start Date *</label>
                         <Input
                           type="datetime-local"
                           value={data.startDate}
@@ -414,7 +414,7 @@ export default function CreateEvent() {
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-text-dark mb-2">End Date *</label>
+                        <label className="block text-sm font-medium text-text-dark dark:text-white mb-2">End Date *</label>
                         <Input
                           type="datetime-local"
                           value={data.endDate}
@@ -427,7 +427,7 @@ export default function CreateEvent() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-text-dark mb-2">Format</label>
+                        <label className="block text-sm font-medium text-text-dark dark:text-white mb-2">Format</label>
                         <Select value={data.format} onValueChange={(value: any) => setData(prev => ({ ...prev, format: value }))}>
                           <SelectTrigger className="border-soft-gray" data-testid="select-format">
                             <SelectValue />
@@ -440,7 +440,7 @@ export default function CreateEvent() {
                         </Select>
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-text-dark mb-2">Location</label>
+                        <label className="block text-sm font-medium text-text-dark dark:text-white mb-2">Location</label>
                         <Input
                           value={data.location}
                           onChange={(e) => setData(prev => ({ ...prev, location: e.target.value }))}
@@ -458,15 +458,15 @@ export default function CreateEvent() {
               {step === 2 && (
                 <div>
                   <div className="text-center mb-8">
-                    <h2 className="font-heading font-bold text-2xl text-text-dark mb-2">Event Timeline</h2>
+                    <h2 className="font-heading font-bold text-2xl text-text-dark dark:text-white mb-2">Event Timeline</h2>
                     <CrayonSquiggle className="mx-auto mb-4" />
-                    <p className="text-text-muted">Set up registration and submission windows</p>
+                    <p className="text-text-muted dark:text-gray-300">Set up registration and submission windows</p>
                   </div>
 
                   <div className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-text-dark mb-2">Registration Opens *</label>
+                        <label className="block text-sm font-medium text-text-dark dark:text-white mb-2">Registration Opens *</label>
                         <Input
                           type="datetime-local"
                           value={data.registrationOpen}
@@ -476,7 +476,7 @@ export default function CreateEvent() {
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-text-dark mb-2">Registration Closes *</label>
+                        <label className="block text-sm font-medium text-text-dark dark:text-white mb-2">Registration Closes *</label>
                         <Input
                           type="datetime-local"
                           value={data.registrationClose}
@@ -489,7 +489,7 @@ export default function CreateEvent() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-text-dark mb-2">Submissions Open *</label>
+                        <label className="block text-sm font-medium text-text-dark dark:text-white mb-2">Submissions Open *</label>
                         <Input
                           type="datetime-local"
                           value={data.submissionOpen}
@@ -499,7 +499,7 @@ export default function CreateEvent() {
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-text-dark mb-2">Submissions Close *</label>
+                        <label className="block text-sm font-medium text-text-dark dark:text-white mb-2">Submissions Close *</label>
                         <Input
                           type="datetime-local"
                           value={data.submissionClose}
@@ -511,7 +511,7 @@ export default function CreateEvent() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-text-dark mb-2">Max Team Size</label>
+                      <label className="block text-sm font-medium text-text-dark dark:text-white mb-2">Max Team Size</label>
                       <Select value={data.maxTeamSize.toString()} onValueChange={(value) => setData(prev => ({ ...prev, maxTeamSize: parseInt(value) }))}>
                         <SelectTrigger className="border-soft-gray" data-testid="select-team-size">
                           <SelectValue />
@@ -534,14 +534,14 @@ export default function CreateEvent() {
               {step === 3 && (
                 <div>
                   <div className="text-center mb-8">
-                    <h2 className="font-heading font-bold text-2xl text-text-dark mb-2">Tracks & Categories</h2>
+                    <h2 className="font-heading font-bold text-2xl text-text-dark dark:text-white mb-2">Tracks & Categories</h2>
                     <CrayonSquiggle className="mx-auto mb-4" />
-                    <p className="text-text-muted">Organize your hackathon with tracks and tags</p>
+                    <p className="text-text-muted dark:text-gray-300">Organize your hackathon with tracks and tags</p>
                   </div>
 
                   <div className="space-y-8">
                     <div>
-                      <label className="block text-sm font-medium text-text-dark mb-4">Competition Tracks *</label>
+                      <label className="block text-sm font-medium text-text-dark dark:text-white mb-4">Competition Tracks *</label>
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
                         {commonTracks.map(track => (
                           <Badge
@@ -550,7 +550,7 @@ export default function CreateEvent() {
                             className={`cursor-pointer transition-colors p-3 rounded-xl border-0 ${
                               data.tracks.includes(track)
                                 ? 'bg-coral text-white'
-                                : 'bg-soft-gray text-text-dark hover:bg-soft-gray/80'
+                                : 'bg-soft-gray text-text-dark dark:bg-gray-700 dark:text-white hover:bg-soft-gray/80 dark:hover:bg-gray-600'
                             }`}
                             data-testid={`track-${track.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}
                           >
@@ -569,7 +569,7 @@ export default function CreateEvent() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-text-dark mb-4">Tags</label>
+                      <label className="block text-sm font-medium text-text-dark dark:text-white mb-4">Tags</label>
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
                         {commonTags.map(tag => (
                           <Badge
@@ -578,7 +578,7 @@ export default function CreateEvent() {
                             className={`cursor-pointer transition-colors p-2 rounded-full border-0 text-center ${
                               data.tags.includes(tag)
                                 ? 'bg-sky text-white'
-                                : 'bg-soft-gray text-text-dark hover:bg-soft-gray/80'
+                                : 'bg-soft-gray text-text-dark dark:bg-gray-700 dark:text-white hover:bg-soft-gray/80 dark:hover:bg-gray-600'
                             }`}
                             data-testid={`tag-${tag.toLowerCase()}`}
                           >
