@@ -43,7 +43,7 @@ export default function Navbar() {
             <Link to="/" className="flex items-center space-x-3 hover-scale group transition-all duration-300" data-testid="logo-link">
               <div className="relative">
                 <div className="w-10 h-10 bg-gradient-to-br from-coral to-coral/80 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
-                  <Rocket className="w-5 h-5 text-white group-hover:rotate-12 transition-transform duration-300" />
+                  <Rocket className="w-5 h-5 text-white group-hover:rotate-12 transition-transform duration-300 rocket-animation" />
                 </div>
                 <div className="absolute -top-1 -right-1 w-3 h-3 bg-yellow rounded-full animate-pulse"></div>
               </div>

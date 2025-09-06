@@ -170,4 +170,44 @@
       opacity: 0;
     }
   }
+  
+  @keyframes rocket-fly {
+    0% { 
+      transform: translateX(0) translateY(0) rotate(0deg); 
+      opacity: 1; 
+    }
+    15% { 
+      transform: translateX(20px) translateY(-15px) rotate(-20deg); 
+      opacity: 0.8; 
+    }
+    30% { 
+      transform: translateX(35px) translateY(-25px) rotate(-35deg); 
+      opacity: 0.6; 
+    }
+    45% { 
+      transform: translateX(45px) translateY(-35px) rotate(-45deg); 
+      opacity: 0.3; 
+    }
+    55% { 
+      transform: translateX(35px) translateY(-25px) rotate(-35deg); 
+      opacity: 0.6; 
+    }
+    70% { 
+      transform: translateX(20px) translateY(-15px) rotate(-20deg); 
+      opacity: 0.8; 
+    }
+    85% { 
+      transform: translateX(5px) translateY(-5px) rotate(-10deg); 
+      opacity: 0.9; 
+    }
+    100% { 
+      transform: translateX(0) translateY(0) rotate(0deg); 
+      opacity: 1; 
+    }
+  }
+  
+  .rocket-animation {
+    animation: rocket-fly 4s ease-in-out infinite;
+    animation-delay: 3s;
+  }
 }
