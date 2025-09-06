@@ -62,7 +62,7 @@ export default function Explore() {
   return (
     <div className="min-h-screen bg-background py-8" data-testid="explore-page">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="font-heading font-bold text-4xl text-card-foreground mb-8">Explore Hackathons</h1>
+        <h1 className="font-heading font-bold text-4xl text-[#2a2d3a] dark:text-card-foreground mb-8">Explore Hackathons</h1>
         
         {/* Search and Filters */}
         <div className="bg-card rounded-2xl p-6 shadow-soft mb-8 border border-border">
