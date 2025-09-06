@@ -1,0 +1,55 @@
+Hey, let’s modularize the event system so every section of an event has its own slug, not just anchors.
+
+What I want:
+
+Each event lives at /e/:eventSlug
+
+Every section is its own route + component under pages/event/
+
+A single EventLayout handles fetching event data by slug and passes it down via EventContext
+
+Sub-nav in the event header links to the correct slug routes, no hash anchors
+
+Routes we need:
+
+/e/:eventSlug                      → Overview.tsx
+/e/:eventSlug/timeline             → Timeline.tsx
+/e/:eventSlug/prizes               → Prizes.tsx
+/e/:eventSlug/rules                → Rules.tsx
+/e/:eventSlug/judging              → Judging.tsx
+/e/:eventSlug/submissions          → submissions/List.tsx
+/e/:eventSlug/submissions/:id      → submissions/Detail.tsx
+/e/:eventSlug/teams                → teams/List.tsx
+/e/:eventSlug/teams/:id            → teams/Detail.tsx
+/e/:eventSlug/people               → people/PeopleHome.tsx
+/e/:eventSlug/people/judges        → people/Judges.tsx
+/e/:eventSlug/people/judges/:id    → people/JudgeDetail.tsx
+/e/:eventSlug/people/mentors       → people/Mentors.tsx
+/e/:eventSlug/people/mentors/:id   → people/MentorDetail.tsx
+/e/:eventSlug/help                 → Help.tsx
+/e/:eventSlug/resources            → Resources.tsx
+/e/:eventSlug/sponsors             → Sponsors.tsx
+/e/:eventSlug/about                → About.tsx
+/e/:eventSlug/announcements        → Announcements.tsx
+/e/:eventSlug/register             → Register.tsx
+/e/:eventSlug/schedule             → Schedule.tsx
+/e/:eventSlug/links                → Links.tsx
+
+
+Key points:
+
+Build an EventLayout.tsx in pages/event/_layout/ to fetch event once and supply EventContext.
+
+Show event stats + Register/Submit CTA consistently across all sub-routes.
+
+Sub-nav order: Overview, Timeline, Prizes, Rules, Judging, Submissions, Teams, People, Help, Resources, Sponsors, About.
+
+Redirect old hash URLs (#prizes, #rules) to the new slug paths.
+
+Lists (submissions, teams, people) should support query params for filters/sorting.
+
+404 gracefully if slug not found.
+
+Empty states and skeletons for loading.
+
+This makes the whole event modular and scalable: we can add/remove sections like /resources or /announcements without breaking others.
