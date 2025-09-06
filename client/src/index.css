@@ -49,8 +49,8 @@
   /* Custom Theme Colors */
   --cream: hsl(223, 47%, 11%);
   --soft-gray: hsl(223, 47%, 14%);
-  --text-dark: hsl(0, 0%, 95%);
-  --text-muted: hsl(0, 0%, 64%);
+  --text-dark: hsl(0, 0%, 70%);
+  --text-muted: hsl(0, 0%, 50%);
   --sky: hsl(204, 100%, 82%);
   --coral: hsl(0, 69%, 78%);
   --yellow: hsl(49, 100%, 75%);
@@ -60,19 +60,19 @@
   
   /* Shadcn Variables */
   --background: hsl(223, 47%, 8%);
-  --foreground: hsl(0, 0%, 95%);
+  --foreground: hsl(0, 0%, 70%);
   --card: hsl(223, 47%, 6%);
-  --card-foreground: hsl(0, 0%, 95%);
+  --card-foreground: hsl(0, 0%, 70%);
   --popover: hsl(223, 47%, 8%);
-  --popover-foreground: hsl(0, 0%, 95%);
+  --popover-foreground: hsl(0, 0%, 70%);
   --primary: hsl(0, 69%, 78%);
   --primary-foreground: hsl(0, 0%, 100%);
   --secondary: hsl(223, 47%, 12%);
-  --secondary-foreground: hsl(0, 0%, 95%);
+  --secondary-foreground: hsl(0, 0%, 70%);
   --muted: hsl(223, 47%, 12%);
   --muted-foreground: hsl(0, 0%, 64%);
   --accent: hsl(223, 47%, 12%);
-  --accent-foreground: hsl(0, 0%, 95%);
+  --accent-foreground: hsl(0, 0%, 70%);
   --destructive: hsl(0, 69%, 71%);
   --destructive-foreground: hsl(0, 0%, 100%);
   --border: hsl(223, 47%, 12%);
