@@ -73,7 +73,7 @@ export default function Signup() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center py-12 px-4">
+    <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center py-12 px-4">
       <div className="w-full max-w-md">
         <Card>
           <CardHeader className="text-center">
