@@ -158,12 +158,12 @@ export default function NewEnhancedEventDetail() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-background">
         <div className="animate-pulse">
-          <div className="h-64 bg-gray-200 mb-8"></div>
+          <div className="h-64 bg-muted mb-8"></div>
           <div className="max-w-6xl mx-auto px-4">
-            <div className="h-8 bg-gray-200 rounded w-3/4 mb-4"></div>
-            <div className="h-4 bg-gray-200 rounded w-1/2 mb-8"></div>
+            <div className="h-8 bg-muted rounded w-3/4 mb-4"></div>
+            <div className="h-4 bg-muted rounded w-1/2 mb-8"></div>
           </div>
         </div>
       </div>
@@ -172,9 +172,9 @@ export default function NewEnhancedEventDetail() {
 
   if (!event) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-medium text-gray-900 mb-4">Event not found</h1>
+          <h1 className="text-2xl font-medium text-foreground mb-4">Event not found</h1>
           <Link href="/explore">
             <Button variant="outline">Back to explore</Button>
           </Link>
@@ -530,24 +530,24 @@ export default function NewEnhancedEventDetail() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-green-100 text-green-800';
-      case 'upcoming': return 'bg-blue-100 text-blue-800';
-      case 'registration_open': return 'bg-yellow-100 text-yellow-800';
-      case 'completed': return 'bg-gray-100 text-gray-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'active': return 'bg-success/20 text-success dark:bg-success/30 dark:text-success';
+      case 'upcoming': return 'bg-sky/20 text-sky dark:bg-sky/30 dark:text-sky';
+      case 'registration_open': return 'bg-yellow/20 text-yellow dark:bg-yellow/30 dark:text-yellow';
+      case 'completed': return 'bg-muted text-muted-foreground';
+      default: return 'bg-muted text-muted-foreground';
     }
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-background">
       {/* Sticky Action Bar */}
-      <div className={`fixed top-0 left-0 right-0 z-50 bg-white border-b shadow-sm transition-transform duration-200 ${
+      <div className={`fixed top-0 left-0 right-0 z-50 bg-background border-b shadow-sm transition-transform duration-200 ${
         showSticky ? 'translate-y-0' : '-translate-y-full'
       }`}>
         <div className="max-w-6xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <h2 className="font-medium text-gray-900 truncate">{event.title}</h2>
+              <h2 className="font-medium text-foreground truncate">{event.title}</h2>
               <Badge className={getStatusColor(event.status)}>
                 {event.status === 'registration_open' ? 'Registration Open' : 
                  event.status === 'active' ? 'Live Now' : 
@@ -562,7 +562,7 @@ export default function NewEnhancedEventDetail() {
       </div>
 
       {/* Hero Section */}
-      <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 py-16">
+      <div className="bg-gradient-to-br from-sky/20 via-background to-mint/20 py-16">
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Main Content */}
@@ -573,16 +573,16 @@ export default function NewEnhancedEventDetail() {
                    event.status === 'active' ? 'Live Now' : 
                    event.status === 'completed' ? 'Completed' : 'Upcoming'}
                 </Badge>
-                <div className="flex items-center gap-1 text-sm text-gray-600">
+                <div className="flex items-center gap-1 text-sm text-muted-foreground">
                   <Users className="w-4 h-4" />
                   <span>{eventStats.totalRegistrations} registered</span>
                 </div>
               </div>
               
-              <h1 className="text-4xl font-bold text-gray-900 mb-4">{event.title}</h1>
-              <p className="text-xl text-gray-600 mb-6">{event.tagline}</p>
+              <h1 className="text-4xl font-bold text-foreground mb-4">{event.title}</h1>
+              <p className="text-xl text-muted-foreground mb-6">{event.tagline}</p>
               
-              <div className="flex flex-wrap items-center gap-6 text-gray-600 mb-8">
+              <div className="flex flex-wrap items-center gap-6 text-muted-foreground mb-8">
                 <div className="flex items-center gap-2">
                   <Calendar className="w-5 h-5" />
                   <span>{formatDate(event.startDate)} - {formatDate(event.endDate)}</span>
