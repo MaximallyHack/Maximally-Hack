@@ -46,11 +46,10 @@ export default function Landing() {
           </div>
         </div>
       </section>
-
       {/* Category Pills */}
       <section className="py-8 bg-soft-gray/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap gap-3 justify-center">
+          <div className="flex flex-wrap gap-3 justify-center text-[#6d6d6d]">
             <Badge className="bg-sky text-white px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer" data-testid="category-ai">
               🤖 AI & ML
             </Badge>
@@ -69,7 +68,6 @@ export default function Landing() {
           </div>
         </div>
       </section>
-
       {/* Featured Events */}
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -125,7 +123,6 @@ export default function Landing() {
           </div>
         </div>
       </section>
-
       {/* How It Works */}
       <section className="py-16 bg-soft-gray/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -166,7 +163,6 @@ export default function Landing() {
           </div>
         </div>
       </section>
-
       {/* Social Proof */}
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
