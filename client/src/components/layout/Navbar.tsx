@@ -261,9 +261,9 @@ export default function Navbar() {
                           </Button>
                         </div>
                       ) : (
-                        <div className="space-y-12">
+                        <div className="flex flex-col items-center space-y-4">
                           <Link to="/login" onClick={() => setIsOpen(false)}>
-                            <Button variant="outline" className="w-full border-coral hover:bg-coral/10 text-[#b3b3b3] bg-[#0b101e] py-3" data-testid="mobile-button-login">
+                            <Button variant="outline" className="w-full border-coral hover:bg-coral/10 text-[#b3b3b3] bg-[#0b101e] pt-[1px] pb-[1px]" data-testid="mobile-button-login">
                               Login
                             </Button>
                           </Link>
