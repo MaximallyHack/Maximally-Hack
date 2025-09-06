@@ -34,11 +34,6 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/judges" className="hover:text-coral transition-colors" data-testid="footer-judges">
-                  Judge Hub
-                </Link>
-              </li>
-              <li>
                 <Link href="/leaders" className="hover:text-coral transition-colors" data-testid="footer-leaderboards">
                   Leaderboards
                 </Link>
