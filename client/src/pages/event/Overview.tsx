@@ -271,22 +271,105 @@ export default function Overview() {
 
       {/* Quick Start Guide */}
       <section>
-        <h2 className="text-2xl font-bold text-foreground mb-6">Quick Start Guide</h2>
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-bold text-foreground">Quick Start Guide</h2>
+          <div className="flex items-center gap-2">
+            <Progress value={progressPercentage} className="w-24" />
+            <span className="text-sm text-muted-foreground">{completedItems}/{quickStartItems.length}</span>
+          </div>
+        </div>
+        
         <div className="grid gap-4">
           {quickStartItems.map((item, index) => (
-            <Card key={item.id} className="p-4">
+            <Card key={item.id} className={`p-4 transition-all duration-200 ${
+              item.completed ? 'bg-success/5 border-success/30' : 'hover:shadow-md'
+            }`}>
               <div className="flex items-start gap-4">
                 <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
                   item.completed ? 'bg-success text-white' : 'bg-muted text-muted-foreground'
                 }`}>
-                  {item.completed ? <CheckCircle className="w-4 h-4" /> : index + 1}
+                  {item.completed ? <CheckCircle className="w-4 h-4" /> : item.icon || (index + 1)}
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-foreground mb-1">{item.title}</h3>
+                  <div className="flex items-center justify-between mb-1">
+                    <h3 className="font-semibold text-foreground">{item.title}</h3>
+                    {item.completed && (
+                      <Badge variant="secondary" className="bg-success/20 text-success text-xs">
+                        Complete
+                      </Badge>
+                    )}
+                  </div>
                   <p className="text-sm text-muted-foreground mb-3">{item.description}</p>
-                  <Button size="sm" variant="outline">
-                    {item.action}
-                  </Button>
+                  
+                  {item.id === '2' && !item.completed ? (
+                    <div className="flex gap-2">
+                      <Dialog open={showTeamDialog} onOpenChange={setShowTeamDialog}>
+                        <DialogTrigger asChild>
+                          <Button size="sm" variant="outline">
+                            Create Team
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>Create Your Team</DialogTitle>
+                            <DialogDescription>
+                              Start your hackathon journey by creating a team. You can invite up to 3 more members later.
+                            </DialogDescription>
+                          </DialogHeader>
+                          <div className="space-y-4 py-4">
+                            <div>
+                              <label className="text-sm font-medium">Team Name</label>
+                              <Input
+                                placeholder="e.g., AI Innovators"
+                                value={teamName}
+                                onChange={(e) => setTeamName(e.target.value)}
+                              />
+                            </div>
+                            <div>
+                              <label className="text-sm font-medium">Description (Optional)</label>
+                              <Textarea
+                                placeholder="Tell others about your project idea..."
+                                value={teamDescription}
+                                onChange={(e) => setTeamDescription(e.target.value)}
+                              />
+                            </div>
+                          </div>
+                          <div className="flex justify-end gap-2">
+                            <Button variant="outline" onClick={() => setShowTeamDialog(false)}>
+                              Cancel
+                            </Button>
+                            <Button onClick={handleCreateTeam}>
+                              Create Team
+                            </Button>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
+                      
+                      {item.link && (
+                        <Link to={item.link}>
+                          <Button size="sm">
+                            {item.action}
+                          </Button>
+                        </Link>
+                      )}
+                    </div>
+                  ) : (
+                    <Button 
+                      size="sm" 
+                      variant={item.completed ? "secondary" : "outline"}
+                      onClick={() => handleQuickAction(item)}
+                      disabled={item.disabled}
+                      asChild={!!item.link && !item.link.startsWith('http')}
+                    >
+                      {item.link && !item.link.startsWith('http') ? (
+                        <Link to={item.link}>
+                          {item.action}
+                        </Link>
+                      ) : (
+                        <span>{item.action}</span>
+                      )}
+                    </Button>
+                  )}
                 </div>
               </div>
             </Card>
@@ -375,26 +458,36 @@ export default function Overview() {
               <CardTitle>Resources</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              {event.discordUrl && (
+              {event.links?.discord && (
                 <Button variant="outline" size="sm" className="w-full justify-start" asChild>
-                  <a href={event.discordUrl} target="_blank" rel="noopener noreferrer">
-                    <ExternalLink className="w-4 h-4 mr-2" />
+                  <a href={event.links.discord} target="_blank" rel="noopener noreferrer">
+                    <SiDiscord className="w-4 h-4 mr-2" />
                     Discord Community
                   </a>
                 </Button>
               )}
-              {event.devpostUrl && (
+              {event.links?.devpost && (
                 <Button variant="outline" size="sm" className="w-full justify-start" asChild>
-                  <a href={event.devpostUrl} target="_blank" rel="noopener noreferrer">
+                  <a href={event.links.devpost} target="_blank" rel="noopener noreferrer">
                     <ExternalLink className="w-4 h-4 mr-2" />
                     Devpost Page
                   </a>
                 </Button>
               )}
-              <Button variant="outline" size="sm" className="w-full justify-start">
-                <ExternalLink className="w-4 h-4 mr-2" />
-                Event Website
-              </Button>
+              {event.links?.website && (
+                <Button variant="outline" size="sm" className="w-full justify-start" asChild>
+                  <a href={event.links.website} target="_blank" rel="noopener noreferrer">
+                    <Globe className="w-4 h-4 mr-2" />
+                    Event Website
+                  </a>
+                </Button>
+              )}
+              <Link to={`/e/${event.slug}/resources`}>
+                <Button variant="outline" size="sm" className="w-full justify-start">
+                  <BookOpen className="w-4 h-4 mr-2" />
+                  Resources & Tools
+                </Button>
+              </Link>
             </CardContent>
           </Card>
         </div>
