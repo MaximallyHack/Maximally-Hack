@@ -773,48 +773,48 @@ export default function CreateEvent() {
               {step === 5 && (
                 <div>
                   <div className="text-center mb-8">
-                    <h2 className="font-heading font-bold text-2xl text-text-dark mb-2">Review & Publish</h2>
+                    <h2 className="font-heading font-bold text-2xl text-text-dark dark:text-white mb-2">Review & Publish</h2>
                     <CrayonSquiggle className="mx-auto mb-4" />
-                    <p className="text-text-muted">Review your event and make it live</p>
+                    <p className="text-text-muted dark:text-gray-300">Review your event and make it live</p>
                   </div>
 
                   <div className="space-y-6">
-                    <div className="bg-soft-gray/30 rounded-xl p-6">
-                      <h3 className="font-heading font-semibold text-xl text-text-dark mb-4">{data.title}</h3>
-                      <p className="text-text-muted mb-4">{data.description}</p>
+                    <div className="bg-soft-gray/30 dark:bg-gray-800/50 rounded-xl p-6">
+                      <h3 className="font-heading font-semibold text-xl text-text-dark dark:text-white mb-4">{data.title}</h3>
+                      <p className="text-text-muted dark:text-gray-300 mb-4">{data.description}</p>
                       
                       <div className="grid grid-cols-2 gap-4 text-sm">
                         <div>
-                          <span className="text-text-muted">Start:</span>
-                          <span className="ml-2 font-medium">{data.startDate ? new Date(data.startDate).toLocaleString() : 'Not set'}</span>
+                          <span className="text-text-muted dark:text-gray-400">Start:</span>
+                          <span className="ml-2 font-medium dark:text-white">{data.startDate ? new Date(data.startDate).toLocaleString() : 'Not set'}</span>
                         </div>
                         <div>
-                          <span className="text-text-muted">End:</span>
-                          <span className="ml-2 font-medium">{data.endDate ? new Date(data.endDate).toLocaleString() : 'Not set'}</span>
+                          <span className="text-text-muted dark:text-gray-400">End:</span>
+                          <span className="ml-2 font-medium dark:text-white">{data.endDate ? new Date(data.endDate).toLocaleString() : 'Not set'}</span>
                         </div>
                         <div>
-                          <span className="text-text-muted">Format:</span>
-                          <span className="ml-2 font-medium">{data.format}</span>
+                          <span className="text-text-muted dark:text-gray-400">Format:</span>
+                          <span className="ml-2 font-medium dark:text-white">{data.format}</span>
                         </div>
                         <div>
-                          <span className="text-text-muted">Location:</span>
-                          <span className="ml-2 font-medium">{data.location || 'Not set'}</span>
+                          <span className="text-text-muted dark:text-gray-400">Location:</span>
+                          <span className="ml-2 font-medium dark:text-white">{data.location || 'Not set'}</span>
                         </div>
                         <div>
-                          <span className="text-text-muted">Tracks:</span>
-                          <span className="ml-2 font-medium">{data.tracks.length}</span>
+                          <span className="text-text-muted dark:text-gray-400">Tracks:</span>
+                          <span className="ml-2 font-medium dark:text-white">{data.tracks.length}</span>
                         </div>
                         <div>
-                          <span className="text-text-muted">Prizes:</span>
-                          <span className="ml-2 font-medium">${data.prizes.reduce((sum, prize) => sum + prize.amount, 0).toLocaleString()}</span>
+                          <span className="text-text-muted dark:text-gray-400">Prizes:</span>
+                          <span className="ml-2 font-medium dark:text-white">${data.prizes.reduce((sum, prize) => sum + prize.amount, 0).toLocaleString()}</span>
                         </div>
                       </div>
                     </div>
 
                     <div className="flex items-center justify-between p-4 bg-sky/10 rounded-xl border border-sky/20">
                       <div>
-                        <h4 className="font-medium text-text-dark">Make Event Public</h4>
-                        <p className="text-text-muted text-sm">When enabled, your event will be visible to everyone and open for registration</p>
+                        <h4 className="font-medium text-text-dark dark:text-white">Make Event Public</h4>
+                        <p className="text-text-muted dark:text-gray-300 text-sm">When enabled, your event will be visible to everyone and open for registration</p>
                       </div>
                       <Switch
                         checked={data.isPublic}
@@ -830,8 +830,8 @@ export default function CreateEvent() {
 
           {/* Progress Sidebar */}
           <div className="lg:col-span-1">
-            <Card className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray sticky top-8">
-              <h3 className="font-heading font-semibold text-lg text-text-dark mb-6">Progress</h3>
+            <Card className="bg-white dark:bg-gray-900 rounded-2xl p-6 shadow-soft border border-soft-gray dark:border-gray-700 sticky top-8">
+              <h3 className="font-heading font-semibold text-lg text-text-dark dark:text-white mb-6">Progress</h3>
               
               <div className="space-y-4">
                 {[
@@ -841,11 +841,11 @@ export default function CreateEvent() {
                   { step: 4, title: 'Content', completed: step > 4 },
                   { step: 5, title: 'Review', completed: false }
                 ].map((item) => (
-                  <div key={item.step} className={`flex items-center gap-3 ${step === item.step ? 'text-coral' : item.completed ? 'text-success' : 'text-text-muted'}`}>
+                  <div key={item.step} className={`flex items-center gap-3 ${step === item.step ? 'text-coral' : item.completed ? 'text-success' : 'text-text-muted dark:text-gray-400'}`}>
                     <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium ${
                       step === item.step ? 'bg-coral text-white' :
                       item.completed ? 'bg-success text-white' :
-                      'bg-soft-gray text-text-muted'
+                      'bg-soft-gray text-text-muted dark:bg-gray-700 dark:text-gray-400'
                     }`}>
                       {item.completed ? '✓' : item.step}
                     </div>
@@ -854,8 +854,8 @@ export default function CreateEvent() {
                 ))}
               </div>
 
-              <div className="mt-8 pt-6 border-t border-soft-gray">
-                <div className="text-sm text-text-muted mb-2">Total Prize Pool</div>
+              <div className="mt-8 pt-6 border-t border-soft-gray dark:border-gray-700">
+                <div className="text-sm text-text-muted dark:text-gray-300 mb-2">Total Prize Pool</div>
                 <div className="text-2xl font-bold text-coral">
                   ${data.prizes.reduce((sum, prize) => sum + prize.amount, 0).toLocaleString()}
                 </div>
