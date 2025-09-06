@@ -196,9 +196,9 @@ export default function Signup() {
         </Card>
 
         {/* Demo Info */}
-        <div className="mt-6 p-4 bg-blue-50 rounded-lg text-center">
-          <p className="text-sm text-blue-700 font-medium mb-2">Demo Mode</p>
-          <p className="text-xs text-blue-600">
+        <div className="mt-6 p-4 bg-blue-50 dark:bg-gray-800 rounded-lg text-center">
+          <p className="text-sm text-blue-700 dark:text-white font-medium mb-2">Demo Mode</p>
+          <p className="text-xs text-blue-600 dark:text-gray-200">
             This is a demo signup. No real accounts are created. All data is stored locally for testing purposes.
           </p>
         </div>
