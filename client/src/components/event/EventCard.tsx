@@ -110,7 +110,7 @@ export default function EventCard({ event, showActions = true }: EventCardProps)
                 <Badge 
                   key={tag}
                   variant="secondary"
-                  className="bg-sky/20 px-2 py-1 rounded-full text-xs border-0 text-[#0099ff]"
+                  className="bg-sky/20 px-2 py-1 rounded-full text-xs border-0 text-[#009dff]"
                 >
                   {tag}
                 </Badge>
