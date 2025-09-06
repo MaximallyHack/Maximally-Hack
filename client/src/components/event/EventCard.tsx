@@ -47,6 +47,7 @@ export default function EventCard({ event, showActions = true }: EventCardProps)
     }
   };
 
+
   const formatPrize = (amount: number) => {
     if (amount >= 1000) {
       return `$${(amount / 1000).toFixed(0)}k`;
@@ -59,14 +60,59 @@ export default function EventCard({ event, showActions = true }: EventCardProps)
       <Link href={`/e/${event.slug}`}>
         <div className="space-y-4">
           {/* Header */}
-          <div className="flex items-center justify-between">
-            <Badge className={`bg-${getStatusColor()}/20 text-${getStatusColor()} px-3 py-1 rounded-full text-sm font-medium border-0`}>
-              <span className="mr-1">{getStatusIcon()}</span>
-              {event.status.charAt(0).toUpperCase() + event.status.slice(1).replace('_', ' ')}
-            </Badge>
-            
-            {showActions && (
-              <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          <Badge
+            className={`bg-${getStatusColor()} text-black/60 rounded-full text-sm font-medium border-0`}
+          >
+            <span className="mr-1">{getStatusIcon()}</span>
+            {event.status.charAt(0).toUpperCase() + event.status.slice(1).replace('_', ' ')}
+          </Badge>
+
+          {/* Content */}
+          <div>
+            <h3 className="font-heading font-semibold text-3xl text-text-dark mb-2">
+              {event.title}
+            </h3>
+            <p className="text-text-muted text-sm mb-4 line-clamp-2">
+              {event.description}
+            </p>
+
+            {/* Tags */}
+            <div className="flex flex-wrap gap-2 mb-4">
+              {event.tags.slice(0, 3).map((tag) => (
+                <Badge 
+                  key={tag}
+                  variant="secondary"
+                  className="bg-sky text-black/70 px-2 py-1 rounded-md text-xs border-0"
+                >
+                  {tag}
+                </Badge>
+              ))}
+              {event.tags.length > 3 && (
+                <Badge variant="secondary" className="bg-soft-gray text-text-muted px-2 py-1 rounded-full text-xs border-0">
+                  +{event.tags.length - 3}
+                </Badge>
+              )}
+            </div>
+
+            {/* Stats */}
+            <div className="flex flex-col justify-between text-sm text-text-muted gap-1 mb-4 text-textDark font-semibold">
+              <div className="flex items-center gap-1">
+                <Trophy className="w-4 h-4" />
+                <span>Prize: {formatPrize(event.prizePool)}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Calendar className="w-4 h-4" />
+                <span>{getTimeLeft()}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Users className="w-4 h-4" />
+                <span>{event.participantCount.toLocaleString()} participants</span>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="flex items-center justify-between">
+              <div className="flex gap-2 justify-start">
                 <Button
                   variant="ghost"
                   size="icon"
@@ -92,55 +138,7 @@ export default function EventCard({ event, showActions = true }: EventCardProps)
                   <Share className="w-4 h-4" />
                 </Button>
               </div>
-            )}
-          </div>
 
-          {/* Content */}
-          <div>
-            <h3 className="font-heading font-semibold text-xl text-text-dark mb-2 group-hover:text-coral transition-colors">
-              {event.title}
-            </h3>
-            <p className="text-text-muted text-sm mb-4 line-clamp-2">
-              {event.description}
-            </p>
-
-            {/* Tags */}
-            <div className="flex flex-wrap gap-2 mb-4">
-              {event.tags.slice(0, 3).map((tag) => (
-                <Badge 
-                  key={tag}
-                  variant="secondary"
-                  className="bg-sky/20 text-sky px-2 py-1 rounded-full text-xs border-0"
-                >
-                  {tag}
-                </Badge>
-              ))}
-              {event.tags.length > 3 && (
-                <Badge variant="secondary" className="bg-soft-gray text-text-muted px-2 py-1 rounded-full text-xs border-0">
-                  +{event.tags.length - 3}
-                </Badge>
-              )}
-            </div>
-
-            {/* Stats */}
-            <div className="flex items-center justify-between text-sm text-text-muted mb-4">
-              <div className="flex items-center gap-1">
-                <Calendar className="w-4 h-4" />
-                <span>{getTimeLeft()}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Users className="w-4 h-4" />
-                <span>{event.participantCount.toLocaleString()} participants</span>
-              </div>
-            </div>
-
-            {/* Footer */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-1 font-semibold text-coral">
-                <Trophy className="w-4 h-4" />
-                <span>Prize: {formatPrize(event.prizePool)}</span>
-              </div>
-              
               <Button 
                 size="sm" 
                 className={`rounded-full px-4 py-2 text-sm font-medium transition-colors

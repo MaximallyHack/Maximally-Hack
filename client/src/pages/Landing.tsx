@@ -17,58 +17,60 @@ export default function Landing() {
 
   return (
     <div className="min-h-screen bg-cream" data-testid="landing-page">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-cream via-sky/10 to-mint/10 py-20">
-        <DecorativeElements />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <FloatingElement>
-            <h1 className="font-heading font-bold text-5xl md:text-6xl text-text-dark mb-6">
-              Where Great Ideas
-              <span className="text-coral"> Come to Life</span>
-            </h1>
-          </FloatingElement>
-          <p className="text-xl text-text-muted mb-8 max-w-2xl mx-auto">
-            Join the friendliest hackathon community. Create, collaborate, and compete in events that celebrate innovation and creativity.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/explore">
-              <Button size="lg" className="bg-coral text-white px-8 py-4 rounded-full font-medium text-lg hover-scale hover:bg-coral/80 transition-colors" data-testid="button-explore-events">
-                <Search className="w-5 h-5 mr-2" />
-                Explore Events
-              </Button>
-            </Link>
-            <Link href="/organizer/events/new">
-              <Button variant="outline" size="lg" className="border-2 border-mint text-text-dark px-8 py-4 rounded-full font-medium text-lg hover-scale hover:bg-mint/20 transition-colors" data-testid="button-join-community">
-                <Plus className="w-5 h-5 mr-2" />
-                Join Our Community
-              </Button>
-            </Link>
+      <div className="h-screen w-full">
+        {/* Hero Section */}
+        <section className="relative overflow-hidden bg-gradient-to-br from-cream via-sky/10 to-mint/10 py-20">
+          <DecorativeElements />
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <FloatingElement>
+              <h1 className="font-heading font-bold text-5xl md:text-6xl text-text-dark mb-6">
+                Where Great Ideas
+                <span className="text-coral"> Come to Life</span>
+              </h1>
+            </FloatingElement>
+            <p className="text-xl text-text-muted mb-8 max-w-2xl mx-auto">
+              Join the friendliest hackathon community. Create, collaborate, and compete in events that celebrate innovation and creativity.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/explore">
+                <Button size="lg" className="bg-coral text-white px-8 py-4 rounded-full font-medium text-lg hover-scale hover:bg-coral/80 transition-colors" data-testid="button-explore-events">
+                  <Search className="w-5 h-5 mr-2" />
+                  Explore Events
+                </Button>
+              </Link>
+              <Link href="/organizer/events/new">
+                <Button variant="outline" size="lg" className="border-2 border-mint text-text-dark px-8 py-4 rounded-full font-medium text-lg hover-scale hover:bg-mint/20 transition-colors" data-testid="button-join-community">
+                  <Plus className="w-5 h-5 mr-2" />
+                  Join Our Community
+                </Button>
+              </Link>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Category Pills */}
-      <section className="py-8 bg-soft-gray/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap gap-3 justify-center">
-            <Badge className="bg-sky text-white px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer" data-testid="category-ai">
-              🤖 AI & ML
-            </Badge>
-            <Badge className="bg-mint text-text-dark px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer" data-testid="category-student">
-              🎓 Student
-            </Badge>
-            <Badge className="bg-yellow text-text-dark px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer" data-testid="category-beginner">
-              👶 Beginner
-            </Badge>
-            <Badge className="bg-coral text-white px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer" data-testid="category-weekend">
-              ⚡ Weekend
-            </Badge>
-            <Badge className="bg-text-dark text-white px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer" data-testid="category-prize">
-              💰 Prize $10k+
-            </Badge>
+        {/* Category Pills */}
+        <section className="py-8 bg-soft-gray/50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-wrap gap-3 justify-center">
+              <Badge className="bg-sky text-white px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer" data-testid="category-ai">
+                🤖 AI & ML
+              </Badge>
+              <Badge className="bg-mint text-text-dark px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer" data-testid="category-student">
+                🎓 Student
+              </Badge>
+              <Badge className="bg-yellow text-text-dark px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer" data-testid="category-beginner">
+                👶 Beginner
+              </Badge>
+              <Badge className="bg-coral text-white px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer" data-testid="category-weekend">
+                ⚡ Weekend
+              </Badge>
+              <Badge className="bg-text-dark text-white px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer" data-testid="category-prize">
+                💰 Prize $10k+
+              </Badge>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
 
       {/* Featured Events */}
       <section className="py-16">

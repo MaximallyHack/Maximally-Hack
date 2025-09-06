@@ -101,7 +101,7 @@
   .text-mint { color: var(--mint); }
   .text-success { color: var(--success); }
   .text-error { color: var(--error); }
-  
+
   .border-soft-gray { border-color: var(--soft-gray); }
   .border-sky { border-color: var(--sky); }
   .border-coral { border-color: var(--coral); }

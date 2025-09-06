@@ -29,6 +29,7 @@ export const theme = {
 } as const;
 
 export const statusColors = {
+  default: "black",
   upcoming: 'yellow',
   active: 'success',
   completed: 'sky',
