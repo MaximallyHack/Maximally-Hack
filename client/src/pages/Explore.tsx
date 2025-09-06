@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,7 @@ interface Filters {
 
 export default function Explore() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [filters, setFilters] = useState<Filters>({
     tags: [],
@@ -29,11 +30,20 @@ export default function Explore() {
     sortBy: 'date',
   });
 
+  // Debounce search query
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
   const { data: events, isLoading, isFetching } = useQuery({
-    queryKey: ['events', searchQuery, filters],
-    queryFn: () => api.searchEvents(searchQuery, filters),
+    queryKey: ['events', debouncedSearchQuery, filters],
+    queryFn: () => api.searchEvents(debouncedSearchQuery, filters),
     staleTime: 5 * 60 * 1000, // Cache for 5 minutes
     refetchOnWindowFocus: false,
+    keepPreviousData: true, // Keep previous results while loading new ones
   });
 
   const handleFilterChange = useCallback((key: keyof Filters, value: any) => {
@@ -57,6 +67,7 @@ export default function Explore() {
       sortBy: 'date',
     });
     setSearchQuery("");
+    setDebouncedSearchQuery("");
   }, []);
 
   const availableTags = useMemo(() => ['AI', 'Healthcare', 'Education', 'Climate', 'Blockchain', 'Web3', 'Mobile', 'IoT'], []);
@@ -260,9 +271,14 @@ export default function Explore() {
           {/* Results */}
           <div className="flex-1">
             <div className="flex justify-between items-center mb-6">
-              <p className="text-muted-foreground" data-testid="results-count">
-                {isLoading ? 'Loading...' : isFetching ? 'Updating...' : `Showing ${events?.length || 0} hackathons`}
-              </p>
+              <div className="flex items-center gap-2">
+                <p className="text-muted-foreground" data-testid="results-count">
+                  {isLoading ? 'Loading...' : `Showing ${events?.length || 0} hackathons`}
+                </p>
+                {isFetching && !isLoading && (
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-coral border-t-transparent" />
+                )}
+              </div>
               <div className="flex gap-2">
                 <Button
                   variant={viewMode === 'grid' ? 'default' : 'outline'}
@@ -287,27 +303,54 @@ export default function Explore() {
 
             {/* Events Grid/List */}
             {isLoading ? (
-              <div className={`grid ${viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'} gap-6`}>
-                {Array.from({ length: 6 }).map((_, i) => (
-                  <div key={i} className="bg-card rounded-2xl p-6 shadow-soft border border-border">
-                    <Skeleton className="h-4 w-20 mb-4" />
-                    <Skeleton className="h-6 w-3/4 mb-2" />
-                    <Skeleton className="h-4 w-full mb-4" />
-                    <div className="flex gap-2 mb-4">
-                      <Skeleton className="h-6 w-12" />
-                      <Skeleton className="h-6 w-16" />
+              <div className={`grid ${viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3' : 'grid-cols-1'} gap-6`}>
+                {Array.from({ length: 9 }).map((_, i) => (
+                  <div key={i} className="bg-card rounded-2xl p-6 shadow-soft border border-border animate-pulse">
+                    <div className="flex justify-between items-center mb-4">
+                      <Skeleton className="h-6 w-24 rounded-full" />
+                      <div className="flex gap-2">
+                        <Skeleton className="h-8 w-8 rounded-full" />
+                        <Skeleton className="h-8 w-8 rounded-full" />
+                      </div>
                     </div>
-                    <div className="flex justify-between">
-                      <Skeleton className="h-4 w-20" />
-                      <Skeleton className="h-4 w-24" />
+                    <Skeleton className="h-7 w-4/5 mb-3 rounded-lg" />
+                    <Skeleton className="h-4 w-full mb-2 rounded-md" />
+                    <Skeleton className="h-4 w-3/4 mb-4 rounded-md" />
+                    <div className="flex gap-2 mb-4">
+                      <Skeleton className="h-6 w-16 rounded-full" />
+                      <Skeleton className="h-6 w-20 rounded-full" />
+                      <Skeleton className="h-6 w-14 rounded-full" />
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center gap-2">
+                        <Skeleton className="h-4 w-4 rounded" />
+                        <Skeleton className="h-4 w-20 rounded-md" />
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Skeleton className="h-4 w-4 rounded" />
+                        <Skeleton className="h-4 w-16 rounded-md" />
+                      </div>
+                    </div>
+                    <div className="flex justify-between items-center mt-4 pt-4 border-t border-border">
+                      <div className="flex items-center gap-2">
+                        <Skeleton className="h-4 w-4 rounded" />
+                        <Skeleton className="h-4 w-24 rounded-md" />
+                      </div>
+                      <Skeleton className="h-9 w-20 rounded-full" />
                     </div>
                   </div>
                 ))}
               </div>
             ) : events && events.length > 0 ? (
-              <div className={`grid ${viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'} gap-6`}>
-                {events.map((event: Event) => (
-                  <EventCard key={event.id} event={event} />
+              <div className={`grid ${viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3' : 'grid-cols-1'} gap-6 transition-all duration-300`}>
+                {events.map((event: Event, index) => (
+                  <div 
+                    key={event.id} 
+                    className="animate-in slide-in-from-bottom-4 duration-500"
+                    style={{ animationDelay: `${index * 50}ms` }}
+                  >
+                    <EventCard event={event} />
+                  </div>
                 ))}
               </div>
             ) : (
