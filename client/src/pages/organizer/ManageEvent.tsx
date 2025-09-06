@@ -217,41 +217,49 @@ export default function ManageEvent() {
             </div>
             
             <div className="grid grid-cols-2 gap-3">
-              <Button 
-                variant="outline" 
-                className="h-16 border-sky text-sky hover:bg-sky/10 rounded-xl flex-col gap-1"
-                data-testid="quick-add-judge"
-              >
-                <Plus className="w-4 h-4" />
-                <span className="text-xs">Add Judge</span>
-              </Button>
+              <Link href={`/organizer/events/${mockEvent.id}/judges`}>
+                <Button 
+                  variant="outline" 
+                  className="w-full h-16 border-sky text-sky hover:bg-sky/10 rounded-xl flex-col gap-1"
+                  data-testid="quick-add-judge"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span className="text-xs">Add Judge</span>
+                </Button>
+              </Link>
               
-              <Button 
-                variant="outline" 
-                className="h-16 border-mint text-mint hover:bg-mint/10 rounded-xl flex-col gap-1"
-                data-testid="quick-edit-timeline"
-              >
-                <Edit className="w-4 h-4" />
-                <span className="text-xs">Edit Timeline</span>
-              </Button>
+              <Link href={`/e/${mockEvent.id}/timeline`}>
+                <Button 
+                  variant="outline" 
+                  className="w-full h-16 border-mint text-mint hover:bg-mint/10 rounded-xl flex-col gap-1"
+                  data-testid="quick-view-timeline"
+                >
+                  <Eye className="w-4 h-4" />
+                  <span className="text-xs">View Timeline</span>
+                </Button>
+              </Link>
               
-              <Button 
-                variant="outline" 
-                className="h-16 border-coral text-coral hover:bg-coral/10 rounded-xl flex-col gap-1"
-                data-testid="quick-post-update"
-              >
-                <MessageSquare className="w-4 h-4" />
-                <span className="text-xs">Post Update</span>
-              </Button>
+              <Link href={`/e/${mockEvent.id}/submissions`}>
+                <Button 
+                  variant="outline" 
+                  className="w-full h-16 border-coral text-coral hover:bg-coral/10 rounded-xl flex-col gap-1"
+                  data-testid="quick-view-submissions"
+                >
+                  <FileText className="w-4 h-4" />
+                  <span className="text-xs">View Submissions</span>
+                </Button>
+              </Link>
               
-              <Button 
-                variant="outline" 
-                className="h-16 border-yellow text-text-dark hover:bg-yellow/10 rounded-xl flex-col gap-1"
-                data-testid="quick-open-submissions"
-              >
-                <Upload className="w-4 h-4" />
-                <span className="text-xs">Open Submissions</span>
-              </Button>
+              <Link href={`/e/${mockEvent.id}/teams`}>
+                <Button 
+                  variant="outline" 
+                  className="w-full h-16 border-yellow text-text-dark hover:bg-yellow/10 rounded-xl flex-col gap-1"
+                  data-testid="quick-view-teams"
+                >
+                  <Users className="w-4 h-4" />
+                  <span className="text-xs">View Teams</span>
+                </Button>
+              </Link>
             </div>
           </Card>
 

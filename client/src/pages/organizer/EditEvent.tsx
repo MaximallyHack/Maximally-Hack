@@ -232,10 +232,12 @@ export default function EditEvent() {
           </div>
 
           <div className="flex items-center gap-3">
-            <Button variant="outline" className="border-sky text-sky hover:bg-sky/10" data-testid="button-preview">
-              <Eye className="w-4 h-4 mr-2" />
-              Preview
-            </Button>
+            <Link href={`/e/${data.id}`}>
+              <Button variant="outline" className="border-sky text-sky hover:bg-sky/10" data-testid="button-preview">
+                <Eye className="w-4 h-4 mr-2" />
+                View Event
+              </Button>
+            </Link>
             <Button 
               onClick={handleSave}
               disabled={!hasChanges}
