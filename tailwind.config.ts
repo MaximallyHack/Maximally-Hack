@@ -61,6 +61,10 @@ export default {
           border: "var(--sidebar-border)",
           ring: "var(--sidebar-ring)",
         },
+        header: {
+          DEFAULT: "var(--header-background)",
+          foreground: "var(--header-foreground)",
+        },
         // Custom theme colors
         cream: "var(--cream)",
         "soft-gray": "var(--soft-gray)",

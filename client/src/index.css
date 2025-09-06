@@ -22,6 +22,10 @@
   --foreground: hsl(0, 0%, 18%);
   --card: hsl(0, 0%, 92%);
   --card-foreground: hsl(0, 0%, 15%);
+  
+  /* Header/Banner */
+  --header-background: hsl(48, 100%, 98%);
+  --header-foreground: hsl(0, 0%, 18%);
   --popover: hsl(48, 100%, 98%);
   --popover-foreground: hsl(0, 0%, 18%);
   --primary: hsl(0, 69%, 78%);
@@ -63,6 +67,10 @@
   --foreground: hsl(0, 0%, 90%);
   --card: hsl(0, 0%, 6%);
   --card-foreground: hsl(0, 0%, 90%);
+  
+  /* Header/Banner */
+  --header-background: hsl(0, 0%, 6%);
+  --header-foreground: hsl(0, 0%, 90%);
   --popover: hsl(0, 0%, 6%);
   --popover-foreground: hsl(0, 0%, 90%);
   --primary: hsl(0, 69%, 78%);
@@ -124,6 +132,9 @@
   .font-body { font-family: var(--font-body); }
   
   .shadow-soft { box-shadow: var(--shadow-soft); }
+  
+  .bg-header { background-color: var(--header-background); }
+  .text-header { color: var(--header-foreground); }
   
   .hover-scale {
     transition: transform 0.18s ease;
