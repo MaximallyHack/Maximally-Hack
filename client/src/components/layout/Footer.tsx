@@ -24,22 +24,22 @@ export default function Footer() {
             <h3 className="font-heading font-semibold text-foreground mb-4">Platform</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <Link href="/explore" className="hover:text-coral transition-colors" data-testid="footer-explore">
+                <Link to="/explore" className="hover:text-coral transition-colors" data-testid="footer-explore">
                   Explore Events
                 </Link>
               </li>
               <li>
-                <Link href="/organizer" className="hover:text-coral transition-colors" data-testid="footer-organize">
+                <Link to="/organizer" className="hover:text-coral transition-colors" data-testid="footer-organize">
                   Organize with Us
                 </Link>
               </li>
               <li>
-                <Link href="/leaders" className="hover:text-coral transition-colors" data-testid="footer-leaderboards">
+                <Link to="/leaders" className="hover:text-coral transition-colors" data-testid="footer-leaderboards">
                   Leaderboards
                 </Link>
               </li>
               <li>
-                <Link href="/sponsors" className="hover:text-coral transition-colors" data-testid="footer-sponsors">
+                <Link to="/sponsors" className="hover:text-coral transition-colors" data-testid="footer-sponsors">
                   Sponsors
                 </Link>
               </li>
