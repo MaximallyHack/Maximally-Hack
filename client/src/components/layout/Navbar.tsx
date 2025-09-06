@@ -138,10 +138,10 @@ export default function Navbar() {
                   </DropdownMenu>
                 </div>
               ) : (
-                <div className="flex items-center space-x-3">
+                <div className="flex flex-col space-y-4 w-full">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="outline" className="w-64 h-14 rounded-xl border border-coral hover:bg-coral/10 text-coral flex items-center justify-center font-medium transition-all duration-300 hover:shadow-sm" data-testid="button-login">
+                      <Button variant="outline" className="w-full h-14 rounded-xl border border-coral hover:bg-coral/10 text-coral flex items-center justify-center font-medium transition-all duration-300 hover:shadow-sm" data-testid="button-login">
                         Login
                       </Button>
                     </DropdownMenuTrigger>
@@ -161,7 +161,7 @@ export default function Navbar() {
                     </DropdownMenuContent>
                   </DropdownMenu>
                   <Link to="/signup">
-                    <Button className="w-64 h-14 rounded-xl bg-gradient-to-r from-coral to-coral/90 hover:from-coral/90 hover:to-coral/80 text-white font-medium flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105" data-testid="button-signup">
+                    <Button className="w-full h-14 rounded-xl bg-gradient-to-r from-coral to-coral/90 hover:from-coral/90 hover:to-coral/80 text-white font-medium flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105" data-testid="button-signup">
                       <Sparkles className="w-4 h-4 mr-2" />
                       Join Now
                     </Button>
@@ -261,14 +261,14 @@ export default function Navbar() {
                           </Button>
                         </div>
                       ) : (
-                        <div className="flex flex-col items-center space-y-4">
+                        <div className="flex flex-col space-y-4">
                           <Link to="/login" onClick={() => setIsOpen(false)}>
-                            <Button variant="outline" className="w-64 h-14 rounded-xl border border-coral hover:bg-coral/10 text-[#b3b3b3] bg-[#0b101e] flex items-center justify-center" data-testid="mobile-button-login">
+                            <Button variant="outline" className="w-full h-14 rounded-xl border border-coral hover:bg-coral/10 text-coral flex items-center justify-center font-medium transition-all duration-300" data-testid="mobile-button-login">
                               Login
                             </Button>
                           </Link>
                           <Link to="/signup" onClick={() => setIsOpen(false)}>
-                            <Button className="w-64 h-14 rounded-xl bg-gradient-to-r from-coral to-coral/90 hover:bg-primary/90 text-white font-medium flex items-center justify-center" data-testid="mobile-button-signup">
+                            <Button className="w-full h-14 rounded-xl bg-gradient-to-r from-coral to-coral/90 hover:from-coral/90 hover:to-coral/80 text-white font-medium flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300" data-testid="mobile-button-signup">
                               <Sparkles className="w-4 h-4 mr-2" />
                               Join Now
                             </Button>
