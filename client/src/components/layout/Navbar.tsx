@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -13,6 +13,8 @@ export default function Navbar() {
   const [location] = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const { user, isLoggedIn, logout } = useAuth();
+  const [rocketClass, setRocketClass] = useState("w-5 h-5 text-white group-hover:rotate-12 transition-transform duration-300 rocket-animation");
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const navItems = [
     { href: "/explore", label: "Explore Hackathons", icon: Search, testId: "nav-explore" },
@@ -25,6 +27,36 @@ export default function Navbar() {
     if (href !== "/" && location.startsWith(href)) return true;
     return false;
   };
+
+  const triggerRocketAnimation = () => {
+    // Remove animation class to reset
+    setRocketClass("w-5 h-5 text-white group-hover:rotate-12 transition-transform duration-300");
+    // Add it back after a small delay to restart
+    setTimeout(() => {
+      setRocketClass("w-5 h-5 text-white group-hover:rotate-12 transition-transform duration-300 rocket-animation");
+    }, 10);
+  };
+
+  // Handle page navigation trigger (2 seconds after navigation)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      triggerRocketAnimation();
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [location]);
+
+  // Handle 5-minute intervals
+  useEffect(() => {
+    intervalRef.current = setInterval(() => {
+      triggerRocketAnimation();
+    }, 300000); // 5 minutes
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, []);
 
   return (
     <>
@@ -43,7 +75,7 @@ export default function Navbar() {
             <Link to="/" className="flex items-center space-x-3 hover-scale group transition-all duration-300" data-testid="logo-link">
               <div className="relative">
                 <div className="w-10 h-10 bg-gradient-to-br from-coral to-coral/80 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
-                  <Rocket className="w-5 h-5 text-white group-hover:rotate-12 transition-transform duration-300 rocket-animation" />
+                  <Rocket className={rocketClass} />
                 </div>
                 <div className="absolute -top-1 -right-1 w-3 h-3 bg-yellow rounded-full animate-pulse"></div>
               </div>
