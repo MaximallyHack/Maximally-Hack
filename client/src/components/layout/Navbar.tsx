@@ -178,7 +178,7 @@ export default function Navbar() {
                     <Menu className="w-5 h-5" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="right" className="w-80 p-0">
+                <SheetContent side="right" className="p-0">
                   <div className="flex flex-col h-full">
                     {/* Mobile Header */}
                     <div className="p-6 bg-gradient-to-r from-coral/5 to-sky/5 border-b">
@@ -224,7 +224,7 @@ export default function Navbar() {
                         <span className="font-medium text-foreground">Theme</span>
                         <ThemeToggle />
                       </div>
-                      
+
                       {isLoggedIn ? (
                         <div className="space-y-3">
                           <div className="flex items-center space-x-3 p-3 bg-background rounded-xl">
@@ -238,7 +238,7 @@ export default function Navbar() {
                               <p className="text-sm text-muted-foreground truncate">{user?.email}</p>
                             </div>
                           </div>
-                          
+
                           {user && (user as any)?.role === 'organizer' && (
                             <Link to="/organizer/dashboard" onClick={() => setIsOpen(false)}>
                               <Button variant="outline" className="w-full border-mint text-mint hover:bg-mint/10">
@@ -247,28 +247,28 @@ export default function Navbar() {
                               </Button>
                             </Link>
                           )}
-                          
+
                           <Link to="/dashboard" onClick={() => setIsOpen(false)}>
                             <Button variant="outline" className="w-full border-coral text-coral hover:bg-coral/10">
                               <User className="w-4 h-4 mr-2" />
                               My Dashboard
                             </Button>
                           </Link>
-                          
+
                           <Button onClick={() => { logout(); setIsOpen(false); }} className="w-full bg-red-500 hover:bg-red-600 text-white">
                             <LogOut className="w-4 h-4 mr-2" />
                             Log out
                           </Button>
                         </div>
                       ) : (
-                        <div className="space-y-8">
+                        <div className="space-y-12">
                           <Link to="/login" onClick={() => setIsOpen(false)}>
-                            <Button variant="outline" className="w-full border-coral hover:bg-coral/10 text-[#b3b3b3] bg-[#0b101e] pt-[1px] pb-[1px]" data-testid="mobile-button-login">
+                            <Button variant="outline" className="w-full border-coral hover:bg-coral/10 text-[#b3b3b3] bg-[#0b101e] py-3" data-testid="mobile-button-login">
                               Login
                             </Button>
                           </Link>
                           <Link to="/signup" onClick={() => setIsOpen(false)}>
-                            <Button className="w-full bg-gradient-to-r from-coral to-coral/90 hover:bg-primary/90 text-white font-medium hover:bg-primary/90 pt-[9px] pb-[9px]" data-testid="mobile-button-signup">
+                            <Button className="w-full bg-gradient-to-r from-coral to-coral/90 hover:bg-primary/90 text-white font-medium hover:bg-primary/90 py-3" data-testid="mobile-button-signup">
                               <Sparkles className="w-4 h-4 mr-2" />
                               Join Now
                             </Button>
