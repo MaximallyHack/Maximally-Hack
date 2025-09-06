@@ -129,7 +129,7 @@ function AppRouter() {
   return (
     <Router>
       <AuthProvider>
-        <div className="min-h-screen bg-cream">
+        <div className="min-h-screen bg-background">
           <ScrollToTop />
           <HashRedirect />
           <Navbar />
