@@ -50,19 +50,19 @@ export default function Landing() {
       <section className="py-8 bg-soft-gray/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap gap-3 justify-center text-[#0d1322] bg-[transparent]">
-            <Badge className="inline-flex items-center border transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer bg-[#0053a6] text-[#ffffff]" data-testid="category-ai">
+            <Badge className="inline-flex items-center border transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer bg-[#2563eb] dark:bg-[#0053a6] text-[#ffffff]" data-testid="category-ai">
               🤖 AI & ML
             </Badge>
-            <Badge className="inline-flex items-center border transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer text-[#23252f] bg-[#a6e3bc]" data-testid="category-student">
+            <Badge className="inline-flex items-center border transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer text-[#1a472a] dark:text-[#23252f] bg-[#86d4a0] dark:bg-[#a6e3bc]" data-testid="category-student">
               🎓 Student
             </Badge>
-            <Badge className="bg-yellow text-foreground px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer" data-testid="category-beginner">
+            <Badge className="bg-[#eab308] dark:bg-yellow text-[#1f2937] dark:text-foreground px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer" data-testid="category-beginner">
               👶 Beginner
             </Badge>
-            <Badge className="bg-coral text-white px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer" data-testid="category-weekend">
+            <Badge className="bg-[#dc2626] dark:bg-coral text-white px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer" data-testid="category-weekend">
               ⚡ Weekend
             </Badge>
-            <Badge className="bg-text-dark text-white px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer" data-testid="category-prize">
+            <Badge className="bg-[#374151] dark:bg-text-dark text-white px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer" data-testid="category-prize">
               💰 Prize $10k+
             </Badge>
           </div>
@@ -115,7 +115,7 @@ export default function Landing() {
 
           <div className="text-center mt-12">
             <Link href="/explore">
-              <Button size="lg" className="bg-sky text-white px-8 py-3 rounded-full font-medium hover-scale hover:bg-sky/80 transition-colors" data-testid="button-explore-all">
+              <Button size="lg" className="bg-[#2563eb] dark:bg-sky text-white px-8 py-3 rounded-full font-medium hover-scale hover:bg-[#1d4ed8] dark:hover:bg-sky/80 transition-colors" data-testid="button-explore-all">
                 <Search className="w-5 h-5 mr-2" />
                 Explore All Events
               </Button>
@@ -135,7 +135,7 @@ export default function Landing() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
               <FloatingElement delay={0}>
-                <div className="bg-coral w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 hover-scale">
+                <div className="bg-[#dc2626] dark:bg-coral w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 hover-scale">
                   <Search className="w-6 h-6 text-white" />
                 </div>
               </FloatingElement>
@@ -144,8 +144,8 @@ export default function Landing() {
             </div>
             <div className="text-center">
               <FloatingElement delay={0.5}>
-                <div className="bg-mint w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 hover-scale">
-                  <Users className="w-6 h-6 text-foreground" />
+                <div className="bg-[#16a34a] dark:bg-mint w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 hover-scale">
+                  <Users className="w-6 h-6 text-white dark:text-foreground" />
                 </div>
               </FloatingElement>
               <h3 className="font-heading font-semibold text-xl text-foreground mb-2">2. Team Up</h3>
@@ -153,7 +153,7 @@ export default function Landing() {
             </div>
             <div className="text-center">
               <FloatingElement delay={1}>
-                <div className="bg-sky w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 hover-scale">
+                <div className="bg-[#2563eb] dark:bg-sky w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 hover-scale">
                   <Trophy className="w-6 h-6 text-white" />
                 </div>
               </FloatingElement>

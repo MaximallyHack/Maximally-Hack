@@ -38,19 +38,19 @@ export function FloatingElement({
 export function DecorativeElements() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none" data-testid="decorative-elements">
-      <FloatingElement delay={0} className="absolute top-20 left-10 text-yellow text-3xl opacity-60">
+      <FloatingElement delay={0} className="absolute top-20 left-10 text-[#e6a500] dark:text-yellow text-3xl opacity-70 dark:opacity-60">
         ✨
       </FloatingElement>
-      <FloatingElement delay={1} className="absolute top-32 right-20 text-sky text-2xl opacity-60">
+      <FloatingElement delay={1} className="absolute top-32 right-20 text-[#4a90e2] dark:text-sky text-2xl opacity-70 dark:opacity-60">
         ⭐
       </FloatingElement>
-      <FloatingElement delay={2} className="absolute bottom-20 left-20 text-mint text-4xl opacity-60">
+      <FloatingElement delay={2} className="absolute bottom-20 left-20 text-[#5cb85c] dark:text-mint text-4xl opacity-70 dark:opacity-60">
         🎯
       </FloatingElement>
-      <FloatingElement delay={0.5} className="absolute top-1/2 right-10 text-coral text-2xl opacity-50">
+      <FloatingElement delay={0.5} className="absolute top-1/2 right-10 text-[#d9534f] dark:text-coral text-2xl opacity-60 dark:opacity-50">
         🚀
       </FloatingElement>
-      <FloatingElement delay={1.5} className="absolute bottom-1/3 right-1/3 text-yellow text-xl opacity-40">
+      <FloatingElement delay={1.5} className="absolute bottom-1/3 right-1/3 text-[#e6a500] dark:text-yellow text-xl opacity-50 dark:opacity-40">
         💡
       </FloatingElement>
     </div>
