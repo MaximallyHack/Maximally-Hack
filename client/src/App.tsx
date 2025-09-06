@@ -66,27 +66,48 @@ function ScrollToTop() {
 // Main Event Layout Wrapper
 function EventLayoutWrapper() {
   const { slug } = useParams();
+  const [location] = useLocation();
   
   if (!slug) return <NotFound />;
+  
+  // Determine which component to render based on the current path
+  const getEventComponent = () => {
+    const path = location.replace(`/e/${slug}`, '') || '/';
+    
+    switch (path) {
+      case '/':
+        return <EventOverview />;
+      case '/timeline':
+        return <EventTimeline />;
+      case '/prizes':
+        return <EventPrizes />;
+      case '/rules':
+        return <EventRules />;
+      case '/judging':
+        return <EventJudging />;
+      case '/submissions':
+        return <EventSubmissionsList />;
+      case '/teams':
+        return <EventTeamsList />;
+      case '/people':
+        return <EventPeopleHome />;
+      case '/help':
+        return <EventHelp />;
+      case '/resources':
+        return <EventResources />;
+      case '/sponsors':
+        return <EventSponsors />;
+      case '/about':
+        return <EventAbout />;
+      default:
+        return <NotFound />;
+    }
+  };
   
   return (
     <EventProvider slug={slug}>
       <EventLayout>
-        <Switch>
-          <Route path="/e/:slug" component={EventOverview} />
-          <Route path="/e/:slug/timeline" component={EventTimeline} />
-          <Route path="/e/:slug/prizes" component={EventPrizes} />
-          <Route path="/e/:slug/rules" component={EventRules} />
-          <Route path="/e/:slug/judging" component={EventJudging} />
-          <Route path="/e/:slug/submissions" component={EventSubmissionsList} />
-          <Route path="/e/:slug/teams" component={EventTeamsList} />
-          <Route path="/e/:slug/people" component={EventPeopleHome} />
-          <Route path="/e/:slug/help" component={EventHelp} />
-          <Route path="/e/:slug/resources" component={EventResources} />
-          <Route path="/e/:slug/sponsors" component={EventSponsors} />
-          <Route path="/e/:slug/about" component={EventAbout} />
-          <Route component={NotFound} />
-        </Switch>
+        {getEventComponent()}
       </EventLayout>
     </EventProvider>
   );
@@ -99,8 +120,19 @@ function Router() {
         <ScrollToTop />
         <HashRedirect />
         <Switch>
-          {/* Event Routes - No Navbar/Footer */}
-          <Route path="/e/:slug*" component={EventLayoutWrapper} />
+          {/* Event Routes - Direct matching with no nested Switch */}
+          <Route path="/e/:slug" component={EventLayoutWrapper} />
+          <Route path="/e/:slug/timeline" component={EventLayoutWrapper} />
+          <Route path="/e/:slug/prizes" component={EventLayoutWrapper} />
+          <Route path="/e/:slug/rules" component={EventLayoutWrapper} />
+          <Route path="/e/:slug/judging" component={EventLayoutWrapper} />
+          <Route path="/e/:slug/submissions" component={EventLayoutWrapper} />
+          <Route path="/e/:slug/teams" component={EventLayoutWrapper} />
+          <Route path="/e/:slug/people" component={EventLayoutWrapper} />
+          <Route path="/e/:slug/help" component={EventLayoutWrapper} />
+          <Route path="/e/:slug/resources" component={EventLayoutWrapper} />
+          <Route path="/e/:slug/sponsors" component={EventLayoutWrapper} />
+          <Route path="/e/:slug/about" component={EventLayoutWrapper} />
           
           {/* Regular Routes - With Navbar/Footer */}
           <Route>
