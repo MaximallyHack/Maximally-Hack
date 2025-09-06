@@ -268,20 +268,26 @@ export default function OrganizerDashboard() {
                     </Button>
                   </Link>
                   
-                  <Button variant="outline" className="w-full h-20 border-sky text-sky hover:bg-sky/10 rounded-xl flex-col gap-2" data-testid="quick-certificates">
-                    <Trophy className="w-6 h-6" />
-                    <span>Certificates</span>
-                  </Button>
+                  <Link href="/e/ai-for-good-2024/submissions">
+                    <Button variant="outline" className="w-full h-20 border-sky text-sky hover:bg-sky/10 rounded-xl flex-col gap-2" data-testid="quick-view-submissions">
+                      <Trophy className="w-6 h-6" />
+                      <span>View Submissions</span>
+                    </Button>
+                  </Link>
                   
-                  <Button variant="outline" className="w-full h-20 border-mint text-mint hover:bg-mint/10 rounded-xl flex-col gap-2" data-testid="quick-exports">
-                    <Download className="w-6 h-6" />
-                    <span>Exports</span>
-                  </Button>
+                  <Link href="/e/ai-for-good-2024/teams">
+                    <Button variant="outline" className="w-full h-20 border-mint text-mint hover:bg-mint/10 rounded-xl flex-col gap-2" data-testid="quick-view-teams">
+                      <Users className="w-6 h-6" />
+                      <span>View Teams</span>
+                    </Button>
+                  </Link>
                   
-                  <Button variant="outline" className="w-full h-20 border-yellow text-text-dark hover:bg-yellow/10 rounded-xl flex-col gap-2" data-testid="quick-settings">
-                    <Settings className="w-6 h-6" />
-                    <span>Settings</span>
-                  </Button>
+                  <Link href="/e/ai-for-good-2024/judging">
+                    <Button variant="outline" className="w-full h-20 border-yellow text-text-dark hover:bg-yellow/10 rounded-xl flex-col gap-2" data-testid="quick-view-judging">
+                      <Settings className="w-6 h-6" />
+                      <span>View Judging</span>
+                    </Button>
+                  </Link>
                 </div>
               </Card>
             </div>

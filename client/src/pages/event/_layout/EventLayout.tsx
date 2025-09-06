@@ -9,7 +9,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { 
   Calendar, Globe, Trophy, Users, MapPin, 
-  MessageSquare, BookOpen, HelpCircle, Star
+  MessageSquare, BookOpen, HelpCircle, Star,
+  Settings, Edit, Eye, BarChart3
 } from 'lucide-react';
 
 interface EventLayoutProps {
@@ -60,6 +61,7 @@ export default function EventLayout({ children }: EventLayoutProps) {
   }
 
   const isRegistered = user?.registeredEvents?.includes(event.id) || false;
+  const isOrganizer = user?.role === 'organizer' || user?.id === event.organizerId;
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -250,6 +252,44 @@ export default function EventLayout({ children }: EventLayoutProps) {
                   </Button>
                 </CardContent>
               </Card>
+
+              {/* Organizer Panel - Only show for organizers */}
+              {isOrganizer && (
+                <Card className="border-coral/30 bg-coral/5">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg text-coral flex items-center gap-2">
+                      <Settings className="w-4 h-4" />
+                      Organizer Panel
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    <Link href={`/organizer/events/${event.id}/overview`}>
+                      <Button variant="ghost" size="sm" className="w-full justify-start text-coral hover:bg-coral/10">
+                        <BarChart3 className="w-4 h-4 mr-2" />
+                        Manage Event
+                      </Button>
+                    </Link>
+                    <Link href={`/organizer/events/${event.id}/edit`}>
+                      <Button variant="ghost" size="sm" className="w-full justify-start text-coral hover:bg-coral/10">
+                        <Edit className="w-4 h-4 mr-2" />
+                        Edit Details
+                      </Button>
+                    </Link>
+                    <Link href={`/organizer/events/${event.id}/content`}>
+                      <Button variant="ghost" size="sm" className="w-full justify-start text-coral hover:bg-coral/10">
+                        <Eye className="w-4 h-4 mr-2" />
+                        Edit Content
+                      </Button>
+                    </Link>
+                    <Link href={`/organizer/events/${event.id}/judges`}>
+                      <Button variant="ghost" size="sm" className="w-full justify-start text-coral hover:bg-coral/10">
+                        <Users className="w-4 h-4 mr-2" />
+                        Manage Judges
+                      </Button>
+                    </Link>
+                  </CardContent>
+                </Card>
+              )}
             </div>
           </div>
         </div>
