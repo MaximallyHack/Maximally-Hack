@@ -60,7 +60,7 @@ export function DecorativeElements() {
 export function CrayonSquiggle({ className = "" }: { className?: string }) {
   return (
     <div 
-      className={`crayon-squiggle ${className}`}
+      className="crayon-squiggle mx-auto mb-6 text-[#a6e3bc]"
       data-testid="crayon-squiggle"
     />
   );
