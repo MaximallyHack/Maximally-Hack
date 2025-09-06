@@ -1,58 +1,271 @@
+import { useState, useEffect } from 'react';
 import { useEvent } from '@/contexts/EventContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
+import { useConfetti } from '@/components/ui/confetti';
+import { Link } from 'react-router-dom';
+import Countdown from '@/components/event/Countdown';
 import { 
-  CheckCircle, Clock, Users, Trophy, Target, 
-  Calendar, MapPin, Globe, ExternalLink 
+  CheckCircle, Clock, Users, Trophy, Target, Rocket, Zap,
+  Calendar, MapPin, Globe, ExternalLink, MessageSquare,
+  BookOpen, Play, Share2, Heart, Star, AlertCircle
 } from 'lucide-react';
+import { SiDiscord, SiGithub } from 'react-icons/si';
 
-const quickStartItems = [
+const liveAnnouncements = [
   {
     id: '1',
-    title: 'Join the Discord',
-    description: 'Connect with other participants and get real-time updates',
-    completed: false,
-    action: 'Join Discord'
+    title: '🎉 Registration Extended!',
+    message: 'Good news! We\'ve extended registration by 24 hours due to popular demand.',
+    timestamp: '2 hours ago',
+    priority: 'high'
   },
   {
-    id: '2',
-    title: 'Form or join a team',
-    description: 'Find teammates with complementary skills',
-    completed: false,
-    action: 'Browse Teams'
+    id: '2', 
+    title: '💡 Mentor Office Hours',
+    message: 'AI experts will be available for 1-on-1 sessions starting tomorrow.',
+    timestamp: '5 hours ago',
+    priority: 'medium'
   },
   {
     id: '3',
-    title: 'Read the rules & judging criteria',
-    description: 'Understand what judges are looking for',
+    title: '🔗 API Keys Available',
+    message: 'Free OpenAI and Anthropic API credits are now available in the Discord.',
+    timestamp: '1 day ago',
+    priority: 'low'
+  }
+];
+
+const getQuickStartItems = (user: any, event: any) => [
+  {
+    id: '1',
+    title: 'Join the Discord Community',
+    description: 'Connect with 1,500+ builders and get real-time updates',
     completed: false,
-    action: 'View Rules'
+    action: 'Join Discord',
+    link: event.links?.discord,
+    icon: <SiDiscord className="w-4 h-4" />
+  },
+  {
+    id: '2',
+    title: 'Form or Join a Team',
+    description: 'Find teammates with complementary skills (1-4 members)',
+    completed: user?.teams?.length > 0,
+    action: 'Browse Teams',
+    link: `/e/${event.slug}/teams`,
+    icon: <Users className="w-4 h-4" />
+  },
+  {
+    id: '3',
+    title: 'Read Rules & Judging Criteria',
+    description: 'Understand scoring: Innovation 25%, Execution 25%, Design 25%, Impact 25%',
+    completed: false,
+    action: 'View Rules',
+    link: `/e/${event.slug}/rules`,
+    icon: <BookOpen className="w-4 h-4" />
   },
   {
     id: '4',
-    title: 'Start building your project',
-    description: 'Begin development and track your progress',
+    title: 'Submit Your Project',
+    description: 'Upload your project and demo video (max 2 mins)',
     completed: false,
-    action: 'Create Project'
+    action: event.status === 'active' ? 'Submit Now' : 'Coming Soon',
+    link: event.status === 'active' ? `/e/${event.slug}/submit` : null,
+    icon: <Rocket className="w-4 h-4" />,
+    disabled: event.status !== 'active'
   }
 ];
 
 export default function Overview() {
   const { event } = useEvent();
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const { trigger: triggerConfetti, Confetti } = useConfetti();
+  const [showTeamDialog, setShowTeamDialog] = useState(false);
+  const [teamName, setTeamName] = useState('');
+  const [teamDescription, setTeamDescription] = useState('');
+  const [isRegistered, setIsRegistered] = useState(false);
+
+  useEffect(() => {
+    // Simulate checking if user is registered
+    setIsRegistered(user?.registeredEvents?.includes(event?.id) || false);
+  }, [user, event]);
 
   if (!event) return null;
 
+  const quickStartItems = getQuickStartItems(user, event);
+  const completedItems = quickStartItems.filter(item => item.completed).length;
+  const progressPercentage = (completedItems / quickStartItems.length) * 100;
+
+  const handleQuickAction = (item: any) => {
+    if (item.link) {
+      if (item.link.startsWith('http')) {
+        window.open(item.link, '_blank');
+      }
+    }
+    
+    // Simulate completing actions
+    if (item.id === '1') {
+      toast({
+        title: '🎉 Joined Discord!',
+        description: 'Welcome to the community! Check #general for updates.'
+      });
+    }
+  };
+
+  const handleCreateTeam = () => {
+    if (!teamName.trim()) {
+      toast({
+        title: 'Team name required',
+        description: 'Please enter a name for your team.',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    toast({
+      title: '🚀 Team Created!',
+      description: `"${teamName}" is ready to hack! Invite your teammates.`
+    });
+    triggerConfetti();
+    setShowTeamDialog(false);
+    setTeamName('');
+    setTeamDescription('');
+  };
+
+  const shareEvent = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: event.title,
+        text: event.description,
+        url: window.location.href,
+      });
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      toast({
+        title: '📋 Link Copied!',
+        description: 'Share this amazing event with your friends!'
+      });
+    }
+  };
+
   return (
     <div className="space-y-8">
-      {/* Hero Description */}
-      <section>
-        <h2 className="text-2xl font-bold text-foreground mb-4">About the Event</h2>
-        <div className="prose prose-lg max-w-none">
-          <p className="text-muted-foreground leading-relaxed">
-            {event.longDescription || event.description}
-          </p>
+      <Confetti />
+      
+      {/* Live Status & Countdown */}
+      {(event.status === 'upcoming' || event.status === 'registration_open') && (
+        <section className="grid md:grid-cols-2 gap-6">
+          <Countdown 
+            targetDate={event.startDate} 
+            label={event.status === 'registration_open' ? 'Event starts in:' : 'Registration opens in:'}
+          />
+          
+          <Card className="bg-gradient-to-br from-coral/10 to-sky/10 border-coral/20">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-coral">
+                <Zap className="w-5 h-5" />
+                Live Updates
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {liveAnnouncements.map(announcement => (
+                <div key={announcement.id} className="flex gap-3">
+                  <div className={`flex-shrink-0 w-2 h-2 rounded-full mt-2 ${
+                    announcement.priority === 'high' ? 'bg-coral' :
+                    announcement.priority === 'medium' ? 'bg-yellow' : 'bg-sky'
+                  }`} />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-foreground truncate">{announcement.title}</p>
+                    <p className="text-xs text-muted-foreground">{announcement.timestamp}</p>
+                  </div>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        </section>
+      )}
+
+      {/* Hero Description with CTA */}
+      <section className="relative">
+        <div className="flex justify-between items-start mb-6">
+          <h2 className="text-2xl font-bold text-foreground">About the Event</h2>
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" onClick={shareEvent}>
+              <Share2 className="w-4 h-4 mr-2" />
+              Share
+            </Button>
+            <Button variant="outline" size="sm">
+              <Heart className="w-4 h-4 mr-2" />
+              Save
+            </Button>
+          </div>
+        </div>
+        
+        <div className="grid lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2">
+            <div className="prose prose-lg max-w-none">
+              <p className="text-muted-foreground leading-relaxed mb-6">
+                {event.longDescription || event.description}
+              </p>
+              
+              {/* Why Join Section */}
+              {event.whyJoin && (
+                <div className="bg-gradient-to-r from-mint/20 to-sky/20 rounded-xl p-6 my-6">
+                  <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
+                    <Star className="w-5 h-5 text-mint" />
+                    Why Join This Event?
+                  </h3>
+                  <ul className="space-y-2">
+                    {event.whyJoin.map((reason: string, index: number) => (
+                      <li key={index} className="flex items-start gap-3 text-sm text-muted-foreground">
+                        <CheckCircle className="w-4 h-4 text-success flex-shrink-0 mt-0.5" />
+                        <span>{reason}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+          
+          {/* Tracks & Quick Info */}
+          <div className="space-y-4">
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg">Event Tracks</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                {event.tracks.map((track: string, index: number) => (
+                  <Badge key={index} variant="secondary" className="mr-2 mb-2">
+                    {track}
+                  </Badge>
+                ))}
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-yellow/10 border-yellow/30">
+              <CardContent className="p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <AlertCircle className="w-4 h-4 text-yellow" />
+                  <span className="font-medium text-sm">Registration Status</span>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  {isRegistered ? 
+                    '✅ You\'re registered! Time to find your team.' :
+                    '⏰ Limited spots remaining. Register now!'
+                  }
+                </p>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </section>
 
