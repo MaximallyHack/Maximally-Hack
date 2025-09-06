@@ -28,7 +28,7 @@ export default function Navbar() {
   return (
     <>
       {/* Test Mode Badge */}
-      <div className="text-center py-1 px-4 text-sm font-medium text-[#273f42] bg-[#a6e3bc]">
+      <div className="text-center py-1 px-4 text-sm font-medium bg-[#468c64] text-[#000000]">
         🧪 Test Mode - All data is simulated for preview
       </div>
       <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
