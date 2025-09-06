@@ -1,12 +1,172 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, timestamp, boolean, json } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, timestamp, boolean, json, integer } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
 export const users = pgTable("users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   username: text("username").notNull().unique(),
+  email: text("email").notNull().unique(),
   password: text("password").notNull(),
+  fullName: text("full_name").notNull(),
+  avatar: text("avatar"),
+  bio: text("bio"),
+  role: text("role").notNull().default("user"), // user, organizer, admin
+  organizationName: text("organization_name"),
+  website: text("website"),
+  linkedin: text("linkedin"),
+  twitter: text("twitter"),
+  isVerified: boolean("is_verified").default(false),
+  registeredEvents: text("registered_events").array().default(sql`'{}'::text[]`),
+  createdAt: timestamp("created_at").default(sql`now()`),
+  updatedAt: timestamp("updated_at").default(sql`now()`),
+});
+
+// Events table for comprehensive event management
+export const events = pgTable("events", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  slug: text("slug").notNull().unique(),
+  title: text("title").notNull(),
+  tagline: text("tagline"),
+  description: text("description").notNull(),
+  longDescription: text("long_description"),
+  startDate: timestamp("start_date").notNull(),
+  endDate: timestamp("end_date").notNull(),
+  registrationOpen: timestamp("registration_open"),
+  registrationClose: timestamp("registration_close"),
+  submissionOpen: timestamp("submission_open"),
+  submissionClose: timestamp("submission_close"),
+  status: text("status").notNull().default("draft"), // draft, published, active, completed, cancelled
+  format: text("format").notNull().default("online"), // online, in-person, hybrid
+  location: text("location"),
+  timezone: text("timezone").notNull().default("UTC"),
+  prizePool: integer("prize_pool").default(0),
+  maxTeamSize: integer("max_team_size").default(4),
+  participantCount: integer("participant_count").default(0),
+  submissionCount: integer("submission_count").default(0),
+  organizerId: varchar("organizer_id").notNull().references(() => users.id),
+  organizerName: text("organizer_name").notNull(),
+  organizationName: text("organization_name"),
+  tracks: text("tracks").array().default(sql`'{}'::text[]`),
+  tags: text("tags").array().default(sql`'{}'::text[]`),
+  socials: json("socials").default({}),
+  links: json("links").default({}),
+  hero: json("hero").default({}),
+  isPublic: boolean("is_public").default(false),
+  isFeatured: boolean("is_featured").default(false),
+  allowTeamFormation: boolean("allow_team_formation").default(true),
+  requireApproval: boolean("require_approval").default(false),
+  emailNotifications: boolean("email_notifications").default(true),
+  createdAt: timestamp("created_at").default(sql`now()`),
+  updatedAt: timestamp("updated_at").default(sql`now()`),
+});
+
+// Event content sections (timeline, prizes, rules, etc.)
+export const eventContent = pgTable("event_content", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  eventId: varchar("event_id").notNull().references(() => events.id),
+  section: text("section").notNull(), // overview, timeline, prizes, rules, judging, sponsors, about, resources, help
+  content: json("content").notNull().default({}),
+  isPublished: boolean("is_published").default(true),
+  order: integer("order").default(0),
+  updatedAt: timestamp("updated_at").default(sql`now()`),
+});
+
+// Event judges
+export const eventJudges = pgTable("event_judges", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  eventId: varchar("event_id").notNull().references(() => events.id),
+  name: text("name").notNull(),
+  title: text("title"),
+  company: text("company"),
+  bio: text("bio"),
+  avatar: text("avatar"),
+  linkedin: text("linkedin"),
+  twitter: text("twitter"),
+  email: text("email"),
+  expertise: text("expertise").array().default(sql`'{}'::text[]`),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").default(sql`now()`),
+});
+
+// Event sponsors
+export const eventSponsors = pgTable("event_sponsors", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  eventId: varchar("event_id").notNull().references(() => events.id),
+  name: text("name").notNull(),
+  logo: text("logo"),
+  website: text("website"),
+  description: text("description"),
+  tier: text("tier").notNull().default("bronze"), // platinum, gold, silver, bronze, partner
+  order: integer("order").default(0),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").default(sql`now()`),
+});
+
+// Event participants
+export const eventParticipants = pgTable("event_participants", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  eventId: varchar("event_id").notNull().references(() => events.id),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  userName: text("user_name").notNull(),
+  userEmail: text("user_email").notNull(),
+  registeredAt: timestamp("registered_at").default(sql`now()`),
+  status: text("status").notNull().default("registered"), // registered, checked_in, submitted, disqualified
+  teamId: varchar("team_id"),
+});
+
+// Event teams
+export const eventTeams = pgTable("event_teams", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  eventId: varchar("event_id").notNull().references(() => events.id),
+  name: text("name").notNull(),
+  description: text("description"),
+  lookingFor: text("looking_for").array().default(sql`'{}'::text[]`),
+  skills: text("skills").array().default(sql`'{}'::text[]`),
+  leaderId: varchar("leader_id").notNull().references(() => users.id),
+  memberIds: text("member_ids").array().default(sql`'{}'::text[]`),
+  maxMembers: integer("max_members").default(4),
+  isRecruiting: boolean("is_recruiting").default(true),
+  track: text("track"),
+  submissionId: varchar("submission_id"),
+  createdAt: timestamp("created_at").default(sql`now()`),
+});
+
+// Event submissions
+export const eventSubmissions = pgTable("event_submissions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  eventId: varchar("event_id").notNull().references(() => events.id),
+  teamId: varchar("team_id").references(() => eventTeams.id),
+  title: text("title").notNull(),
+  tagline: text("tagline"),
+  description: text("description").notNull(),
+  longDescription: text("long_description"),
+  demoUrl: text("demo_url"),
+  repoUrl: text("repo_url"),
+  videoUrl: text("video_url"),
+  slidesUrl: text("slides_url"),
+  imageUrls: text("image_urls").array().default(sql`'{}'::text[]`),
+  techStack: text("tech_stack").array().default(sql`'{}'::text[]`),
+  track: text("track"),
+  submittedBy: varchar("submitted_by").notNull().references(() => users.id),
+  submittedAt: timestamp("submitted_at").default(sql`now()`),
+  status: text("status").notNull().default("submitted"), // draft, submitted, judging, winner, finalist
+  scores: json("scores").default({}),
+  totalScore: integer("total_score").default(0),
+  rank: integer("rank"),
+  prizes: text("prizes").array().default(sql`'{}'::text[]`),
+});
+
+// Judging scores
+export const judgingScores = pgTable("judging_scores", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  submissionId: varchar("submission_id").notNull().references(() => eventSubmissions.id),
+  judgeId: varchar("judge_id").notNull().references(() => eventJudges.id),
+  criteria: json("criteria").notNull().default({}), // { innovation: 8, execution: 7, impact: 9 }
+  totalScore: integer("total_score").notNull(),
+  feedback: text("feedback"),
+  isComplete: boolean("is_complete").default(false),
+  submittedAt: timestamp("submitted_at").default(sql`now()`),
 });
 
 export const projects = pgTable("projects", {
@@ -94,9 +254,54 @@ export const projectMessages = pgTable("project_messages", {
   createdAt: timestamp("created_at").default(sql`now()`),
 });
 
-export const insertUserSchema = createInsertSchema(users).pick({
-  username: true,
-  password: true,
+// Insert schemas
+export const insertUserSchema = createInsertSchema(users).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertEventSchema = createInsertSchema(events).omit({
+  id: true,
+  participantCount: true,
+  submissionCount: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertEventContentSchema = createInsertSchema(eventContent).omit({
+  id: true,
+  updatedAt: true,
+});
+
+export const insertEventJudgeSchema = createInsertSchema(eventJudges).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertEventSponsorSchema = createInsertSchema(eventSponsors).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertEventParticipantSchema = createInsertSchema(eventParticipants).omit({
+  id: true,
+  registeredAt: true,
+});
+
+export const insertEventTeamSchema = createInsertSchema(eventTeams).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertEventSubmissionSchema = createInsertSchema(eventSubmissions).omit({
+  id: true,
+  submittedAt: true,
+});
+
+export const insertJudgingScoreSchema = createInsertSchema(judgingScores).omit({
+  id: true,
+  submittedAt: true,
 });
 
 export const insertProjectSchema = createInsertSchema(projects).omit({
@@ -133,6 +338,7 @@ export const insertProjectMessageSchema = createInsertSchema(projectMessages).om
   createdAt: true,
 });
 
+// Type exports
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type Project = typeof projects.$inferSelect;
@@ -148,26 +354,50 @@ export type InsertJoinRequest = z.infer<typeof insertJoinRequestSchema>;
 export type ProjectMessage = typeof projectMessages.$inferSelect;
 export type InsertProjectMessage = z.infer<typeof insertProjectMessageSchema>;
 
-// Event types for frontend-only implementation
+// Event-related types
+export type Event = typeof events.$inferSelect;
+export type InsertEvent = z.infer<typeof insertEventSchema>;
+export type EventContent = typeof eventContent.$inferSelect;
+export type InsertEventContent = z.infer<typeof insertEventContentSchema>;
+export type EventJudge = typeof eventJudges.$inferSelect;
+export type InsertEventJudge = z.infer<typeof insertEventJudgeSchema>;
+export type EventSponsor = typeof eventSponsors.$inferSelect;
+export type InsertEventSponsor = z.infer<typeof insertEventSponsorSchema>;
+export type EventParticipant = typeof eventParticipants.$inferSelect;
+export type InsertEventParticipant = z.infer<typeof insertEventParticipantSchema>;
+export type EventTeam = typeof eventTeams.$inferSelect;
+export type InsertEventTeam = z.infer<typeof insertEventTeamSchema>;
+export type EventSubmission = typeof eventSubmissions.$inferSelect;
+export type InsertEventSubmission = z.infer<typeof insertEventSubmissionSchema>;
+export type JudgingScore = typeof judgingScores.$inferSelect;
+export type InsertJudgingScore = z.infer<typeof insertJudgingScoreSchema>;
+
+// Content structure interfaces
 export interface Prize {
+  id?: string;
   place?: number;
   track?: string;
   amount: number;
   title: string;
   description?: string;
+  icon?: string;
+  color?: string;
 }
 
 export interface TimelineItem {
+  id?: string;
   time: string;
   title: string;
   description: string;
-  isActive?: boolean;
-  isCompleted?: boolean;
+  status?: "completed" | "active" | "upcoming";
+  type?: "milestone" | "deadline" | "event";
 }
 
 export interface FAQ {
+  id?: string;
   question: string;
   answer: string;
+  category?: string;
 }
 
 export interface GalleryItem {
@@ -179,111 +409,167 @@ export interface GalleryItem {
   caption?: string;
 }
 
-export interface Event {
-  id: string;
-  slug: string;
-  title: string;
-  tagline?: string;
-  description: string;
-  longDescription?: string;
-  startDate: string;
-  endDate: string;
-  registrationOpen?: string;
-  registrationClose?: string;
-  submissionOpen?: string;
-  submissionClose?: string;
-  status: "upcoming" | "active" | "completed" | "registration_open";
-  format: "online" | "in-person" | "hybrid";
-  location: string;
-  prizePool: number;
-  maxTeamSize: number;
-  participantCount: number;
-  organizerId: string;
-  tracks: string[];
-  tags: string[];
-  judges: string[];
-  sponsors: string[];
-  socials?: Record<string, string>;
-  links?: Record<string, string>;
-  hero?: {
-    coverImage?: string;
-    promoVideo?: string;
-    countdown?: boolean;
-  };
-  criteria?: {
-    name: string;
-    percentage: number;
-    description: string;
-  }[];
-  whyJoin?: string[];
-  gallery?: GalleryItem[];
-  eligibility?: {
-    age?: string;
-    teamSize?: string;
-    ipPolicy?: string;
-    codeOfConduct?: string;
-  };
-  community?: {
-    discord?: string;
-    telegram?: string;
-    forum?: string;
-    responseTime?: string;
-  };
-  contact?: {
-    name?: string;
-    email?: string;
-    phone?: string;
-    organizer?: string;
-  };
-  prizes: Prize[];
-  timeline?: TimelineItem[];
-  rules?: string[];
-  faqs?: FAQ[];
-  createdAt?: string;
-  updatedAt?: string;
-}
-
-export interface Team {
-  id: string;
+export interface JudgingCriterion {
+  id?: string;
   name: string;
+  weight: number;
   description: string;
-  lookingFor: string[];
-  members: {
-    id: string;
-    name: string;
-    role: string;
-    avatar?: string;
-  }[];
-  skills: string[];
-  eventId: string;
-  isOpen: boolean;
-  maxSize: number;
+  maxScore?: number;
 }
 
-export interface Submission {
+export interface EventRule {
+  id?: string;
+  title: string;
+  description: string;
+  category: string;
+  icon?: string;
+  color?: string;
+}
+
+export interface QuickStartItem {
   id: string;
   title: string;
   description: string;
-  teamId: string;
-  eventId: string;
-  demoUrl?: string;
-  repoUrl?: string;
-  videoUrl?: string;
-  images: string[];
-  technologies: string[];
-  track?: string;
-  submittedAt: string;
-  score?: number;
+  action: string;
+  completed: boolean;
+  required: boolean;
 }
 
-export interface Judge {
+// Comprehensive event content structure
+export interface EventContentStructure {
+  overview?: {
+    highlights?: Array<{
+      title: string;
+      value: string | number;
+      description: string;
+      icon: string;
+      color: string;
+    }>;
+    quickStart?: QuickStartItem[];
+    whyJoin?: string[];
+    featured?: boolean;
+  };
+  timeline?: {
+    items: TimelineItem[];
+    showLive?: boolean;
+  };
+  prizes?: {
+    total: number;
+    currency: string;
+    categories: Array<{
+      id: string;
+      title: string;
+      description: string;
+      prizes: Prize[];
+    }>;
+    rules?: string[];
+  };
+  rules?: {
+    sections: EventRule[];
+    importantNotes?: Array<{
+      type: "warning" | "info";
+      title: string;
+      message: string;
+      icon: string;
+    }>;
+    deadlines?: Array<{
+      title: string;
+      date: string;
+      status: "open" | "closed" | "upcoming";
+    }>;
+  };
+  judging?: {
+    criteria: JudgingCriterion[];
+    process?: string[];
+    timeline?: TimelineItem[];
+  };
+  sponsors?: {
+    tiers: Array<{
+      name: string;
+      level: number;
+      benefits: string[];
+    }>;
+  };
+  about?: {
+    story?: string;
+    mission?: string;
+    team?: Array<{
+      name: string;
+      role: string;
+      bio: string;
+      avatar?: string;
+      social?: Record<string, string>;
+    }>;
+    contact?: {
+      email: string;
+      social: Record<string, string>;
+    };
+  };
+  resources?: {
+    categories: Array<{
+      title: string;
+      description: string;
+      items: Array<{
+        title: string;
+        description: string;
+        url: string;
+        type: "documentation" | "tool" | "template" | "api";
+      }>;
+    }>;
+  };
+  help?: {
+    faqs: FAQ[];
+    support: {
+      email: string;
+      discord?: string;
+      slack?: string;
+      hours?: string;
+    };
+    guides?: Array<{
+      title: string;
+      description: string;
+      url: string;
+    }>;
+  };
+}
+
+// Auth and permission types
+export interface AuthUser extends User {
+  isOrganizer: boolean;
+  canEditEvent: (eventId: string) => boolean;
+  permissions: string[];
+}
+
+// Event analytics and management
+export interface EventAnalytics {
+  registrations: {
+    total: number;
+    daily: Array<{ date: string; count: number }>;
+    byTrack: Array<{ track: string; count: number }>;
+  };
+  teams: {
+    total: number;
+    recruiting: number;
+    full: number;
+  };
+  submissions: {
+    total: number;
+    byTrack: Array<{ track: string; count: number }>;
+    judged: number;
+    pending: number;
+  };
+  engagement: {
+    pageViews: number;
+    uniqueVisitors: number;
+    socialShares: number;
+  };
+}
+
+export interface EventHealthCheck {
   id: string;
-  name: string;
   title: string;
-  company: string;
-  bio: string;
-  avatar?: string;
-  expertise: string[];
-  linkedinUrl?: string;
-  twitterUrl?: string;
+  status: "complete" | "warning" | "error";
+  message?: string;
+  action?: string;
+  priority: "high" | "medium" | "low";
 }
