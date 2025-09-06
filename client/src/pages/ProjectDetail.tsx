@@ -242,7 +242,11 @@ Already helping 10,000+ users reduce their carbon footprint by an average of 25%
                   {project.badges?.map((badge) => (
                     <Badge 
                       key={badge} 
-                      className="bg-yellow text-card-foreground shadow-soft"
+                      className={`${
+                        badge === 'Winner' || badge === 'Finalist'
+                          ? 'bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
+                          : 'bg-yellow text-card-foreground'
+                      } shadow-soft`}
                       data-testid={`badge-${badge}`}
                     >
                       {badgeIcons[badge as keyof typeof badgeIcons]}

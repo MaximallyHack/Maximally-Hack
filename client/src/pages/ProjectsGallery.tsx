@@ -84,7 +84,11 @@ function ProjectCard({ project }: ProjectCardProps) {
             {project.badges?.map((badge) => (
               <Badge 
                 key={badge} 
-                className="bg-yellow text-text-dark shadow-soft"
+                className={`${
+                  badge === 'Winner' || badge === 'Finalist'
+                    ? 'bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100'
+                    : 'bg-yellow text-text-dark'
+                } shadow-soft`}
                 data-testid={`badge-${badge}`}
               >
                 {badgeIcons[badge as keyof typeof badgeIcons]}

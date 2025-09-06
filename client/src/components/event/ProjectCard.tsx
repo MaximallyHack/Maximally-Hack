@@ -38,7 +38,11 @@ export default function ProjectCard({ project, teamMembers = [], showScore = fal
         {/* Header */}
         <div className="flex items-center justify-between">
           {project.awards && project.awards.length > 0 ? (
-            <Badge className={`bg-${getAwardColor(project.awards[0])}/20 text-${getAwardColor(project.awards[0])} px-3 py-1 rounded-full text-sm font-medium border-0`}>
+            <Badge className={`${
+              project.awards[0].includes('Winner') || project.awards[0].includes('Finalist') 
+                ? 'bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100' 
+                : `bg-${getAwardColor(project.awards[0])}/20 text-${getAwardColor(project.awards[0])}`
+            } px-3 py-1 rounded-full text-sm font-medium border-0`}>
               <Trophy className="w-3 h-3 mr-1" />
               {project.awards[0]}
             </Badge>
