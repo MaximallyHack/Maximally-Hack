@@ -75,7 +75,7 @@ export default function Signup() {
   return (
     <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center py-12 px-4">
       <div className="w-full max-w-md">
-        <Card className="dark:bg-gray-500">
+        <Card className="dark:bg-gray-900">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl font-medium dark:text-white">Create Account</CardTitle>
             <CardDescription className="dark:text-gray-100">
