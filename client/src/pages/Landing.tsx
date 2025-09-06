@@ -263,7 +263,13 @@ export default function Landing() {
                 </Avatar>
               ))}
             </div>
-            <span className="text-muted-foreground">200+ Expert Judges</span>
+            <div className="flex flex-col sm:flex-row gap-4 items-center">
+              <span className="text-muted-foreground">200+ Expert Judges</span>
+              <span className="hidden sm:block text-muted-foreground">•</span>
+              <span className="text-muted-foreground font-semibold text-coral">500+ Teams Formed</span>
+              <span className="hidden sm:block text-muted-foreground">•</span>
+              <span className="text-muted-foreground">10,000+ Hackers</span>
+            </div>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
