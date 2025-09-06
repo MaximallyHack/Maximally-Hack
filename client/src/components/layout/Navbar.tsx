@@ -263,12 +263,12 @@ export default function Navbar() {
                       ) : (
                         <div className="flex flex-col items-center space-y-4">
                           <Link to="/login" onClick={() => setIsOpen(false)}>
-                            <Button variant="outline" className="w-full border-coral hover:bg-coral/10 text-[#b3b3b3] bg-[#0b101e] py-3" data-testid="mobile-button-login">
+                            <Button variant="outline" className="w-64 h-14 rounded-xl border border-coral hover:bg-coral/10 text-[#b3b3b3] bg-[#0b101e] flex items-center justify-center" data-testid="mobile-button-login">
                               Login
                             </Button>
                           </Link>
                           <Link to="/signup" onClick={() => setIsOpen(false)}>
-                            <Button className="w-full bg-gradient-to-r from-coral to-coral/90 hover:bg-primary/90 text-white font-medium hover:bg-primary/90 py-3" data-testid="mobile-button-signup">
+                            <Button className="w-64 h-14 rounded-xl bg-gradient-to-r from-coral to-coral/90 hover:bg-primary/90 text-white font-medium flex items-center justify-center" data-testid="mobile-button-signup">
                               <Sparkles className="w-4 h-4 mr-2" />
                               Join Now
                             </Button>
