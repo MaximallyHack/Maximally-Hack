@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
-import { Link, useParams, useLocation } from 'wouter';
+import { useParams, useLocation } from 'react-router-dom';
+import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -33,8 +34,8 @@ const eventNavItems = [
 ];
 
 export default function EventLayout({ children }: EventLayoutProps) {
-  const { slug } = useParams();
-  const [location] = useLocation();
+  const { slug } = useParams<{ slug: string }>();
+  const location = useLocation();
   const { event, isLoading, error } = useEvent();
   const { user, isLoggedIn, registerForEvent, unregisterFromEvent } = useAuth();
   const { toast } = useToast();
@@ -154,7 +155,7 @@ export default function EventLayout({ children }: EventLayoutProps) {
   };
 
   const getCurrentSection = () => {
-    const path = location.replace(`/e/${slug}`, '') || '/';
+    const path = location.pathname.replace(`/e/${slug}`, '') || '/';
     if (path === '/') return 'overview';
     const section = path.split('/')[1];
     return section || 'overview';
