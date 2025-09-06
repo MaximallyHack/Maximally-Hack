@@ -230,6 +230,17 @@ export default function OrganizerDashboard() {
                         <Badge className={`bg-${getStatusColor(event.status)}/20 text-${getStatusColor(event.status)} px-2 py-1 rounded-full text-xs border-0`}>
                           {event.status}
                         </Badge>
+                        <Link href={`/e/${event.id}`}>
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            className="border-coral text-coral hover:bg-coral/10 text-xs px-3"
+                            data-testid={`button-view-event-${event.id}`}
+                          >
+                            <Eye className="w-3 h-3 mr-1" />
+                            View
+                          </Button>
+                        </Link>
                         <Link href={`/organizer/events/${event.id}/overview`}>
                           <Button 
                             size="sm" 
@@ -350,12 +361,16 @@ export default function OrganizerDashboard() {
                         </div>
                         
                         <div className="flex items-center gap-2">
-                          <Button variant="ghost" size="icon" className="text-text-muted hover:text-sky" data-testid={`button-view-${event.id}`}>
-                            <Eye className="w-4 h-4" />
-                          </Button>
-                          <Button variant="ghost" size="icon" className="text-text-muted hover:text-coral" data-testid={`button-edit-${event.id}`}>
-                            <Edit className="w-4 h-4" />
-                          </Button>
+                          <Link href={`/e/${event.id}`}>
+                            <Button variant="ghost" size="icon" className="text-text-muted hover:text-sky" data-testid={`button-view-${event.id}`}>
+                              <Eye className="w-4 h-4" />
+                            </Button>
+                          </Link>
+                          <Link href={`/organizer/events/${event.id}/edit`}>
+                            <Button variant="ghost" size="icon" className="text-text-muted hover:text-coral" data-testid={`button-edit-${event.id}`}>
+                              <Edit className="w-4 h-4" />
+                            </Button>
+                          </Link>
                           <Button variant="ghost" size="icon" className="text-text-muted hover:text-text-dark" data-testid={`button-more-${event.id}`}>
                             <MoreHorizontal className="w-4 h-4" />
                           </Button>
