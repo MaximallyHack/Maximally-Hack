@@ -77,19 +77,19 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center py-12 px-4">
+    <div className="min-h-screen bg-background flex items-center justify-center py-12 px-4">
       <div className="w-full max-w-md">
-        <Card>
+        <Card className="bg-card border-border">
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-medium">Welcome Back</CardTitle>
-            <CardDescription>
+            <CardTitle className="text-2xl font-medium text-card-foreground">Welcome Back</CardTitle>
+            <CardDescription className="text-muted-foreground">
               Sign in to your account to register for hackathons and track your progress
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <Label htmlFor="username">Username or Email</Label>
+                <Label htmlFor="username" className="text-card-foreground">Username or Email</Label>
                 <Input
                   id="username"
                   name="username"
@@ -102,7 +102,7 @@ export default function Login() {
               </div>
 
               <div>
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password" className="text-card-foreground">Password</Label>
                 <div className="relative">
                   <Input
                     id="password"
@@ -137,7 +137,7 @@ export default function Login() {
 
               <Button
                 type="submit"
-                className="w-full bg-gray-900 hover:bg-gray-800"
+                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -151,9 +151,9 @@ export default function Login() {
               </Button>
             </form>
 
-            <div className="mt-6 text-center text-sm">
+            <div className="mt-6 text-center text-sm text-card-foreground">
               Don't have an account?{" "}
-              <Link href="/signup" className="text-blue-600 hover:underline">
+              <Link href="/signup" className="text-sky hover:underline">
                 Sign up
               </Link>
             </div>
@@ -161,26 +161,26 @@ export default function Login() {
         </Card>
 
         {/* Demo Accounts */}
-        <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-          <h3 className="text-sm font-medium text-blue-700 mb-3">Demo Accounts</h3>
+        <div className="mt-6 p-4 bg-muted rounded-lg">
+          <h3 className="text-sm font-medium text-muted-foreground mb-3">Demo Accounts</h3>
           <div className="space-y-2">
             {demoCredentials.map((cred, index) => (
               <Button
                 key={index}
                 variant="outline"
                 size="sm"
-                className="w-full text-left justify-start bg-white hover:bg-blue-50 border-blue-200"
+                className="w-full text-left justify-start bg-card hover:bg-muted border-border"
                 onClick={() => handleDemoLogin(cred.username, cred.password)}
                 disabled={isLoading}
               >
                 <div className="text-left">
                   <div className="font-medium text-sm">{cred.name}</div>
-                  <div className="text-xs text-gray-500">{cred.username}</div>
+                  <div className="text-xs text-muted-foreground">{cred.username}</div>
                 </div>
               </Button>
             ))}
           </div>
-          <p className="text-xs text-blue-600 mt-3">
+          <p className="text-xs text-muted-foreground mt-3">
             Click any demo account to login instantly. Password: demo123
           </p>
         </div>

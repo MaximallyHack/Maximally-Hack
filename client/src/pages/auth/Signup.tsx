@@ -73,19 +73,19 @@ export default function Signup() {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center py-12 px-4">
+    <div className="min-h-screen bg-background flex items-center justify-center py-12 px-4">
       <div className="w-full max-w-md">
-        <Card className="dark:bg-gray-900">
+        <Card className="bg-card border-border">
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-medium dark:text-white">Create Account</CardTitle>
-            <CardDescription className="dark:text-gray-100">
+            <CardTitle className="text-2xl font-medium text-card-foreground">Create Account</CardTitle>
+            <CardDescription className="text-muted-foreground">
               Join the hackathon community and start building amazing projects
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <Label htmlFor="fullName" className="dark:text-white">Full Name</Label>
+                <Label htmlFor="fullName" className="text-card-foreground">Full Name</Label>
                 <Input
                   id="fullName"
                   name="fullName"
@@ -98,7 +98,7 @@ export default function Signup() {
               </div>
 
               <div>
-                <Label htmlFor="username" className="dark:text-white">Username</Label>
+                <Label htmlFor="username" className="text-card-foreground">Username</Label>
                 <Input
                   id="username"
                   name="username"
@@ -111,7 +111,7 @@ export default function Signup() {
               </div>
 
               <div>
-                <Label htmlFor="email" className="dark:text-white">Email</Label>
+                <Label htmlFor="email" className="text-card-foreground">Email</Label>
                 <Input
                   id="email"
                   name="email"
@@ -124,7 +124,7 @@ export default function Signup() {
               </div>
 
               <div>
-                <Label htmlFor="password" className="dark:text-white">Password</Label>
+                <Label htmlFor="password" className="text-card-foreground">Password</Label>
                 <div className="relative">
                   <Input
                     id="password"
@@ -152,7 +152,7 @@ export default function Signup() {
               </div>
 
               <div>
-                <Label htmlFor="confirmPassword" className="dark:text-white">Confirm Password</Label>
+                <Label htmlFor="confirmPassword" className="text-card-foreground">Confirm Password</Label>
                 <Input
                   id="confirmPassword"
                   name="confirmPassword"
@@ -172,7 +172,7 @@ export default function Signup() {
 
               <Button
                 type="submit"
-                className="w-full bg-gray-900 hover:bg-gray-800"
+                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -186,9 +186,9 @@ export default function Signup() {
               </Button>
             </form>
 
-            <div className="mt-6 text-center text-sm dark:text-white">
+            <div className="mt-6 text-center text-sm text-card-foreground">
               Already have an account?{" "}
-              <Link href="/login" className="text-blue-600 hover:underline dark:text-blue-300">
+              <Link href="/login" className="text-sky hover:underline">
                 Sign in
               </Link>
             </div>
@@ -196,9 +196,9 @@ export default function Signup() {
         </Card>
 
         {/* Demo Info */}
-        <div className="mt-6 p-4 bg-blue-50 dark:bg-gray-800 rounded-lg text-center">
-          <p className="text-sm text-blue-700 dark:text-white font-medium mb-2">Demo Mode</p>
-          <p className="text-xs text-blue-600 dark:text-gray-200">
+        <div className="mt-6 p-4 bg-muted rounded-lg text-center">
+          <p className="text-sm text-muted-foreground font-medium mb-2">Demo Mode</p>
+          <p className="text-xs text-muted-foreground">
             This is a demo signup. No real accounts are created. All data is stored locally for testing purposes.
           </p>
         </div>
