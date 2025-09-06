@@ -22,7 +22,7 @@ export default function Landing() {
         <DecorativeElements />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <FloatingElement>
-            <h1 className="font-heading font-bold text-5xl md:text-6xl mb-6 text-[#e6e8ed]">
+            <h1 className="font-heading font-bold text-5xl md:text-6xl mb-6 text-[#2a2d3a] dark:text-[#e6e8ed]">
               Where Great Ideas
               <span className="text-coral"> Come to Life</span>
             </h1>
