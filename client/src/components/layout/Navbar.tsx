@@ -141,7 +141,7 @@ export default function Navbar() {
                 <div className="flex items-center space-x-3">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="outline" className="border-coral text-coral hover:bg-coral/10 font-medium transition-all duration-300 hover:shadow-sm" data-testid="button-login">
+                      <Button variant="outline" className="w-64 h-14 rounded-xl border border-coral hover:bg-coral/10 text-coral flex items-center justify-center font-medium transition-all duration-300 hover:shadow-sm" data-testid="button-login">
                         Login
                       </Button>
                     </DropdownMenuTrigger>
@@ -161,7 +161,7 @@ export default function Navbar() {
                     </DropdownMenuContent>
                   </DropdownMenu>
                   <Link to="/signup">
-                    <Button className="bg-gradient-to-r from-coral to-coral/90 hover:from-coral/90 hover:to-coral/80 text-white font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105" data-testid="button-signup">
+                    <Button className="w-64 h-14 rounded-xl bg-gradient-to-r from-coral to-coral/90 hover:from-coral/90 hover:to-coral/80 text-white font-medium flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105" data-testid="button-signup">
                       <Sparkles className="w-4 h-4 mr-2" />
                       Join Now
                     </Button>
