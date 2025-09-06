@@ -50,7 +50,7 @@ export default function Landing() {
       <section className="py-8 bg-soft-gray/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap gap-3 justify-center text-[#0d1322] bg-[transparent]">
-            <Badge className="bg-sky text-white px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer" data-testid="category-ai">
+            <Badge className="inline-flex items-center border transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer bg-[#0053a6] text-[#ffffff]" data-testid="category-ai">
               🤖 AI & ML
             </Badge>
             <Badge className="bg-mint text-foreground px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer" data-testid="category-student">
