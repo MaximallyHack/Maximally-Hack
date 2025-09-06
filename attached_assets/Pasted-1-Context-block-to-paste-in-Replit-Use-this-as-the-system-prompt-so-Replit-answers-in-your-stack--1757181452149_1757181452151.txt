@@ -1,0 +1,181 @@
+1) Context block to paste in Replit
+
+Use this as the system prompt so Replit answers in your stack.
+
+You are designing and building "MaximallyHack" — a hackathon hosting + discovery platform.
+
+Stack: Vercel for hosting, TypeScript React for frontend, Supabase (Postgres + Auth) for backend, storage, and row-level security. Realtime where needed. No vendor lock-in beyond Supabase.
+
+Key objects: Users, Profiles, Hackathons, Teams, Submissions, Judges, Mentors, Announcements, Messages, Tickets, Sponsors.
+
+Key flows: register for hackathon, team find/form, project submit, async judging, mentor booking, announcements, Discord webhooks, simple payouts (later), analytics.
+
+Non-goals: no heavy CMS, no paid ads panel.
+
+Design rules: simple UI, fast loads, mobile first, privacy by default. India-first timezones, global friendly.
+
+Deliver answers as short, direct bullets. Include code when asked. Prefer SQL for schema, TypeScript for types, and clear API routes.
+
+2) Giant question bank for Replit
+
+Paste these as numbered prompts. Replit will answer each. You’ll then hand me the answers.
+
+A. Product scope
+
+What are the must-have features for v1, nice-to-have for v1.1, and later?
+
+What is the smallest flow to host 1 live hackathon this month end to end?
+
+What things will we not build at all in the next 90 days?
+
+B. Auth, accounts, and roles
+
+Which auth methods do we support now: email+OTP, Google, GitHub?
+
+Role set: participant, organizer, judge, mentor, sponsor, admin — any more?
+
+What fields do we need on profiles beyond name, avatar, bio, country, school/company?
+
+Age handling for minors, consent text, and parental email field — needed?
+
+C. Hackathon model
+
+Fields on hackathons: slug, title, tagline, cover, start_at, end_at, mode, city, prize_pool, rules_url, devpost_url, discord_url, faq, status. Anything else?
+
+What statuses do we use: draft, upcoming, live, judging, finished, archived?
+
+D. Registration
+
+Do we allow both solo and team? team size min/max?
+
+Any custom questions per hackathon at signup?
+
+Should organizers cap total seats or team count?
+
+E. Teams and matchmaking
+
+Do we need a team finder with posts, tags, and “request to join”?
+
+Filters to find people: skills, timezone, experience level, goal (win, learn, chill), role (dev, design, PM, content).
+
+Do we lock teams after submission freeze?
+
+F. Submissions
+
+Required fields: title, 60-char summary, long description, repo, demo link, video link, tech used, track.
+
+Can organizers add required deliverables per event?
+
+Do we support resubmits until deadline?
+
+G. Judging
+
+Scoring rubric fields and weights (e.g., originality 25, impact 25, execution 25, polish 25).
+
+Blind judging on by default?
+
+Judge assignment mode: random split, balanced by load, or manual list?
+
+Tie-break rule and auto-ranking logic?
+
+Do we need judge notes visible to teams post-results?
+
+H. Mentors
+
+Mentor slots: 15-min or 30-min? booking window rules?
+
+Do mentors set skills tags and time blocks?
+
+Do we gate bookings per team per day?
+
+I. Announcements and help
+
+Channels: in-app banner, email, Discord webhook.
+
+Priority levels: low, normal, high.
+
+Do we need a live ticker during the event?
+
+J. Messaging
+
+Team chat only, or event-wide threads too?
+
+Should we mirror to Discord via webhook?
+
+K. Tracks, prizes, and sponsors
+
+Track structure and prize mapping. Can sponsors add track-specific prompts?
+
+Do we need sponsor logos per track?
+
+L. Moderation and safety
+
+Report flow for people or teams. Who can action? what actions?
+
+Content policy link. What gets auto-flagged?
+
+M. Payments (later)
+
+Will we charge entry fees later? currency, gateway?
+
+Do we need payouts to winners now or later?
+
+N. Analytics
+
+What KPIs matter on the event page: registrations, teams, submissions, mentor sessions, views, CTR to Devpost?
+
+What organizer dashboard tiles do we need day one?
+
+O. Performance and limits
+
+Max concurrent users target per event?
+
+Asset sizes for images and videos?
+
+Rate limits on API endpoints?
+
+P. Integrations
+
+Devpost: deep link only or partial sync?
+
+Discord: which events should fire webhooks?
+
+GitHub: show stars, last commit, branch?
+
+Google Drive for judges to review attachments?
+
+Q. Internationalization
+
+Do we need i18n scaffolding now? default en-IN.
+
+R. Accessibility
+
+Minimum AA, keyboard nav, captions required?
+
+S. Admin ops
+
+Who can switch event status? audit log needed?
+
+Bulk CSV import for users, teams, or judges?
+
+T. Legal
+
+Terms, privacy, and media consent. Any special clauses for minors?
+
+Simple contributor license for external code? MIT across repos?
+
+U. Deployment
+
+Vercel envs: preview, staging, production. Which env vars do we need?
+
+Supabase policies: which tables need row-level security on day one?
+
+V. Data model checks
+
+Do we need soft deletes? which tables?
+
+What indexes should we add for hot queries?
+
+W. Roadmap
+
+Pick top 10 tasks for a public “Contribute” board for the next 2 weeks.

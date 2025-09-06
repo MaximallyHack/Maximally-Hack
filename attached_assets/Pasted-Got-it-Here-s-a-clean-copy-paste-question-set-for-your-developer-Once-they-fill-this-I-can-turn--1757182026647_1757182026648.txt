@@ -1,0 +1,415 @@
+Got it. Here’s a clean, copy-paste question set for your developer. Once they fill this, I can turn it into a full roadmap, milestones, and tickets.
+
+# 0) Quick context
+
+1. In one line, what is MaximallyHack v1 trying to prove?
+2. Success by Sept 30, 2025 looks like what numbers, exactly? signups, active users, submissions, uptime
+3. What is out of scope till Nov 2025?
+
+# 1) Users and roles
+
+1. Who can sign up, email OTP, Google, GitHub, magic link
+2. Roles needed, participant, organizer, judge, mentor, sponsor, admin, moderator, volunteer
+3. Can a user hold many roles across events, yes or no
+4. KYC needed for any role, if yes, what fields and proof
+5. Age handling, under 18 flow, consent text, storage
+
+# 2) Event model
+
+1. Are events single or multi-track, how many tracks max
+2. Core fields for an event, slug, title, dates, time zone, online or offline, city, banner, prize pool, rules, resources
+3. Draft → published → archived states, who flips states
+4. Stats to show, registrations, teams, submissions, mentors online, judges assigned
+5. Visibility, public, unlisted, private invite code
+6. Team size min and max per event
+7. File limits for resources and rules, size, types
+
+# 3) Registration and access
+
+1. Registration window rules, open and close, waitlist needed
+2. Per-event questions on signup, skills, stack, interests, portfolio links
+3. Approval flow, auto or manual, who approves
+4. Country or school restrictions
+5. Rate limits to block bot signups
+
+# 4) Teams and matchmaking
+
+1. Team create, join by link or code, requests, approvals
+2. Search filters, skills, timezone, experience, open roles
+3. Roles inside a team, lead, builder, designer, marketer
+4. Team limits, rename rules, lock after submission or not
+5. Team chat on platform or push to Discord
+6. Team bulletin, looking for X, short post rules
+
+# 5) Projects and submissions
+
+1. What is a “submission”, links only, file uploads, both
+2. Required fields, title, short pitch, long writeup, stack, links, demo video, repo
+3. Revisions allowed, versioning needed, freeze time rules
+4. Media limits, video length, file size, allowed types
+5. Public gallery rules, when visible, during or after event
+6. Report or flag button for spam or abuse, who reviews
+
+# 6) Judging
+
+1. Judging mode, async, live, both
+2. Rubric format, criteria list, weights, auto total score
+3. Judge assignment, random, by track, by skill, manual
+4. Conflict of interest handling
+5. Tie-break rules
+6. Final awards, main prizes, special awards, track winners
+7. Export, CSV of scores with judge names or anonymized
+
+# 7) Mentors
+
+1. Mentor listing, skills, slots, booking rules
+2. Booking system, 1-1 calls, office hours, Discord threads
+3. No-show rules, cooldowns, flags
+4. Feedback form after a session
+
+# 8) Announcements and comms
+
+1. Announcement types, high, medium, low, who can post
+2. Channels, site banner, email, Discord, push, SMS
+3. Throttle rules per hour
+4. Support, live help link, ticket form, SLA
+
+# 9) Integrations
+
+1. Discord, which features, SSO, role sync, channel auto-create, webhook events
+2. Devpost, mirror or import or export, which fields are source of truth
+3. Email provider, Postmark, Sendgrid, SES
+4. File storage, S3, Cloudflare R2, limits and regions
+5. Auth, Clerk, Auth0, Supabase Auth, custom
+6. Payments later, Stripe or Razorpay, currency plan
+
+# 10) Search and discovery
+
+1. Explore page filters, status, dates, track, prize, location, skill level
+2. Search across people, teams, projects, events
+3. Sort rules, trending, newest, deadline soon, prize high
+4. SEO rules, open graph, sitemaps, custom meta per event
+
+# 11) Admin and organizer tools
+
+1. Organizer dashboard cards, regs, teams, submissions, judges, mentors, comms queue
+2. Bulk actions, approve, email, export, assign judges
+3. Audit log, who did what and when
+4. Role-based permissions map, read, write, manage, delete per model
+5. Impersonate user for support, yes or no, guardrails
+
+# 12) Anti-abuse, safety, and legal
+
+1. Rate limits per endpoint
+2. IP and device fingerprint plan
+3. Content policy in simple terms, what gets removed
+4. Takedown flow, who can remove, how fast
+5. Data retention periods per object, user data, logs, backups
+6. COPPA or under-18 notes, consent text and storage
+7. Terms, Privacy, Refund, Code of Conduct links needed at account and event level
+
+# 13) Performance and scale
+
+1. Traffic targets, peak RPS, peak concurrent users
+2. Page load budget, LCP, TTFB targets
+3. Image sizes and thumbnail pipeline
+4. Pagination sizes per list
+5. Caching plan, CDN, edge caching, API caching, what keys and TTLs
+6. Known heavy queries, expected indexes
+
+# 14) Uptime and ops
+
+1. Uptime target for v1
+2. Error budget and alert rules
+3. Logs and metrics stack, which tools, what dashboards
+4. Incidents, who gets paged, where, Discord or Slack, on-call hours
+5. Backups, frequency, restore test plan, RPO and RTO
+6. Feature flags, where and how
+
+# 15) Data model, storage, and migrations
+
+1. DB choice and region, Postgres on Supabase or Neon or RDS
+2. Tables you expect now, users, profiles, events, tracks, registrations, teams, team\_members, submissions, submission\_versions, judges, judge\_assignments, scores, mentors, mentor\_slots, announcements, reports, audit\_logs, webhooks
+3. PII split plan, which fields in a separate schema
+4. Soft delete vs hard delete rules
+5. Migrations process, versioning, rollback steps
+
+# 16) API shape
+
+1. Public vs private APIs
+2. REST vs tRPC or GraphQL, pick one and why
+3. Rate limits per route
+4. Webhooks you need in or out, events list
+5. Idempotency for writes
+
+# 17) Frontend
+
+1. Stack, React with Wouter or Next, state, React Query or Zustand
+2. Design system, Tailwind, shadcn, icon set
+3. Breakpoints and mobile rules
+4. Forms, validation, file uploads, progress UI
+5. Accessibility targets, keyboard, contrast, focus states
+6. Error and empty states for each page
+7. Loading states, skeletons per list
+8. Client cache strategy and invalidation
+
+# 18) Notifications
+
+1. Channels, email, in-app, Discord, SMS later
+2. Event triggers, registration, team invite, judge assign, mentor book, submission received, result posted
+3. Quiet hours and time zone handling
+4. Unsubscribe rules per channel
+
+# 19) Analytics
+
+1. What do we track, registrations per source, funnel, team creation rate, submission rate, judge SLA
+2. Tool, PostHog, Plausible, GA4
+3. PII in analytics, yes or no
+4. Organizer analytics exports, CSV fields
+
+# 20) File and media rules
+
+1. Allowed types, pdf, mp4, png, jpg, zip
+2. Size caps per upload type
+3. Virus scan plan, yes or no
+4. Signed URLs, expiry times
+
+# 21) Security
+
+1. Auth session length, refresh rules
+2. Passwordless, OTP reuse window
+3. Admin access limits, IP allow-list, 2FA
+4. Secrets storage
+5. OWASP checks you want in CI
+
+# 22) Testing and QA
+
+1. Unit, integration, e2e scope
+2. What to mock vs hit for real in CI
+3. Staging env, seed data plan
+4. Pre-launch test script, signups, team flow, submission flow, judge scoring, result publish
+
+# 23) Roadmap shape
+
+1. What is the smallest live flow for one event in Sept, exact screens
+2. What can slip to v1.1 in Oct
+3. What waits for Nov
+4. Milestones as dates, with demo goals
+
+# 24) Content and CMS bits
+
+1. Where do organizers edit Overview, Timeline, Prizes, Rules, Judging, Sponsors
+2. Markdown or simple rich text
+3. Image handling in these sections
+
+# 25) International and time zones
+
+1. Time zone storage, UTC in DB with event tz label
+2. 12h vs 24h view
+3. Currency show and store rules
+
+# 26) Edge cases to lock down
+
+1. Team disband after submission, allowed or not
+2. Changing team members after judging starts
+3. Late submissions window or grace period
+4. Judges missing scores, auto reassign or skip
+5. Mentors over-booked, auto cap
+6. Duplicate projects across events
+
+# 27) Nice to have, if cheap
+
+1. Save draft on every form
+2. Shareable preview of project card
+3. Simple badge system for profiles
+4. Organizer templates to clone past events
+
+---
+
+## Answer format for the dev
+
+Reply in this exact YAML so I can parse fast. Keep keys, add values.
+
+```yaml
+context:
+  v1_goal: ""
+  success_metrics: { signups: 0, active_users: 0, submissions: 0, uptime_pct: 0 }
+  out_of_scope_till_nov: []
+
+users_roles:
+  auth_methods: ["email_otp", "google", "github", "magic_link"]
+  roles: ["participant","organizer","judge","mentor","sponsor","admin","moderator","volunteer"]
+  multi_role: true
+  kyc: { required: false, fields: [] }
+  under_18: { needs_consent: false, text_location: "" }
+
+event_model:
+  tracks: { enabled: true, max: 5 }
+  fields: ["slug","title","dates","tz","mode","city","banner","prize_pool","rules","resources"]
+  states: ["draft","published","archived"]
+  stats: ["registrations","teams","submissions","mentors_online","judges_assigned"]
+  visibility: ["public","unlisted","private"]
+  team_size: { min: 1, max: 4 }
+  resource_limits: { file_mb: 20, types: ["pdf","png","jpg"] }
+
+registration:
+  window: { open: "", close: "" }
+  questions: ["skills","stack","interests","portfolio"]
+  approval: "auto"
+  restrictions: []
+  rate_limits: { signup_per_ip_per_hour: 5 }
+
+teams:
+  create_join: { method: ["link","code","requests"], approvals: "lead_or_open" }
+  search_filters: ["skills","timezone","experience","open_roles"]
+  team_roles: ["lead","builder","designer","marketer"]
+  rename_rules: "lead_only"
+  lock_rules: "lock_on_final_submission"
+  chat: "discord"
+  bulletin: true
+
+submissions:
+  inputs: { links: true, files: true }
+  required_fields: ["title","short_pitch","writeup","stack","links","video","repo"]
+  versioning: true
+  media_limits: { file_mb: 200, video_minutes: 5, types: ["mp4","pdf","png","jpg","zip"] }
+  gallery_visibility: "after_event"
+  report_flag: true
+
+judging:
+  mode: ["async"]
+  rubric: [{ name: "impact", weight: 0.4 }, { name: "technical", weight: 0.3 }, { name: "design", weight: 0.2 }, { name: "presentation", weight: 0.1 }]
+  assignment: "by_track_auto"
+  coi: "self_declared"
+  tie_break: "highest_impact_then_technical"
+  awards: ["overall_1","overall_2","overall_3","track_winners"]
+  export: { csv: true, anonymized: false }
+
+mentors:
+  listing: true
+  booking: { mode: ["office_hours"], tool: "discord_threads" }
+  no_show_rules: { strike_after_misses: 2 }
+  feedback_form: true
+
+comms:
+  announcement_levels: ["high","medium","low"]
+  channels: ["site","email","discord"]
+  throttle: { per_hour: 3 }
+  support: { type: "ticket_form", sla_hours: 24 }
+
+integrations:
+  discord: { sso: true, role_sync: true, channels_auto: true, webhooks: true }
+  devpost: { sync: "export_submissions" }
+  email: "postmark"
+  storage: "s3"
+  auth: "supabase_auth"
+  payments_future: "stripe"
+
+discovery:
+  explore_filters: ["status","dates","track","prize","location","level"]
+  search_entities: ["people","teams","projects","events"]
+  sort: ["trending","newest","deadline","prize"]
+  seo: { og: true, sitemap: true, custom_meta: true }
+
+admin:
+  dashboard_cards: ["regs","teams","subs","judges","mentors","comms"]
+  bulk_actions: ["approve","email","export","assign_judges"]
+  audit_log: true
+  permissions_model: "rbac_by_resource"
+  impersonate: { enabled: true, guards: ["2fa","reason_required"] }
+
+safety_legal:
+  rate_limits: { api_per_ip_per_min: 60 }
+  fingerprint: false
+  content_policy_link: "/policy"
+  takedown_flow: "admin_remove"
+  retention_days: { logs: 30, backups: 30 }
+  under_18: { consent_text_stored: false }
+  policies: ["terms","privacy","coc","refund"]
+
+performance:
+  targets: { lcp_ms: 2500, ttfb_ms: 500 }
+  images: { max_width_px: 1600, thumb_px: 400 }
+  pagination: { default: 20 }
+  caching: { cdn: true, api_ttl_s: 60 }
+  indexes: ["events.slug","users.email","submissions.event_id","scores.submission_id"]
+
+ops:
+  uptime_target_pct: 99.5
+  alerts: ["5xx_rate","db_errors","queue_lag"]
+  logs_metrics: "supabase_logs_plus_posthog"
+  incident_channel: "discord#ops"
+  backups: { freq_hours: 24, rpo_hours: 24, rto_hours: 4 }
+  feature_flags: "simple_db_flags"
+
+data_model:
+  db: { engine: "postgres", region: "ap-south-1" }
+  tables: ["users","profiles","events","tracks","registrations","teams","team_members","submissions","submission_versions","judges","judge_assignments","scores","mentors","mentor_slots","announcements","reports","audit_logs","webhooks"]
+  pii_split: { enabled: true, schema: "pii" }
+  delete_policy: "soft_delete"
+  migrations: "sqlx_or_prisma"
+
+api:
+  style: "rest"
+  public_endpoints: ["/explore","/events/:slug","/projects/:id"]
+  private_endpoints: ["/teams/*","/submissions/*","/judging/*","/admin/*"]
+  rate_limits: { public_rpm: 120, private_rpm: 60 }
+  webhooks_out: ["submission.created","score.finalized"]
+  idempotency: true
+
+frontend:
+  framework: "react_with_wouter"
+  state: "react_query"
+  design_system: "tailwind_shadcn"
+  breakpoints: ["sm","md","lg","xl"]
+  forms: "react_hook_form"
+  a11y: { keyboard: true, contrast: true }
+  errors: "per_page_defined"
+  skeletons: true
+  cache: "stale_while_revalidate"
+
+notifications:
+  channels: ["email","in_app","discord"]
+  triggers: ["reg_ok","team_invite","judge_assign","mentor_book","submission_ok","results_live"]
+  quiet_hours: { enabled: true, tz_aware: true }
+  unsubscribe: { email: true, discord: false, in_app: true }
+
+analytics:
+  tool: "posthog"
+  events: ["visit_explore","register_event","create_team","submit_project","judge_scored","result_view"]
+  pii_in_analytics: false
+  exports: { organizer_csv: true }
+
+files:
+  types: ["pdf","mp4","png","jpg","zip"]
+  max_mb: 200
+  virus_scan: false
+  signed_urls_expiry_min: 30
+
+security:
+  session_hours: 72
+  otp_window_min: 10
+  admin_2fa: true
+  secrets: "env_with_kms"
+  owasp_checks_in_ci: true
+
+testing:
+  unit: true
+  integration: true
+  e2e: true
+  staging_env: true
+  seed_script: true
+  prelaunch_script: ["signup","create_event","register","team","submit","assign_judges","score","publish_results"]
+
+roadmap:
+  smallest_live_flow_screens: ["/explore","/e/:slug","/register","/teams/create","/submissions/new","/judging","/results"]
+  v1_sept: ["auth","event_page","register","teams","submissions","basic_judging","announcements","discord_link"]
+  v1_1_oct: ["mentor_booking","advanced_filters","public_gallery","analytics_basic"]
+  nov: ["payments","api_keys","org_templates"]
+  milestones:
+    - { name: "M1 skeleton", date: "2025-09-15" }
+    - { name: "M2 end-to-end demo", date: "2025-09-25" }
+    - { name: "M3 ship v1", date: "2025-09-30" }
+```
+
+If you want, I can also turn this into a Notion form or a Google Doc template.
