@@ -1,4 +1,4 @@
-// Demo authentication system - all simulated, no real backend
+// Enhanced authentication system with organizer support
 
 export interface User {
   id: string;
@@ -7,8 +7,22 @@ export interface User {
   fullName: string;
   avatar?: string;
   bio?: string;
+  role: "user" | "organizer" | "admin";
+  organizationName?: string;
+  website?: string;
+  linkedin?: string;
+  twitter?: string;
+  isVerified: boolean;
   registeredEvents: string[];
+  ownedEvents: string[];
+  permissions: string[];
   createdAt: string;
+}
+
+export interface AuthUser extends User {
+  isOrganizer: boolean;
+  canEditEvent: (eventId: string) => boolean;
+  canCreateEvent: boolean;
 }
 
 export interface AuthState {
@@ -16,7 +30,7 @@ export interface AuthState {
   isLoggedIn: boolean;
 }
 
-// Demo users storage (simulates a database)
+// Demo users storage with organizer support
 const demoUsers: User[] = [
   {
     id: 'demo-user-1',
@@ -24,7 +38,11 @@ const demoUsers: User[] = [
     email: 'sarah@example.com',
     fullName: 'Sarah Johnson',
     bio: 'Full-stack developer passionate about AI and sustainability',
+    role: 'user',
+    isVerified: false,
     registeredEvents: ['maximally-ai-shipathon-2025'],
+    ownedEvents: [],
+    permissions: ['view_events', 'register_events'],
     createdAt: new Date().toISOString(),
   },
   {
@@ -33,7 +51,27 @@ const demoUsers: User[] = [
     email: 'alex@example.com',
     fullName: 'Alex Chen',
     bio: 'Mobile app developer and hackathon enthusiast',
+    role: 'user',
+    isVerified: false,
     registeredEvents: [],
+    ownedEvents: [],
+    permissions: ['view_events', 'register_events'],
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'demo-organizer-1',
+    username: 'event_master',
+    email: 'organizer@techcorp.com',
+    fullName: 'Maria Rodriguez',
+    bio: 'Event organizer with 5+ years of experience in tech events',
+    role: 'organizer',
+    organizationName: 'TechCorp Events',
+    website: 'https://techcorp.com',
+    linkedin: 'maria-rodriguez-events',
+    isVerified: true,
+    registeredEvents: [],
+    ownedEvents: ['maximally-ai-shipathon-2025'],
+    permissions: ['view_events', 'create_events', 'edit_events', 'manage_participants', 'manage_judges'],
     createdAt: new Date().toISOString(),
   }
 ];
@@ -41,19 +79,34 @@ const demoUsers: User[] = [
 class AuthService {
   private storageKey = 'demo-auth-user';
 
-  getCurrentUser(): User | null {
+  getCurrentUser(): AuthUser | null {
     const stored = localStorage.getItem(this.storageKey);
-    return stored ? JSON.parse(stored) : null;
+    if (!stored) return null;
+    
+    const user: User = JSON.parse(stored);
+    return this.enhanceUserWithPermissions(user);
   }
 
-  login(username: string, password: string): Promise<{ success: boolean; user?: User; error?: string }> {
+  private enhanceUserWithPermissions(user: User): AuthUser {
+    return {
+      ...user,
+      isOrganizer: user.role === 'organizer' || user.role === 'admin',
+      canEditEvent: (eventId: string) => {
+        return user.role === 'admin' || user.ownedEvents.includes(eventId);
+      },
+      canCreateEvent: user.role === 'organizer' || user.role === 'admin',
+    };
+  }
+
+  login(username: string, password: string): Promise<{ success: boolean; user?: AuthUser; error?: string }> {
     return new Promise((resolve) => {
       setTimeout(() => {
         const user = demoUsers.find(u => u.username === username || u.email === username);
         
         if (user && password === 'demo123') {
           localStorage.setItem(this.storageKey, JSON.stringify(user));
-          resolve({ success: true, user });
+          const authUser = this.enhanceUserWithPermissions(user);
+          resolve({ success: true, user: authUser });
         } else {
           resolve({ success: false, error: 'Invalid credentials' });
         }
@@ -66,7 +119,10 @@ class AuthService {
     email: string;
     fullName: string;
     password: string;
-  }): Promise<{ success: boolean; user?: User; error?: string }> {
+    role?: "user" | "organizer";
+    organizationName?: string;
+    website?: string;
+  }): Promise<{ success: boolean; user?: AuthUser; error?: string }> {
     return new Promise((resolve) => {
       setTimeout(() => {
         // Check if user already exists
@@ -80,18 +136,30 @@ class AuthService {
         }
 
         // Create new user
+        const role = userData.role || 'user';
+        const permissions = role === 'organizer' 
+          ? ['view_events', 'create_events', 'edit_events', 'manage_participants', 'manage_judges']
+          : ['view_events', 'register_events'];
+        
         const newUser: User = {
           id: `user-${Date.now()}`,
           username: userData.username,
           email: userData.email,
           fullName: userData.fullName,
+          role,
+          organizationName: userData.organizationName,
+          website: userData.website,
+          isVerified: false,
           registeredEvents: [],
+          ownedEvents: [],
+          permissions,
           createdAt: new Date().toISOString(),
         };
 
         demoUsers.push(newUser);
         localStorage.setItem(this.storageKey, JSON.stringify(newUser));
-        resolve({ success: true, user: newUser });
+        const authUser = this.enhanceUserWithPermissions(newUser);
+        resolve({ success: true, user: authUser });
       }, 1000);
     });
   }
@@ -103,24 +171,24 @@ class AuthService {
   registerForEvent(eventId: string): Promise<{ success: boolean; error?: string }> {
     return new Promise((resolve) => {
       setTimeout(() => {
-        const user = this.getCurrentUser();
-        if (!user) {
+        const authUser = this.getCurrentUser();
+        if (!authUser) {
           resolve({ success: false, error: 'Not logged in' });
           return;
         }
 
-        if (user.registeredEvents.includes(eventId)) {
+        if (authUser.registeredEvents.includes(eventId)) {
           resolve({ success: false, error: 'Already registered for this event' });
           return;
         }
 
-        user.registeredEvents.push(eventId);
-        localStorage.setItem(this.storageKey, JSON.stringify(user));
+        authUser.registeredEvents.push(eventId);
+        localStorage.setItem(this.storageKey, JSON.stringify(authUser));
         
         // Update the demo users array too
-        const userIndex = demoUsers.findIndex(u => u.id === user.id);
+        const userIndex = demoUsers.findIndex(u => u.id === authUser.id);
         if (userIndex !== -1) {
-          demoUsers[userIndex] = user;
+          demoUsers[userIndex] = { ...authUser };
         }
 
         resolve({ success: true });

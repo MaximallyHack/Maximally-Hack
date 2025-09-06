@@ -16,6 +16,7 @@ import Sponsors from "@/pages/Sponsors";
 import Login from "@/pages/auth/Login";
 import Signup from "@/pages/auth/Signup";
 import Onboarding from "@/pages/auth/Onboarding";
+import OrganizerSignin from "@/pages/auth/OrganizerSignin";
 import OrganizerDashboard from "@/pages/organizer/OrganizerDashboard";
 import CreateEvent from "@/pages/organizer/CreateEvent";
 import ManageEvent from "@/pages/organizer/ManageEvent";
@@ -169,6 +170,9 @@ function Router() {
             <Route path="/leaders" element={<Leaderboards />} />
             <Route path="/sponsors" element={<Sponsors />} />
             <Route path="/help" element={<Help />} />
+            <Route path="/auth/login" element={<Login />} />
+            <Route path="/auth/signup" element={<Signup />} />
+            <Route path="/auth/organizer" element={<OrganizerSignin />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/dashboard" element={<Dashboard />} />
