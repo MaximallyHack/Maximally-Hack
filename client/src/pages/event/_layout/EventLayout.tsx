@@ -1,6 +1,5 @@
 import { ReactNode } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
-import { Link } from 'wouter';
+import { useParams, useLocation, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -45,7 +44,7 @@ export default function EventLayout({ children }: EventLayoutProps) {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-medium text-foreground mb-4">Event not found</h1>
-          <Link href="/explore">
+          <Link to="/explore">
             <Button variant="outline">Back to explore</Button>
           </Link>
         </div>
@@ -78,7 +77,7 @@ export default function EventLayout({ children }: EventLayoutProps) {
     if (!isLoggedIn) {
       return (
         <Button size="lg" className="min-w-[140px]" asChild>
-          <Link href="/login">Login to Register</Link>
+          <Link to="/login">Login to Register</Link>
         </Button>
       );
     }
@@ -98,7 +97,7 @@ export default function EventLayout({ children }: EventLayoutProps) {
       case 'active':
         return isRegistered ? (
           <Button size="lg" asChild className="min-w-[140px]">
-            <Link href={`/e/${event.slug}/submissions`}>
+            <Link to={`/e/${event.slug}/submissions`}>
               Submit Project
             </Link>
           </Button>
@@ -110,7 +109,7 @@ export default function EventLayout({ children }: EventLayoutProps) {
       case 'completed':
         return (
           <Button size="lg" variant="outline" asChild className="min-w-[140px]">
-            <Link href="/projects">View Winners</Link>
+            <Link to="/projects">View Winners</Link>
           </Button>
         );
       default:
@@ -264,25 +263,25 @@ export default function EventLayout({ children }: EventLayoutProps) {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-2">
-                    <Link href={`/organizer/events/${event.id}/overview`}>
+                    <Link to={`/organizer/events/${event.id}/overview`}>
                       <Button variant="ghost" size="sm" className="w-full justify-start text-coral hover:bg-coral/10">
                         <BarChart3 className="w-4 h-4 mr-2" />
                         Manage Event
                       </Button>
                     </Link>
-                    <Link href={`/organizer/events/${event.id}/edit`}>
+                    <Link to={`/organizer/events/${event.id}/edit`}>
                       <Button variant="ghost" size="sm" className="w-full justify-start text-coral hover:bg-coral/10">
                         <Edit className="w-4 h-4 mr-2" />
                         Edit Details
                       </Button>
                     </Link>
-                    <Link href={`/organizer/events/${event.id}/content`}>
+                    <Link to={`/organizer/events/${event.id}/content`}>
                       <Button variant="ghost" size="sm" className="w-full justify-start text-coral hover:bg-coral/10">
                         <Eye className="w-4 h-4 mr-2" />
                         Edit Content
                       </Button>
                     </Link>
-                    <Link href={`/organizer/events/${event.id}/judges`}>
+                    <Link to={`/organizer/events/${event.id}/judges`}>
                       <Button variant="ghost" size="sm" className="w-full justify-start text-coral hover:bg-coral/10">
                         <Users className="w-4 h-4 mr-2" />
                         Manage Judges
@@ -305,7 +304,7 @@ export default function EventLayout({ children }: EventLayoutProps) {
               return (
                 <Link
                   key={item.key}
-                  href={`/e/${slug}${item.path}`}
+                  to={`/e/${slug}${item.path}`}
                   className={`flex-shrink-0 px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
                     isActive
                       ? 'border-coral text-coral'
