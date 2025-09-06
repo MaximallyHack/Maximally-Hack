@@ -31,8 +31,16 @@ export class MemStorage implements IStorage {
     const id = randomUUID();
     const now = new Date();
     const user: User = { 
-      ...insertUser, 
+      ...insertUser,
       id,
+      avatar: insertUser.avatar || null,
+      bio: insertUser.bio || null,
+      organizationName: insertUser.organizationName || null,
+      website: insertUser.website || null,
+      linkedin: insertUser.linkedin || null,
+      twitter: insertUser.twitter || null,
+      isVerified: insertUser.isVerified || false,
+      registeredEvents: insertUser.registeredEvents || [],
       createdAt: now,
       updatedAt: now
     };
