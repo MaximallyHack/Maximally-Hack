@@ -77,15 +77,15 @@ export default function Signup() {
       <div className="w-full max-w-md">
         <Card className="dark:bg-gray-500">
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-medium dark:text-black">Create Account</CardTitle>
-            <CardDescription className="dark:text-black">
+            <CardTitle className="text-2xl font-medium dark:text-white">Create Account</CardTitle>
+            <CardDescription className="dark:text-gray-100">
               Join the hackathon community and start building amazing projects
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <Label htmlFor="fullName" className="dark:text-black">Full Name</Label>
+                <Label htmlFor="fullName" className="dark:text-white">Full Name</Label>
                 <Input
                   id="fullName"
                   name="fullName"
@@ -98,7 +98,7 @@ export default function Signup() {
               </div>
 
               <div>
-                <Label htmlFor="username" className="dark:text-black">Username</Label>
+                <Label htmlFor="username" className="dark:text-white">Username</Label>
                 <Input
                   id="username"
                   name="username"
@@ -111,7 +111,7 @@ export default function Signup() {
               </div>
 
               <div>
-                <Label htmlFor="email" className="dark:text-black">Email</Label>
+                <Label htmlFor="email" className="dark:text-white">Email</Label>
                 <Input
                   id="email"
                   name="email"
@@ -124,7 +124,7 @@ export default function Signup() {
               </div>
 
               <div>
-                <Label htmlFor="password" className="dark:text-black">Password</Label>
+                <Label htmlFor="password" className="dark:text-white">Password</Label>
                 <div className="relative">
                   <Input
                     id="password"
@@ -152,7 +152,7 @@ export default function Signup() {
               </div>
 
               <div>
-                <Label htmlFor="confirmPassword" className="dark:text-black">Confirm Password</Label>
+                <Label htmlFor="confirmPassword" className="dark:text-white">Confirm Password</Label>
                 <Input
                   id="confirmPassword"
                   name="confirmPassword"
@@ -186,9 +186,9 @@ export default function Signup() {
               </Button>
             </form>
 
-            <div className="mt-6 text-center text-sm dark:text-black">
+            <div className="mt-6 text-center text-sm dark:text-white">
               Already have an account?{" "}
-              <Link href="/login" className="text-blue-600 hover:underline dark:text-blue-800">
+              <Link href="/login" className="text-blue-600 hover:underline dark:text-blue-300">
                 Sign in
               </Link>
             </div>
