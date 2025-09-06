@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "wouter";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,7 +11,7 @@ import teamsData, { type Team, type User } from "@/lib/fixtures/teamsData";
 const currentUserId = "1"; // Mock current user
 
 export default function MyTeams() {
-  const navigate = useNavigate();
+  const [, navigate] = useLocation();
   const [userTeams, setUserTeams] = useState<Team[]>([]);
   const [leadingTeams, setLeadingTeams] = useState<Team[]>([]);
   const [memberTeams, setMemberTeams] = useState<Team[]>([]);

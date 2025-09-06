@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "wouter";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,7 +9,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Separator } from "@/components/ui/separator";
 import { Search, Filter, Users, Calendar, MapPin, ArrowLeft } from "lucide-react";
 import teamsData, { type Team, type User } from "@/lib/fixtures/teamsData";
-import { useNavigate } from "react-router-dom";
 
 interface FilterOptions {
   search: string;
@@ -23,7 +22,7 @@ const allSkills = ["React", "TypeScript", "Python", "Node.js", "UI/UX Design", "
 const allTags = ["AI", "HealthTech", "FinTech", "Sustainability", "Education", "Gaming", "Social Impact", "Developer Tools"];
 
 export default function FindTeam() {
-  const navigate = useNavigate();
+  const [, navigate] = useLocation();
   const [teams, setTeams] = useState<Team[]>([]);
   const [filteredTeams, setFilteredTeams] = useState<Team[]>([]);
   const [filters, setFilters] = useState<FilterOptions>({

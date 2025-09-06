@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "wouter";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -12,7 +12,7 @@ import teamsData, { type LFGPost, type User, type Team } from "@/lib/fixtures/te
 const currentUserId = "1"; // Mock current user
 
 export default function TeamsLFG() {
-  const navigate = useNavigate();
+  const [, navigate] = useLocation();
   const [lfgPosts, setLfgPosts] = useState<LFGPost[]>([]);
   const [individualPosts, setIndividualPosts] = useState<LFGPost[]>([]);
   const [teamPosts, setTeamPosts] = useState<LFGPost[]>([]);
