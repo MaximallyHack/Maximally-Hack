@@ -261,7 +261,7 @@ export default function Navbar() {
                           </Button>
                         </div>
                       ) : (
-                        <div className="space-y-3">
+                        <div className="space-y-4">
                           <Link to="/login" onClick={() => setIsOpen(false)}>
                             <Button variant="outline" className="w-full border-coral text-coral hover:bg-coral/10" data-testid="mobile-button-login">
                               Login
