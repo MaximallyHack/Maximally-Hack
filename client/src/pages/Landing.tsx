@@ -28,7 +28,7 @@ export default function Landing() {
             </h1>
           </FloatingElement>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Join the friendliest hackathon community. Create, collaborate, and compete in events that celebrate innovation and creativity.
+            Join the friendliest hackathon community. Form amazing teams, create together, and compete in events that celebrate innovation and creativity.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/explore">
