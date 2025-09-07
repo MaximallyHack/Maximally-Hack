@@ -260,7 +260,7 @@ export default function SimpleExplore() {
                   <CardContent className={`p-6 ${viewMode === 'list' ? 'flex items-center gap-6' : ''}`}>
                     <div className={viewMode === 'list' ? 'flex-1' : ''}>
                       <div className="flex items-center justify-between mb-3">
-                        <Badge className="inline-flex items-center border px-2.5 py-0.5 transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300 rounded-full text-xs font-medium bg-[#dbeafe]">
+                        <Badge className="inline-flex items-center border px-2.5 py-0.5 transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent text-gray-800 rounded-full text-xs font-medium bg-[#dbeafe]">
                           {event.status.replace('_', ' ')}
                         </Badge>
                         <div className="text-sm font-medium text-foreground">

@@ -97,16 +97,16 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white dark:bg-black">
       <div className="max-w-5xl mx-auto px-4 py-8">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-8 ">
           <div className="flex items-center justify-between mb-4">
-            <div>
-              <h1 className="text-3xl font-medium text-gray-900">
+            <div className="">
+              <h1 className="text-3xl font-medium text-gray-900 dark:text-white">
                 Welcome back, {user.fullName || user.username}
               </h1>
-              <p className="text-gray-600 mt-1">Track your hackathons and projects</p>
+              <p className="text-gray-700 dark:text-gray-300 mt-1">Track your hackathons and projects</p>
             </div>
             <Link to="/profile">
               <Button variant="outline" size="sm">
@@ -120,8 +120,8 @@ export default function Dashboard() {
         <div className="space-y-8">
           {/* My Hackathons Section */}
           <section>
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-medium text-gray-900">My Hackathons</h2>
+            <div className="flex items-center justify-between mb-6 text-gray-900 dark:text-white">
+              <h2 className="text-xl font-medium ">My Hackathons</h2>
               <Link to="/explore">
                 <Button variant="outline">
                   <Plus className="w-4 h-4 mr-2" />
@@ -131,11 +131,11 @@ export default function Dashboard() {
             </div>
 
             {registeredEvents.length === 0 ? (
-              <Card className="text-center py-12">
+              <Card className="text-center py-12 ">
                 <CardContent>
                   <div className="text-6xl mb-4">🚀</div>
-                  <h3 className="text-xl font-medium text-gray-900 mb-2">No hackathons yet</h3>
-                  <p className="text-gray-600 mb-6">Start your journey by registering for hackathons</p>
+                  <h3 className="text-xl font-medium mb-2 text-gray-900 dark:text-white">No hackathons yet</h3>
+                  <p className="text-gray-700 dark:text-gray-300 mb-6">Start your journey by registering for hackathons</p>
                   <Link to="/explore">
                     <Button>
                       Explore Hackathons
@@ -265,7 +265,7 @@ export default function Dashboard() {
           {/* My Projects Section */}
           <section>
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-medium text-gray-900">My Projects</h2>
+              <h2 className="text-xl font-medium text-gray-900 dark:text-white">My Projects</h2>
               <Link to="/projects/create">
                 <Button>
                   <Plus className="w-4 h-4 mr-2" />
@@ -278,8 +278,8 @@ export default function Dashboard() {
               <Card className="text-center py-12">
                 <CardContent>
                   <div className="text-6xl mb-4">💡</div>
-                  <h3 className="text-xl font-medium text-gray-900 mb-2">No projects yet</h3>
-                  <p className="text-gray-600 mb-6">Start building something amazing</p>
+                  <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-2">No projects yet</h3>
+                  <p className="text-gray-700 dark:text-gray-300  mb-6">Start building something amazing</p>
                   <Link to="/projects/create">
                     <Button>
                       <Code className="w-4 h-4 mr-2" />
