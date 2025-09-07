@@ -474,6 +474,152 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Seed data endpoint for development
+  app.post("/api/seed", async (req, res) => {
+    try {
+      // Create a test organizer user
+      const organizer = await storage.createUser({
+        username: "test-organizer",
+        email: "organizer@maxhack.dev",
+        password: "password123",
+        fullName: "Test Organizer",
+        role: "organizer",
+        organizationName: "MaxHack Inc",
+        bio: "Professional hackathon organizer"
+      });
+
+      // Create a test event
+      const event = await storage.createEvent({
+        slug: "ai-innovation-hackathon-2025",
+        title: "AI Innovation Hackathon 2025",
+        tagline: "Build the future with AI",
+        description: "Join us for an exciting AI-focused hackathon where innovation meets opportunity",
+        longDescription: "A comprehensive 48-hour hackathon focusing on AI and machine learning innovations",
+        startDate: new Date("2025-02-15T09:00:00Z"),
+        endDate: new Date("2025-02-17T18:00:00Z"),
+        registrationOpen: new Date("2025-01-01T00:00:00Z"),
+        registrationClose: new Date("2025-02-14T23:59:59Z"),
+        submissionOpen: new Date("2025-02-15T09:00:00Z"),
+        submissionClose: new Date("2025-02-17T16:00:00Z"),
+        status: "active",
+        format: "hybrid",
+        location: "San Francisco, CA",
+        timezone: "America/Los_Angeles",
+        prizePool: 50000,
+        maxTeamSize: 4,
+        organizerId: organizer.id,
+        organizerName: organizer.fullName,
+        organizationName: organizer.organizationName,
+        tracks: ["AI & ML", "Healthcare", "Climate Tech", "Developer Tools"],
+        tags: ["artificial-intelligence", "machine-learning", "innovation"],
+        isPublic: true,
+        isFeatured: true
+      });
+
+      // Create test judges
+      const judges = await Promise.all([
+        storage.createEventJudge({
+          eventId: event.id,
+          name: "Dr. Sarah Chen",
+          title: "AI Research Director",
+          company: "TechCorp",
+          bio: "Leading AI researcher with 10+ years of experience",
+          email: "sarah@techcorp.com",
+          expertise: ["Machine Learning", "Computer Vision", "NLP"]
+        }),
+        storage.createEventJudge({
+          eventId: event.id,
+          name: "Alex Rodriguez",
+          title: "Senior ML Engineer",
+          company: "DataFlow",
+          bio: "Senior engineer specializing in production ML systems",
+          email: "alex@dataflow.com",
+          expertise: ["MLOps", "Deep Learning", "Data Engineering"]
+        })
+      ]);
+
+      // Create test participants
+      const participants = await Promise.all([
+        storage.createEventParticipant({
+          eventId: event.id,
+          userId: organizer.id, // Using organizer as participant for demo
+          userName: "John Doe",
+          userEmail: "john@example.com",
+          status: "registered"
+        }),
+        storage.createEventParticipant({
+          eventId: event.id,
+          userId: organizer.id,
+          userName: "Jane Smith", 
+          userEmail: "jane@example.com",
+          status: "registered"
+        })
+      ]);
+
+      // Create test teams
+      const team = await storage.createEventTeam({
+        eventId: event.id,
+        name: "AI Innovators",
+        description: "Building next-gen AI solutions for healthcare",
+        lookingFor: ["Frontend Developer", "Data Scientist"],
+        skills: ["React", "Python", "TensorFlow"],
+        memberIds: [organizer.id],
+        maxMembers: 4,
+        isRecruiting: true,
+        track: "Healthcare"
+      });
+
+      // Create test submissions
+      const submission = await storage.createEventSubmission({
+        eventId: event.id,
+        teamId: team.id,
+        title: "MedAI Assistant",
+        description: "AI-powered medical diagnosis assistant",
+        longDescription: "A comprehensive AI system that helps healthcare professionals with preliminary diagnosis",
+        demoUrl: "https://medai-demo.com",
+        repoUrl: "https://github.com/team/medai",
+        techStack: ["React", "Python", "TensorFlow", "FastAPI"],
+        track: "Healthcare",
+        status: "submitted"
+      });
+
+      // Create sponsors
+      const sponsors = await Promise.all([
+        storage.createEventSponsor({
+          eventId: event.id,
+          name: "TechGiant Corp",
+          tier: "platinum",
+          description: "Leading technology company",
+          order: 1
+        }),
+        storage.createEventSponsor({
+          eventId: event.id,
+          name: "StartupHub",
+          tier: "gold", 
+          description: "Supporting innovation ecosystem",
+          order: 2
+        })
+      ]);
+
+      res.json({ 
+        success: true, 
+        message: "Seed data created successfully",
+        data: {
+          organizer,
+          event,
+          judges: judges.length,
+          participants: participants.length,
+          teams: 1,
+          submissions: 1,
+          sponsors: sponsors.length
+        }
+      });
+    } catch (error) {
+      console.error("Seed data error:", error);
+      res.status(500).json({ success: false, error: "Failed to create seed data" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

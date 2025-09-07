@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useQuery } from '@tanstack/react-query';
+import { api } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -84,100 +85,80 @@ interface Event {
   healthChecks: EventHealthCheck[];
 }
 
-const mockEvents: Event[] = [
-  {
-    id: 'maximally-ai-shipathon-2025',
-    title: 'Maximally AI Shipathon 2025',
-    slug: 'maximally-ai-shipathon-2025',
-    status: 'active',
-    startDate: '2025-02-01T09:00:00Z',
-    endDate: '2025-02-03T18:00:00Z',
-    registrationCount: 234,
-    submissionCount: 87,
-    prizePool: 50000,
-    analytics: {
-      registrations: {
-        total: 234,
-        daily: [
-          { date: '2025-01-01', count: 12 },
-          { date: '2025-01-02', count: 18 },
-          { date: '2025-01-03', count: 25 },
-        ],
-        byTrack: [
-          { track: 'AI & ML', count: 89 },
-          { track: 'Climate Tech', count: 76 },
-          { track: 'Healthcare', count: 69 },
-        ],
-        growth: 23.5
-      },
-      teams: {
-        total: 78,
-        recruiting: 23,
-        full: 55,
-        averageSize: 3.2
-      },
-      submissions: {
-        total: 87,
-        byTrack: [
-          { track: 'AI & ML', count: 34 },
-          { track: 'Climate Tech', count: 28 },
-          { track: 'Healthcare', count: 25 },
-        ],
-        judged: 45,
-        pending: 42
-      },
-      engagement: {
-        pageViews: 12500,
-        uniqueVisitors: 8200,
-        socialShares: 456,
-        discordMembers: 189
-      }
-    },
-    healthChecks: [
-      {
-        id: '1',
-        title: 'Judging Criteria',
-        status: 'complete',
-        message: 'All judging criteria are properly configured',
-        priority: 'medium'
-      },
-      {
-        id: '2',
-        title: 'Prize Distribution',
-        status: 'warning',
-        message: 'Prize amounts need final review',
-        action: 'Review Prizes',
-        priority: 'high'
-      },
-      {
-        id: '3',
-        title: 'Judge Assignments',
-        status: 'error',
-        message: '3 judges have not confirmed availability',
-        action: 'Contact Judges',
-        priority: 'high'
-      }
-    ]
-  }
-];
 
 export default function EnhancedOrganizerDashboard() {
-  const { user } = useAuth();
+  const { user, login } = useAuth();
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("overview");
 
-  // Redirect if not an organizer
+  // Auto-login as demo organizer for development/demo purposes
+  React.useEffect(() => {
+    if (!user) {
+      // Auto-login with demo organizer credentials for seamless demo experience
+      login('event_master', 'demo123').catch(console.error);
+    }
+  }, [user, login]);
+
+  // Show loading while auto-login is happening
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  // Redirect if not an organizer (after login attempt)
   if (!user?.isOrganizer) {
     return <Navigate to="/auth/organizer" replace />;
   }
 
   const { data: events, isLoading } = useQuery({
-    queryKey: ['organizer-events'],
+    queryKey: ['organizer-events', user?.id],
     queryFn: async () => {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 500));
-      return mockEvents;
+      if (!user?.id) return [];
+      
+      // Fetch organizer's events
+      const events = await api.getOrganizerEvents(user.id);
+      
+      // For each event, fetch analytics and health checks
+      const eventsWithData = await Promise.all(
+        events.map(async (event) => {
+          try {
+            const [analytics, healthChecks] = await Promise.all([
+              api.getEventAnalytics(event.id),
+              api.getEventHealthChecks(event.id)
+            ]);
+            
+            return {
+              ...event,
+              analytics,
+              healthChecks,
+              registrationCount: event.participantCount || 0,
+              submissionCount: (event as any).submissionCount || 0
+            };
+          } catch (error) {
+            console.warn(`Failed to fetch data for event ${event.id}:`, error);
+            // Return event with empty analytics if fetch fails
+            return {
+              ...event,
+              analytics: {
+                registrations: { total: 0, daily: [], byTrack: [], growth: 0 },
+                teams: { total: 0, recruiting: 0, full: 0, averageSize: 0 },
+                submissions: { total: 0, byTrack: [], judged: 0, pending: 0 },
+                engagement: { pageViews: 0, uniqueVisitors: 0, socialShares: 0, discordMembers: 0 }
+              },
+              healthChecks: [],
+              registrationCount: event.participantCount || 0,
+              submissionCount: (event as any).submissionCount || 0
+            };
+          }
+        })
+      );
+      
+      return eventsWithData;
     },
+    enabled: !!user?.id,
   });
 
   const activeEvent = events?.[0]; // For demo, use first event
@@ -539,7 +520,7 @@ export default function EnhancedOrganizerDashboard() {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
-                      {activeEvent.analytics.registrations.byTrack.map((track, index) => (
+                      {activeEvent.analytics.registrations.byTrack.map((track: any, index: number) => (
                         <div key={track.track} className="space-y-2">
                           <div className="flex justify-between items-center">
                             <span className="font-medium">{track.track}</span>
