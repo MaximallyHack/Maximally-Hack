@@ -1,14 +1,29 @@
 import { queryClient } from "./queryClient";
 
-// Optimized delay for better performance
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+// API base URL - use environment variable or fallback
+const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api';
 
-// Import fixtures
-import eventsData from "./fixtures/events.json";
-import usersData from "./fixtures/users.json";
-import teamsData from "./fixtures/teams.json";
-import submissionsData from "./fixtures/submissions.json";
-import judgesData from "./fixtures/judges.json";
+// Helper function for making API requests
+async function apiRequest<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
+  const url = `${API_BASE}${endpoint}`;
+  
+  const config: RequestInit = {
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+    ...options,
+  };
+
+  const response = await fetch(url, config);
+  
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Network error' }));
+    throw new Error(error.error || `HTTP ${response.status}`);
+  }
+
+  return response.json();
+}
 
 export interface Event {
   id: string;
@@ -169,180 +184,314 @@ export interface Judge {
   timezone: string;
 }
 
-// Mock API functions
+// Real API functions connecting to backend
 export const api = {
+  // Authentication
+  auth: {
+    login: async (email: string, password: string): Promise<{ success: boolean; user?: User; error?: string }> => {
+      return apiRequest('/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({ email, password }),
+      });
+    },
+
+    register: async (userData: Partial<User>): Promise<{ success: boolean; user?: User; error?: string }> => {
+      return apiRequest('/auth/register', {
+        method: 'POST',
+        body: JSON.stringify(userData),
+      });
+    },
+  },
+
   // Events
   getEvents: async (): Promise<Event[]> => {
-    await delay(50);
-    return eventsData as Event[];
+    return apiRequest('/events');
   },
 
-  getEvent: async (slug: string): Promise<Event | null> => {
-    const event = eventsData.find(e => e.slug === slug);
-    return event ? (event as Event) : null;
+  getEvent: async (id: string): Promise<Event> => {
+    return apiRequest(`/events/${id}`);
   },
 
-  getFeaturedEvents: async (): Promise<Event[]> => {
-    await delay(100);
-    return eventsData.slice(0, 6) as Event[];
+  getEventBySlug: async (slug: string): Promise<Event> => {
+    return apiRequest(`/events/slug/${slug}`);
   },
 
-  // Users
-  getUsers: async (): Promise<User[]> => {
-    await delay(100);
-    return usersData as User[];
+  getOrganizerEvents: async (organizerId: string): Promise<Event[]> => {
+    return apiRequest(`/events/organizer/${organizerId}`);
   },
 
-  getUser: async (id: string): Promise<User | null> => {
-    await delay(200);
-    const user = usersData.find(u => u.id === id);
-    return user ? (user as User) : null;
+  createEvent: async (eventData: Partial<Event>): Promise<Event> => {
+    return apiRequest('/events', {
+      method: 'POST',
+      body: JSON.stringify(eventData),
+    });
   },
 
-  getUserByUsername: async (username: string): Promise<User | null> => {
-    await delay(200);
-    const user = usersData.find(u => u.username === username);
-    return user ? (user as User) : null;
+  updateEvent: async (id: string, updates: Partial<Event>): Promise<Event> => {
+    return apiRequest(`/events/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(updates),
+    });
   },
 
-  // Teams
-  getTeams: async (eventId?: string): Promise<Team[]> => {
-    let teams = teamsData as Team[];
-    if (eventId) {
-      teams = teams.filter(t => t.eventId === eventId);
-    }
-    return teams;
+  deleteEvent: async (id: string): Promise<{ success: boolean }> => {
+    return apiRequest(`/events/${id}`, {
+      method: 'DELETE',
+    });
   },
 
-  getTeam: async (id: string): Promise<Team | null> => {
-    await delay(200);
-    const team = teamsData.find(t => t.id === id);
-    return team ? (team as Team) : null;
+  // Event Analytics and Management
+  getEventAnalytics: async (eventId: string): Promise<any> => {
+    return apiRequest(`/events/${eventId}/analytics`);
   },
 
-  createTeam: async (teamData: Partial<Team>): Promise<Team> => {
-    await delay(500);
-    const newTeam: Team = {
-      id: `team-${Date.now()}`,
-      name: teamData.name || '',
-      description: teamData.description || '',
-      eventId: teamData.eventId || '',
-      leaderId: teamData.leaderId || '',
-      members: teamData.members || [],
-      maxSize: teamData.maxSize || 4,
-      joinCode: Math.random().toString(36).substring(2, 8).toUpperCase(),
-      skills: teamData.skills || [],
-      lookingFor: teamData.lookingFor || [],
-      track: teamData.track || '',
-      created: new Date().toISOString(),
-      status: 'recruiting'
-    };
-    return newTeam;
+  getEventHealthChecks: async (eventId: string): Promise<any[]> => {
+    return apiRequest(`/events/${eventId}/health`);
   },
 
-  // Submissions
-  getSubmissions: async (eventId?: string): Promise<Submission[]> => {
-    let submissions = submissionsData as Submission[];
-    if (eventId) {
-      submissions = submissions.filter(s => s.eventId === eventId);
-    }
-    return submissions;
-  },
-
-  getSubmission: async (id: string): Promise<Submission | null> => {
-    await delay(200);
-    const submission = submissionsData.find(s => s.id === id);
-    return submission ? (submission as Submission) : null;
-  },
-
-  getFeaturedProjects: async (): Promise<Submission[]> => {
-    await delay(400);
-    return submissionsData.slice(0, 12) as Submission[];
+  getOrganizerStats: async (organizerId: string): Promise<any> => {
+    return apiRequest(`/organizers/${organizerId}/stats`);
   },
 
   // Judges
-  getJudges: async (): Promise<Judge[]> => {
-    await delay(300);
-    return judgesData as Judge[];
+  getEventJudges: async (eventId: string): Promise<Judge[]> => {
+    return apiRequest(`/events/${eventId}/judges`);
   },
 
-  getJudge: async (id: string): Promise<Judge | null> => {
-    await delay(200);
-    const judge = judgesData.find(j => j.id === id);
-    return judge ? (judge as Judge) : null;
+  getJudge: async (id: string): Promise<Judge> => {
+    return apiRequest(`/judges/${id}`);
   },
 
-  // Leaderboards
-  getLeaderboards: async (type: 'hackers' | 'organizers' | 'judges' = 'hackers') => {
-    await delay(500);
-    const users = usersData as User[];
-    
-    switch (type) {
-      case 'hackers':
-        return users
-          .filter(u => u.role === 'participant')
-          .sort((a, b) => (b.stats.wins * 100 + b.stats.finals * 50) - (a.stats.wins * 100 + a.stats.finals * 50))
-          .slice(0, 20);
-      case 'organizers':
-        return users
-          .filter(u => u.role === 'organizer')
-          .sort((a, b) => b.stats.organized - a.stats.organized)
-          .slice(0, 20);
-      case 'judges':
-        return judgesData
-          .sort((a, b) => b.eventsJudged - a.eventsJudged)
-          .slice(0, 20);
-      default:
-        return [];
+  createJudge: async (eventId: string, judgeData: Partial<Judge>): Promise<Judge> => {
+    return apiRequest(`/events/${eventId}/judges`, {
+      method: 'POST',
+      body: JSON.stringify(judgeData),
+    });
+  },
+
+  updateJudge: async (id: string, updates: Partial<Judge>): Promise<Judge> => {
+    return apiRequest(`/judges/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(updates),
+    });
+  },
+
+  deleteJudge: async (id: string): Promise<{ success: boolean }> => {
+    return apiRequest(`/judges/${id}`, {
+      method: 'DELETE',
+    });
+  },
+
+  // Participants
+  getEventParticipants: async (eventId: string): Promise<any[]> => {
+    return apiRequest(`/events/${eventId}/participants`);
+  },
+
+  registerParticipant: async (eventId: string, participantData: any): Promise<any> => {
+    return apiRequest(`/events/${eventId}/participants`, {
+      method: 'POST',
+      body: JSON.stringify(participantData),
+    });
+  },
+
+  updateParticipant: async (id: string, updates: any): Promise<any> => {
+    return apiRequest(`/participants/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(updates),
+    });
+  },
+
+  // Teams
+  getEventTeams: async (eventId: string): Promise<Team[]> => {
+    return apiRequest(`/events/${eventId}/teams`);
+  },
+
+  getTeam: async (id: string): Promise<Team> => {
+    return apiRequest(`/teams/${id}`);
+  },
+
+  createTeam: async (eventId: string, teamData: Partial<Team>): Promise<Team> => {
+    return apiRequest(`/events/${eventId}/teams`, {
+      method: 'POST',
+      body: JSON.stringify(teamData),
+    });
+  },
+
+  updateTeam: async (id: string, updates: Partial<Team>): Promise<Team> => {
+    return apiRequest(`/teams/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(updates),
+    });
+  },
+
+  // Submissions
+  getEventSubmissions: async (eventId: string): Promise<Submission[]> => {
+    return apiRequest(`/events/${eventId}/submissions`);
+  },
+
+  getSubmission: async (id: string): Promise<Submission> => {
+    return apiRequest(`/submissions/${id}`);
+  },
+
+  createSubmission: async (eventId: string, submissionData: Partial<Submission>): Promise<Submission> => {
+    return apiRequest(`/events/${eventId}/submissions`, {
+      method: 'POST',
+      body: JSON.stringify(submissionData),
+    });
+  },
+
+  updateSubmission: async (id: string, updates: Partial<Submission>): Promise<Submission> => {
+    return apiRequest(`/submissions/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(updates),
+    });
+  },
+
+  // Scoring
+  getSubmissionScores: async (submissionId: string): Promise<any[]> => {
+    return apiRequest(`/submissions/${submissionId}/scores`);
+  },
+
+  getJudgeScores: async (judgeId: string): Promise<any[]> => {
+    return apiRequest(`/judges/${judgeId}/scores`);
+  },
+
+  createScore: async (scoreData: any): Promise<any> => {
+    return apiRequest('/scores', {
+      method: 'POST',
+      body: JSON.stringify(scoreData),
+    });
+  },
+
+  updateScore: async (id: string, updates: any): Promise<any> => {
+    return apiRequest(`/scores/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(updates),
+    });
+  },
+
+  // Sponsors
+  getEventSponsors: async (eventId: string): Promise<any[]> => {
+    return apiRequest(`/events/${eventId}/sponsors`);
+  },
+
+  createSponsor: async (eventId: string, sponsorData: any): Promise<any> => {
+    return apiRequest(`/events/${eventId}/sponsors`, {
+      method: 'POST',
+      body: JSON.stringify(sponsorData),
+    });
+  },
+
+  updateSponsor: async (id: string, updates: any): Promise<any> => {
+    return apiRequest(`/sponsors/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(updates),
+    });
+  },
+
+  // Event Content
+  getEventContent: async (eventId: string): Promise<any[]> => {
+    return apiRequest(`/events/${eventId}/content`);
+  },
+
+  getEventContentBySection: async (eventId: string, section: string): Promise<any> => {
+    return apiRequest(`/events/${eventId}/content/${section}`);
+  },
+
+  createEventContent: async (eventId: string, contentData: any): Promise<any> => {
+    return apiRequest(`/events/${eventId}/content`, {
+      method: 'POST',
+      body: JSON.stringify(contentData),
+    });
+  },
+
+  updateEventContent: async (id: string, updates: any): Promise<any> => {
+    return apiRequest(`/events/content/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(updates),
+    });
+  },
+
+  // Users
+  getUser: async (id: string): Promise<User> => {
+    return apiRequest(`/users/${id}`);
+  },
+
+  updateUser: async (id: string, updates: Partial<User>): Promise<User> => {
+    return apiRequest(`/users/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(updates),
+    });
+  },
+
+  // Legacy compatibility functions (keep for existing components that haven't been updated yet)
+  getFeaturedEvents: async (): Promise<Event[]> => {
+    const events = await api.getEvents();
+    return events.slice(0, 6);
+  },
+
+  getUsers: async (): Promise<User[]> => {
+    // This would need to be implemented on the backend if needed
+    throw new Error('getUsers not implemented - use specific user endpoints instead');
+  },
+
+  getUserByUsername: async (username: string): Promise<User | null> => {
+    // This would need to be implemented on the backend if needed
+    throw new Error('getUserByUsername not implemented - use user ID endpoints instead');
+  },
+
+  getTeams: async (eventId?: string): Promise<Team[]> => {
+    if (eventId) {
+      return api.getEventTeams(eventId);
     }
+    throw new Error('getTeams requires eventId parameter');
   },
 
-  // Search and filter - optimized for fast response
+  getSubmissions: async (eventId?: string): Promise<Submission[]> => {
+    if (eventId) {
+      return api.getEventSubmissions(eventId);
+    }
+    throw new Error('getSubmissions requires eventId parameter');
+  },
+
+  getFeaturedProjects: async (): Promise<Submission[]> => {
+    // This would need to be implemented on the backend if needed
+    throw new Error('getFeaturedProjects not implemented yet');
+  },
+
+  getJudges: async (): Promise<Judge[]> => {
+    // This would need to be implemented on the backend if needed
+    throw new Error('getJudges not implemented - use getEventJudges instead');
+  },
+
+  getLeaderboards: async (type: 'hackers' | 'organizers' | 'judges' = 'hackers') => {
+    // This would need to be implemented on the backend if needed
+    throw new Error('getLeaderboards not implemented yet');
+  },
+
   searchEvents: async (query: string, filters: any = {}) => {
-    await delay(50);
-    let events = eventsData as Event[];
+    // This would need to be implemented on the backend if needed
+    const events = await api.getEvents();
+    
+    let filteredEvents = events;
     
     if (query) {
-      events = events.filter(e => 
+      filteredEvents = filteredEvents.filter(e => 
         e.title.toLowerCase().includes(query.toLowerCase()) ||
         e.description.toLowerCase().includes(query.toLowerCase()) ||
-        e.tags.some(tag => tag.toLowerCase().includes(query.toLowerCase()))
+        (e.tags || []).some(tag => tag.toLowerCase().includes(query.toLowerCase()))
       );
     }
 
     if (filters.status) {
-      events = events.filter(e => e.status === filters.status);
+      filteredEvents = filteredEvents.filter(e => e.status === filters.status);
     }
 
     if (filters.format) {
-      events = events.filter(e => e.format === filters.format);
+      filteredEvents = filteredEvents.filter(e => e.format === filters.format);
     }
 
-    if (filters.tags && filters.tags.length > 0) {
-      events = events.filter(e => 
-        filters.tags.some((tag: string) => e.tags.includes(tag))
-      );
-    }
-
-    if (filters.prizeMin) {
-      events = events.filter(e => e.prizePool >= filters.prizeMin);
-    }
-
-    if (filters.sortBy) {
-      switch (filters.sortBy) {
-        case 'date':
-          events.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
-          break;
-        case 'popular':
-          events.sort((a, b) => b.participantCount - a.participantCount);
-          break;
-        case 'prize':
-          events.sort((a, b) => b.prizePool - a.prizePool);
-          break;
-      }
-    }
-
-    return events;
+    return filteredEvents;
   }
 };
 
