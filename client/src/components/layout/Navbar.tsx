@@ -68,9 +68,9 @@ export default function Navbar() {
           <Sparkles className="w-4 h-4" />
         </div>
       </div>
-      <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-border/50 shadow-sm">
+      <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-border/50 shadow-sm ">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-18 bg-white dark:bg-[#0f1628]">
+          <div className="flex justify-between items-center h-18 bg-white dark:bg-[#0f1628] py-4">
             {/* Enhanced Logo */}
             <Link to="/" className="flex items-center space-x-3 hover-scale group transition-all duration-300" data-testid="logo-link">
               <div className="relative">
