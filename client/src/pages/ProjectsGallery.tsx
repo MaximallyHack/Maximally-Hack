@@ -68,14 +68,14 @@ function ProjectCard({ project }: ProjectCardProps) {
   };
 
   return (
-    <Card className="bg-white shadow-soft border-soft-gray hover-scale transition-all duration-200 group" data-testid={`project-card-${project.id}`}>
+    <Card className="bg-white rounded-2xl shadow-soft border-soft-gray hover-scale hover:rounded-2xl transition-all duration-200 group" data-testid={`project-card-${project.id}`}>
       <CardContent className="p-0">
-        <div className="aspect-video bg-gradient-to-br from-sky/20 to-mint/20 relative overflow-hidden">
+        <div className="aspect-video bg-gradient-to-br from-sky/20 to-mint/20 relative overflow-hidden rounded-t-2xl hover:rounded-t-xl">
           {project.coverImage && (
             <img 
               src={project.coverImage} 
               alt={project.title}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+              className="w-full h-full object-cover  group-hover:scale-105 transition-transform duration-200"
             />
           )}
           
@@ -101,7 +101,7 @@ function ProjectCard({ project }: ProjectCardProps) {
         </div>
         
         <div className="p-4">
-          <h3 className="font-heading font-semibold text-lg text-text-dark mb-1">
+          <h3 className="font-heading font-semibold text-xl text-text-dark mb-1">
             {project.title}
           </h3>
           <p className="text-sm text-text-muted mb-3 line-clamp-2">
@@ -111,7 +111,7 @@ function ProjectCard({ project }: ProjectCardProps) {
           {/* Tags */}
           <div className="flex flex-wrap gap-1 mb-3">
             {project.tags?.slice(0, 3).map((tag) => (
-              <Badge key={tag} className="bg-mint/20 text-text-dark text-xs">
+              <Badge key={tag} className="bg-mint text-black/60 text-xs">
                 {tag}
               </Badge>
             ))}
@@ -152,7 +152,7 @@ function ProjectCard({ project }: ProjectCardProps) {
             <Link href={`/projects/${project.id}`}>
               <Button 
                 size="sm" 
-                className="bg-coral text-white hover:bg-coral/80 flex-1"
+                className="bg-coral text-white hover:text-text-dark flex-1"
                 data-testid={`button-view-${project.id}`}
               >
                 <ExternalLink className="w-4 h-4 mr-1" />
@@ -164,7 +164,7 @@ function ProjectCard({ project }: ProjectCardProps) {
               <Button 
                 size="sm" 
                 variant="outline" 
-                className="border-mint text-mint hover:bg-mint/20"
+                className="border-mint text-mint hover:bg-mint"
                 data-testid={`button-join-${project.id}`}
               >
                 <Users className="w-4 h-4 mr-1" />
@@ -175,7 +175,7 @@ function ProjectCard({ project }: ProjectCardProps) {
             <Button 
               size="sm" 
               variant="outline" 
-              className="border-sky text-sky hover:bg-sky/20"
+              className="border-sky text-sky hover:bg-sky"
               data-testid={`button-contact-${project.id}`}
             >
               {project.contactMethod === 'email' ? (
