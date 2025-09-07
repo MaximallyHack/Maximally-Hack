@@ -191,6 +191,23 @@ export class MemStorage implements IStorage {
     const event: Event = {
       ...insertEvent,
       id,
+      tagline: insertEvent.tagline || null,
+      longDescription: insertEvent.longDescription || null,
+      registrationOpen: insertEvent.registrationOpen || null,
+      registrationClose: insertEvent.registrationClose || null,
+      submissionOpen: insertEvent.submissionOpen || null,
+      submissionClose: insertEvent.submissionClose || null,
+      status: insertEvent.status || "draft",
+      format: insertEvent.format || "online",
+      location: insertEvent.location || null,
+      timezone: insertEvent.timezone || "UTC",
+      prizePool: insertEvent.prizePool || 0,
+      organizationName: insertEvent.organizationName || null,
+      tracks: insertEvent.tracks || [],
+      tags: insertEvent.tags || [],
+      socials: insertEvent.socials || {},
+      links: insertEvent.links || {},
+      hero: insertEvent.hero || {},
       participantCount: 0,
       submissionCount: 0,
       createdAt: now,
@@ -229,6 +246,9 @@ export class MemStorage implements IStorage {
     const content: EventContent = {
       ...insertContent,
       id,
+      content: insertContent.content || {},
+      isPublished: insertContent.isPublished ?? true,
+      order: insertContent.order || 0,
       updatedAt: new Date()
     };
     this.eventContent.set(id, content);
@@ -262,6 +282,15 @@ export class MemStorage implements IStorage {
     const judge: EventJudge = {
       ...insertJudge,
       id,
+      title: insertJudge.title || null,
+      company: insertJudge.company || null,
+      bio: insertJudge.bio || null,
+      avatar: insertJudge.avatar || null,
+      linkedin: insertJudge.linkedin || null,
+      twitter: insertJudge.twitter || null,
+      email: insertJudge.email || null,
+      expertise: insertJudge.expertise || [],
+      isActive: insertJudge.isActive ?? true,
       createdAt: new Date()
     };
     this.eventJudges.set(id, judge);
@@ -291,7 +320,7 @@ export class MemStorage implements IStorage {
   async getEventSponsors(eventId: string): Promise<EventSponsor[]> {
     return Array.from(this.eventSponsors.values())
       .filter(sponsor => sponsor.eventId === eventId && sponsor.isActive)
-      .sort((a, b) => a.order - b.order);
+      .sort((a, b) => (a.order || 0) - (b.order || 0));
   }
 
   async createEventSponsor(insertSponsor: InsertEventSponsor): Promise<EventSponsor> {
@@ -299,6 +328,12 @@ export class MemStorage implements IStorage {
     const sponsor: EventSponsor = {
       ...insertSponsor,
       id,
+      logo: insertSponsor.logo || null,
+      website: insertSponsor.website || null,
+      description: insertSponsor.description || null,
+      tier: insertSponsor.tier || "bronze",
+      order: insertSponsor.order || 0,
+      isActive: insertSponsor.isActive ?? true,
       createdAt: new Date()
     };
     this.eventSponsors.set(id, sponsor);
@@ -340,6 +375,8 @@ export class MemStorage implements IStorage {
     const participant: EventParticipant = {
       ...insertParticipant,
       id,
+      status: insertParticipant.status || "registered",
+      teamId: insertParticipant.teamId || null,
       registeredAt: new Date()
     };
     this.eventParticipants.set(id, participant);
@@ -347,7 +384,7 @@ export class MemStorage implements IStorage {
     // Update event participant count
     const event = await this.getEvent(insertParticipant.eventId);
     if (event) {
-      await this.updateEvent(event.id, { participantCount: event.participantCount + 1 });
+      await this.updateEvent(event.id, { participantCount: (event.participantCount || 0) + 1 });
     }
     
     return participant;
@@ -371,8 +408,8 @@ export class MemStorage implements IStorage {
     // Update event participant count
     if (deleted) {
       const event = await this.getEvent(participant.eventId);
-      if (event && event.participantCount > 0) {
-        await this.updateEvent(event.id, { participantCount: event.participantCount - 1 });
+      if (event && (event.participantCount || 0) > 0) {
+        await this.updateEvent(event.id, { participantCount: (event.participantCount || 0) - 1 });
       }
     }
     
@@ -393,6 +430,14 @@ export class MemStorage implements IStorage {
     const team: EventTeam = {
       ...insertTeam,
       id,
+      description: insertTeam.description || null,
+      lookingFor: insertTeam.lookingFor || [],
+      skills: insertTeam.skills || [],
+      memberIds: insertTeam.memberIds || [],
+      maxMembers: insertTeam.maxMembers || 4,
+      isRecruiting: insertTeam.isRecruiting ?? true,
+      track: insertTeam.track || null,
+      submissionId: insertTeam.submissionId || null,
       createdAt: new Date()
     };
     this.eventTeams.set(id, team);
@@ -426,6 +471,21 @@ export class MemStorage implements IStorage {
     const submission: EventSubmission = {
       ...insertSubmission,
       id,
+      tagline: insertSubmission.tagline || null,
+      longDescription: insertSubmission.longDescription || null,
+      teamId: insertSubmission.teamId || null,
+      demoUrl: insertSubmission.demoUrl || null,
+      repoUrl: insertSubmission.repoUrl || null,
+      videoUrl: insertSubmission.videoUrl || null,
+      slidesUrl: insertSubmission.slidesUrl || null,
+      imageUrls: insertSubmission.imageUrls || [],
+      techStack: insertSubmission.techStack || [],
+      track: insertSubmission.track || null,
+      status: insertSubmission.status || "submitted",
+      scores: insertSubmission.scores || {},
+      totalScore: insertSubmission.totalScore || 0,
+      rank: insertSubmission.rank || null,
+      prizes: insertSubmission.prizes || [],
       submittedAt: new Date()
     };
     this.eventSubmissions.set(id, submission);
@@ -433,7 +493,7 @@ export class MemStorage implements IStorage {
     // Update event submission count
     const event = await this.getEvent(insertSubmission.eventId);
     if (event) {
-      await this.updateEvent(event.id, { submissionCount: event.submissionCount + 1 });
+      await this.updateEvent(event.id, { submissionCount: (event.submissionCount || 0) + 1 });
     }
     
     return submission;
@@ -457,8 +517,8 @@ export class MemStorage implements IStorage {
     // Update event submission count
     if (deleted) {
       const event = await this.getEvent(submission.eventId);
-      if (event && event.submissionCount > 0) {
-        await this.updateEvent(event.id, { submissionCount: event.submissionCount - 1 });
+      if (event && (event.submissionCount || 0) > 0) {
+        await this.updateEvent(event.id, { submissionCount: (event.submissionCount || 0) - 1 });
       }
     }
     
@@ -479,6 +539,9 @@ export class MemStorage implements IStorage {
     const score: JudgingScore = {
       ...insertScore,
       id,
+      criteria: insertScore.criteria || {},
+      feedback: insertScore.feedback || null,
+      isComplete: insertScore.isComplete ?? false,
       submittedAt: new Date()
     };
     this.judgingScores.set(id, score);
@@ -516,7 +579,7 @@ export class MemStorage implements IStorage {
       teams: {
         total: teams.length,
         recruiting: teams.filter(t => t.isRecruiting).length,
-        full: teams.filter(t => t.memberIds.length >= t.maxMembers).length
+        full: teams.filter(t => (t.memberIds || []).length >= (t.maxMembers || 4)).length
       },
       submissions: {
         total: submissions.length,
@@ -592,8 +655,8 @@ export class MemStorage implements IStorage {
     checks.push({
       id: 'prizes',
       title: 'Prizes configured',
-      status: event.prizePool > 0 ? 'complete' : 'warning',
-      message: event.prizePool === 0 ? 'Configure prize information' : undefined,
+      status: (event.prizePool || 0) > 0 ? 'complete' : 'warning',
+      message: (event.prizePool || 0) === 0 ? 'Configure prize information' : undefined,
       priority: 'medium'
     });
 
@@ -605,7 +668,7 @@ export class MemStorage implements IStorage {
     const dailyData: { [key: string]: number } = {};
     
     participants.forEach(participant => {
-      const date = participant.registeredAt.toISOString().split('T')[0];
+      const date = (participant.registeredAt || new Date()).toISOString().split('T')[0];
       dailyData[date] = (dailyData[date] || 0) + 1;
     });
 
