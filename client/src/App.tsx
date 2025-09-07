@@ -1,12 +1,13 @@
-import { Router, Route, Switch, useLocation, useParams } from "wouter";
-import { useEffect } from "react";
+import { Router, Route, Switch, useLocation } from "wouter";
+import { useEffect, lazy, Suspense } from "react";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { AuthProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeProvider";
 import { EventProvider } from "@/contexts/EventContext";
+import { SupabaseAuthProvider } from "@/contexts/SupabaseAuthContext";
+
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import Landing from "@/pages/Landing";
@@ -49,9 +50,8 @@ import TeamRoles from "@/components/teams/TeamRoles";
 
 // Event Layout and Components
 import EventLayout from "@/pages/event/_layout/EventLayout";
-import { lazy, Suspense } from "react";
+import { HashRedirect } from "@/components/utils/HashRedirect";
 
-// Lazy load event components for better performance
 const EventOverview = lazy(() => import("@/pages/event/Overview"));
 const EventTimeline = lazy(() => import("@/pages/event/Timeline"));
 const EventPrizes = lazy(() => import("@/pages/event/Prizes"));
@@ -64,71 +64,119 @@ const EventHelp = lazy(() => import("@/pages/event/Help"));
 const EventResources = lazy(() => import("@/pages/event/Resources"));
 const EventSponsors = lazy(() => import("@/pages/event/Sponsors"));
 const EventAbout = lazy(() => import("@/pages/event/About"));
-import { HashRedirect } from "@/components/utils/HashRedirect";
 
 function ScrollToTop() {
   const [location] = useLocation();
-  
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
-  
   return null;
 }
 
-// Event Layout Wrapper for sub-routes
 function EventLayoutWrapper({ params }: { params: { slug: string } }) {
   const { slug } = params;
   const [location] = useLocation();
-  
   if (!slug) return <NotFound />;
-  
+
   const getEventContent = () => {
-    const path = location.replace(`/e/${slug}`, '') || '/';
-    
+    const path = location.replace(`/e/${slug}`, "") || "/";
     switch (path) {
-      case '/':
-        return <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}><EventOverview /></Suspense>;
-      case '/timeline':
-        return <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}><EventTimeline /></Suspense>;
-      case '/prizes':
-        return <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}><EventPrizes /></Suspense>;
-      case '/rules':
-        return <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}><EventRules /></Suspense>;
-      case '/judging':
-        return <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}><EventJudging /></Suspense>;
-      case '/submissions':
-        return <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}><EventSubmissionsList /></Suspense>;
-      case '/teams':
-        return <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}><EventTeamsList /></Suspense>;
-      case '/people':
-        return <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}><EventPeopleHome /></Suspense>;
-      case '/help':
-        return <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}><EventHelp /></Suspense>;
-      case '/resources':
-        return <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}><EventResources /></Suspense>;
-      case '/sponsors':
-        return <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}><EventSponsors /></Suspense>;
-      case '/about':
-        return <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div></div>}><EventAbout /></Suspense>;
+      case "/":
+        return (
+          <Suspense fallback={<Loader />}>
+            <EventOverview />
+          </Suspense>
+        );
+      case "/timeline":
+        return (
+          <Suspense fallback={<Loader />}>
+            <EventTimeline />
+          </Suspense>
+        );
+      case "/prizes":
+        return (
+          <Suspense fallback={<Loader />}>
+            <EventPrizes />
+          </Suspense>
+        );
+      case "/rules":
+        return (
+          <Suspense fallback={<Loader />}>
+            <EventRules />
+          </Suspense>
+        );
+      case "/judging":
+        return (
+          <Suspense fallback={<Loader />}>
+            <EventJudging />
+          </Suspense>
+        );
+      case "/submissions":
+        return (
+          <Suspense fallback={<Loader />}>
+            <EventSubmissionsList />
+          </Suspense>
+        );
+      case "/teams":
+        return (
+          <Suspense fallback={<Loader />}>
+            <EventTeamsList />
+          </Suspense>
+        );
+      case "/people":
+        return (
+          <Suspense fallback={<Loader />}>
+            <EventPeopleHome />
+          </Suspense>
+        );
+      case "/help":
+        return (
+          <Suspense fallback={<Loader />}>
+            <EventHelp />
+          </Suspense>
+        );
+      case "/resources":
+        return (
+          <Suspense fallback={<Loader />}>
+            <EventResources />
+          </Suspense>
+        );
+      case "/sponsors":
+        return (
+          <Suspense fallback={<Loader />}>
+            <EventSponsors />
+          </Suspense>
+        );
+      case "/about":
+        return (
+          <Suspense fallback={<Loader />}>
+            <EventAbout />
+          </Suspense>
+        );
       default:
         return <NotFound />;
     }
   };
-  
+
   return (
     <EventProvider slug={slug}>
-      <EventLayout>
-        {getEventContent()}
-      </EventLayout>
+      <EventLayout>{getEventContent()}</EventLayout>
     </EventProvider>
+  );
+}
+
+function Loader() {
+  return (
+    <div className="flex items-center justify-center p-8">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div>
+    </div>
   );
 }
 
 function AppRouter() {
   return (
     <Router>
-      <AuthProvider>
+      <SupabaseAuthProvider>
         <div className="min-h-screen bg-background">
           <ScrollToTop />
           <HashRedirect />
@@ -149,17 +197,17 @@ function AppRouter() {
             <Route path="/teams/:id/chat" component={TeamChat} />
             <Route path="/teams/:id/settings" component={TeamSettings} />
             <Route path="/teams/:id/roles" component={TeamRoles} />
-            
+
             {/* Event Routes */}
             <Route path="/e/:slug" component={EventLayoutWrapper} />
             <Route path="/e/:slug/*" component={EventLayoutWrapper} />
             <Route path="/e/:slug/submit" component={Submit} />
-            
+
             {/* Regular Routes */}
             <Route path="/" component={Landing} />
             <Route path="/explore" component={SimpleExplore} />
             <Route path="/organize" component={Organize} />
-            <Route path="/profiles/:handle" component={Profile} />
+            <Route path="/profile/:handle" component={Profile} />
             <Route path="/leaders" component={Leaderboards} />
             <Route path="/sponsors" component={Sponsors} />
             <Route path="/help" component={Help} />
@@ -182,7 +230,7 @@ function AppRouter() {
           </Switch>
           <Footer />
         </div>
-      </AuthProvider>
+      </SupabaseAuthProvider>
     </Router>
   );
 }

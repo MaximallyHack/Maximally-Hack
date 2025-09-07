@@ -110,71 +110,210 @@ client/src/lib/fixtures/
 
 ## 📁 Project Structure
 
+
+
 ```
-maximally-hack/
-├── client/                    # Frontend React application
-│   ├── src/
-│   │   ├── components/        # Reusable UI components
-│   │   │   ├── event/         # Event-specific components
-│   │   │   │   ├── EventCard.tsx
-│   │   │   │   ├── EventHeader.tsx
-│   │   │   │   ├── Countdown.tsx
-│   │   │   │   ├── JudgeCard.tsx
-│   │   │   │   ├── ProjectCard.tsx
-│   │   │   │   ├── TeamCard.tsx
-│   │   │   │   └── ...
-│   │   │   ├── judge/         # Judge dashboard components
-│   │   │   │   └── ScorePanel.tsx
-│   │   │   ├── layout/        # Navigation and layout
-│   │   │   │   ├── Navbar.tsx
-│   │   │   │   └── Footer.tsx
-│   │   │   ├── project/       # Project-related components
-│   │   │   │   ├── ContactModal.tsx
-│   │   │   │   └── JoinRequestModal.tsx
-│   │   │   └── ui/            # Base UI component library (Shadcn)
-│   │   ├── pages/             # Page components and routes
-│   │   │   ├── auth/          # Authentication flows
-│   │   │   │   ├── Login.tsx
-│   │   │   │   ├── Signup.tsx
-│   │   │   │   └── Onboarding.tsx
-│   │   │   ├── judge/         # Judge-specific pages
-│   │   │   │   ├── JudgeDashboard.tsx
-│   │   │   │   └── JudgeRegister.tsx
-│   │   │   ├── organizer/     # Organizer dashboard pages
-│   │   │   │   ├── CreateEvent.tsx
-│   │   │   │   ├── EditHackathon.tsx
-│   │   │   │   ├── ManageEvent.tsx
-│   │   │   │   └── OrganizerDashboard.tsx
-│   │   │   ├── Landing.tsx          # Homepage with hero and features
-│   │   │   ├── Explore.tsx          # Event discovery with filters
-│   │   │   ├── EventDetail.tsx      # Individual event pages
-│   │   │   ├── NewEnhancedEventDetail.tsx  # Advanced event hub
-│   │   │   ├── Projects.tsx         # Project gallery
-│   │   │   ├── ProjectDetail.tsx    # Individual project pages
-│   │   │   ├── CreateProject.tsx    # Project submission
-│   │   │   ├── Dashboard.tsx        # User dashboard
-│   │   │   ├── Profile.tsx          # User profiles
-│   │   │   ├── Judges.tsx           # Judge directory
-│   │   │   ├── Sponsors.tsx         # Sponsor showcase
-│   │   │   ├── Help.tsx             # Help center
-│   │   │   └── Leaderboards.tsx     # Competition rankings
-│   │   ├── lib/               # Utilities and fixtures
-│   │   │   ├── fixtures/      # Mock data and JSON files
-│   │   │   ├── api.ts         # API client and mock responses
-│   │   │   ├── auth.ts        # Authentication utilities
-│   │   │   ├── utils.ts       # General utilities
-│   │   │   └── theme.ts       # Design system utilities
-│   │   ├── hooks/             # Custom React hooks
-│   │   └── contexts/          # React context providers
-│   │       └── AuthContext.tsx
-├── server/                    # Development server (Express)
-│   ├── index.ts              # Server entry point
-│   ├── routes.ts             # API route definitions
-│   ├── storage.ts            # Mock data persistence
-│   └── vite.ts               # Vite development setup
-├── shared/                    # Shared types and schemas
-│   └── schema.ts             # TypeScript type definitions
-└── ...
+Maximally-Hack/
+│
+├── attached_assets/
+│   ├── generated_images/
+│   ├── image_*.png
+│   ├── Pasted-*.txt
+│   └── Screenshot *.png
+│
+├── client/
+│   ├── index.html
+│   └── src/
+│       ├── App.tsx
+│       ├── index.css
+│       ├── main.tsx
+│       ├── supabaseClient.ts
+│       ├── components/
+│       │   ├── event/
+│       │   │   ├── Countdown.tsx
+│       │   │   ├── CriteriaBar.tsx
+│       │   │   ├── EnhancedPrizeCard.tsx
+│       │   │   ├── EventCard.tsx
+│       │   │   ├── EventHeader.tsx
+│       │   │   ├── FactBadge.tsx
+│       │   │   ├── GalleryGrid.tsx
+│       │   │   ├── LinkChip.tsx
+│       │   │   ├── ProjectCard.tsx
+│       │   │   ├── SocialIcon.tsx
+│       │   │   ├── StickyCTA.tsx
+│       │   │   ├── TeamCard.tsx
+│       │   │   ├── TimelineItem.tsx
+│       │   │   └── ...
+│       │   ├── layout/
+│       │   │   ├── Footer.tsx
+│       │   │   └── Navbar.tsx
+│       │   ├── teams/
+│       │   │   ├── CreateTeam.tsx
+│       │   │   ├── FindTeam.tsx
+│       │   │   ├── MyTeams.tsx
+│       │   │   ├── TeamApply.tsx
+│       │   │   ├── TeamCard.tsx
+│       │   │   ├── TeamChat.tsx
+│       │   │   ├── TeamDetail.tsx
+│       │   │   ├── TeamInvites.tsx
+│       │   │   ├── TeamManage.tsx
+│       │   │   ├── TeamManagement.tsx
+│       │   │   ├── TeamMatch.tsx
+│       │   │   ├── TeamRequests.tsx
+│       │   │   ├── TeamRoles.tsx
+│       │   │   ├── TeamSettings.tsx
+│       │   │   ├── TeamsHome.tsx
+│       │   │   ├── TeamsLFG.tsx
+│       │   │   └── ...
+│       │   ├── ui/
+│       │   │   ├── accordion.tsx
+│       │   │   ├── alert-dialog.tsx
+│       │   │   ├── alert.tsx
+│       │   │   ├── aspect-ratio.tsx
+│       │   │   ├── avatar.tsx
+│       │   │   ├── badge.tsx
+│       │   │   ├── breadcrumb.tsx
+│       │   │   ├── button.tsx
+│       │   │   ├── calendar.tsx
+│       │   │   ├── card.tsx
+│       │   │   ├── carousel.tsx
+│       │   │   ├── chart.tsx
+│       │   │   ├── checkbox.tsx
+│       │   │   ├── collapsible.tsx
+│       │   │   ├── command.tsx
+│       │   │   ├── confetti.tsx
+│       │   │   ├── context-menu.tsx
+│       │   │   ├── dialog.tsx
+│       │   │   ├── drawer.tsx
+│       │   │   ├── dropdown-menu.tsx
+│       │   │   ├── floating-elements.tsx
+│       │   │   ├── form.tsx
+│       │   │   ├── hover-card.tsx
+│       │   │   ├── input-otp.tsx
+│       │   │   ├── input.tsx
+│       │   │   ├── label.tsx
+│       │   │   ├── menubar.tsx
+│       │   │   ├── navigation-menu.tsx
+│       │   │   ├── pagination.tsx
+│       │   │   ├── popover.tsx
+│       │   │   ├── progress.tsx
+│       │   │   ├── radio-group.tsx
+│       │   │   ├── resizable.tsx
+│       │   │   ├── scroll-area.tsx
+│       │   │   ├── select.tsx
+│       │   │   ├── separator.tsx
+│       │   │   ├── sheet.tsx
+│       │   │   ├── sidebar.tsx
+│       │   │   ├── skeleton.tsx
+│       │   │   ├── slider.tsx
+│       │   │   ├── switch.tsx
+│       │   │   ├── table.tsx
+│       │   │   ├── tabs.tsx
+│       │   │   ├── textarea.tsx
+│       │   │   ├── theme-toggle.tsx
+│       │   │   ├── toast.tsx
+│       │   │   ├── toaster.tsx
+│       │   │   ├── toggle-group.tsx
+│       │   │   ├── toggle.tsx
+│       │   │   └── tooltip.tsx
+│       │   └── utils/
+│       │       └── HashRedirect.tsx
+│       ├── contexts/
+│       │   ├── AuthContext.tsx
+│       │   ├── EventContext.tsx
+│       │   ├── SupabaseAuthContext.tsx
+│       │   └── ThemeProvider.tsx
+│       ├── hooks/
+│       │   ├── use-mobile.tsx
+│       │   └── use-toast.ts
+│       ├── lib/
+│       │   ├── api.ts
+│       │   ├── auth.ts
+│       │   ├── fixtures/
+│       │   │   ├── events.json
+│       │   │   ├── judges.json
+│       │   │   ├── scorecards.json
+│       │   │   ├── submissions.json
+│       │   │   ├── teams.json
+│       │   │   ├── teamsData.json
+│       │   │   ├── teamsData.ts
+│       │   │   └── users.json
+│       │   ├── queryClient.ts
+│       │   ├── theme.ts
+│       │   └── utils.ts
+│       └── pages/
+│           ├── auth/
+│           │   ├── Login.tsx
+│           │   ├── Onboarding.tsx
+│           │   ├── OrganizerSignin.tsx
+│           │   └── Signup.tsx
+│           ├── Dashboard.tsx
+│           ├── EnhancedEventDetail.tsx
+│           ├── event/
+│           │   ├── About.tsx
+│           │   ├── Help.tsx
+│           │   ├── Judging.tsx
+│           │   ├── Overview.tsx
+│           │   ├── people/
+│           │   │   └── PeopleHome.tsx
+│           │   ├── Prizes.tsx
+│           │   ├── Resources.tsx
+│           │   ├── Rules.tsx
+│           │   ├── Sponsors.tsx
+│           │   ├── submissions/
+│           │   │   └── List.tsx
+│           │   ├── teams/
+│           │   │   └── List.tsx
+│           │   ├── Timeline.tsx
+│           │   └── _layout/
+│           │       └── EventLayout.tsx
+│           ├── EventDetail.tsx
+│           ├── Explore.tsx
+│           ├── Help.tsx
+│           ├── Landing.tsx
+│           ├── Leaderboards.tsx
+│           ├── NewEnhancedEventDetail.tsx
+│           ├── not-found.tsx
+│           ├── Organize.tsx
+│           ├── organizer/
+│           │   ├── CreateEvent.tsx
+│           │   ├── EditEvent.tsx
+│           │   ├── EditHackathon.tsx
+│           │   ├── EnhancedOrganizerDashboard.tsx
+│           │   ├── EventContentEditor.tsx
+│           │   ├── JudgeManagement.tsx
+│           │   ├── ManageEvent.tsx
+│           │   ├── OrganizerDashboard.tsx
+│           ├── Profile.tsx
+│           ├── ProjectDetail.tsx
+│           ├── ProjectsGallery.tsx
+│           ├── SimpleEventDetail.tsx
+│           ├── SimpleExplore.tsx
+│           ├── Sponsors.tsx
+│           ├── Submit.tsx
+│           └── ...
+│
+├── server/
+│   ├── index.ts
+│   ├── routes.ts
+│   ├── storage.ts
+│   └── vite.ts
+│
+├── shared/
+│   └── schema.ts
+│
+├── components.json
+├── drizzle.config.ts
+├── events.md
+├── package.json
+├── postcss.config.js
+├── README.md
+├── replit.md
+├── tailwind.config.ts
+├── TECH_STACK.md
+├── tsconfig.json
+├── vite.config.ts
+└── ...other config files
 ```
 
 ## 🌟 Key Features Showcase
