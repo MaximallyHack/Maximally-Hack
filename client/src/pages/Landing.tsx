@@ -56,7 +56,7 @@ export default function Landing() {
             <Badge className="inline-flex items-center border transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer text-[#1a472a] dark:text-[#23252f] bg-[#86d4a0] dark:bg-[#a6e3bc]" data-testid="category-student">
               🎓 Student
             </Badge>
-            <Badge className="bg-[#eab308] dark:bg-yellow text-[#1f2937] dark:text-foreground px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer" data-testid="category-beginner">
+            <Badge className="bg-[#eab308] dark:bg-yellow text-black dark:text-foreground px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer" data-testid="category-beginner">
               👶 Beginner
             </Badge>
             <Badge className="bg-[#dc2626] dark:bg-coral text-white px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer" data-testid="category-weekend">

@@ -43,7 +43,6 @@ export default function Explore() {
     queryFn: () => api.searchEvents(debouncedSearchQuery, filters),
     staleTime: 5 * 60 * 1000, // Cache for 5 minutes
     refetchOnWindowFocus: false,
-    keepPreviousData: true, // Keep previous results while loading new ones
   });
 
   const handleFilterChange = useCallback((key: keyof Filters, value: any) => {

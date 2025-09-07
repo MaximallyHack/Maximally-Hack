@@ -87,8 +87,7 @@ export default function Navbar() {
 
       <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-border/50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-18 bg-white dark:bg-[#0f1628]">
-            {/* Logo */}
+          <div className="flex justify-between items-center h-18 mb-4 mt-4">
             <Link
               to="/"
               className="flex items-center space-x-3 hover-scale group transition-all duration-300"
