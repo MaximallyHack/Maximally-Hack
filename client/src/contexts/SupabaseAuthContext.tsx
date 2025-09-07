@@ -3,7 +3,8 @@ import { supabase } from "@/supabaseClient";
 import type { User } from "@supabase/supabase-js";
 
 type SupabaseAuthContextType = {
-  user: User | null;
+  user: User | null;               // Supabase Auth User
+  profile: any | null;             // profiles table ka data
   signUp: (email: string, password: string, metadata?: Record<string, any>) => Promise<any>;
   signInWithPassword: (email: string, password: string) => Promise<any>;
   signInWithGoogle: () => Promise<void>;
@@ -16,8 +17,9 @@ const SupabaseAuthContext = createContext<SupabaseAuthContextType | undefined>(u
 
 export function SupabaseAuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [profile, setProfile] = useState<any | null>(null);
 
-  // ✅ Listen for auth state changes
+  // ✅ Listen for auth changes
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
       if (data.session?.user) setUser(data.session.user);
@@ -34,22 +36,19 @@ export function SupabaseAuthProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  // ✅ Always sync username from profiles table
+  // ✅ Sync profile table
   useEffect(() => {
     if (user) {
       supabase
         .from("profiles")
-        .select("username")
+        .select("*")
         .eq("id", user.id)
         .single()
-        .then(({ data }) => {
-          if (data?.username) {
-            setUser({
-              ...user,
-              user_metadata: { ...user.user_metadata, username: data.username },
-            });
-          }
+        .then(({ data, error }) => {
+          if (!error && data) setProfile(data);
         });
+    } else {
+      setProfile(null);
     }
   }, [user?.id]);
 
@@ -79,13 +78,17 @@ export function SupabaseAuthProvider({ children }: { children: ReactNode }) {
   const signOut = async () => {
     await supabase.auth.signOut();
     setUser(null);
+    setProfile(null);
   };
 
   const updateUser = async (updates: Record<string, any>) => {
     if (!user) return;
-    const { data, error } = await supabase.auth.updateUser({ data: updates });
+    const { error } = await supabase
+      .from("profiles")
+      .update(updates)
+      .eq("id", user.id);
     if (error) throw error;
-    if (data.user) setUser(data.user);
+    setProfile((prev: any) => (prev ? { ...prev, ...updates } : null));
   };
 
   const uploadAvatar = async (file: File): Promise<string | null> => {
@@ -103,22 +106,30 @@ export function SupabaseAuthProvider({ children }: { children: ReactNode }) {
     const { data } = supabase.storage.from("avatars").getPublicUrl(filePath);
     const publicUrl = data.publicUrl;
 
-    const { error: updateError } = await supabase.auth.updateUser({
-      data: { avatar_url: publicUrl },
-    });
+    const { error: updateError } = await supabase
+      .from("profiles")
+      .update({ avatar_url: publicUrl })
+      .eq("id", user.id);
+
     if (updateError) throw updateError;
 
-    setUser({
-      ...user,
-      user_metadata: { ...user.user_metadata, avatar_url: publicUrl },
-    });
+    setProfile((prev: any) => (prev ? { ...prev, avatar_url: publicUrl } : null));
 
     return publicUrl;
   };
 
   return (
     <SupabaseAuthContext.Provider
-      value={{ user, signUp, signInWithPassword, signInWithGoogle, signOut, updateUser, uploadAvatar }}
+      value={{
+        user,
+        profile,
+        signUp,
+        signInWithPassword,
+        signInWithGoogle,
+        signOut,
+        updateUser,
+        uploadAvatar,
+      }}
     >
       {children}
     </SupabaseAuthContext.Provider>

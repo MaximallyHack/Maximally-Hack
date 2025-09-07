@@ -73,6 +73,14 @@ function ScrollToTop() {
   return null;
 }
 
+function Loader() {
+  return (
+    <div className="flex items-center justify-center p-8">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div>
+    </div>
+  );
+}
+
 function EventLayoutWrapper({ params }: { params: { slug: string } }) {
   const { slug } = params;
   const [location] = useLocation();
@@ -82,77 +90,29 @@ function EventLayoutWrapper({ params }: { params: { slug: string } }) {
     const path = location.replace(`/e/${slug}`, "") || "/";
     switch (path) {
       case "/":
-        return (
-          <Suspense fallback={<Loader />}>
-            <EventOverview />
-          </Suspense>
-        );
+        return <Suspense fallback={<Loader />}><EventOverview /></Suspense>;
       case "/timeline":
-        return (
-          <Suspense fallback={<Loader />}>
-            <EventTimeline />
-          </Suspense>
-        );
+        return <Suspense fallback={<Loader />}><EventTimeline /></Suspense>;
       case "/prizes":
-        return (
-          <Suspense fallback={<Loader />}>
-            <EventPrizes />
-          </Suspense>
-        );
+        return <Suspense fallback={<Loader />}><EventPrizes /></Suspense>;
       case "/rules":
-        return (
-          <Suspense fallback={<Loader />}>
-            <EventRules />
-          </Suspense>
-        );
+        return <Suspense fallback={<Loader />}><EventRules /></Suspense>;
       case "/judging":
-        return (
-          <Suspense fallback={<Loader />}>
-            <EventJudging />
-          </Suspense>
-        );
+        return <Suspense fallback={<Loader />}><EventJudging /></Suspense>;
       case "/submissions":
-        return (
-          <Suspense fallback={<Loader />}>
-            <EventSubmissionsList />
-          </Suspense>
-        );
+        return <Suspense fallback={<Loader />}><EventSubmissionsList /></Suspense>;
       case "/teams":
-        return (
-          <Suspense fallback={<Loader />}>
-            <EventTeamsList />
-          </Suspense>
-        );
+        return <Suspense fallback={<Loader />}><EventTeamsList /></Suspense>;
       case "/people":
-        return (
-          <Suspense fallback={<Loader />}>
-            <EventPeopleHome />
-          </Suspense>
-        );
+        return <Suspense fallback={<Loader />}><EventPeopleHome /></Suspense>;
       case "/help":
-        return (
-          <Suspense fallback={<Loader />}>
-            <EventHelp />
-          </Suspense>
-        );
+        return <Suspense fallback={<Loader />}><EventHelp /></Suspense>;
       case "/resources":
-        return (
-          <Suspense fallback={<Loader />}>
-            <EventResources />
-          </Suspense>
-        );
+        return <Suspense fallback={<Loader />}><EventResources /></Suspense>;
       case "/sponsors":
-        return (
-          <Suspense fallback={<Loader />}>
-            <EventSponsors />
-          </Suspense>
-        );
+        return <Suspense fallback={<Loader />}><EventSponsors /></Suspense>;
       case "/about":
-        return (
-          <Suspense fallback={<Loader />}>
-            <EventAbout />
-          </Suspense>
-        );
+        return <Suspense fallback={<Loader />}><EventAbout /></Suspense>;
       default:
         return <NotFound />;
     }
@@ -162,14 +122,6 @@ function EventLayoutWrapper({ params }: { params: { slug: string } }) {
     <EventProvider slug={slug}>
       <EventLayout>{getEventContent()}</EventLayout>
     </EventProvider>
-  );
-}
-
-function Loader() {
-  return (
-    <div className="flex items-center justify-center p-8">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div>
-    </div>
   );
 }
 

@@ -26,50 +26,51 @@ type ProfileData = {
 export default function Profile() {
   const { user, signOut, uploadAvatar } = useSupabaseAuth();
   const { handle } = useParams<{ handle: string }>();
+
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState<ProfileData | null>(null);
 
-  const isOwnProfile =
-    user &&
-    (handle === user.user_metadata?.username || handle === user.id);
+  // ✅ Correct: check own profile
+  const isOwnProfile = user && profile && user.id === profile.id;
 
+  // ✅ Fetch profile by username (or id if handle is uuid)
   useEffect(() => {
     async function fetchProfile() {
       setLoading(true);
-    
-      // Agar handle UUID jaisa dikhta hai, to id se search karo
+
       const isUuid = /^[0-9a-fA-F-]{36}$/.test(handle);
-    
-      const query = supabase
+      console.log("isuuid", isUuid);
+
+      const { data, error } = await supabase
         .from("profiles")
         .select(
           "id, username, full_name, avatar_url, email, phone, location, github, linkedin, skills, interests, bio"
         )
         .or(isUuid ? `id.eq.${handle}` : `username.eq.${handle}`)
-        .single();
-      
-      const { data, error } = await query;
-      
-      console.log("DEBUG profile fetch:", { handle, data, error });
-      
+        .maybeSingle();
+      console.log("fetched profile data:", data, "error:", error);
+
       if (error) {
-        console.error("Supabase error:", error);
-      }
-    
-      if (data) {
+        console.error("Supabase profile fetch error:", error);
+        setProfile(null);
+        setForm(null);
+      } else if (data) {
         setProfile(data);
         setForm(data);
+        console.log(data)
       }
-    
+      
+
       setLoading(false);
     }
-    fetchProfile();
+    if (handle) fetchProfile();
   }, [handle]);
 
+  // ✅ Save profile changes
   async function handleSave() {
-    if (!form || !user) return;
+    if (!form || !user || !isOwnProfile) return;
 
     const { error } = await supabase
       .from("profiles")
@@ -91,12 +92,15 @@ export default function Profile() {
     }
   }
 
+  // ✅ Upload new avatar
   async function handleAvatarChange() {
+    if (!isOwnProfile) return;
     const file = await selectFile();
     if (file) {
       const url = await uploadAvatar(file);
       if (url) {
         setProfile((prev) => (prev ? { ...prev, avatar_url: url } : prev));
+        setForm((prev) => (prev ? { ...prev, avatar_url: url } : prev));
       }
     }
   }
@@ -142,6 +146,7 @@ export default function Profile() {
             </h1>
             <p className="text-muted">@{profile.username}</p>
             {profile.bio && <p className="mt-3">{profile.bio}</p>}
+
             <div className="mt-4 text-left space-y-2">
               {profile.location && <p>📍 {profile.location}</p>}
               {profile.phone && <p>📱 {profile.phone}</p>}
@@ -162,6 +167,7 @@ export default function Profile() {
                 <p>🎯 Interests: {profile.interests.join(", ")}</p>
               )}
             </div>
+
             {isOwnProfile && (
               <div className="mt-6 space-y-3">
                 <Button onClick={() => setEditing(true)} className="w-full">
