@@ -306,10 +306,18 @@ export default function JuryBoard() {
                         {selectedJudge.title} at {selectedJudge.company}
                       </DialogDescription>
                     </div>
+
+                    
                   </div>
                 </DialogHeader>
                 
                 <div className="space-y-6">
+                  {/* Quote */}
+                    {selectedJudge.quote && (
+                      <blockquote className="text-muted-foreground italic text-sm border-l-4 border-mint pl-4 text-left">
+                        "{selectedJudge.quote}"
+                      </blockquote>
+                    )}
                   <div>
                     <h3 className="font-semibold text-text-dark mb-2">About</h3>
                     <p className="text-text-muted text-sm">{selectedJudge.bio}</p>
@@ -319,7 +327,7 @@ export default function JuryBoard() {
                     <h3 className="font-semibold text-text-dark mb-2">Expertise</h3>
                     <div className="flex flex-wrap gap-2">
                       {selectedJudge.expertise.slice(0, 6).map(skill => (
-                        <Badge key={skill} className="bg-sky/20 text-sky px-2 py-1 rounded-full text-xs border-0">
+                        <Badge key={skill} className="bg-sky text-black/60 px-2 py-1 rounded-full text-xs border-0">
                           {skill}
                         </Badge>
                       ))}
@@ -329,14 +337,14 @@ export default function JuryBoard() {
                   <div className="flex justify-between items-center pt-4 border-t border-soft-gray">
                     <div className="flex gap-2">
                       {selectedJudge.social.linkedin && (
-                        <Button variant="outline" size="icon" className="border-sky text-sky hover:bg-sky/10" asChild>
+                        <Button variant="outline" size="icon" className="border-sky text-sky hover:bg-sky" asChild>
                           <a href={`https://linkedin.com/in/${selectedJudge.social.linkedin}`} target="_blank" rel="noopener noreferrer">
                             <Linkedin className="w-4 h-4" />
                           </a>
                         </Button>
                       )}
                       {selectedJudge.social.twitter && (
-                        <Button variant="outline" size="icon" className="border-sky text-sky hover:bg-sky/10" asChild>
+                        <Button variant="outline" size="icon" className="border-sky text-sky hover:bg-sky" asChild>
                           <a href={`https://twitter.com/${selectedJudge.social.twitter}`} target="_blank" rel="noopener noreferrer">
                             <Twitter className="w-4 h-4" />
                           </a>
@@ -345,7 +353,7 @@ export default function JuryBoard() {
                     </div>
                     
                     {selectedJudge.availability === 'Available' && (
-                      <Button className="bg-coral text-white hover:bg-coral/80">
+                      <Button className="bg-coral text-white hover:text-black/60">
                         Invite to Jury Board
                       </Button>
                     )}

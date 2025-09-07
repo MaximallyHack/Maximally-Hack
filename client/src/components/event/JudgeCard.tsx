@@ -22,29 +22,39 @@ export default function JuryMemberCard({ judge, showContactButton = false }: Jud
 
   return (
     <Card className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray hover-scale cursor-pointer transition-all duration-200" data-testid={`judge-card-${judge.id}`}>
-      <div className="text-center space-y-4">
-        {/* Avatar */}
-        <Avatar className="w-20 h-20 mx-auto">
-          <AvatarImage src={judge.avatar} alt={judge.name} />
-          <AvatarFallback className="bg-sky text-white text-xl">
-            {judge.name.split(' ').map(n => n[0]).join('')}
-          </AvatarFallback>
-        </Avatar>
+      <div className="space-y-4">
+        <div className="flex flex-row justify-start">
+          {/* Avatar */}
+          <Avatar className="w-20 h-20 mx-2">
+            <AvatarImage src={judge.avatar} alt={judge.name} />
+            <AvatarFallback className="bg-sky text-white text-xl">
+              {judge.name.split(' ').map(n => n[0]).join('')}
+            </AvatarFallback>
+          </Avatar>
 
-        {/* Basic Info */}
-        <div>
-          <h3 className="font-heading font-semibold text-lg text-text-dark mb-1">{judge.name}</h3>
-          <p className="text-text-muted text-sm mb-2">{judge.title} at {judge.company}</p>
-          <p className="text-text-muted text-xs">{judge.location}</p>
+          {/* Basic Info */}
+          <div className="">
+            <h3 className="font-heading font-semibold text-xl text-text-dark ">{judge.name}</h3>
+            <p className="text-text-muted text-sm">{judge.title} at {judge.company}</p>
+            <p className="text-text-muted text-xs">{judge.location}</p>
+          </div>
+          
         </div>
-
+        {/*
+        Quote 
+        {judge.quote && (
+          <blockquote className="text-text-muted italic text-sm border-l-4 border-mint pl-4 text-left">
+            "{judge.quote}"
+          </blockquote>
+        )}
+        */}
         {/* Bio */}
-        <p className="text-text-muted text-sm line-clamp-3">{judge.bio}</p>
+        <p className="text-text-muted text-xs justify-start line-clamp-3">{judge.bio}</p>
 
         {/* Expertise Tags */}
-        <div className="flex flex-wrap gap-2 justify-center">
-          {judge.expertise.slice(0, 3).map((skill) => (
-            <Badge key={skill} className="bg-sky/20 text-sky px-2 py-1 rounded-full text-xs border-0">
+        <div className="flex flex-row gap-2 justify-start">
+          {judge.expertise.slice(0, 2).map((skill) => (
+            <Badge key={skill} className="bg-sky text-black/60 px-2 py-1 rounded-full text-xs border-0">
               {skill}
             </Badge>
           ))}
@@ -56,99 +66,91 @@ export default function JuryMemberCard({ judge, showContactButton = false }: Jud
         </div>
 
         {/* Stats */}
-        <div className="flex justify-center gap-4 text-center">
-          <div>
-            <div className="text-lg font-bold text-coral">{judge.eventsJudged}</div>
-            <div className="text-xs text-text-muted">Events Judged</div>
+        <div className="flex flex-col justify-start gap-1">
+          <div className="flex flex-row items-center gap-2">
+            <div className="text-sm text-text-muted font-semibold">Events Judged:</div>
+            <div className="text-md font-bold text-coral">{judge.eventsJudged}</div>
           </div>
-          <div>
-            <div className="flex items-center justify-center gap-1">
-              <span className="text-lg font-bold text-yellow">{judge.rating}</span>
+          <div className="flex flex-row items-center gap-2">
+            <div className="text-sm text-text-muted font-semibold">Rating:</div>
+            <div className="flex items-center">
+              <span className="text-md font-bold text-yellow">{judge.rating}</span>
               <Star className="w-4 h-4 text-yellow" fill="currentColor" />
             </div>
-            <div className="text-xs text-text-muted">Rating</div>
+          </div>
+          <div className="flex flex-row items-center">
+            {/* Availability */}
+            <div className="text-sm text-text-muted font-semibold">Status:</div>
+            <Badge className={`bg-${getAvailabilityColor()}/20 text-${getAvailabilityColor()} px-3 py-1 rounded-full text-md border-0`}>
+              {judge.availability}
+            </Badge>
           </div>
         </div>
 
-        {/* Availability */}
-        <Badge className={`bg-${getAvailabilityColor()}/20 text-${getAvailabilityColor()} px-3 py-1 rounded-full text-sm border-0`}>
-          {judge.availability}
-        </Badge>
+        {/*Footer*/}
+        <div className="flex justify-between">
+          {/* Social Links */}
+          <div className="flex justify-start gap-3">
+            {judge.social.linkedin && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 text-text-muted hover:text-textDark"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  window.open(`https://linkedin.com/in/${judge.social.linkedin}`, '_blank');
+                }}
+                data-testid={`button-linkedin-${judge.id}`}
+              >
+                <Linkedin className="w-4 h-4" />
+              </Button>
+            )}
+            {judge.social.twitter && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 text-text-muted hover:text-textDark"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  window.open(`https://twitter.com/${judge.social.twitter}`, '_blank');
+                }}
+                data-testid={`button-twitter-${judge.id}`}
+              >
+                <Twitter className="w-4 h-4" />
+              </Button>
+            )}
+            {judge.social.website && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 text-text-muted hover:text-textDark"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  window.open(judge.social.website, '_blank');
+                }}
+                data-testid={`button-website-${judge.id}`}
+              >
+                <ExternalLink className="w-4 h-4" />
+              </Button>
+            )}
+          </div>
 
-        {/* Quote */}
-        {judge.quote && (
-          <blockquote className="text-text-muted italic text-sm border-l-4 border-mint pl-4 text-left">
-            "{judge.quote}"
-          </blockquote>
-        )}
+          <div className="flex justify-end">
+            {/* Contact Button */}
+            {showContactButton && judge.availability === 'Available' && (
+              <Button 
+                className="w-full bg-coral text-white text-xs hover:bg-coral/80 rounded-full"
+                data-testid={`button-contact-${judge.id}`}
+              >
+                Invite to Judge
+              </Button>
+            )}
+          </div>
 
-        {/* Badges */}
-        <div className="flex flex-wrap gap-2 justify-center">
-          {judge.badges.slice(0, 2).map((badge) => (
-            <Badge key={badge} className="bg-mint/20 text-mint px-2 py-1 rounded-full text-xs border-0">
-              {badge}
-            </Badge>
-          ))}
         </div>
-
-        {/* Social Links */}
-        <div className="flex justify-center gap-3">
-          {judge.social.linkedin && (
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 text-text-muted hover:text-sky"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                window.open(`https://linkedin.com/in/${judge.social.linkedin}`, '_blank');
-              }}
-              data-testid={`button-linkedin-${judge.id}`}
-            >
-              <Linkedin className="w-4 h-4" />
-            </Button>
-          )}
-          {judge.social.twitter && (
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 text-text-muted hover:text-sky"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                window.open(`https://twitter.com/${judge.social.twitter}`, '_blank');
-              }}
-              data-testid={`button-twitter-${judge.id}`}
-            >
-              <Twitter className="w-4 h-4" />
-            </Button>
-          )}
-          {judge.social.website && (
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 text-text-muted hover:text-coral"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                window.open(judge.social.website, '_blank');
-              }}
-              data-testid={`button-website-${judge.id}`}
-            >
-              <ExternalLink className="w-4 h-4" />
-            </Button>
-          )}
-        </div>
-
-        {/* Contact Button */}
-        {showContactButton && judge.availability === 'Available' && (
-          <Button 
-            className="w-full bg-coral text-white hover:bg-coral/80 rounded-full"
-            data-testid={`button-contact-${judge.id}`}
-          >
-            Invite to Judge
-          </Button>
-        )}
       </div>
     </Card>
   );
