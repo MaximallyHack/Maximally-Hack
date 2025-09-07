@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/lib/api';
+import { useWebSocket } from '@/hooks/useWebSocket';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -34,6 +35,16 @@ import {
   Zap
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+
+interface RealtimeActivity {
+  id: string;
+  type: 'participant_joined' | 'submission_created' | 'judge_activity' | 'event_update';
+  title: string;
+  description: string;
+  timestamp: string;
+  eventId?: string;
+  data?: any;
+}
 
 interface EventAnalytics {
   registrations: {
@@ -89,7 +100,9 @@ interface Event {
 export default function EnhancedOrganizerDashboard() {
   const { user, login } = useAuth();
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState("overview");
+  const [realtimeActivities, setRealtimeActivities] = useState<RealtimeActivity[]>([]);
 
   // Auto-login as demo organizer for development/demo purposes
   React.useEffect(() => {
@@ -98,6 +111,99 @@ export default function EnhancedOrganizerDashboard() {
       login('event_master', 'demo123').catch(console.error);
     }
   }, [user, login]);
+
+  // WebSocket connection for real-time updates
+  const { isConnected, lastMessage } = useWebSocket({
+    userId: user?.id,
+    isOrganizer: true,
+    onMessage: (message) => {
+      console.log('[Dashboard] Received real-time message:', message);
+      
+      // Add to real-time activity feed
+      const activity: RealtimeActivity = {
+        id: `${message.type}_${Date.now()}`,
+        type: message.type,
+        title: getActivityTitle(message),
+        description: getActivityDescription(message),
+        timestamp: message.timestamp,
+        eventId: message.eventId,
+        data: message.data
+      };
+      
+      setRealtimeActivities(prev => [activity, ...prev.slice(0, 9)]); // Keep only last 10
+      
+      // Show toast notification for important events
+      if (message.type === 'participant_joined' || message.type === 'submission_created') {
+        toast({
+          title: activity.title,
+          description: activity.description,
+          duration: 3000,
+        });
+      }
+      
+      // Invalidate queries to refresh data
+      if (message.type === 'analytics_update') {
+        queryClient.invalidateQueries({ queryKey: ['organizer-events'] });
+      }
+    },
+    onConnect: () => {
+      console.log('[Dashboard] WebSocket connected');
+      toast({
+        title: "Real-time updates enabled",
+        description: "You'll now receive live notifications",
+        duration: 2000,
+      });
+    },
+    onDisconnect: () => {
+      console.log('[Dashboard] WebSocket disconnected');
+    }
+  });
+
+  // Helper functions for activity feed
+  const getActivityTitle = (message: any) => {
+    switch (message.type) {
+      case 'participant_joined':
+        return 'New Participant Registered';
+      case 'submission_created':
+        return 'New Submission Received';
+      case 'judge_activity':
+        return 'Judge Activity';
+      case 'analytics_update':
+        return 'Analytics Updated';
+      default:
+        return 'Event Update';
+    }
+  };
+
+  const getActivityDescription = (message: any) => {
+    switch (message.type) {
+      case 'participant_joined':
+        return `${message.data?.name || 'A participant'} joined the event`;
+      case 'submission_created':
+        return `New project "${message.data?.title || 'Untitled'}" submitted`;
+      case 'judge_activity':
+        return `${message.data?.judgeName || 'A judge'} ${message.data?.action || 'updated'}`;
+      case 'analytics_update':
+        return 'Event analytics have been updated';
+      default:
+        return 'Event has been updated';
+    }
+  };
+
+  const getActivityIcon = (type: string) => {
+    switch (type) {
+      case 'participant_joined':
+        return <UserCheck className="w-4 h-4 text-green-600" />;
+      case 'submission_created':
+        return <FileText className="w-4 h-4 text-blue-600" />;
+      case 'judge_activity':
+        return <Award className="w-4 h-4 text-purple-600" />;
+      case 'analytics_update':
+        return <BarChart3 className="w-4 h-4 text-orange-600" />;
+      default:
+        return <Zap className="w-4 h-4 text-gray-600" />;
+    }
+  };
 
   // Show loading while auto-login is happening
   if (!user) {
@@ -326,41 +432,47 @@ export default function EnhancedOrganizerDashboard() {
                 </CardContent>
               </Card>
 
-              {/* Recent Activity */}
+              {/* Real-time Activity Feed */}
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Clock className="w-5 h-5" />
-                    Recent Activity
+                    Live Activity
+                    <Badge 
+                      variant={isConnected ? "default" : "secondary"} 
+                      className={`ml-auto text-xs ${isConnected ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'}`}
+                    >
+                      {isConnected ? 'Live' : 'Offline'}
+                    </Badge>
                   </CardTitle>
                   <CardDescription>
-                    Latest updates across your events
+                    Real-time updates from your events
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3 p-2">
-                      <UserCheck className="w-4 h-4 text-green-600" />
-                      <div className="flex-1">
-                        <p className="text-sm">12 new registrations</p>
-                        <p className="text-xs text-muted-foreground">2 hours ago</p>
-                      </div>
+                  {realtimeActivities.length === 0 ? (
+                    <div className="text-center py-8 text-muted-foreground">
+                      <Zap className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                      <p className="text-sm">No recent activity</p>
+                      <p className="text-xs">Live updates will appear here</p>
                     </div>
-                    <div className="flex items-center gap-3 p-2">
-                      <FileText className="w-4 h-4 text-blue-600" />
-                      <div className="flex-1">
-                        <p className="text-sm">5 new submissions</p>
-                        <p className="text-xs text-muted-foreground">4 hours ago</p>
-                      </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {realtimeActivities.map((activity) => (
+                        <div key={activity.id} className="flex items-center gap-3 p-2 border rounded-lg bg-soft-gray/50">
+                          {getActivityIcon(activity.type)}
+                          <div className="flex-1">
+                            <p className="text-sm font-medium">{activity.title}</p>
+                            <p className="text-xs text-muted-foreground">{activity.description}</p>
+                            <p className="text-xs text-muted-foreground mt-1">
+                              {new Date(activity.timestamp).toLocaleTimeString()}
+                            </p>
+                          </div>
+                          <div className="w-2 h-2 bg-coral rounded-full animate-pulse"></div>
+                        </div>
+                      ))}
                     </div>
-                    <div className="flex items-center gap-3 p-2">
-                      <Award className="w-4 h-4 text-purple-600" />
-                      <div className="flex-1">
-                        <p className="text-sm">Judging period started</p>
-                        <p className="text-xs text-muted-foreground">6 hours ago</p>
-                      </div>
-                    </div>
-                  </div>
+                  )}
                 </CardContent>
               </Card>
             </div>
