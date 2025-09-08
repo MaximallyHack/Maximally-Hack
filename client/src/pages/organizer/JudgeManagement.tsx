@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Navigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { api } from '@/lib/api';
+import { Judge as APIJudge } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -123,13 +125,63 @@ export default function JudgeManagement() {
   const { user } = useAuth();
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('judges');
-  const [judges, setJudges] = useState<Judge[]>(mockJudges);
+  const [judges, setJudges] = useState<Judge[]>([]);
   const [criteria, setCriteria] = useState<JudgingCriterion[]>(mockCriteria);
   const [isAddJudgeOpen, setIsAddJudgeOpen] = useState(false);
   const [isAddCriterionOpen, setIsAddCriterionOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Redirect if user is not an organizer or can't edit this event
-  if (!user?.isOrganizer || !user?.canEditEvent(id || '')) {
+  // Load judges data
+  useEffect(() => {
+    const loadJudges = async () => {
+      if (!id) return;
+      
+      try {
+        setIsLoading(true);
+        const eventJudges = await api.getEventJudges(id);
+        
+        // Transform API judges to component judge format
+        const transformedJudges: Judge[] = eventJudges.map(judge => ({
+          id: judge.id,
+          name: judge.name,
+          title: judge.title,
+          company: judge.company,
+          bio: judge.bio,
+          avatar: judge.avatar,
+          email: '', // API doesn't have email
+          linkedin: judge.social?.linkedin,
+          twitter: judge.social?.twitter,
+          expertise: judge.expertise,
+          status: 'confirmed', // API judges are confirmed by default
+          assignedSubmissions: 0, // These would come from scoring data
+          completedEvaluations: 0,
+          averageScore: judge.rating || 0,
+          joinedAt: new Date().toISOString()
+        }));
+        
+        setJudges(transformedJudges);
+      } catch (error) {
+        console.error('Error loading judges:', error);
+        toast({
+          title: "Error loading judges",
+          description: "Failed to load judge data. Please try again.",
+          variant: "destructive"
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    loadJudges();
+  }, [id, toast]);
+
+  // Redirect if user is not an organizer
+  if (!user?.isOrganizer) {
+    return <Navigate to="/organizer" replace />;
+  }
+
+  if (!id) {
     return <Navigate to="/organizer" replace />;
   }
 
@@ -150,15 +202,51 @@ export default function JudgeManagement() {
   };
 
   const handleInviteJudge = async (judgeData: any) => {
+    if (!id) return;
+    
     try {
-      // In real app, send invitation email and add to database
+      setIsSubmitting(true);
+      
+      // Create judge using API
+      const apiJudgeData = {
+        name: judgeData.name,
+        title: judgeData.title,
+        company: judgeData.company,
+        bio: judgeData.bio,
+        expertise: judgeData.expertise || [],
+        avatar: judgeData.avatar || '',
+        location: '',
+        social: {
+          linkedin: judgeData.linkedin,
+          twitter: judgeData.twitter,
+          website: judgeData.website
+        },
+        badges: [],
+        eventsJudged: 0,
+        rating: 0,
+        quote: judgeData.bio || '',
+        availability: 'Available' as const,
+        timezone: 'UTC'
+      };
+      
+      const createdJudge = await api.createJudge(id, apiJudgeData);
+      
+      // Transform and add to local state
       const newJudge: Judge = {
-        id: Date.now().toString(),
-        ...judgeData,
-        status: 'pending',
+        id: createdJudge.id,
+        name: createdJudge.name,
+        title: createdJudge.title,
+        company: createdJudge.company,
+        bio: createdJudge.bio,
+        avatar: createdJudge.avatar,
+        email: judgeData.email || '', // Use form data for email
+        linkedin: createdJudge.social?.linkedin,
+        twitter: createdJudge.social?.twitter,
+        expertise: createdJudge.expertise,
+        status: 'confirmed',
         assignedSubmissions: 0,
         completedEvaluations: 0,
-        averageScore: 0,
+        averageScore: createdJudge.rating || 0,
         joinedAt: new Date().toISOString()
       };
       
@@ -166,31 +254,41 @@ export default function JudgeManagement() {
       setIsAddJudgeOpen(false);
       
       toast({
-        title: "Judge invited",
-        description: `Invitation sent to ${judgeData.name}`,
+        title: "Judge added",
+        description: `${judgeData.name} has been added as a judge`,
       });
     } catch (error) {
+      console.error('Error adding judge:', error);
       toast({
-        title: "Invitation failed",
-        description: "Failed to send judge invitation",
+        title: "Failed to add judge",
+        description: "There was a problem adding the judge. Please try again.",
         variant: "destructive",
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const handleRemoveJudge = async (judgeId: string) => {
     try {
+      setIsSubmitting(true);
+      
+      await api.deleteJudge(judgeId);
       setJudges(prev => prev.filter(judge => judge.id !== judgeId));
+      
       toast({
         title: "Judge removed",
         description: "Judge has been removed from the event",
       });
     } catch (error) {
+      console.error('Error removing judge:', error);
       toast({
         title: "Removal failed",
-        description: "Failed to remove judge",
+        description: "Failed to remove judge. Please try again.",
         variant: "destructive",
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -303,7 +401,37 @@ export default function JudgeManagement() {
             </div>
 
             <div className="grid gap-6">
-              {judges.map((judge) => (
+              {isLoading ? (
+                <div className="space-y-6">
+                  {[1, 2, 3].map((i) => (
+                    <Card key={i} className="animate-pulse">
+                      <CardHeader>
+                        <div className="flex items-start gap-4">
+                          <div className="w-16 h-16 bg-soft-gray rounded-full"></div>
+                          <div className="flex-1 space-y-2">
+                            <div className="h-4 bg-soft-gray rounded w-1/3"></div>
+                            <div className="h-3 bg-soft-gray rounded w-1/4"></div>
+                            <div className="h-3 bg-soft-gray rounded w-1/2"></div>
+                          </div>
+                        </div>
+                      </CardHeader>
+                    </Card>
+                  ))}
+                </div>
+              ) : judges.length === 0 ? (
+                <Card className="p-8 text-center">
+                  <div className="text-gray-500 dark:text-gray-400">
+                    <Users className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                    <h3 className="text-lg font-medium mb-2">No judges yet</h3>
+                    <p className="text-sm mb-4">Invite judges to start building your judging panel</p>
+                    <Button onClick={() => setIsAddJudgeOpen(true)} data-testid="button-add-first-judge">
+                      <Plus className="w-4 h-4 mr-2" />
+                      Invite Your First Judge
+                    </Button>
+                  </div>
+                </Card>
+              ) : (
+                judges.map((judge) => (
                 <Card key={judge.id} className="hover:shadow-lg transition-shadow">
                   <CardHeader>
                     <div className="flex items-start justify-between">
@@ -369,7 +497,8 @@ export default function JudgeManagement() {
                     </div>
                   </CardHeader>
                 </Card>
-              ))}
+                ))
+              )}
             </div>
           </TabsContent>
 

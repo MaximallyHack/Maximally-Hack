@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { api } from '@/lib/api';
+import { useWebSocket } from '@/hooks/useWebSocket';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -33,6 +35,16 @@ import {
   Zap
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+
+interface RealtimeActivity {
+  id: string;
+  type: 'participant_joined' | 'submission_created' | 'judge_activity' | 'event_update';
+  title: string;
+  description: string;
+  timestamp: string;
+  eventId?: string;
+  data?: any;
+}
 
 interface EventAnalytics {
   registrations: {
@@ -84,100 +96,175 @@ interface Event {
   healthChecks: EventHealthCheck[];
 }
 
-const mockEvents: Event[] = [
-  {
-    id: 'maximally-ai-shipathon-2025',
-    title: 'Maximally AI Shipathon 2025',
-    slug: 'maximally-ai-shipathon-2025',
-    status: 'active',
-    startDate: '2025-02-01T09:00:00Z',
-    endDate: '2025-02-03T18:00:00Z',
-    registrationCount: 234,
-    submissionCount: 87,
-    prizePool: 50000,
-    analytics: {
-      registrations: {
-        total: 234,
-        daily: [
-          { date: '2025-01-01', count: 12 },
-          { date: '2025-01-02', count: 18 },
-          { date: '2025-01-03', count: 25 },
-        ],
-        byTrack: [
-          { track: 'AI & ML', count: 89 },
-          { track: 'Climate Tech', count: 76 },
-          { track: 'Healthcare', count: 69 },
-        ],
-        growth: 23.5
-      },
-      teams: {
-        total: 78,
-        recruiting: 23,
-        full: 55,
-        averageSize: 3.2
-      },
-      submissions: {
-        total: 87,
-        byTrack: [
-          { track: 'AI & ML', count: 34 },
-          { track: 'Climate Tech', count: 28 },
-          { track: 'Healthcare', count: 25 },
-        ],
-        judged: 45,
-        pending: 42
-      },
-      engagement: {
-        pageViews: 12500,
-        uniqueVisitors: 8200,
-        socialShares: 456,
-        discordMembers: 189
-      }
-    },
-    healthChecks: [
-      {
-        id: '1',
-        title: 'Judging Criteria',
-        status: 'complete',
-        message: 'All judging criteria are properly configured',
-        priority: 'medium'
-      },
-      {
-        id: '2',
-        title: 'Prize Distribution',
-        status: 'warning',
-        message: 'Prize amounts need final review',
-        action: 'Review Prizes',
-        priority: 'high'
-      },
-      {
-        id: '3',
-        title: 'Judge Assignments',
-        status: 'error',
-        message: '3 judges have not confirmed availability',
-        action: 'Contact Judges',
-        priority: 'high'
-      }
-    ]
-  }
-];
 
 export default function EnhancedOrganizerDashboard() {
-  const { user } = useAuth();
+  const { user, login } = useAuth();
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState("overview");
+  const [realtimeActivities, setRealtimeActivities] = useState<RealtimeActivity[]>([]);
 
-  // Redirect if not an organizer
+  // Auto-login as demo organizer for development/demo purposes
+  React.useEffect(() => {
+    if (!user) {
+      // Auto-login with demo organizer credentials for seamless demo experience
+      login('event_master', 'demo123').catch(console.error);
+    }
+  }, [user, login]);
+
+  // WebSocket connection for real-time updates
+  const { isConnected, lastMessage } = useWebSocket({
+    userId: user?.id,
+    isOrganizer: true,
+    onMessage: (message) => {
+      console.log('[Dashboard] Received real-time message:', message);
+      
+      // Add to real-time activity feed
+      const activity: RealtimeActivity = {
+        id: `${message.type}_${Date.now()}`,
+        type: message.type,
+        title: getActivityTitle(message),
+        description: getActivityDescription(message),
+        timestamp: message.timestamp,
+        eventId: message.eventId,
+        data: message.data
+      };
+      
+      setRealtimeActivities(prev => [activity, ...prev.slice(0, 9)]); // Keep only last 10
+      
+      // Show toast notification for important events
+      if (message.type === 'participant_joined' || message.type === 'submission_created') {
+        toast({
+          title: activity.title,
+          description: activity.description,
+          duration: 3000,
+        });
+      }
+      
+      // Invalidate queries to refresh data
+      if (message.type === 'analytics_update') {
+        queryClient.invalidateQueries({ queryKey: ['organizer-events'] });
+      }
+    },
+    onConnect: () => {
+      console.log('[Dashboard] WebSocket connected');
+      toast({
+        title: "Real-time updates enabled",
+        description: "You'll now receive live notifications",
+        duration: 2000,
+      });
+    },
+    onDisconnect: () => {
+      console.log('[Dashboard] WebSocket disconnected');
+    }
+  });
+
+  // Helper functions for activity feed
+  const getActivityTitle = (message: any) => {
+    switch (message.type) {
+      case 'participant_joined':
+        return 'New Participant Registered';
+      case 'submission_created':
+        return 'New Submission Received';
+      case 'judge_activity':
+        return 'Judge Activity';
+      case 'analytics_update':
+        return 'Analytics Updated';
+      default:
+        return 'Event Update';
+    }
+  };
+
+  const getActivityDescription = (message: any) => {
+    switch (message.type) {
+      case 'participant_joined':
+        return `${message.data?.name || 'A participant'} joined the event`;
+      case 'submission_created':
+        return `New project "${message.data?.title || 'Untitled'}" submitted`;
+      case 'judge_activity':
+        return `${message.data?.judgeName || 'A judge'} ${message.data?.action || 'updated'}`;
+      case 'analytics_update':
+        return 'Event analytics have been updated';
+      default:
+        return 'Event has been updated';
+    }
+  };
+
+  const getActivityIcon = (type: string) => {
+    switch (type) {
+      case 'participant_joined':
+        return <UserCheck className="w-4 h-4 text-green-600" />;
+      case 'submission_created':
+        return <FileText className="w-4 h-4 text-blue-600" />;
+      case 'judge_activity':
+        return <Award className="w-4 h-4 text-purple-600" />;
+      case 'analytics_update':
+        return <BarChart3 className="w-4 h-4 text-orange-600" />;
+      default:
+        return <Zap className="w-4 h-4 text-gray-600" />;
+    }
+  };
+
+  // Show loading while auto-login is happening
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  // Redirect if not an organizer (after login attempt)
   if (!user?.isOrganizer) {
     return <Navigate to="/auth/organizer" replace />;
   }
 
   const { data: events, isLoading } = useQuery({
-    queryKey: ['organizer-events'],
+    queryKey: ['organizer-events', user?.id],
     queryFn: async () => {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 500));
-      return mockEvents;
+      if (!user?.id) return [];
+      
+      // Fetch organizer's events
+      const events = await api.getOrganizerEvents(user.id);
+      
+      // For each event, fetch analytics and health checks
+      const eventsWithData = await Promise.all(
+        events.map(async (event) => {
+          try {
+            const [analytics, healthChecks] = await Promise.all([
+              api.getEventAnalytics(event.id),
+              api.getEventHealthChecks(event.id)
+            ]);
+            
+            return {
+              ...event,
+              analytics,
+              healthChecks,
+              registrationCount: event.participantCount || 0,
+              submissionCount: (event as any).submissionCount || 0
+            };
+          } catch (error) {
+            console.warn(`Failed to fetch data for event ${event.id}:`, error);
+            // Return event with empty analytics if fetch fails
+            return {
+              ...event,
+              analytics: {
+                registrations: { total: 0, daily: [], byTrack: [], growth: 0 },
+                teams: { total: 0, recruiting: 0, full: 0, averageSize: 0 },
+                submissions: { total: 0, byTrack: [], judged: 0, pending: 0 },
+                engagement: { pageViews: 0, uniqueVisitors: 0, socialShares: 0, discordMembers: 0 }
+              },
+              healthChecks: [],
+              registrationCount: event.participantCount || 0,
+              submissionCount: (event as any).submissionCount || 0
+            };
+          }
+        })
+      );
+      
+      return eventsWithData;
     },
+    enabled: !!user?.id,
   });
 
   const activeEvent = events?.[0]; // For demo, use first event
@@ -345,41 +432,47 @@ export default function EnhancedOrganizerDashboard() {
                 </CardContent>
               </Card>
 
-              {/* Recent Activity */}
+              {/* Real-time Activity Feed */}
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Clock className="w-5 h-5" />
-                    Recent Activity
+                    Live Activity
+                    <Badge 
+                      variant={isConnected ? "default" : "secondary"} 
+                      className={`ml-auto text-xs ${isConnected ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'}`}
+                    >
+                      {isConnected ? 'Live' : 'Offline'}
+                    </Badge>
                   </CardTitle>
                   <CardDescription>
-                    Latest updates across your events
+                    Real-time updates from your events
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3 p-2">
-                      <UserCheck className="w-4 h-4 text-green-600" />
-                      <div className="flex-1">
-                        <p className="text-sm">12 new registrations</p>
-                        <p className="text-xs text-muted-foreground">2 hours ago</p>
-                      </div>
+                  {realtimeActivities.length === 0 ? (
+                    <div className="text-center py-8 text-muted-foreground">
+                      <Zap className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                      <p className="text-sm">No recent activity</p>
+                      <p className="text-xs">Live updates will appear here</p>
                     </div>
-                    <div className="flex items-center gap-3 p-2">
-                      <FileText className="w-4 h-4 text-blue-600" />
-                      <div className="flex-1">
-                        <p className="text-sm">5 new submissions</p>
-                        <p className="text-xs text-muted-foreground">4 hours ago</p>
-                      </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {realtimeActivities.map((activity) => (
+                        <div key={activity.id} className="flex items-center gap-3 p-2 border rounded-lg bg-soft-gray/50">
+                          {getActivityIcon(activity.type)}
+                          <div className="flex-1">
+                            <p className="text-sm font-medium">{activity.title}</p>
+                            <p className="text-xs text-muted-foreground">{activity.description}</p>
+                            <p className="text-xs text-muted-foreground mt-1">
+                              {new Date(activity.timestamp).toLocaleTimeString()}
+                            </p>
+                          </div>
+                          <div className="w-2 h-2 bg-coral rounded-full animate-pulse"></div>
+                        </div>
+                      ))}
                     </div>
-                    <div className="flex items-center gap-3 p-2">
-                      <Award className="w-4 h-4 text-purple-600" />
-                      <div className="flex-1">
-                        <p className="text-sm">Judging period started</p>
-                        <p className="text-xs text-muted-foreground">6 hours ago</p>
-                      </div>
-                    </div>
-                  </div>
+                  )}
                 </CardContent>
               </Card>
             </div>
@@ -539,7 +632,7 @@ export default function EnhancedOrganizerDashboard() {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
-                      {activeEvent.analytics.registrations.byTrack.map((track, index) => (
+                      {activeEvent.analytics.registrations.byTrack.map((track: any, index: number) => (
                         <div key={track.track} className="space-y-2">
                           <div className="flex justify-between items-center">
                             <span className="font-medium">{track.track}</span>
