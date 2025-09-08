@@ -115,13 +115,13 @@ export default function TeamsHome() {
             <CardTitle className="text-xl font-semibold">My Teams</CardTitle>
             <div className="flex gap-2">
               <Link to="/teams/create" data-testid="button-create-team">
-                <Button size="sm" className="bg-coral hover:bg-coral/90">
+                <Button size="sm" className="bg-coral hover:text-gray-800">
                   <Plus className="w-4 h-4 mr-2" />
                   Create Team
                 </Button>
               </Link>
               <Link to="/teams/find" data-testid="button-find-teams">
-                <Button size="sm" variant="outline" className="border-mint text-mint hover:bg-mint/10">
+                <Button size="sm" variant="outline" className="border-mint bg-mint text-gray-800 hover:text-white dark:hover:text-white dark:hover:bg-green-800" >
                   <Search className="w-4 h-4 mr-2" />
                   Find Teams
                 </Button>
@@ -158,7 +158,7 @@ export default function TeamsHome() {
                         </Link>
                         <p className="text-sm text-[#6C6C6C] dark:text-muted-foreground mb-2">{getTeamRole(team)}</p>
                       </div>
-                      <Badge variant={team.status === 'recruiting' ? 'default' : 'secondary'} className="bg-mint/10 text-mint">
+                      <Badge variant={team.status === 'recruiting' ? 'default' : 'secondary'} className="bg-mint text-gray-700">
                         {team.status === 'recruiting' ? 'Recruiting' : 'Full'}
                       </Badge>
                     </div>
@@ -185,7 +185,7 @@ export default function TeamsHome() {
                         <span className="text-sm text-[#6C6C6C] dark:text-muted-foreground ml-2">{team.members.length}/5 members</span>
                       </div>
                       <Link to={`/teams/${team.id}`}>
-                        <Button size="sm" variant="outline" className="border-sky text-sky hover:bg-sky/10">
+                        <Button size="sm" variant="outline" className="border-sky text-sky hover:bg-sky dark:hover:text-gray-800">
                           View Team
                         </Button>
                       </Link>
@@ -193,7 +193,7 @@ export default function TeamsHome() {
                   </div>
                 ))}
                 <Link to="/teams/my" className="block" data-testid="link-view-all-teams">
-                  <Button variant="ghost" className="w-full text-coral hover:text-coral/80">
+                  <Button variant="ghost" className="w-full bg-coral text-gray-800 hover:text-white hover:bg-pink-300">
                     View All My Teams
                   </Button>
                 </Link>
@@ -250,25 +250,25 @@ export default function TeamsHome() {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <Link to="/teams/lfg" data-testid="quick-action-lfg">
-              <Button variant="outline" className="w-full h-20 flex-col gap-2 border-mint text-mint hover:bg-mint/10">
+              <Button variant="outline" className="w-full h-20 bg-green-50 dark:bg-gray-900  flex-col gap-2 border-mint text-mint hover:bg-mint dark:hover:hover:bg-mint dark:hover:text-gray-800">
                 <MessageCircle className="w-6 h-6" />
                 <span className="font-medium">Browse LFG</span>
               </Button>
             </Link>
             <Link to="/teams/invites" data-testid="quick-action-invites">
-              <Button variant="outline" className="w-full h-20 flex-col gap-2 border-sky text-sky hover:bg-sky/10">
+              <Button variant="outline" className="w-full h-20 bg-blue-50 dark:bg-gray-900  flex-col gap-2 border-sky text-sky hover:bg-sky dark:hover:hover:bg-sky dark:hover:text-gray-800">
                 <Award className="w-6 h-6" />
                 <span className="font-medium">My Invites</span>
               </Button>
             </Link>
             <Link to="/teams/requests" data-testid="quick-action-requests">
-              <Button variant="outline" className="w-full h-20 flex-col gap-2 border-coral text-coral hover:bg-coral/10">
+              <Button variant="outline" className="w-full h-20 flex-col bg-pink-50 dark:bg-gray-900 gap-2 border-coral text-coral hover:bg-coral dark:hover:hover:bg-coral dark:hover:text-gray-800">
                 <Users className="w-6 h-6" />
                 <span className="font-medium">Join Requests</span>
               </Button>
             </Link>
-            <Link to="/teams/match" data-testid="quick-action-match">
-              <Button variant="outline" className="w-full h-20 flex-col gap-2 border-yellow text-yellow hover:bg-yellow/10">
+            <Link to="/teams/match" data-testid="quick-action-match"> 
+              <Button variant="outline" className="w-full h-20 flex-col bg-amber-50 dark:bg-gray-900  gap-2 border-yellow text-amber-400 hover:bg-yellow dark:hover:hover:bg-yellow dark:hover:text-gray-800">
                 <Search className="w-6 h-6" />
                 <span className="font-medium">Team Match</span>
               </Button>

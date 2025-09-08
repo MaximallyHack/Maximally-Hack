@@ -187,7 +187,7 @@ export default function MyTeams() {
             <p className="text-muted-foreground">Manage your team memberships and leadership roles</p>
           </div>
           <Link to="/teams/create" data-testid="button-create-team">
-            <Button className="bg-coral hover:bg-coral/90">
+            <Button className="bg-coral hover:bg-coral/50">
               <Plus className="w-4 h-4 mr-2" />
               Create Team
             </Button>

@@ -7,6 +7,7 @@ import {
   DialogContent,
   DialogFooter,
   DialogHeader,
+  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -64,7 +65,7 @@ export function TeamCard({ team, onEdit, onDelete }: TeamCardProps) {
           <DropdownMenuContent align="end">
             <DropdownMenuItem onSelect={() => setIsEditing(true)}>
               Edit
-            </DropdownMenuMenuItem>
+            </DropdownMenuItem>
             <DropdownMenuItem onSelect={() => onDelete(team.id)}>
               Delete
             </DropdownMenuItem>
