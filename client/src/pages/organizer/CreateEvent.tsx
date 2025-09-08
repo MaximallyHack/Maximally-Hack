@@ -12,6 +12,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { useConfetti } from "@/components/ui/confetti";
 import { CrayonSquiggle } from "@/components/ui/floating-elements";
+import { api } from "@/lib/api";
+import { useAuth } from "@/contexts/AuthContext";
 import { 
   ArrowRight, 
   ArrowLeft,
@@ -96,8 +98,10 @@ export default function CreateEvent() {
   const [activeTab, setActiveTab] = useState('basic');
   const [data, setData] = useState<EventData>(defaultEventData);
   const [isPreview, setIsPreview] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const { isActive: confettiActive, trigger: triggerConfetti, Confetti } = useConfetti();
+  const { user } = useAuth();
 
   const totalSteps = 5;
   const progress = (step / totalSteps) * 100;
@@ -225,23 +229,106 @@ export default function CreateEvent() {
     }
   };
 
-  const handleSaveDraft = () => {
-    toast({
-      title: "Draft saved! 💾",
-      description: "Your event has been saved as a draft.",
-    });
+  const handleSaveDraft = async () => {
+    if (!user?.id) {
+      toast({
+        title: "Error",
+        description: "You must be logged in to save events.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const eventData = {
+        ...data,
+        status: "draft",
+        organizerId: user.id,
+        organizerName: user.fullName,
+        organizationName: user.organizationName || null,
+        prizePool: data.prizes.reduce((sum, prize) => sum + prize.amount, 0),
+        startDate: data.startDate,
+        endDate: data.endDate,
+        registrationOpen: data.registrationOpen || null,
+        registrationClose: data.registrationClose || null,
+        submissionOpen: data.submissionOpen || null,
+        submissionClose: data.submissionClose || null,
+        isPublic: false // drafts are not public
+      };
+
+      const createdEvent = await api.createEvent(eventData);
+      
+      toast({
+        title: "Draft saved! 💾",
+        description: "Your event has been saved as a draft.",
+      });
+      
+      // Redirect to edit page for further editing
+      setTimeout(() => {
+        setLocation(`/organizer/events/${createdEvent.id}/edit`);
+      }, 1000);
+    } catch (error) {
+      console.error('Error saving draft:', error);
+      toast({
+        title: "Error saving draft",
+        description: "There was a problem saving your event draft. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  const handlePublish = () => {
-    triggerConfetti();
-    toast({
-      title: "Event published! 🎉",
-      description: "Your hackathon is now live and accepting registrations.",
-    });
-    
-    setTimeout(() => {
-      setLocation('/organizer');
-    }, 2000);
+  const handlePublish = async () => {
+    if (!user?.id) {
+      toast({
+        title: "Error",
+        description: "You must be logged in to publish events.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const eventData = {
+        ...data,
+        status: "published",
+        organizerId: user.id,
+        organizerName: user.fullName,
+        organizationName: user.organizationName || null,
+        prizePool: data.prizes.reduce((sum, prize) => sum + prize.amount, 0),
+        startDate: data.startDate,
+        endDate: data.endDate,
+        registrationOpen: data.registrationOpen || null,
+        registrationClose: data.registrationClose || null,
+        submissionOpen: data.submissionOpen || null,
+        submissionClose: data.submissionClose || null,
+        isPublic: data.isPublic
+      };
+
+      const createdEvent = await api.createEvent(eventData);
+      
+      triggerConfetti();
+      toast({
+        title: "Event published! 🎉",
+        description: "Your hackathon is now live and accepting registrations.",
+      });
+      
+      setTimeout(() => {
+        setLocation('/organizer');
+      }, 2000);
+    } catch (error) {
+      console.error('Error publishing event:', error);
+      toast({
+        title: "Error publishing event",
+        description: "There was a problem publishing your event. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (isPreview) {
@@ -346,11 +433,21 @@ export default function CreateEvent() {
             <Button 
               onClick={handleSaveDraft}
               variant="outline" 
+              disabled={isSubmitting}
               className="border-mint text-mint hover:bg-mint/10 rounded-full px-6"
               data-testid="button-save-draft"
             >
-              <Save className="w-4 h-4 mr-2" />
-              Save Draft
+              {isSubmitting ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-mint mr-2"></div>
+                  Saving...
+                </>
+              ) : (
+                <>
+                  <Save className="w-4 h-4 mr-2" />
+                  Save Draft
+                </>
+              )}
             </Button>
           </div>
         </div>
@@ -893,12 +990,21 @@ export default function CreateEvent() {
           ) : (
             <Button
               onClick={handlePublish}
-              disabled={!data.isPublic}
+              disabled={!data.isPublic || isSubmitting}
               className="bg-coral text-white hover:bg-coral/80 rounded-full px-8"
               data-testid="button-publish"
             >
-              <Rocket className="w-4 h-4 mr-2" />
-              Publish Event 🎉
+              {isSubmitting ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  Publishing...
+                </>
+              ) : (
+                <>
+                  <Rocket className="w-4 h-4 mr-2" />
+                  Publish Event 🎉
+                </>
+              )}
             </Button>
           )}
         </div>
