@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useParams, Navigate } from 'react-router-dom';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/contexts/AuthContext';
+import { useSupabaseAuth } from '@/contexts/SupabaseAuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -26,6 +28,7 @@ import {
   ArrowLeft
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { supabaseApi } from '@/lib/supabaseApi';
 
 interface Judge {
   id: string;
@@ -53,39 +56,6 @@ interface JudgingCriterion {
   maxScore: number;
 }
 
-const mockJudges: Judge[] = [
-  {
-    id: '1',
-    name: 'Dr. Sarah Chen',
-    title: 'Senior AI Research Scientist',
-    company: 'TechCorp',
-    bio: 'Leading AI researcher with 10+ years of experience in machine learning and neural networks.',
-    avatar: '/api/placeholder/64/64',
-    email: 'sarah.chen@techcorp.com',
-    linkedin: 'sarah-chen-ai',
-    expertise: ['Machine Learning', 'Neural Networks', 'Computer Vision'],
-    status: 'confirmed',
-    assignedSubmissions: 15,
-    completedEvaluations: 12,
-    averageScore: 7.8,
-    joinedAt: '2025-01-15T10:00:00Z'
-  },
-  {
-    id: '2',
-    name: 'Marcus Rodriguez',
-    title: 'CTO',
-    company: 'StartupX',
-    bio: 'Tech entrepreneur and startup mentor with expertise in scaling technology companies.',
-    email: 'marcus@startupx.com',
-    twitter: 'marcustech',
-    expertise: ['Startups', 'Product Development', 'Tech Strategy'],
-    status: 'pending',
-    assignedSubmissions: 0,
-    completedEvaluations: 0,
-    averageScore: 0,
-    joinedAt: '2025-01-20T14:30:00Z'
-  }
-];
 
 const mockCriteria: JudgingCriterion[] = [
   {
@@ -121,12 +91,66 @@ const mockCriteria: JudgingCriterion[] = [
 export default function JudgeManagement() {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
+  const { user: supabaseUser } = useSupabaseAuth();
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState('judges');
-  const [judges, setJudges] = useState<Judge[]>(mockJudges);
   const [criteria, setCriteria] = useState<JudgingCriterion[]>(mockCriteria);
   const [isAddJudgeOpen, setIsAddJudgeOpen] = useState(false);
   const [isAddCriterionOpen, setIsAddCriterionOpen] = useState(false);
+
+  const { data: allJudges = [], isLoading: judgesLoading } = useQuery({
+    queryKey: ['judges'],
+    queryFn: () => supabaseApi.getJudges(),
+  });
+
+  const { data: eventJudges = [], isLoading: eventJudgesLoading } = useQuery({
+    queryKey: ['event-judges', id],
+    queryFn: () => supabaseApi.getEventJudges(id!),
+    enabled: !!id,
+  });
+
+  const assignJudgeMutation = useMutation({
+    mutationFn: ({ eventId, judgeId }: { eventId: string, judgeId: string }) => 
+      supabaseApi.assignJudgeToEvent(eventId, judgeId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['event-judges'] });
+      toast({
+        title: 'Judge Assigned',
+        description: 'Judge has been successfully assigned to this event.',
+      });
+    },
+    onError: (error) => {
+      console.error('Error assigning judge:', error);
+      toast({
+        title: 'Assignment Failed',
+        description: 'Failed to assign judge to event.',
+        variant: 'destructive'
+      });
+    }
+  });
+
+  const removeJudgeMutation = useMutation({
+    mutationFn: ({ eventId, judgeId }: { eventId: string, judgeId: string }) => 
+      supabaseApi.removeJudgeFromEvent(eventId, judgeId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['event-judges'] });
+      toast({
+        title: 'Judge Removed',
+        description: 'Judge has been removed from this event.',
+      });
+    },
+    onError: (error) => {
+      console.error('Error removing judge:', error);
+      toast({
+        title: 'Removal Failed',
+        description: 'Failed to remove judge from event.',
+        variant: 'destructive'
+      });
+    }
+  });
+
+  const isLoading = judgesLoading || eventJudgesLoading;
 
   // Redirect if user is not an organizer or can't edit this event
   if (!user?.isOrganizer || !user?.canEditEvent(id || '')) {
@@ -149,54 +173,23 @@ export default function JudgeManagement() {
     }
   };
 
-  const handleInviteJudge = async (judgeData: any) => {
-    try {
-      // In real app, send invitation email and add to database
-      const newJudge: Judge = {
-        id: Date.now().toString(),
-        ...judgeData,
-        status: 'pending',
-        assignedSubmissions: 0,
-        completedEvaluations: 0,
-        averageScore: 0,
-        joinedAt: new Date().toISOString()
-      };
-      
-      setJudges(prev => [...prev, newJudge]);
-      setIsAddJudgeOpen(false);
-      
-      toast({
-        title: "Judge invited",
-        description: `Invitation sent to ${judgeData.name}`,
-      });
-    } catch (error) {
-      toast({
-        title: "Invitation failed",
-        description: "Failed to send judge invitation",
-        variant: "destructive",
-      });
-    }
+  const handleAssignJudge = (judgeId: string) => {
+    if (!id) return;
+    assignJudgeMutation.mutate({ eventId: id, judgeId });
   };
 
-  const handleRemoveJudge = async (judgeId: string) => {
-    try {
-      setJudges(prev => prev.filter(judge => judge.id !== judgeId));
-      toast({
-        title: "Judge removed",
-        description: "Judge has been removed from the event",
-      });
-    } catch (error) {
-      toast({
-        title: "Removal failed",
-        description: "Failed to remove judge",
-        variant: "destructive",
-      });
-    }
+  const handleRemoveJudge = (judgeId: string) => {
+    if (!id) return;
+    removeJudgeMutation.mutate({ eventId: id, judgeId });
   };
+
+  const availableJudges = allJudges.filter(
+    judge => !eventJudges.some(eventJudge => eventJudge.id === judge.id)
+  );
 
   return (
     <div className="min-h-screen bg-background" data-testid="judge-management">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
@@ -213,6 +206,26 @@ export default function JudgeManagement() {
           </div>
         </div>
 
+        {/* Loading State */}
+        {isLoading ? (
+          <div className="space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              {Array.from({length: 4}).map((_, i) => (
+                <Card key={i} className="animate-pulse">
+                  <CardHeader>
+                    <div className="h-4 bg-muted rounded w-3/4"></div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="h-8 bg-muted rounded w-1/2 mb-2"></div>
+                    <div className="h-3 bg-muted rounded w-full"></div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+            <div className="h-64 bg-muted rounded animate-pulse"></div>
+          </div>
+        ) : (
+        <>
         {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <Card>
@@ -447,6 +460,8 @@ export default function JudgeManagement() {
             </div>
           </TabsContent>
         </Tabs>
+        </>
+        )}
       </div>
     </div>
   );

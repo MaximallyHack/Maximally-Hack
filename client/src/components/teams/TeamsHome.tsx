@@ -6,39 +6,74 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { Users, Plus, Search, MessageCircle, Calendar, TrendingUp, Award } from "lucide-react";
-import teamsData, { type Team, type Activity, type User } from "@/lib/fixtures/teamsData";
+import { useQuery } from "@tanstack/react-query";
+import { api, type Team, type User } from "@/lib/supabaseApi";
+import { useAuth } from "@/contexts/SupabaseAuthContext";
 
-const currentUserId = "1"; // Mock current user
+// Mock activity interface for now - these would be real API calls in production
+interface Activity {
+  id: string;
+  type: string;
+  teamId: string;
+  userId: string;
+  message: string;
+  timestamp: string;
+}
+
+// Mock team request interface for now
+interface TeamRequest {
+  id: string;
+  teamId: string;
+  status: 'pending' | 'accepted' | 'rejected';
+}
 
 export default function TeamsHome() {
-  const [userTeams, setUserTeams] = useState<Team[]>([]);
+  const { user } = useAuth();
   const [recentActivity, setRecentActivity] = useState<Activity[]>([]);
-  const [stats, setStats] = useState({ totalTeams: 0, activeApplications: 0, invitations: 0 });
 
+  // Fetch user's teams using React Query
+  const { data: allTeams, isLoading } = useQuery<Team[]>({
+    queryKey: ['teams'],
+    queryFn: async () => {
+      const teams = await api.getTeams();
+      return teams;
+    },
+    enabled: !!user
+  });
+
+  // Filter teams where user is a member
+  const userTeams = (allTeams || []).filter((team: Team) =>
+    team.members?.some((member: User) => member.id === user?.id)
+  );
+
+  // Mock recent activities - in production this would be a real API call
   useEffect(() => {
-    // Get user's teams
-    const teams = teamsData.teams.filter(team => 
-      team.members.some(member => member.userId === currentUserId)
-    );
-    setUserTeams(teams);
+    if (userTeams.length > 0) {
+      // Mock some recent activities
+      const mockActivities: Activity[] = [
+        {
+          id: '1',
+          type: 'member_joined',
+          teamId: userTeams[0]?.id || '',
+          userId: user?.id || '',
+          message: 'joined the team',
+          timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString() // 2 hours ago
+        }
+      ];
+      setRecentActivity(mockActivities);
+    }
+  }, [userTeams, user]);
 
-    // Get recent activities for user's teams
-    const activities = teamsData.activities
-      .filter(activity => teams.some(team => team.id === activity.teamId))
-      .slice(0, 5);
-    setRecentActivity(activities);
-
-    // Calculate stats
-    const totalTeams = teams.length;
-    const activeApplications = teamsData.teamRequests.filter(req => 
-      teams.some(team => team.id === req.teamId) && req.status === 'pending'
-    ).length;
-    setStats({ totalTeams, activeApplications, invitations: 2 });
-  }, []);
+  // Calculate stats
+  const stats = {
+    totalTeams: userTeams.length,
+    activeApplications: 0, // Would be real API call in production
+    invitations: 0 // Would be real API call in production
+  };
 
   const getTeamRole = (team: Team) => {
-    const member = team.members.find(m => m.userId === currentUserId);
-    return member?.role || "Member";
+    if (!user) return "Member";
+    return team.leader_id === user.id ? "Leader" : "Member";
   };
 
   const getActivityIcon = (type: string) => {
@@ -129,7 +164,11 @@ export default function TeamsHome() {
             </div>
           </CardHeader>
           <CardContent>
-            {userTeams.length === 0 ? (
+            {isLoading ? (
+              <div className="flex items-center justify-center py-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-coral"></div>
+              </div>
+            ) : userTeams.length === 0 ? (
               <div className="text-center py-8" data-testid="empty-teams-state">
                 <Users className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
                 <h3 className="font-semibold text-foreground mb-2">No teams yet</h3>
@@ -166,12 +205,11 @@ export default function TeamsHome() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <div className="flex -space-x-2">
-                          {team.members.slice(0, 3).map((member, idx) => {
-                            const user = teamsData.users.find(u => u.id === member.userId);
+                          {team.members?.slice(0, 3).map((member) => {
                             return (
-                              <Avatar key={member.userId} className="w-6 h-6 ring-2 ring-background">
+                              <Avatar key={member.id} className="w-6 h-6 ring-2 ring-background">
                                 <AvatarFallback className="text-xs bg-gradient-to-br from-coral to-coral/80 text-white">
-                                  {user?.avatar}
+                                  {member.name?.split(' ').map(n => n[0]).join('').slice(0, 2) || 'U'}
                                 </AvatarFallback>
                               </Avatar>
                             );
@@ -182,7 +220,7 @@ export default function TeamsHome() {
                             </div>
                           )}
                         </div>
-                        <span className="text-sm text-[#6C6C6C] dark:text-muted-foreground ml-2">{team.members.length}/5 members</span>
+                        <span className="text-sm text-[#6C6C6C] dark:text-muted-foreground ml-2">{team.members?.length || 0}/{team.max_size || 5} members</span>
                       </div>
                       <Link to={`/teams/${team.id}`}>
                         <Button size="sm" variant="outline" className="border-sky text-sky hover:bg-sky/10">
@@ -217,14 +255,14 @@ export default function TeamsHome() {
             ) : (
               <div className="space-y-4">
                 {recentActivity.map((activity, index) => {
-                  const team = teamsData.teams.find(t => t.id === activity.teamId);
-                  const user = teamsData.users.find(u => u.id === activity.userId);
+                  const team = userTeams.find(t => t.id === activity.teamId);
+                  const activityUser = user; // For now, assume it's the current user
                   return (
                     <div key={activity.id} className="flex items-start gap-3" data-testid={`activity-${activity.id}`}>
                       {getActivityIcon(activity.type)}
                       <div className="flex-1 min-w-0">
                         <p className="text-sm text-foreground">
-                          <span className="font-medium">{user?.fullName}</span>
+                          <span className="font-medium">{activityUser?.name}</span>
                           <span className="text-muted-foreground"> {activity.message}</span>
                         </p>
                         <div className="flex items-center gap-2 mt-1">

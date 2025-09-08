@@ -1,49 +1,48 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
+import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Users, Settings, MessageCircle, Calendar, ArrowLeft, Plus, Crown } from "lucide-react";
-import teamsData, { type Team, type User } from "@/lib/fixtures/teamsData";
-
-const currentUserId = "1"; // Mock current user
+import { useAuth } from "@/contexts/AuthContext";
+import { api, type Team, type User } from "@/lib/supabaseApi";
 
 export default function MyTeams() {
   const [, navigate] = useLocation();
-  const [userTeams, setUserTeams] = useState<Team[]>([]);
-  const [leadingTeams, setLeadingTeams] = useState<Team[]>([]);
-  const [memberTeams, setMemberTeams] = useState<Team[]>([]);
+  const { user } = useAuth();
 
-  useEffect(() => {
-    const teams = teamsData.teams.filter(team => 
-      team.members.some(member => member.userId === currentUserId)
-    );
+  const { data: allTeams, isLoading } = useQuery<Team[]>({
+    queryKey: ['my-teams'],
+    queryFn: async () => {
+      // Fetch all teams, we'll filter client-side by membership because of RLS simplicity
+      const teams = await api.getTeams();
+      return teams as any;
+    },
+  });
 
-    const leading = teams.filter(team => team.leaderId === currentUserId);
-    const member = teams.filter(team => team.leaderId !== currentUserId);
+  const userTeams = (allTeams || []).filter((team: any) =>
+    (team as any).members?.some((m: any) => m.id === user?.id)
+  );
+  const leadingTeams = userTeams.filter((team: any) => team.leader_id === user?.id);
+  const memberTeams = userTeams.filter((team: any) => team.leader_id !== user?.id);
 
-    setUserTeams(teams);
-    setLeadingTeams(leading);
-    setMemberTeams(member);
-  }, []);
-
-  const getTeamRole = (team: Team) => {
-    const member = team.members.find(m => m.userId === currentUserId);
-    return member?.role || "Member";
+  const getTeamRole = (team: any) => {
+    // members are profiles in API shape; role is on team_members join not present in simplified mapping
+    if (!user) return "Member";
+    return team.leader_id === user.id ? "Leader" : "Member";
   };
 
-  const getTeamMembers = (team: Team): User[] => {
-    return team.members.map(member => 
-      teamsData.users.find(user => user.id === member.userId)
-    ).filter(Boolean) as User[];
+  const getTeamMembers = (team: any): User[] => {
+    return (team.members || []) as any;
   };
 
   const TeamCard = ({ team, showActions = true }: { team: Team; showActions?: boolean }) => {
     const members = getTeamMembers(team);
-    const isLeader = team.leaderId === currentUserId;
-    const availableSpots = team.maxSize - team.members.length;
+    const isLeader = team.leader_id === user?.id;
+    const availableSpots = (team.max_size ?? team.maxSize) - (team.members?.length || 0);
 
     return (
       <Card className="hover:shadow-md transition-shadow" data-testid={`team-card-${team.id}`}>
@@ -81,10 +80,10 @@ export default function MyTeams() {
           </div>
 
           {/* Project Idea */}
-          {team.projectIdea && (
+          {team.description && (
             <div className="mb-4">
               <p className="text-sm text-foreground bg-sky/5 p-3 rounded-lg border border-sky/10">
-                <strong>Project:</strong> {team.projectIdea}
+                <strong>Project:</strong> {team.description}
               </p>
             </div>
           )}
@@ -93,17 +92,17 @@ export default function MyTeams() {
           <div className="mb-4">
             <div className="flex items-center gap-2 mb-2">
               <h4 className="text-sm font-medium text-foreground">Team Members</h4>
-              <span className="text-xs text-[#6C6C6C] dark:text-muted-foreground">({team.members.length}/{team.maxSize} members)</span>
+              <span className="text-xs text-[#6C6C6C] dark:text-muted-foreground">({team.members?.length || 0}/{team.max_size ?? team.maxSize} members)</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="flex -space-x-2">
-                {members.slice(0, 5).map((member) => (
-                  <Avatar key={member.id} className="w-8 h-8 ring-2 ring-background" title={member.fullName}>
-                    <AvatarFallback className="text-xs bg-gradient-to-br from-coral to-coral/80 text-white">
-                      {member.avatar}
-                    </AvatarFallback>
-                  </Avatar>
-                ))}
+                  {members.slice(0, 5).map((member: any) => (
+                    <Avatar key={member.id} className="w-8 h-8 ring-2 ring-background" title={member.name || member.fullName}>
+                      <AvatarFallback className="text-xs bg-gradient-to-br from-coral to-coral/80 text-white">
+                        {member.name?.split(' ').map((n: string) => n[0]).join('').slice(0, 2) || 'U'}
+                      </AvatarFallback>
+                    </Avatar>
+                  ))}
                 {members.length > 5 && (
                   <div className="w-8 h-8 rounded-full bg-muted border-2 border-background flex items-center justify-center">
                     <span className="text-xs text-muted-foreground">+{members.length - 5}</span>
@@ -118,32 +117,32 @@ export default function MyTeams() {
 
           {/* Skills and Roles */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            {team.requiredSkills.length > 0 && (
+            {(team.skills || []).length > 0 && (
               <div>
                 <h4 className="text-sm font-medium text-foreground mb-2">Skills</h4>
                 <div className="flex flex-wrap gap-1">
-                  {team.requiredSkills.slice(0, 3).map(skill => (
+                  {(team.skills || []).slice(0, 3).map((skill: string) => (
                     <Badge key={skill} variant="secondary" className="bg-coral/10 text-coral text-xs">
                       {skill}
                     </Badge>
                   ))}
-                  {team.requiredSkills.length > 3 && (
-                    <Badge variant="secondary" className="text-xs">+{team.requiredSkills.length - 3}</Badge>
+                  {(team.skills || []).length > 3 && (
+                    <Badge variant="secondary" className="text-xs">+{(team.skills || []).length - 3}</Badge>
                   )}
                 </div>
               </div>
             )}
-            {team.lookingForRoles.length > 0 && (
+            {(team.looking_for || []).length > 0 && (
               <div>
                 <h4 className="text-sm font-medium text-foreground mb-2">Looking For</h4>
                 <div className="flex flex-wrap gap-1">
-                  {team.lookingForRoles.slice(0, 2).map(role => (
+                  {(team.looking_for || []).slice(0, 2).map((role: string) => (
                     <Badge key={role} variant="secondary" className="bg-mint/10 text-mint text-xs">
                       {role}
                     </Badge>
                   ))}
-                  {team.lookingForRoles.length > 2 && (
-                    <Badge variant="secondary" className="text-xs">+{team.lookingForRoles.length - 2}</Badge>
+                  {(team.looking_for || []).length > 2 && (
+                    <Badge variant="secondary" className="text-xs">+{(team.looking_for || []).length - 2}</Badge>
                   )}
                 </div>
               </div>
@@ -155,7 +154,7 @@ export default function MyTeams() {
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4 text-muted-foreground" />
               <span className="text-xs text-muted-foreground">
-                Last activity: {new Date(team.lastActivity).toLocaleDateString()}
+                Created: {new Date(team.created_at).toLocaleDateString()}
               </span>
             </div>
             <div className="flex gap-2">
@@ -195,8 +194,25 @@ export default function MyTeams() {
         </div>
       </div>
 
-      {/* Quick Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      {/* Loading State */}
+      {isLoading ? (
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            {Array.from({length: 3}).map((_, i) => (
+              <Card key={i} className="animate-pulse">
+                <CardContent className="p-6">
+                  <div className="h-8 bg-muted rounded mb-2"></div>
+                  <div className="h-4 bg-muted rounded"></div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+          <div className="h-96 bg-muted rounded animate-pulse"></div>
+        </div>
+      ) : (
+        <>
+          {/* Quick Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <Card className="bg-gradient-to-br from-coral/5 to-coral/10 border-coral/20" data-testid="stat-total-teams">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
@@ -306,6 +322,8 @@ export default function MyTeams() {
           )}
         </TabsContent>
       </Tabs>
+        </>
+      )}
     </div>
   );
 }

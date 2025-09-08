@@ -8,7 +8,8 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Search, Filter, Users, Calendar, MapPin, ArrowLeft } from "lucide-react";
-import teamsData, { type Team, type User } from "@/lib/fixtures/teamsData";
+import { useQuery } from "@tanstack/react-query";
+import { api, type Team, type User } from "@/lib/supabaseApi";
 
 interface FilterOptions {
   search: string;
@@ -23,7 +24,6 @@ const allTags = ["AI", "HealthTech", "FinTech", "Sustainability", "Education", "
 
 export default function FindTeam() {
   const [, navigate] = useLocation();
-  const [teams, setTeams] = useState<Team[]>([]);
   const [filteredTeams, setFilteredTeams] = useState<Team[]>([]);
   const [filters, setFilters] = useState<FilterOptions>({
     search: "",
@@ -34,11 +34,13 @@ export default function FindTeam() {
   });
   const [showFilters, setShowFilters] = useState(false);
 
-  useEffect(() => {
-    // Load teams data
-    setTeams(teamsData.teams.filter(team => team.isPublic));
-    setFilteredTeams(teamsData.teams.filter(team => team.isPublic));
-  }, []);
+  const { data: teams = [], isLoading } = useQuery({
+    queryKey: ['teams'],
+    queryFn: async () => {
+      const allTeams = await api.getTeams();
+      return allTeams.filter((team: any) => team.status === 'recruiting');
+    }
+  });
 
   useEffect(() => {
     // Apply filters
@@ -47,18 +49,17 @@ export default function FindTeam() {
     // Search filter
     if (filters.search) {
       const searchTerm = filters.search.toLowerCase();
-      filtered = filtered.filter(team =>
+      filtered = filtered.filter((team: any) =>
         team.name.toLowerCase().includes(searchTerm) ||
-        team.description.toLowerCase().includes(searchTerm) ||
-        team.projectIdea.toLowerCase().includes(searchTerm)
+        (team.description || '').toLowerCase().includes(searchTerm)
       );
     }
 
     // Team size filter
     if (filters.teamSize !== "all") {
       const [min, max] = filters.teamSize.split("-").map(n => parseInt(n));
-      filtered = filtered.filter(team => {
-        const availableSpots = team.maxSize - team.members.length;
+      filtered = filtered.filter((team: any) => {
+        const availableSpots = (team.max_size || team.maxSize || 4) - (team.members?.length || 0);
         if (max) {
           return availableSpots >= min && availableSpots <= max;
         }
@@ -68,20 +69,20 @@ export default function FindTeam() {
 
     // Skills filter
     if (filters.skills.length > 0) {
-      filtered = filtered.filter(team =>
-        filters.skills.some(skill => team.requiredSkills.includes(skill))
+      filtered = filtered.filter((team: any) =>
+        filters.skills.some(skill => (team.skills || []).includes(skill))
       );
     }
 
     // Status filter
     if (filters.status !== "all") {
-      filtered = filtered.filter(team => team.status === filters.status);
+      filtered = filtered.filter((team: any) => team.status === filters.status);
     }
 
     // Tags filter
     if (filters.tags.length > 0) {
-      filtered = filtered.filter(team =>
-        filters.tags.some(tag => team.tags.includes(tag))
+      filtered = filtered.filter((team: any) =>
+        filters.tags.some(tag => (team.track && [team.track].includes(tag)))
       );
     }
 
@@ -116,12 +117,13 @@ export default function FindTeam() {
     });
   };
 
-  const getTeamLeader = (team: Team): User | undefined => {
-    return teamsData.users.find(user => user.id === team.leaderId);
+  const getTeamLeader = (team: any): User | undefined => {
+    // For now, return a basic leader object
+    return team.members?.find((member: any) => member.id === team.leader_id);
   };
 
-  const getAvailableSpots = (team: Team) => {
-    return team.maxSize - team.members.length;
+  const getAvailableSpots = (team: any) => {
+    return (team.max_size || team.maxSize || 4) - (team.members?.length || 0);
   };
 
   return (

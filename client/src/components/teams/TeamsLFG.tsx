@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
+import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -7,29 +8,47 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { Users, MessageCircle, Search, Plus, ArrowLeft, Crown, Clock } from "lucide-react";
-import teamsData, { type LFGPost, type User, type Team } from "@/lib/fixtures/teamsData";
-
-const currentUserId = "1"; // Mock current user
+import { api, type LFGPost, type User, type Team } from "@/lib/api";
+import { useAuth } from "@/contexts/SupabaseAuthContext";
+import CreateLFGPost from "./CreateLFGPost";
 
 export default function TeamsLFG() {
   const [, navigate] = useLocation();
-  const [lfgPosts, setLfgPosts] = useState<LFGPost[]>([]);
+  const { user } = useAuth();
   const [individualPosts, setIndividualPosts] = useState<LFGPost[]>([]);
   const [teamPosts, setTeamPosts] = useState<LFGPost[]>([]);
 
-  useEffect(() => {
-    const posts = teamsData.lfgPosts.filter(post => post.status === 'active');
-    setLfgPosts(posts);
-    setIndividualPosts(posts.filter(post => post.type === 'individual'));
-    setTeamPosts(posts.filter(post => post.type === 'team'));
-  }, []);
+  // Fetch LFG posts using React Query
+  const { data: lfgPosts = [], isLoading, error } = useQuery({
+    queryKey: ['lfg-posts'],
+    queryFn: () => api.getLFGPosts(),
+  });
 
-  const getUser = (userId: string): User | undefined => {
-    return teamsData.users.find(user => user.id === userId);
+  const { data: users = [] } = useQuery({
+    queryKey: ['users'],
+    queryFn: () => api.getUsers(),
+  });
+
+  const { data: teams = [] } = useQuery({
+    queryKey: ['teams'],
+    queryFn: () => api.getTeams(),
+  });
+
+  useEffect(() => {
+    if (lfgPosts) {
+      setIndividualPosts(lfgPosts.filter(post => post.type === 'individual'));
+      setTeamPosts(lfgPosts.filter(post => post.type === 'team'));
+    }
+  }, [lfgPosts]);
+
+  const getUser = (userId?: string): User | undefined => {
+    if (!userId) return undefined;
+    return users.find(user => user.id === userId);
   };
 
-  const getTeam = (teamId: string): Team | undefined => {
-    return teamsData.teams.find(team => team.id === teamId);
+  const getTeam = (teamId?: string): Team | undefined => {
+    if (!teamId) return undefined;
+    return teams.find(team => team.id === teamId);
   };
 
   const formatTimeAgo = (timestamp: string) => {
@@ -44,7 +63,7 @@ export default function TeamsLFG() {
   };
 
   const IndividualPostCard = ({ post }: { post: LFGPost }) => {
-    const user = post.userId ? getUser(post.userId) : null;
+    const postUser = getUser(post.userId);
     
     return (
       <Card className="hover:shadow-md transition-shadow" data-testid={`individual-post-${post.id}`}>
@@ -52,7 +71,7 @@ export default function TeamsLFG() {
           <div className="flex items-start gap-4">
             <Avatar className="w-12 h-12">
               <AvatarFallback className="bg-gradient-to-br from-coral to-coral/80 text-white font-semibold">
-                {user?.avatar}
+                {postUser?.name?.charAt(0) || '?'}
               </AvatarFallback>
             </Avatar>
             <div className="flex-1">
@@ -60,7 +79,7 @@ export default function TeamsLFG() {
                 <h3 className="font-semibold text-foreground">{post.title}</h3>
                 <Badge className="bg-mint/10 text-mint">Individual</Badge>
               </div>
-              <p className="text-sm text-muted-foreground mb-1">{user?.fullName} • @{user?.username}</p>
+              <p className="text-sm text-muted-foreground mb-1">{postUser?.name} • @{postUser?.username}</p>
               <p className="text-foreground mb-4">{post.description}</p>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -120,7 +139,7 @@ export default function TeamsLFG() {
   };
 
   const TeamPostCard = ({ post }: { post: LFGPost }) => {
-    const team = post.teamId ? getTeam(post.teamId) : null;
+    const team = getTeam(post.teamId);
     const teamLeader = team ? getUser(team.leaderId) : null;
     
     return (
@@ -142,10 +161,10 @@ export default function TeamsLFG() {
                   <div className="flex items-center gap-1">
                     <Avatar className="w-5 h-5">
                       <AvatarFallback className="text-xs bg-gradient-to-br from-coral to-coral/80 text-white">
-                        {teamLeader?.avatar}
+                        {teamLeader?.name?.charAt(0) || '?'}
                       </AvatarFallback>
                     </Avatar>
-                    <span className="text-sm text-muted-foreground">{teamLeader?.fullName}</span>
+                    <span className="text-sm text-muted-foreground">{teamLeader?.name}</span>
                     <Crown className="w-3 h-3 text-yellow" />
                   </div>
                 </div>
@@ -212,7 +231,7 @@ export default function TeamsLFG() {
               {team && (
                 <>
                   <span className="text-muted-foreground">•</span>
-                  <span className="text-sm text-muted-foreground">{team.members.length}/{team.maxSize} members</span>
+                  <span className="text-sm text-muted-foreground">{team.members?.length || 0}/{team.maxSize} members</span>
                 </>
               )}
             </div>
@@ -238,10 +257,7 @@ export default function TeamsLFG() {
             <h1 className="text-3xl font-heading font-bold text-foreground mb-2">Looking for Group</h1>
             <p className="text-muted-foreground">Find teammates or discover individuals looking to join teams</p>
           </div>
-          <Button className="bg-coral hover:bg-coral/90" data-testid="button-create-post">
-            <Plus className="w-4 h-4 mr-2" />
-            Create Post
-          </Button>
+          <CreateLFGPost />
         </div>
       </div>
 
@@ -284,8 +300,25 @@ export default function TeamsLFG() {
         </Card>
       </div>
 
+      {/* Loading State */}
+      {isLoading && (
+        <div className="text-center py-8">
+          <div className="animate-spin h-8 w-8 border-b-2 border-coral mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading LFG posts...</p>
+        </div>
+      )}
+
+      {/* Error State */}
+      {error && (
+        <Card className="p-12 text-center">
+          <div className="text-red-500 mb-4">⚠️ Error loading posts</div>
+          <p className="text-muted-foreground">There was an error loading the LFG posts. Please try again later.</p>
+        </Card>
+      )}
+
       {/* LFG Posts */}
-      <Tabs defaultValue="all" className="space-y-6" data-testid="lfg-tabs">
+      {!isLoading && !error && (
+        <Tabs defaultValue="all" className="space-y-6" data-testid="lfg-tabs">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="all" data-testid="tab-all">All Posts ({lfgPosts.length})</TabsTrigger>
           <TabsTrigger value="individuals" data-testid="tab-individuals">Individuals ({individualPosts.length})</TabsTrigger>
@@ -298,9 +331,11 @@ export default function TeamsLFG() {
               <MessageCircle className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
               <h3 className="text-lg font-semibold mb-2">No posts yet</h3>
               <p className="text-muted-foreground mb-4">Be the first to post in the LFG board!</p>
-              <Button className="bg-coral hover:bg-coral/90">
-                Create First Post
-              </Button>
+              <CreateLFGPost trigger={
+                <Button className="bg-coral hover:bg-coral/90">
+                  Create First Post
+                </Button>
+              } />
             </Card>
           ) : (
             <div className="space-y-6">
@@ -319,9 +354,11 @@ export default function TeamsLFG() {
               <Users className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
               <h3 className="text-lg font-semibold mb-2">No individual posts</h3>
               <p className="text-muted-foreground mb-4">No individuals are currently looking for teams</p>
-              <Button className="bg-mint hover:bg-mint/90">
-                Post as Individual
-              </Button>
+              <CreateLFGPost trigger={
+                <Button className="bg-mint hover:bg-mint/90">
+                  Post as Individual
+                </Button>
+              } />
             </Card>
           ) : (
             <div className="space-y-6">
@@ -336,9 +373,11 @@ export default function TeamsLFG() {
               <Search className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
               <h3 className="text-lg font-semibold mb-2">No team posts</h3>
               <p className="text-muted-foreground mb-4">No teams are currently recruiting members</p>
-              <Button className="bg-sky hover:bg-sky/90">
-                Post for Team
-              </Button>
+              <CreateLFGPost trigger={
+                <Button className="bg-sky hover:bg-sky/90">
+                  Post for Team
+                </Button>
+              } />
             </Card>
           ) : (
             <div className="space-y-6">
@@ -346,7 +385,8 @@ export default function TeamsLFG() {
             </div>
           )}
         </TabsContent>
-      </Tabs>
+        </Tabs>
+      )}
     </div>
   );
 }

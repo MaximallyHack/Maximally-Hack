@@ -7,7 +7,16 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Users, Settings, UserMinus, UserPlus, ArrowLeft, Crown, Mail, Shield, Trash2, Edit } from "lucide-react";
-import teamsData, { type Team, type User, type TeamMember } from "@/lib/fixtures/teamsData";
+import { useQuery } from "@tanstack/react-query";
+import { api, type Team, type User } from "@/lib/supabaseApi";
+
+// Mock interface for now
+interface TeamMember {
+  userId: string;
+  role: string;
+  joinedAt: string;
+  status: string;
+}
 import { useToast } from "@/hooks/use-toast";
 
 const currentUserId = "1"; // Mock current user

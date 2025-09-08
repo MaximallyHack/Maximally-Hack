@@ -283,9 +283,6 @@ export default function EditHackathon() {
   };
 
   const onSubmit = (data: EditHackathonForm, isDraft: boolean = false) => {
-    console.log("Form data:", data);
-    console.log("Additional data:", { criteria, judges, milestones, prizes, customNotes });
-    console.log("Is draft:", isDraft);
     // Here you would typically send the data to your API
   };
 

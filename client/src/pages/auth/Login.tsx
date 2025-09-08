@@ -7,11 +7,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Eye, EyeOff } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useSupabaseAuth } from "@/contexts/SupabaseAuthContext";
+import { useAuth } from "@/contexts/SupabaseAuthContext";
+import { Chrome } from "lucide-react";
 
 export default function Login() {
   const [, setLocation] = useLocation();
-  const { signInWithPassword, signInWithGoogle } = useSupabaseAuth();
+  const { signIn, signInWithGoogle } = useAuth();
   const { toast } = useToast();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -36,12 +37,16 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      await signInWithPassword(formData.email, formData.password);
-      toast({
-        title: "Welcome back!",
-        description: "You've been logged in successfully.",
-      });
-      setLocation("/dashboard");
+      const result = await signIn(formData.email, formData.password);
+      if (result.success) {
+        toast({
+          title: "Welcome back!",
+          description: "You've been logged in successfully.",
+        });
+        setLocation("/dashboard");
+      } else {
+        setError(result.error || "Invalid credentials");
+      }
     } catch (err: any) {
       setError(err.message || "Invalid credentials");
     } finally {
@@ -49,12 +54,23 @@ export default function Login() {
     }
   };
 
-  const handleGoogleLogin = async () => {
+  const handleGoogleSignIn = async () => {
     setIsLoading(true);
+    setError("");
+    
     try {
-      await signInWithGoogle();
+      const result = await signInWithGoogle();
+      if (result.success) {
+        toast({
+          title: "Welcome!",
+          description: "You've been signed in with Google.",
+        });
+        // The redirect will be handled by Supabase
+      } else {
+        setError(result.error || "Failed to sign in with Google");
+      }
     } catch (err: any) {
-      setError("Google login failed");
+      setError(err.message || "Failed to sign in with Google");
     } finally {
       setIsLoading(false);
     }
@@ -136,21 +152,27 @@ export default function Login() {
               </Button>
             </form>
 
-            <div className="mt-4">
-              <Button
-                onClick={handleGoogleLogin}
-                variant="outline"
-                className="w-full flex items-center justify-center gap-2"
-                disabled={isLoading}
-              >
-                <img
-                  src="https://www.svgrepo.com/show/475656/google-color.svg"
-                  alt="Google"
-                  className="h-4 w-4"
-                />
-                Continue with Google
-              </Button>
+            {/* Divider */}
+            <div className="relative my-6">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t border-border" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
+              </div>
             </div>
+
+            {/* Google Sign In Button */}
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={handleGoogleSignIn}
+              disabled={isLoading}
+            >
+              <Chrome className="mr-2 h-4 w-4" />
+              Sign in with Google
+            </Button>
 
             <div className="mt-6 text-center text-sm text-card-foreground">
               Don&apos;t have an account?{" "}

@@ -1,4 +1,4 @@
-import { useSupabaseAuth } from "@/contexts/SupabaseAuthContext";
+import { useAuth } from "@/contexts/SupabaseAuthContext";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -24,7 +24,7 @@ type ProfileData = {
 };
 
 export default function Profile() {
-  const { user, signOut, uploadAvatar } = useSupabaseAuth();
+  const { user, signOut } = useAuth();
   const { handle } = useParams<{ handle: string }>();
 
   const [profile, setProfile] = useState<ProfileData | null>(null);
@@ -292,4 +292,29 @@ async function selectFile(): Promise<File | null> {
     };
     input.click();
   });
+}
+
+// Upload avatar to Supabase storage
+async function uploadAvatar(file: File): Promise<string | null> {
+  try {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Date.now()}.${fileExt}`;
+    const { data, error } = await supabase.storage
+      .from('avatars')
+      .upload(fileName, file);
+
+    if (error) {
+      console.error('Upload error:', error);
+      return null;
+    }
+
+    const { data: { publicUrl } } = supabase.storage
+      .from('avatars')
+      .getPublicUrl(fileName);
+
+    return publicUrl;
+  } catch (error) {
+    console.error('Upload error:', error);
+    return null;
+  }
 }

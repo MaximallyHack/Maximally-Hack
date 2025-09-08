@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEvent } from '@/contexts/EventContext';
 import { useAuth } from '@/contexts/AuthContext';
+import { useSupabaseAuth } from '@/contexts/SupabaseAuthContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { supabaseApi } from '@/lib/supabaseApi';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
@@ -86,17 +89,79 @@ const getQuickStartItems = (user: any, event: any) => [
 export default function Overview() {
   const { event } = useEvent();
   const { user } = useAuth();
+  const { user: supabaseUser } = useSupabaseAuth();
   const { toast } = useToast();
   const { trigger: triggerConfetti, Confetti } = useConfetti();
+  const queryClient = useQueryClient();
   const [showTeamDialog, setShowTeamDialog] = useState(false);
   const [teamName, setTeamName] = useState('');
   const [teamDescription, setTeamDescription] = useState('');
-  const [isRegistered, setIsRegistered] = useState(false);
 
-  useEffect(() => {
-    // Simulate checking if user is registered
-    setIsRegistered(user?.registeredEvents?.includes(event?.id) || false);
-  }, [user, event]);
+  const { data: userRegistrations = [] } = useQuery({
+    queryKey: ['user-registrations', supabaseUser?.id],
+    queryFn: () => supabaseApi.getUserEventRegistrations(),
+    enabled: !!supabaseUser?.id,
+  });
+
+  const isRegistered = event ? userRegistrations.includes(event.id) : false;
+
+  const registerMutation = useMutation({
+    mutationFn: (eventId: string) => supabaseApi.registerForEvent(eventId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['user-registrations'] });
+      queryClient.invalidateQueries({ queryKey: ['events'] });
+      triggerConfetti();
+      toast({
+        title: 'Registration Successful! 🎉',
+        description: `You're now registered for ${event?.title}. Get ready to hack!`,
+      });
+    },
+    onError: (error) => {
+      console.error('Registration error:', error);
+      toast({
+        title: 'Registration Failed',
+        description: 'Please try again or contact support if the problem persists.',
+        variant: 'destructive'
+      });
+    }
+  });
+
+  const unregisterMutation = useMutation({
+    mutationFn: (eventId: string) => supabaseApi.unregisterFromEvent(eventId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['user-registrations'] });
+      queryClient.invalidateQueries({ queryKey: ['events'] });
+      toast({
+        title: 'Unregistered Successfully',
+        description: `You've been removed from ${event?.title}.`,
+      });
+    },
+    onError: (error) => {
+      console.error('Unregistration error:', error);
+      toast({
+        title: 'Unregistration Failed',
+        description: 'Please try again or contact support.',
+        variant: 'destructive'
+      });
+    }
+  });
+
+  const handleRegistration = () => {
+    if (!event || !supabaseUser) {
+      toast({
+        title: 'Please log in',
+        description: 'You need to be logged in to register for events.',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    if (isRegistered) {
+      unregisterMutation.mutate(event.id);
+    } else {
+      registerMutation.mutate(event.id);
+    }
+  };
 
   if (!event) return null;
 
@@ -198,6 +263,34 @@ export default function Overview() {
         <div className="flex justify-between items-start mb-6">
           <h2 className="text-2xl font-bold text-foreground">About the Event</h2>
           <div className="flex gap-2">
+            {event.status === 'registration_open' && (
+              <Button 
+                onClick={handleRegistration}
+                disabled={registerMutation.isPending || unregisterMutation.isPending}
+                className={isRegistered ? 'bg-red-500 hover:bg-red-600' : 'bg-coral hover:bg-coral/80'}
+              >
+                {registerMutation.isPending || unregisterMutation.isPending ? (
+                  <span className="flex items-center gap-2">
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    {isRegistered ? 'Unregistering...' : 'Registering...'}
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-2">
+                    {isRegistered ? (
+                      <>
+                        <CheckCircle className="w-4 h-4" />
+                        Unregister
+                      </>
+                    ) : (
+                      <>
+                        <Rocket className="w-4 h-4" />
+                        Register Now
+                      </>
+                    )}
+                  </span>
+                )}
+              </Button>
+            )}
             <Button variant="outline" size="sm" onClick={shareEvent}>
               <Share2 className="w-4 h-4 mr-2" />
               Share
@@ -398,7 +491,7 @@ export default function Overview() {
               <CardTitle className="text-sm font-medium ml-2">Participants</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">234</div>
+              <div className="text-2xl font-bold">{event.participantCount || 0}</div>
               <p className="text-xs text-muted-foreground">Registered and ready to hack</p>
             </CardContent>
           </Card>

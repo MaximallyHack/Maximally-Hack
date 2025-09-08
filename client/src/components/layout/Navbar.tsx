@@ -24,12 +24,13 @@ import {
   Sparkles,
   UserPlus,
 } from "lucide-react";
-import { useSupabaseAuth } from "@/contexts/SupabaseAuthContext";
+import { useAuth } from "@/contexts/SupabaseAuthContext";
 
 export default function Navbar() {
   const [location] = useLocation();
   const [isOpen, setIsOpen] = useState(false);
-  const { user, profile, signOut } = useSupabaseAuth();
+  const { user, signOut } = useAuth();
+  const profile = user; // user already contains profile data
   const [rocketClass, setRocketClass] = useState(
     "w-5 h-5 text-white group-hover:rotate-12 transition-transform duration-300 rocket-animation"
   );

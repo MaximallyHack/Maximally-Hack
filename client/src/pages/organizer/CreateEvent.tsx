@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { useConfetti } from "@/components/ui/confetti";
 import { CrayonSquiggle } from "@/components/ui/floating-elements";
+import { supabaseApi, Event } from "@/lib/supabaseApi";
 import { 
   ArrowRight, 
   ArrowLeft,
@@ -225,23 +226,94 @@ export default function CreateEvent() {
     }
   };
 
-  const handleSaveDraft = () => {
-    toast({
-      title: "Draft saved! 💾",
-      description: "Your event has been saved as a draft.",
-    });
+  const handleSaveDraft = async () => {
+    try {
+      const eventData: Partial<Event> = {
+        slug: data.slug,
+        title: data.title,
+        description: data.description,
+        longDescription: data.longDescription,
+        startDate: data.startDate,
+        endDate: data.endDate,
+        registrationOpen: data.registrationOpen,
+        registrationClose: data.registrationClose,
+        submissionOpen: data.submissionOpen,
+        submissionClose: data.submissionClose,
+        format: data.format,
+        location: data.location,
+        maxTeamSize: data.maxTeamSize,
+        tracks: data.tracks,
+        tags: data.tags,
+        prizes: data.prizes,
+        rules: data.rules,
+        timeline: data.timeline,
+        faqs: data.faqs,
+        status: 'upcoming',
+        prizePool: data.prizes.reduce((total, prize) => total + prize.amount, 0),
+        participantCount: 0
+      };
+
+      await supabaseApi.createEvent(eventData);
+      toast({
+        title: "Draft saved! 💾",
+        description: "Your event has been saved as a draft.",
+      });
+    } catch (error) {
+      console.error('Error saving draft:', error);
+      toast({
+        title: "Error",
+        description: "Failed to save draft. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
-  const handlePublish = () => {
-    triggerConfetti();
-    toast({
-      title: "Event published! 🎉",
-      description: "Your hackathon is now live and accepting registrations.",
-    });
-    
-    setTimeout(() => {
-      setLocation('/organizer');
-    }, 2000);
+  const handlePublish = async () => {
+    try {
+      const eventData: Partial<Event> = {
+        slug: data.slug,
+        title: data.title,
+        description: data.description,
+        longDescription: data.longDescription,
+        startDate: data.startDate,
+        endDate: data.endDate,
+        registrationOpen: data.registrationOpen,
+        registrationClose: data.registrationClose,
+        submissionOpen: data.submissionOpen,
+        submissionClose: data.submissionClose,
+        format: data.format,
+        location: data.location,
+        maxTeamSize: data.maxTeamSize,
+        tracks: data.tracks,
+        tags: data.tags,
+        prizes: data.prizes,
+        rules: data.rules,
+        timeline: data.timeline,
+        faqs: data.faqs,
+        status: data.isPublic ? 'registration_open' : 'upcoming',
+        prizePool: data.prizes.reduce((total, prize) => total + prize.amount, 0),
+        participantCount: 0
+      };
+
+      await supabaseApi.createEvent(eventData);
+      
+      triggerConfetti();
+      toast({
+        title: "Event published! 🎉",
+        description: "Your hackathon is now live and accepting registrations.",
+      });
+      
+      setTimeout(() => {
+        setLocation('/organizer');
+      }, 2000);
+    } catch (error) {
+      console.error('Error publishing event:', error);
+      toast({
+        title: "Error",
+        description: "Failed to publish event. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   if (isPreview) {

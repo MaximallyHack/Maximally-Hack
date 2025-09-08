@@ -204,67 +204,41 @@ export default function ProjectsGallery() {
   const [lookingForContributors, setLookingForContributors] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
 
-  // Mock data for demo - in real app this would come from API
+  // Fetch real project submissions from Supabase
   const { data: projects, isLoading } = useQuery({
     queryKey: ['projects', searchQuery, sortBy, selectedTech, selectedTags, selectedRoles, lookingForContributors],
     queryFn: async () => {
-      // Mock projects data
-      const mockProjects = [
-        {
-          id: "1",
-          title: "EcoTrack",
-          oneLiner: "AI-powered carbon footprint tracker for individuals and businesses",
-          description: "A comprehensive platform to track, analyze, and reduce carbon emissions",
-          coverImage: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=300&h=200&fit=crop",
-          tags: ["AI & ML", "Sustainability", "Mobile"],
-          techStack: ["React Native", "Python", "TensorFlow"],
-          ownerName: "Sarah Johnson",
-          ownerAvatar: "https://images.unsplash.com/photo-1494790108755-2616b612b829?w=32&h=32&fit=crop&crop=face",
-          lookingForContributors: true,
-          badges: ["Winner"],
-          teamCount: 2,
-          openRolesCount: 3,
-          contactMethod: "form",
-          published: true,
-        },
-        {
-          id: "2", 
-          title: "MindfulChat",
-          oneLiner: "Mental health support chatbot with personalized therapy sessions",
-          description: "AI-powered mental health companion providing 24/7 support and guidance",
-          coverImage: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=300&h=200&fit=crop",
-          tags: ["Health", "AI & ML", "Chat"],
-          techStack: ["Vue", "Node.js", "OpenAI"],
-          ownerName: "Alex Rivera",
-          ownerAvatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=32&h=32&fit=crop&crop=face",
-          lookingForContributors: true,
-          badges: ["Finalist"],
-          teamCount: 3,
-          openRolesCount: 2,
-          contactMethod: "email",
-          published: true,
-        },
-        {
-          id: "3",
-          title: "CodeCollab",
-          oneLiner: "Real-time collaborative coding platform with video chat",
-          description: "Enable remote pair programming with integrated communication tools",
-          coverImage: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=300&h=200&fit=crop",
-          tags: ["Developer Tools", "Collaboration", "Web Development"],
-          techStack: ["React", "WebRTC", "Socket.io"],
-          ownerName: "Jamie Chen",
-          ownerAvatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=32&h=32&fit=crop&crop=face",
-          lookingForContributors: false,
-          badges: [],
-          teamCount: 4,
-          openRolesCount: 0,
-          contactMethod: "form",
-          published: true,
-        }
-      ];
+      const submissions = await api.getSubmissions();
+      
+      // Transform submissions to match expected project format
+      const transformedProjects = await Promise.all(submissions.map(async (submission: any) => {
+        // Get owner info
+        const owner = await api.getUser(submission.submitted_by);
+        
+        return {
+          id: submission.id,
+          title: submission.title,
+          oneLiner: submission.tagline || submission.description?.substring(0, 100) + '...',
+          description: submission.description,
+          coverImage: submission.images?.[0] || '/api/placeholder/300/200',
+          tags: submission.tags || [],
+          techStack: submission.tech_stack || [],
+          ownerName: owner?.name || 'Anonymous',
+          ownerAvatar: owner?.avatar || '/api/placeholder/32/32',
+          lookingForContributors: false, // Could add this field to submissions table
+          badges: submission.awards || [],
+          teamCount: 1, // Could fetch team info if team_id exists
+          openRolesCount: 0, // Could implement if needed
+          contactMethod: 'email',
+          published: submission.status === 'submitted',
+          demoUrl: submission.demo_url,
+          githubUrl: submission.github_url,
+          videoUrl: submission.video_url
+        };
+      }));
       
       // Apply filters
-      let filtered = mockProjects;
+      let filtered = transformedProjects;
       
       if (searchQuery) {
         filtered = filtered.filter(p => 
@@ -290,9 +264,23 @@ export default function ProjectsGallery() {
         filtered = filtered.filter(p => p.lookingForContributors);
       }
       
+      // Apply sorting
+      switch (sortBy) {
+        case 'popular':
+          // Could sort by view count or likes if implemented
+          break;
+        case 'contributors':
+          filtered = filtered.filter(p => p.lookingForContributors);
+          break;
+        case 'winners':
+          filtered = filtered.filter(p => p.badges.length > 0);
+          break;
+        default: // newest
+          filtered = filtered.reverse();
+      }
+      
       return filtered;
     },
-    staleTime: Infinity, // For demo purposes
   });
 
   const toggleTechFilter = (tech: string) => {
@@ -493,7 +481,7 @@ export default function ProjectsGallery() {
                       <Checkbox
                         id="contributors"
                         checked={lookingForContributors}
-                        onCheckedChange={setLookingForContributors}
+                        onCheckedChange={(checked) => setLookingForContributors(checked === true)}
                         data-testid="filter-looking-for-contributors"
                       />
                       <Label htmlFor="contributors" className="text-sm cursor-pointer">

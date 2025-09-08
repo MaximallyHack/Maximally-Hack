@@ -31,6 +31,7 @@ import Profile from "@/pages/Profile";
 import Dashboard from "@/pages/Dashboard";
 import Organize from "@/pages/Organize";
 import NotFound from "@/pages/not-found";
+import CreateEventPage from "@/pages/CreateEventPage";
 
 // Team Components
 import TeamsHome from "@/components/teams/TeamsHome";
@@ -52,6 +53,7 @@ import TeamRoles from "@/components/teams/TeamRoles";
 import EventLayout from "@/pages/event/_layout/EventLayout";
 import { HashRedirect } from "@/components/utils/HashRedirect";
 
+const JudgeDashboard = lazy(() => import("@/pages/judge/JudgeDashboard"));
 const EventOverview = lazy(() => import("@/pages/event/Overview"));
 const EventTimeline = lazy(() => import("@/pages/event/Timeline"));
 const EventPrizes = lazy(() => import("@/pages/event/Prizes"));
@@ -159,6 +161,7 @@ function AppRouter() {
             <Route path="/" component={Landing} />
             <Route path="/explore" component={SimpleExplore} />
             <Route path="/organize" component={Organize} />
+            <Route path="/create-event" component={CreateEventPage} />
             <Route path="/profile/:handle" component={Profile} />
             <Route path="/leaders" component={Leaderboards} />
             <Route path="/sponsors" component={Sponsors} />
@@ -178,6 +181,8 @@ function AppRouter() {
             <Route path="/organizer/events/:id/content" component={EventContentEditor} />
             <Route path="/organizer/events/:id/judges" component={JudgeManagement} />
             <Route path="/organizer/events/:id/edit-hackathon" component={EditHackathon} />
+            <Route path="/judge" component={JudgeDashboard} />
+            <Route path="/judge/dashboard" component={JudgeDashboard} />
             <Route component={NotFound} />
           </Switch>
           <Footer />

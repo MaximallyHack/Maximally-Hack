@@ -6,9 +6,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/SupabaseAuthContext";
 import { useToast } from "@/hooks/use-toast";
-import { api } from "@/lib/api";
+import { supabaseApi } from "@/lib/supabaseApi";
 import { 
   Calendar, Clock, MapPin, ExternalLink, Plus, Code, 
   Trophy, Eye, Settings, Edit3, ArrowRight, Globe,
@@ -16,17 +16,18 @@ import {
 } from "lucide-react";
 
 export default function Dashboard() {
-  const { user, unregisterFromEvent } = useAuth();
+  const { user } = useAuth();
   const { toast } = useToast();
 
   const { data: events } = useQuery({
     queryKey: ['events'],
-    queryFn: api.getEvents,
+    queryFn: supabaseApi.getEvents,
   });
 
   const { data: submissions } = useQuery({
     queryKey: ['submissions'],
-    queryFn: () => api.getSubmissions(),
+    queryFn: () => supabaseApi.getUserSubmissions(),
+    enabled: !!user
   });
 
   if (!user) {
@@ -42,8 +43,15 @@ export default function Dashboard() {
     );
   }
 
+  const { data: userRegistrations = [] } = useQuery({
+    queryKey: ['user-registrations', user?.id],
+    queryFn: () => supabaseApi.getUserEventRegistrations(),
+    enabled: !!user?.id,
+  });
+
+  // Get events where user is actually registered
   const registeredEvents = events?.filter(event => 
-    user.registeredEvents.includes(event.id)
+    userRegistrations.includes(event.id)
   ) || [];
 
   const upcomingEvents = registeredEvents.filter(event => 
@@ -54,17 +62,23 @@ export default function Dashboard() {
     event.status === 'active'
   );
 
-  // Get user's projects
-  const userProjects = submissions?.filter(submission => 
-    submission.submittedBy === user.id
-  ) || [];
+  // Get user's projects (already filtered by getUserSubmissions)
+  const userProjects = submissions || [];
 
   const handleUnregister = async (eventId: string, eventTitle: string) => {
-    const result = await unregisterFromEvent(eventId);
-    if (result.success) {
+    try {
+      // TODO: Implement actual unregister API when event registration system is built
+      // For now, show success message with note that this is a placeholder
       toast({
-        title: "Unregistered successfully",
-        description: `You've been removed from ${eventTitle}`,
+        title: "Unregister (Demo)",
+        description: `This would unregister you from ${eventTitle}. Full implementation pending.`,
+      });
+      console.log(`Would unregister from event ${eventId}`);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to unregister from event",
+        variant: "destructive"
       });
     }
   };
@@ -104,7 +118,7 @@ export default function Dashboard() {
           <div className="flex items-center justify-between mb-4">
             <div>
               <h1 className="text-3xl font-medium text-gray-900">
-                Welcome back, {user.fullName || user.username}
+                Welcome back, {user.name || user.username}
               </h1>
               <p className="text-gray-600 mt-1">Track your hackathons and projects</p>
             </div>

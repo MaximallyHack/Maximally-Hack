@@ -7,11 +7,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Eye, EyeOff } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useSupabaseAuth } from "@/contexts/SupabaseAuthContext";
+import { useAuth } from "@/contexts/SupabaseAuthContext";
+import { Chrome } from "lucide-react";
 
 export default function Signup() {
   const [, setLocation] = useLocation();
-  const { signUp, signInWithGoogle } = useSupabaseAuth();
+  const { signUp, signInWithGoogle } = useAuth();
   const { toast } = useToast();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -50,16 +51,20 @@ export default function Signup() {
     setIsLoading(true);
 
     try {
-      await signUp(formData.email, formData.password, {
+      const result = await signUp(formData.email, formData.password, {
         username: formData.username,
         full_name: formData.fullName,
       });
 
-      toast({
-        title: "Account created successfully!",
-        description: "Welcome to Maximally Hack! You can now register for hackathons.",
-      });
-      setLocation("/dashboard");
+      if (result.success) {
+        toast({
+          title: "Account created successfully!",
+          description: "Welcome to Maximally Hack! You can now register for hackathons.",
+        });
+        setLocation("/dashboard");
+      } else {
+        setError(result.error || "Failed to create account");
+      }
     } catch (err: any) {
       setError(err.message || "Failed to create account");
     } finally {
@@ -67,13 +72,23 @@ export default function Signup() {
     }
   };
 
-  const handleGoogleLogin = async () => {
+  const handleGoogleSignup = async () => {
     setIsLoading(true);
+    setError("");
+    
     try {
-      await signInWithGoogle();
-      setLocation("/dashboard");
+      const result = await signInWithGoogle();
+      if (result.success) {
+        toast({
+          title: "Welcome!",
+          description: "You've been signed up with Google.",
+        });
+        // The redirect will be handled by Supabase
+      } else {
+        setError(result.error || "Failed to sign up with Google");
+      }
     } catch (err: any) {
-      setError("Google signup failed");
+      setError(err.message || "Failed to sign up with Google");
     } finally {
       setIsLoading(false);
     }
@@ -193,21 +208,27 @@ export default function Signup() {
               </Button>
             </form>
 
-            <div className="mt-4">
-              <Button
-                onClick={handleGoogleLogin}
-                variant="outline"
-                className="w-full flex items-center justify-center gap-2"
-                disabled={isLoading}
-              >
-                <img
-                  src="https://www.svgrepo.com/show/475656/google-color.svg"
-                  alt="Google"
-                  className="h-4 w-4"
-                />
-                Continue with Google
-              </Button>
+            {/* Divider */}
+            <div className="relative my-6">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t border-border" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
+              </div>
             </div>
+
+            {/* Google Sign Up Button */}
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={handleGoogleSignup}
+              disabled={isLoading}
+            >
+              <Chrome className="mr-2 h-4 w-4" />
+              Sign up with Google
+            </Button>
 
             <div className="mt-6 text-center text-sm text-card-foreground">
               Already have an account?{" "}

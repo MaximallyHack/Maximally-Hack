@@ -11,9 +11,11 @@ import {
   SlidersHorizontal, X, ArrowUpDown, ArrowRight
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { api } from "@/lib/api";
-import type { Event } from "@/lib/api";
+import { supabaseApi } from "@/lib/supabaseApi";
+import type { Event } from "@/lib/supabaseApi";
 import { Link } from "wouter";
+import { NoEventsFound, NoSearchResults } from "@/components/ui/empty-state";
+import { useAuth } from "@/contexts/SupabaseAuthContext";
 
 interface Filters {
   status?: string;
@@ -36,7 +38,7 @@ export default function SimpleExplore() {
 
   const { data: events, isLoading } = useQuery({
     queryKey: ['events', searchQuery, filters],
-    queryFn: () => api.searchEvents(searchQuery, filters),
+    queryFn: () => supabaseApi.searchEvents(searchQuery, filters),
   });
 
   const categories = [
@@ -261,7 +263,7 @@ export default function SimpleExplore() {
                     <div className={viewMode === 'list' ? 'flex-1' : ''}>
                       <div className="flex items-center justify-between mb-3">
                         <Badge className="inline-flex items-center border px-2.5 py-0.5 transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300 rounded-full text-xs font-medium bg-[#dbeafe]">
-                          {event.status.replace('_', ' ')}
+                          {event.status.replace(/_/g, ' ')}
                         </Badge>
                         <div className="text-sm font-medium text-foreground">
                           ${(event.prizePool / 1000).toFixed(0)}k
@@ -302,13 +304,11 @@ export default function SimpleExplore() {
             ))}
           </div>
         ) : (
-          <div className="text-center py-16">
-            <h3 className="text-lg font-medium text-foreground mb-2">No hackathons found</h3>
-            <p className="text-muted-foreground mb-6">Try adjusting your search or filters</p>
-            <Button variant="outline" onClick={clearFilters}>
-              Clear filters
-            </Button>
-          </div>
+          searchQuery || filters.tags.length > 0 || filters.prizeMin > 0 || filters.status || filters.format ? (
+            <NoSearchResults query={searchQuery || 'filtered results'} />
+          ) : (
+            <NoEventsFound onCreateEvent={() => window.location.href = '/create-event'} />
+          )
         )}
       </div>
     </div>

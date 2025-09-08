@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, Link, useLocation } from "wouter";
+import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -7,30 +8,42 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Users, MessageCircle, Settings, Calendar, MapPin, ArrowLeft, Crown, Mail, ExternalLink } from "lucide-react";
-import teamsData, { type Team, type User } from "@/lib/fixtures/teamsData";
-
-const currentUserId = "1"; // Mock current user
+import { useAuth } from '@/contexts/AuthContext';
+import { useSupabaseAuth } from '@/contexts/SupabaseAuthContext';
+import { supabaseApi, type Team, type User } from '@/lib/supabaseApi';
 
 export default function TeamDetail() {
   const { id } = useParams<{ id: string }>();
   const [, navigate] = useLocation();
-  const [team, setTeam] = useState<Team | null>(null);
-  const [teamMembers, setTeamMembers] = useState<User[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { user } = useAuth();
+  const { user: supabaseUser } = useSupabaseAuth();
 
-  useEffect(() => {
-    if (id) {
-      const foundTeam = teamsData.teams.find(t => t.id === id);
-      if (foundTeam) {
-        setTeam(foundTeam);
-        const members = foundTeam.members.map(member => 
-          teamsData.users.find(user => user.id === member.userId)
-        ).filter(Boolean) as User[];
-        setTeamMembers(members);
-      }
-    }
-    setIsLoading(false);
-  }, [id]);
+  const { data: team, isLoading, error } = useQuery({
+    queryKey: ['team', id],
+    queryFn: async () => {
+      if (!id) return null;
+      const teamData = await supabaseApi.getTeam(id);
+      return teamData as any;
+    },
+    enabled: !!id
+  });
+
+  const teamMembers = (team?.members || []) as User[];
+
+  if (isLoading) {
+    return (
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="animate-pulse space-y-8">
+          <div className="h-8 bg-muted rounded w-64"></div>
+          <div className="h-32 bg-muted rounded"></div>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2 h-96 bg-muted rounded"></div>
+            <div className="h-96 bg-muted rounded"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (
@@ -62,11 +75,11 @@ export default function TeamDetail() {
     );
   }
 
-  const isCurrentUserMember = team.members.some(member => member.userId === currentUserId);
-  const isCurrentUserLeader = team.leaderId === currentUserId;
-  const currentUserRole = team.members.find(member => member.userId === currentUserId)?.role;
-  const teamLeader = teamsData.users.find(user => user.id === team.leaderId);
-  const availableSpots = team.maxSize - team.members.length;
+  const isCurrentUserMember = teamMembers.some((member: any) => member.id === user?.id);
+  const isCurrentUserLeader = team.leader_id === user?.id;
+  const currentUserRole = isCurrentUserLeader ? "Leader" : "Member";
+  const teamLeader = teamMembers.find((member: any) => member.id === team.leader_id);
+  const availableSpots = (team.max_size ?? team.maxSize) - teamMembers.length;
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -141,7 +154,7 @@ export default function TeamDetail() {
 
             <TabsContent value="overview" className="space-y-6" data-testid="tab-content-overview">
               {/* Project Idea */}
-              {team.projectIdea && (
+              {team.description && (
                 <Card data-testid="project-idea-section">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
@@ -150,7 +163,7 @@ export default function TeamDetail() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-foreground">{team.projectIdea}</p>
+                    <p className="text-foreground">{team.description}</p>
                   </CardContent>
                 </Card>
               )}
@@ -162,9 +175,9 @@ export default function TeamDetail() {
                     <CardTitle className="text-lg">Required Skills</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    {team.requiredSkills.length > 0 ? (
+                    {(team.skills || []).length > 0 ? (
                       <div className="flex flex-wrap gap-2">
-                        {team.requiredSkills.map(skill => (
+                        {(team.skills || []).map((skill: string) => (
                           <Badge key={skill} variant="secondary" className="bg-coral/10 text-coral">
                             {skill}
                           </Badge>
@@ -181,9 +194,9 @@ export default function TeamDetail() {
                     <CardTitle className="text-lg">Looking For</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    {team.lookingForRoles.length > 0 ? (
+                    {(team.looking_for || []).length > 0 ? (
                       <div className="flex flex-wrap gap-2">
-                        {team.lookingForRoles.map(role => (
+                        {(team.looking_for || []).map((role: string) => (
                           <Badge key={role} variant="secondary" className="bg-mint/10 text-mint">
                             {role}
                           </Badge>
@@ -196,19 +209,17 @@ export default function TeamDetail() {
                 </Card>
               </div>
 
-              {/* Tags */}
-              {team.tags.length > 0 && (
+              {/* Tags (Track) */}
+              {team.track && (
                 <Card data-testid="tags-section">
                   <CardHeader>
-                    <CardTitle className="text-lg">Categories</CardTitle>
+                    <CardTitle className="text-lg">Track</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="flex flex-wrap gap-2">
-                      {team.tags.map(tag => (
-                        <Badge key={tag} variant="outline" className="border-sky/20 text-sky">
-                          {tag}
-                        </Badge>
-                      ))}
+                      <Badge variant="outline" className="border-sky/20 text-sky">
+                        {team.track}
+                      </Badge>
                     </div>
                   </CardContent>
                 </Card>
@@ -219,7 +230,7 @@ export default function TeamDetail() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center justify-between">
-                    <span>Team Members ({team.members.length}/{team.maxSize})</span>
+                    <span>Team Members ({teamMembers.length}/{team.max_size ?? team.maxSize})</span>
                     {isCurrentUserLeader && (
                       <Link to={`/teams/${team.id}/manage`}>
                         <Button size="sm" variant="outline" className="border-coral text-coral hover:bg-coral/10">
@@ -232,35 +243,34 @@ export default function TeamDetail() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {team.members.map(member => {
-                      const user = teamsData.users.find(u => u.id === member.userId);
-                      const isLeader = member.userId === team.leaderId;
+                    {teamMembers.map((member: any) => {
+                      const isLeader = member.id === team.leader_id;
                       
                       return (
-                        <div key={member.userId} className="flex items-center justify-between p-4 border border-border rounded-lg" data-testid={`member-${member.userId}`}>
+                        <div key={member.id} className="flex items-center justify-between p-4 border border-border rounded-lg" data-testid={`member-${member.id}`}>
                           <div className="flex items-center gap-3">
                             <Avatar className="w-12 h-12">
                               <AvatarFallback className="bg-gradient-to-br from-coral to-coral/80 text-white font-semibold">
-                                {user?.avatar}
+                                {member.name?.split(' ').map((n: string) => n[0]).join('').slice(0, 2) || 'U'}
                               </AvatarFallback>
                             </Avatar>
                             <div>
                               <div className="flex items-center gap-2">
-                                <h3 className="font-semibold text-foreground">{user?.fullName}</h3>
+                                <h3 className="font-semibold text-foreground">{member.name || member.username}</h3>
                                 {isLeader && <Crown className="w-4 h-4 text-yellow" />}
                               </div>
-                              <p className="text-sm text-muted-foreground">{member.role}</p>
-                              <p className="text-xs text-muted-foreground">@{user?.username}</p>
+                              <p className="text-sm text-muted-foreground">{isLeader ? 'Leader' : 'Member'}</p>
+                              <p className="text-xs text-muted-foreground">@{member.username}</p>
                             </div>
                           </div>
                           <div className="flex items-center gap-2">
-                            {user?.skills.slice(0, 3).map(skill => (
+                            {(member.skills || []).slice(0, 3).map((skill: string) => (
                               <Badge key={skill} variant="secondary" className="text-xs">
                                 {skill}
                               </Badge>
                             ))}
-                            {user && user.skills.length > 3 && (
-                              <Badge variant="secondary" className="text-xs">+{user.skills.length - 3}</Badge>
+                            {member.skills && member.skills.length > 3 && (
+                              <Badge variant="secondary" className="text-xs">+{member.skills.length - 3}</Badge>
                             )}
                           </div>
                         </div>
@@ -323,7 +333,7 @@ export default function TeamDetail() {
             <CardContent className="space-y-4">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Team Size</span>
-                <span className="text-sm font-medium">{team.members.length}/{team.maxSize} members</span>
+                <span className="text-sm font-medium">{teamMembers.length}/{team.max_size ?? team.maxSize} members</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Available Spots</span>
@@ -331,11 +341,13 @@ export default function TeamDetail() {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Created</span>
-                <span className="text-sm font-medium">{new Date(team.createdAt).toLocaleDateString()}</span>
+                <span className="text-sm font-medium">{new Date(team.created_at).toLocaleDateString()}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Last Activity</span>
-                <span className="text-sm font-medium">{new Date(team.lastActivity).toLocaleDateString()}</span>
+                <span className="text-sm text-muted-foreground">Status</span>
+                <Badge variant={team.status === 'recruiting' ? 'default' : 'secondary'} className="bg-mint/10 text-mint">
+                  {team.status === 'recruiting' ? 'Recruiting' : team.status === 'full' ? 'Full' : 'Closed'}
+                </Badge>
               </div>
               <Separator />
               <div className="flex items-center justify-between">
@@ -360,24 +372,24 @@ export default function TeamDetail() {
                 <div className="flex items-center gap-3">
                   <Avatar className="w-12 h-12">
                     <AvatarFallback className="bg-gradient-to-br from-coral to-coral/80 text-white font-semibold">
-                      {teamLeader.avatar}
+                      {teamLeader.name?.split(' ').map((n: string) => n[0]).join('').slice(0, 2) || 'L'}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1">
-                    <h3 className="font-semibold text-foreground">{teamLeader.fullName}</h3>
+                    <h3 className="font-semibold text-foreground">{teamLeader.name || teamLeader.username}</h3>
                     <p className="text-sm text-muted-foreground">@{teamLeader.username}</p>
                   </div>
                 </div>
                 <div className="mt-3">
                   <p className="text-sm text-muted-foreground mb-2">{teamLeader.bio}</p>
                   <div className="flex flex-wrap gap-1">
-                    {teamLeader.skills.slice(0, 3).map(skill => (
+                    {(teamLeader.skills || []).slice(0, 3).map((skill: string) => (
                       <Badge key={skill} variant="secondary" className="text-xs">
                         {skill}
                       </Badge>
                     ))}
-                    {teamLeader.skills.length > 3 && (
-                      <Badge variant="secondary" className="text-xs">+{teamLeader.skills.length - 3}</Badge>
+                    {(teamLeader.skills || []).length > 3 && (
+                      <Badge variant="secondary" className="text-xs">+{(teamLeader.skills || []).length - 3}</Badge>
                     )}
                   </div>
                 </div>

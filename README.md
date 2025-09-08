@@ -1,3 +1,337 @@
+# Maximally Hack 🚀
+
+A comprehensive hackathon platform built with modern web technologies, providing end-to-end solutions for organizing, participating in, and managing hackathons.
+
+## 📖 Overview
+
+**Maximally Hack** is a full-stack web application that brings together hackathon organizers, participants, teams, and judges in one unified platform. Originally started as a UI-only demonstration with mock data, it has evolved into a complete production-ready application with real database integration, authentication, and live data management.
+
+### 🎯 Key Features
+
+#### For Participants
+- **User Registration & Authentication** with email/password and Google OAuth
+- **Event Discovery** with advanced search and filtering
+- **Team Formation** with intelligent matching algorithms
+- **Looking for Group (LFG)** posts for finding teammates
+- **Project Submission** with multimedia support
+- **Real-time Team Management** and communication
+- **Personal Dashboard** tracking participation history
+
+#### For Organizers
+- **Event Creation & Management** with comprehensive event settings
+- **Judge Assignment** and scorecard management
+- **Real-time Analytics** and participant tracking
+- **Submission Review** and judging workflows
+- **Team Management** oversight
+- **Customizable Event Pages** with rich content support
+
+#### For Judges
+- **Dedicated Judging Interface** with structured scorecards
+- **Multi-criteria Evaluation** system
+- **Real-time Score Tracking** and analytics
+- **Submission Reviews** with detailed feedback
+- **Judge Profile Management** with expertise tracking
+
+## 🏗️ Architecture
+
+### Frontend Stack
+- **React 18** with TypeScript for type safety
+- **Wouter** for lightweight client-side routing
+- **TanStack Query (React Query)** for efficient data fetching and caching
+- **Tailwind CSS** with custom component library built on Radix UI
+- **Framer Motion** for smooth animations and transitions
+- **Vite** for lightning-fast development and optimized builds
+
+### Backend & Database
+- **Supabase** as the primary backend service
+- **PostgreSQL** with comprehensive schema design
+- **Row Level Security (RLS)** for secure data access
+- **Real-time subscriptions** for live updates
+- **Automatic triggers** for data consistency
+- **Express.js** server for additional API endpoints and SSR
+
+### Key Integrations
+- **Supabase Authentication** with multiple providers
+- **Google OAuth** for seamless sign-in
+- **Real-time Data Sync** across all clients
+- **File Upload** handling for project assets
+- **Email Notifications** for important events
+
+## 📁 Project Structure
+
+```
+Maximally-Hack/
+├── client/                    # Frontend React application
+│   ├── src/
+│   │   ├── components/        # Reusable UI components
+│   │   │   ├── teams/         # Team-related components
+│   │   │   ├── layout/        # Layout components (Navbar, Footer)
+│   │   │   └── ui/            # Base UI components (shadcn/ui)
+│   │   ├── contexts/          # React contexts for global state
+│   │   │   ├── AuthContext.tsx        # Legacy auth context
+│   │   │   ├── SupabaseAuthContext.tsx # Primary auth context
+│   │   │   ├── ThemeProvider.tsx      # Theme management
+│   │   │   └── EventContext.tsx       # Event-specific state
+│   │   ├── lib/               # Utility libraries
+│   │   │   ├── supabaseApi.ts # Supabase API wrapper
+│   │   │   ├── queryClient.ts # React Query configuration
+│   │   │   └── utils.ts       # Common utilities
+│   │   ├── pages/             # Page components
+│   │   │   ├── auth/          # Authentication pages
+│   │   │   ├── event/         # Event-specific pages
+│   │   │   ├── organizer/     # Organizer dashboard pages
+│   │   │   └── teams/         # Team management pages
+│   │   └── supabaseClient.ts  # Supabase client configuration
+│   ├── public/                # Static assets
+│   └── package.json           # Frontend dependencies
+├── server/                    # Express.js backend server
+│   ├── index.ts              # Main server entry point
+│   └── routes/               # API route handlers
+├── supabase/                  # Database schema and migrations
+│   ├── schema.sql            # Complete database schema
+│   ├── lfg_posts_schema.sql  # LFG posts table schema
+│   ├── schema_incremental.sql # Schema updates
+│   └── seed.sql              # Sample data for development
+├── shared/                    # Shared types and utilities
+└── package.json              # Root project configuration
+```
+
+## 🚀 Getting Started
+
+### Prerequisites
+- **Node.js** 18+ and npm
+- **Supabase** account and project
+- **Google OAuth** credentials (optional, for Google sign-in)
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/your-username/maximally-hack.git
+   cd maximally-hack
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Set up Supabase**
+   - Create a new Supabase project at [supabase.com](https://supabase.com)
+   - Copy your project URL and anon key
+   - Run the database schema:
+     ```sql
+     -- Copy and execute the contents of supabase/schema.sql in your Supabase SQL editor
+     -- Then run supabase/lfg_posts_schema.sql for LFG functionality
+     ```
+
+4. **Environment Configuration**
+   Create a `.env.local` file in the root directory:
+   ```env
+   VITE_SUPABASE_URL=your_supabase_project_url
+   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+   ```
+
+5. **Configure Authentication Providers** (Optional)
+   - In your Supabase dashboard, go to Authentication → Providers
+   - Enable Email/Password (enabled by default)
+   - Enable Google OAuth with your credentials
+   - Set redirect URL to `http://localhost:5000/dashboard`
+
+6. **Start the development server**
+   ```bash
+   npm run dev
+   ```
+
+7. **Access the application**
+   - Open [http://localhost:5000](http://localhost:5000)
+   - Create an account or sign in with Google
+   - Start exploring hackathons and creating teams!
+
+## 🛠️ Development
+
+### Key Scripts
+- `npm run dev` - Start development server with hot reload
+- `npm run build` - Build production-ready application
+- `npm run start` - Start production server
+- `npm run check` - TypeScript type checking
+
+### Database Management
+The application uses Supabase PostgreSQL with a comprehensive schema supporting:
+- **User profiles** with role-based access (participant, organizer, judge)
+- **Events** with full lifecycle management
+- **Teams** with member management and join codes
+- **Submissions** with multimedia support and judging
+- **Scorecards** for structured evaluation
+- **LFG posts** for team formation
+
+### Authentication Flow
+1. **Registration**: Users can sign up with email/password or Google OAuth
+2. **Profile Creation**: Automatic profile creation with customizable fields
+3. **Role Assignment**: Users can be participants, organizers, or judges
+4. **Session Management**: Secure session handling with Supabase Auth
+
+### Real-time Features
+- **Live team updates** when members join/leave
+- **Real-time submission status** changes
+- **Live scorecard updates** during judging
+- **Instant notifications** for important events
+
+## 🎨 UI/UX Design
+
+### Design System
+- **Tailwind CSS** for utility-first styling
+- **Radix UI** components for accessibility and functionality
+- **Custom component library** with consistent design patterns
+- **Responsive design** supporting mobile, tablet, and desktop
+- **Dark/light mode** support with system preference detection
+
+### Color Palette
+- **Primary**: Coral (#FF6B6B) for primary actions
+- **Secondary**: Mint (#4ECDC4) for success states
+- **Accent**: Sky (#45B7D1) for informational elements
+- **Neutral**: Gray scale for text and backgrounds
+
+## 🔐 Security
+
+### Data Protection
+- **Row Level Security (RLS)** policies on all database tables
+- **JWT authentication** with secure token management
+- **API route protection** with middleware validation
+- **Input sanitization** and validation on all forms
+- **HTTPS enforcement** in production environments
+
+### Privacy
+- **GDPR compliant** data handling
+- **User data encryption** at rest and in transit
+- **Minimal data collection** policy
+- **Clear privacy controls** for user profiles
+
+## 📊 Performance
+
+### Optimizations
+- **React Query caching** for efficient data management
+- **Code splitting** with dynamic imports
+- **Image optimization** with responsive loading
+- **Bundle optimization** with Vite's advanced bundling
+- **Database indexing** for fast query performance
+
+### Monitoring
+- **Real-time error tracking** with comprehensive logging
+- **Performance metrics** monitoring
+- **User analytics** for feature usage insights
+- **Database performance** monitoring via Supabase dashboard
+
+## 🚢 Deployment
+
+### Production Checklist
+1. **Environment Variables**: Set production Supabase credentials
+2. **Database Migration**: Run all schema files in production Supabase
+3. **OAuth Configuration**: Update redirect URLs for production domain
+4. **Build Optimization**: Run `npm run build` for production assets
+5. **Security Headers**: Configure proper security headers
+6. **SSL Certificate**: Ensure HTTPS is enabled
+7. **Database Backup**: Set up automated backups
+
+### Supported Platforms
+- **Vercel** (recommended for frontend)
+- **Railway** or **Heroku** for full-stack deployment
+- **Netlify** for static deployment
+- **Docker** containerization support
+
+## 🤝 Contributing
+
+We welcome contributions! Please follow these guidelines:
+
+### Development Workflow
+1. **Fork the repository** and create a feature branch
+2. **Follow TypeScript** best practices and maintain type safety
+3. **Write tests** for new features and bug fixes
+4. **Follow commit conventions** with clear, descriptive messages
+5. **Update documentation** for any new features or API changes
+6. **Submit a pull request** with detailed description of changes
+
+### Code Standards
+- **ESLint** configuration for consistent code style
+- **Prettier** for automatic code formatting
+- **TypeScript strict mode** for maximum type safety
+- **Component documentation** with JSDoc comments
+- **Accessibility** compliance with WCAG guidelines
+
+## 📚 API Documentation
+
+### Core Endpoints
+- **Authentication**: User registration, login, and profile management
+- **Events**: CRUD operations for hackathon events
+- **Teams**: Team creation, member management, and joining
+- **Submissions**: Project submission and file management
+- **Judging**: Scorecard creation and evaluation workflows
+- **LFG Posts**: Looking for group functionality
+
+### Data Models
+Comprehensive TypeScript interfaces are available in `client/src/lib/supabaseApi.ts` covering:
+- User profiles and authentication
+- Event management and lifecycle
+- Team formation and collaboration
+- Submission and judging workflows
+
+## 🆘 Support & Troubleshooting
+
+### Common Issues
+1. **Authentication Problems**: Check Supabase configuration and OAuth settings
+2. **Database Errors**: Verify schema migration and RLS policies
+3. **Build Failures**: Ensure all dependencies are installed correctly
+4. **Performance Issues**: Check React Query cache configuration
+
+### Getting Help
+- **GitHub Issues**: Report bugs and request features
+- **Documentation**: Check inline code documentation
+- **Community**: Join our Discord server for real-time support
+- **Email**: Contact the development team directly
+
+## 📈 Roadmap
+
+### Upcoming Features
+- **Advanced Analytics** dashboard for organizers
+- **Mobile Application** with React Native
+- **AI-powered Team Matching** algorithm
+- **Blockchain Integration** for certificate verification
+- **Multi-language Support** for global accessibility
+- **Advanced Judging Tools** with rubric customization
+
+### Performance Improvements
+- **Server-side Rendering** for better SEO
+- **Advanced Caching** strategies
+- **WebSocket Integration** for real-time features
+- **Progressive Web App** capabilities
+
+## 📄 License
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- **Supabase Team** for the excellent backend-as-a-service platform
+- **Vercel Team** for the incredible frontend development experience
+- **Open Source Community** for the amazing tools and libraries
+- **Beta Testers** and early adopters for valuable feedback
+- **Design Contributors** for UI/UX improvements and accessibility enhancements
+
+## 📞 Contact
+
+**Project Maintainers:**
+- Lead Developer: [Your Name] - your.email@example.com
+- UI/UX Designer: [Designer Name] - designer@example.com
+
+**Project Links:**
+- **Live Demo**: [https://maximally-hack.vercel.app](https://maximally-hack.vercel.app)
+- **GitHub Repository**: [https://github.com/your-username/maximally-hack](https://github.com/your-username/maximally-hack)
+- **Project Documentation**: [https://docs.maximally-hack.com](https://docs.maximally-hack.com)
+
+---
+
+**Built with ❤️ for the hackathon community**
+
 
 # Maximally Hack 🎉
 

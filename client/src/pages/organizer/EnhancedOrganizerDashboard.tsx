@@ -3,6 +3,7 @@ import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
+import { supabaseApi, Event as ApiEvent } from '@/lib/supabaseApi';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
@@ -172,12 +173,51 @@ export default function EnhancedOrganizerDashboard() {
   }
 
   const { data: events, isLoading } = useQuery({
-    queryKey: ['organizer-events'],
+    queryKey: ['organizer-events', user?.id],
     queryFn: async () => {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 500));
-      return mockEvents;
+      if (!user?.id) return [];
+      const allEvents = await supabaseApi.getEvents();
+      // Filter events where current user is the organizer
+      return allEvents.filter(event => event.organizerId === user.id).map(event => ({
+        id: event.id,
+        title: event.title,
+        slug: event.slug,
+        status: event.status as "draft" | "published" | "active" | "completed",
+        startDate: event.startDate,
+        endDate: event.endDate,
+        registrationCount: event.participantCount || 0,
+        submissionCount: 0, // TODO: implement submissions API
+        prizePool: event.prizePool || 0,
+        analytics: {
+          registrations: {
+            total: event.participantCount || 0,
+            daily: [],
+            byTrack: [],
+            growth: 0
+          },
+          teams: {
+            total: 0,
+            recruiting: 0,
+            full: 0,
+            averageSize: 0
+          },
+          submissions: {
+            total: 0,
+            byTrack: [],
+            judged: 0,
+            pending: 0
+          },
+          engagement: {
+            pageViews: 0,
+            uniqueVisitors: 0,
+            socialShares: 0,
+            discordMembers: 0
+          }
+        },
+        healthChecks: []
+      }));
     },
+    enabled: !!user?.id
   });
 
   const activeEvent = events?.[0]; // For demo, use first event

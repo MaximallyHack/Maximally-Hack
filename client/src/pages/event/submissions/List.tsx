@@ -1,7 +1,10 @@
 import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useEvent } from '@/contexts/EventContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { supabaseApi } from '@/lib/supabaseApi';
+import { useSupabaseAuth } from '@/contexts/SupabaseAuthContext';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -85,6 +88,7 @@ const mockSubmissions = [
 export default function SubmissionsList() {
   const { event } = useEvent();
   const { user } = useAuth();
+  const { user: supabaseUser } = useSupabaseAuth();
   const { toast } = useToast();
   const { trigger: triggerConfetti, Confetti } = useConfetti();
   const [searchTerm, setSearchTerm] = useState('');
@@ -92,12 +96,24 @@ export default function SubmissionsList() {
   const [sortBy, setSortBy] = useState('recent');
   const [showSubmitDialog, setShowSubmitDialog] = useState(false);
 
+  const { data: submissions = [], isLoading } = useQuery({
+    queryKey: ['submissions', event?.id],
+    queryFn: () => supabaseApi.getSubmissions(event?.id),
+    enabled: !!event?.id,
+  });
+
+  const { data: userSubmissions = [] } = useQuery({
+    queryKey: ['user-submissions', supabaseUser?.id],
+    queryFn: () => supabaseApi.getUserSubmissions(),
+    enabled: !!supabaseUser?.id,
+  });
+
   if (!event) return null;
 
-  const filteredSubmissions = mockSubmissions.filter(submission => {
+  const filteredSubmissions = submissions.filter(submission => {
     const matchesSearch = submission.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          submission.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         submission.tagline.toLowerCase().includes(searchTerm.toLowerCase());
+                         (submission.tagline || '').toLowerCase().includes(searchTerm.toLowerCase());
     const matchesTrack = selectedTrack === 'all' || submission.track === selectedTrack;
     return matchesSearch && matchesTrack;
   });
@@ -106,11 +122,13 @@ export default function SubmissionsList() {
   const sortedSubmissions = [...filteredSubmissions].sort((a, b) => {
     switch (sortBy) {
       case 'recent':
-        return new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime();
+        return new Date(b.submittedAt || '').getTime() - new Date(a.submittedAt || '').getTime();
       case 'popular':
-        return b.likes - a.likes;
+        // Use average score if available, otherwise 0
+        return (b.averageScore || 0) - (a.averageScore || 0);
       case 'views':
-        return b.views - a.views;
+        // Views not implemented yet, use creation order
+        return 0;
       default:
         return 0;
     }
@@ -133,8 +151,8 @@ export default function SubmissionsList() {
     return `${Math.floor(diffInHours / 24)}d ago`;
   };
 
-  const canSubmit = event.status === 'active' && user;
-  const hasUserSubmitted = user?.submissions?.some(s => s.eventId === event.id) || false;
+  const canSubmit = (event.status === 'active' || event.status === 'registration_open') && supabaseUser;
+  const hasUserSubmitted = userSubmissions.some(s => s.eventId === event.id);
 
   return (
     <div className="space-y-6">

@@ -1,7 +1,10 @@
 import { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEvent } from '@/contexts/EventContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { supabaseApi } from '@/lib/supabaseApi';
+import { useSupabaseAuth } from '@/contexts/SupabaseAuthContext';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -70,8 +73,10 @@ const mockTeams = [
 export default function List() {
   const { event } = useEvent();
   const { user } = useAuth();
+  const { user: supabaseUser } = useSupabaseAuth();
   const { toast } = useToast();
   const { trigger: triggerConfetti, Confetti } = useConfetti();
+  const queryClient = useQueryClient();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedTrack, setSelectedTrack] = useState('all');
   const [showCreateDialog, setShowCreateDialog] = useState(false);
@@ -82,11 +87,39 @@ export default function List() {
     lookingFor: ''
   });
 
+  const { data: teams = [], isLoading } = useQuery({
+    queryKey: ['teams', event?.id],
+    queryFn: () => supabaseApi.getTeams(event?.id),
+    enabled: !!event?.id,
+  });
+
+  const createTeamMutation = useMutation({
+    mutationFn: (teamData: any) => supabaseApi.createTeam(teamData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['teams'] });
+      toast({
+        title: '🚀 Team Created!',
+        description: `"${newTeam.name}" is ready to hack! Start recruiting teammates.`
+      });
+      triggerConfetti();
+      setShowCreateDialog(false);
+      setNewTeam({ name: '', description: '', track: '', lookingFor: '' });
+    },
+    onError: (error) => {
+      console.error('Error creating team:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to create team. Please try again.',
+        variant: 'destructive'
+      });
+    }
+  });
+
   if (!event) return null;
 
-  const filteredTeams = mockTeams.filter(team => {
+  const filteredTeams = teams.filter(team => {
     const matchesSearch = team.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         team.description.toLowerCase().includes(searchTerm.toLowerCase());
+                         (team.description || '').toLowerCase().includes(searchTerm.toLowerCase());
     const matchesTrack = selectedTrack === 'all' || team.track === selectedTrack;
     return matchesSearch && matchesTrack;
   });
@@ -101,20 +134,37 @@ export default function List() {
       return;
     }
 
-    toast({
-      title: '🚀 Team Created!',
-      description: `"${newTeam.name}" is ready to hack! Start recruiting teammates.`
-    });
-    triggerConfetti();
-    setShowCreateDialog(false);
-    setNewTeam({ name: '', description: '', track: '', lookingFor: '' });
+    if (!event) return;
+
+    const teamData = {
+      eventId: event.id,
+      name: newTeam.name,
+      description: newTeam.description,
+      track: newTeam.track,
+      lookingFor: newTeam.lookingFor ? newTeam.lookingFor.split(',').map(s => s.trim()) : [],
+      maxMembers: 4,
+      isRecruiting: true
+    };
+
+    createTeamMutation.mutate(teamData);
   };
 
-  const handleJoinRequest = (teamName: string) => {
-    toast({
-      title: '📩 Join Request Sent!',
-      description: `Your request to join "${teamName}" has been sent to the team lead.`
-    });
+  const handleJoinRequest = async (teamId: string, teamName: string) => {
+    try {
+      await supabaseApi.joinTeam(teamId);
+      queryClient.invalidateQueries({ queryKey: ['teams'] });
+      toast({
+        title: '🎉 Joined Team!',
+        description: `You've successfully joined "${teamName}".`
+      });
+    } catch (error) {
+      console.error('Error joining team:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to join team. Please try again.',
+        variant: 'destructive'
+      });
+    }
   };
 
   const getStatusColor = (status: string) => {

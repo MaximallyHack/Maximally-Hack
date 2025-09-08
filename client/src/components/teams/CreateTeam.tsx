@@ -10,6 +10,8 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Users, Plus, X, ArrowLeft, Sparkles } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { api } from "@/lib/api";
+import { useAuth } from "@/contexts/SupabaseAuthContext";
 
 interface TeamFormData {
   name: string;
@@ -42,6 +44,7 @@ const commonTags = [
 export default function CreateTeam() {
   const [, navigate] = useLocation();
   const { toast } = useToast();
+  const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   
   const [formData, setFormData] = useState<TeamFormData>({
@@ -104,6 +107,11 @@ export default function CreateTeam() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    if (!user) {
+      toast({ title: "Error", description: "Please log in to create a team", variant: "destructive" });
+      return;
+    }
+    
     if (!formData.name.trim()) {
       toast({ title: "Error", description: "Team name is required", variant: "destructive" });
       return;
@@ -116,12 +124,31 @@ export default function CreateTeam() {
 
     setIsLoading(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      // Use real API call
+      const teamData = {
+        name: formData.name,
+        description: formData.description,
+        eventId: 'default-event', // You might want to get this from context or URL
+        skills: formData.requiredSkills,
+        lookingFor: formData.lookingForRoles,
+        maxSize: formData.maxSize,
+        track: formData.tags[0] || 'General'
+      };
+      
+      await api.createTeam(teamData);
+      
       toast({ title: "Success!", description: "Team created successfully!" });
       navigate('/teams/my');
-    }, 1500);
+    } catch (error: any) {
+      toast({ 
+        title: "Error", 
+        description: error.message || "Failed to create team", 
+        variant: "destructive" 
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

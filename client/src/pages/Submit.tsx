@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,8 +28,9 @@ import {
   Clock,
   Trophy
 } from "lucide-react";
-import { api } from "@/lib/api";
-import type { Event } from "@/lib/api";
+import { supabaseApi } from "@/lib/supabaseApi";
+import { useSupabaseAuth } from "@/contexts/SupabaseAuthContext";
+import type { Event, Submission } from "@/lib/supabaseApi";
 
 interface SubmissionData {
   title: string;
@@ -75,19 +76,32 @@ export default function Submit() {
   const [data, setData] = useState<SubmissionData>(defaultSubmissionData);
   const [isDraft, setIsDraft] = useState(true);
   const [urlStatuses, setUrlStatuses] = useState<{[key: string]: 'checking' | 'valid' | 'invalid' | 'idle'}>({});
+  const [currentSubmission, setCurrentSubmission] = useState<Submission | null>(null);
   const { toast } = useToast();
   const { isActive: confettiActive, trigger: triggerConfetti, Confetti } = useConfetti();
+  const { user } = useSupabaseAuth();
+  const queryClient = useQueryClient();
 
   const { data: event, isLoading: eventLoading } = useQuery({
-    queryKey: ['events', slug],
-    queryFn: () => api.getEvent(slug!),
+    queryKey: ['event', slug],
+    queryFn: () => supabaseApi.getEvent(slug!),
     enabled: !!slug,
   });
 
   const { data: teams } = useQuery({
     queryKey: ['teams', event?.id],
-    queryFn: () => api.getTeams(event?.id),
+    queryFn: () => supabaseApi.getTeams(event?.id),
     enabled: !!event?.id,
+  });
+
+  const { data: userSubmissions } = useQuery({
+    queryKey: ['user-submissions', user?.id, event?.id],
+    queryFn: async () => {
+      if (!user?.id) return [];
+      const submissions = await supabaseApi.getUserSubmissions();
+      return submissions.filter(sub => sub.eventId === event?.id);
+    },
+    enabled: !!user?.id && !!event?.id,
   });
 
   // Check URL validity
@@ -124,6 +138,27 @@ export default function Submit() {
     }
   }, [data.githubUrl]);
 
+  // Load existing submission data if available
+  useEffect(() => {
+    if (userSubmissions && userSubmissions.length > 0) {
+      const existingSubmission = userSubmissions[0]; // Get the latest submission for this event
+      setCurrentSubmission(existingSubmission);
+      setData({
+        title: existingSubmission.title || '',
+        tagline: existingSubmission.tagline || '',
+        description: existingSubmission.description || '',
+        demoUrl: existingSubmission.demoUrl || '',
+        githubUrl: existingSubmission.githubUrl || '',
+        slidesUrl: existingSubmission.slidesUrl || '',
+        videoUrl: existingSubmission.videoUrl || '',
+        track: existingSubmission.track || '',
+        tags: existingSubmission.tags || [],
+        teamId: existingSubmission.teamId || 'solo'
+      });
+      setIsDraft(existingSubmission.status === 'draft');
+    }
+  }, [userSubmissions]);
+
   const addTag = (tag: string) => {
     if (!data.tags.includes(tag)) {
       setData(prev => ({ ...prev, tags: [...prev.tags, tag] }));
@@ -134,16 +169,101 @@ export default function Submit() {
     setData(prev => ({ ...prev, tags: prev.tags.filter(t => t !== tag) }));
   };
 
-  const handleSaveDraft = () => {
-    setIsDraft(true);
-    toast({
-      title: "Draft saved! 💾",
-      description: "Your submission has been saved as a draft.",
-    });
+  const createSubmissionMutation = useMutation({
+    mutationFn: (submissionData: Partial<Submission>) => supabaseApi.createSubmission(submissionData),
+    onSuccess: (submission) => {
+      setCurrentSubmission(submission);
+      queryClient.invalidateQueries({ queryKey: ['user-submissions'] });
+      toast({
+        title: "Draft saved! 💾",
+        description: "Your submission has been saved as a draft.",
+      });
+    },
+    onError: (error) => {
+      console.error('Error saving draft:', error);
+      toast({
+        title: "Error",
+        description: "Failed to save draft. Please try again.",
+        variant: "destructive"
+      });
+    }
+  });
+
+  const updateSubmissionMutation = useMutation({
+    mutationFn: ({ id, data: updateData }: { id: string, data: Partial<Submission> }) => 
+      supabaseApi.updateSubmission(id, updateData),
+    onSuccess: (submission) => {
+      setCurrentSubmission(submission);
+      queryClient.invalidateQueries({ queryKey: ['user-submissions'] });
+      toast({
+        title: "Draft updated! 💾",
+        description: "Your submission has been updated.",
+      });
+    },
+    onError: (error) => {
+      console.error('Error updating submission:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update submission. Please try again.",
+        variant: "destructive"
+      });
+    }
+  });
+
+  const submitFinalMutation = useMutation({
+    mutationFn: (id: string) => supabaseApi.submitSubmission(id),
+    onSuccess: () => {
+      setIsDraft(false);
+      queryClient.invalidateQueries({ queryKey: ['user-submissions'] });
+      triggerConfetti();
+      toast({
+        title: "Submission successful! 🎉",
+        description: "Your project has been submitted to the hackathon.",
+      });
+      setTimeout(() => {
+        setLocation(`/e/${slug}`);
+      }, 2000);
+    },
+    onError: (error) => {
+      console.error('Error submitting:', error);
+      toast({
+        title: "Error",
+        description: "Failed to submit project. Please try again.",
+        variant: "destructive"
+      });
+    }
+  });
+
+  const handleSaveDraft = async () => {
+    if (!event || !user) return;
+
+    const submissionData = {
+      title: data.title,
+      tagline: data.tagline,
+      description: data.description,
+      eventId: event.id,
+      track: data.track,
+      tags: data.tags,
+      techStack: data.tags, // Use tags as tech stack for now
+      demoUrl: data.demoUrl,
+      githubUrl: data.githubUrl,
+      slidesUrl: data.slidesUrl,
+      videoUrl: data.videoUrl,
+      teamId: data.teamId !== 'solo' ? data.teamId : undefined,
+      features: [], // TODO: implement features if needed
+      images: [], // TODO: implement image upload if needed
+      status: 'draft' as const
+    };
+
+    if (currentSubmission) {
+      updateSubmissionMutation.mutate({ id: currentSubmission.id, data: submissionData });
+    } else {
+      createSubmissionMutation.mutate(submissionData);
+    }
   };
 
-  const handleSubmitFinal = () => {
-    if (!data.title || !data.description || !data.track) {
+  const handleSubmitFinal = async () => {
+    if (!data.title || !data.description || !data.track || !data.demoUrl || !data.githubUrl) {
       toast({
         title: "Missing required fields",
         description: "Please fill in all required fields before submitting.",
@@ -152,16 +272,14 @@ export default function Submit() {
       return;
     }
 
-    setIsDraft(false);
-    triggerConfetti();
-    toast({
-      title: "Submission successful! 🎉",
-      description: "Your project has been submitted to the hackathon.",
-    });
+    if (!currentSubmission) {
+      // Save as draft first if no submission exists
+      await handleSaveDraft();
+      // The mutation will handle the rest
+      return;
+    }
 
-    setTimeout(() => {
-      setLocation(`/e/${slug}`);
-    }, 2000);
+    submitFinalMutation.mutate(currentSubmission.id);
   };
 
   const getUrlIcon = (field: string) => {
@@ -210,9 +328,11 @@ export default function Submit() {
     );
   }
 
-  const submissionDeadline = new Date(event.submissionClose);
+  const submissionDeadline = event.submissionClose ? new Date(event.submissionClose) : null;
+  const submissionStart = event.submissionOpen ? new Date(event.submissionOpen) : null;
   const now = new Date();
-  const isSubmissionOpen = now >= new Date(event.submissionOpen) && now <= submissionDeadline;
+  const isSubmissionOpen = submissionStart && submissionDeadline ? 
+    now >= submissionStart && now <= submissionDeadline : false;
   const timeLeft = submissionDeadline.getTime() - now.getTime();
   const daysLeft = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
   const hoursLeft = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));

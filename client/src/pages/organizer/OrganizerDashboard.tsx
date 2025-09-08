@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import { supabaseApi } from "@/lib/supabaseApi";
+import { useSupabaseAuth } from "@/contexts/SupabaseAuthContext";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -79,22 +81,30 @@ const mockStats = {
 };
 
 export default function OrganizerDashboard() {
+  const { user } = useSupabaseAuth();
   const [activeTab, setActiveTab] = useState("overview");
   const [timeFilter, setTimeFilter] = useState("all");
 
   const handleStatusChange = (eventId: string, newStatus: string) => {
-    // Update event status logic would go here
-    console.log(`Changing event ${eventId} status to ${newStatus}`);
-    // In a real app, this would make an API call
   };
 
   const { data: events, isLoading } = useQuery({
-    queryKey: ['organizer-events'],
+    queryKey: ['organizer-events', user?.id],
     queryFn: async () => {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 500));
-      return mockOrganizerEvents;
+      if (!user?.id) return [];
+      const allEvents = await supabaseApi.getEvents();
+      // Filter events where current user is the organizer
+      return allEvents.filter(event => event.organizerId === user.id).map(event => ({
+        id: event.id,
+        title: event.title,
+        status: event.status,
+        participants: event.participantCount || 0,
+        submissions: 0, // TODO: implement submissions count
+        startDate: event.startDate,
+        prizePool: event.prizePool || 0
+      }));
     },
+    enabled: !!user?.id
   });
 
   const getStatusColor = (status: string) => {
