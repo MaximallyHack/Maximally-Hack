@@ -101,10 +101,10 @@ export default function Organize() {
             you focus on building an amazing community of innovators.
           </p>
           <div className="flex items-center justify-center gap-4 mb-12">
-            <Badge className="bg-mint/20 text-mint border-mint/30 px-4 py-2 text-sm font-medium">
+            <Badge className="bg-green-50 dark:bg-card  text-mint border-mint/30 px-4 py-2 text-sm font-medium">
               ✨ Trusted by 500+ organizers
             </Badge>
-            <Badge className="bg-coral/20 text-coral border-coral/30 px-4 py-2 text-sm font-medium">
+            <Badge className="bg-fuchsia-50 dark:bg-card text-coral border-coral/30 px-4 py-2 text-sm font-medium">
               🎯 98% success rate
             </Badge>
           </div>
@@ -347,7 +347,7 @@ export default function Organize() {
                 <div className="pt-6">
                   <Button 
                     type="submit" 
-                    className="w-full bg-gradient-to-r from-coral to-coral/90 hover:from-coral/90 hover:to-coral/80 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                    className="w-full bg-gradient-to-r from-coral to-coral/90 hover:bg-coral-dark text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
                     data-testid="button-submit"
                   >
                     <Sparkles className="w-5 h-5 mr-2" />
