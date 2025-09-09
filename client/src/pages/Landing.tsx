@@ -17,57 +17,60 @@ export default function Landing() {
 
   return (
     <div className="min-h-screen bg-background" data-testid="landing-page">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-cream via-sky/10 to-mint/10 py-20">
-        <DecorativeElements />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <FloatingElement>
-            <h1 className="font-heading font-bold text-5xl md:text-6xl mb-6 text-[#2a2d3a] dark:text-[#e6e8ed]">
-              Where Great Ideas
-              <span className="text-coral"> Come to Life</span>
-            </h1>
-          </FloatingElement>
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Join the friendliest hackathon community. Form amazing teams, create together, and compete in events that celebrate innovation and creativity.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/explore">
-              <Button size="lg" className="bg-coral text-white px-8 py-4 rounded-full font-medium text-lg hover-scale hover:bg-coral/80 transition-colors" data-testid="button-explore-events">
-                <Search className="w-5 h-5 mr-2" />
-                Explore Events
-              </Button>
-            </Link>
-            <Link to="/organizer/events/new">
-              <Button variant="outline" size="lg" className="border-2 border-mint text-foreground px-8 py-4 rounded-full font-medium text-lg hover-scale hover:bg-mint/20 transition-colors" data-testid="button-join-community">
-                <Plus className="w-5 h-5 mr-2" />
-                Join Our Community
-              </Button>
-            </Link>
+      <div className="h-screen">
+        {/* Hero Section */}
+        <section className="relative overflow-hidden bg-gradient-to-br from-cream via-sky/10 to-mint/10 py-20">
+          <DecorativeElements />
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <FloatingElement>
+              <h1 className="font-heading font-bold text-5xl md:text-6xl mb-6 text-[#2a2d3a] dark:text-[#e6e8ed]">
+                Where Great Ideas
+                <span className="text-coral"> Come to Life</span>
+              </h1>
+            </FloatingElement>
+            <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+              Join the friendliest hackathon community. Form amazing teams, create together, and compete in events that celebrate innovation and creativity.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link to="/explore">
+                <Button size="lg" className="bg-coral text-white px-8 py-4 rounded-full font-medium text-lg hover-scale hover:bg-coral/80 transition-colors" data-testid="button-explore-events">
+                  <Search className="w-5 h-5 mr-2" />
+                  Explore Events
+                </Button>
+              </Link>
+              <Link to="/organizer/events/new">
+                <Button variant="outline" size="lg" className="border-2 border-mint text-foreground px-8 py-4 rounded-full font-medium text-lg hover-scale hover:bg-mint/20 transition-colors" data-testid="button-join-community">
+                  <Plus className="w-5 h-5 mr-2" />
+                  Join Our Community
+                </Button>
+              </Link>
+            </div>
           </div>
-        </div>
-      </section>
-      {/* Category Pills */}
-      <section className="py-8 bg-soft-gray/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap gap-3 justify-center text-[#0d1322] bg-[transparent]">
-            <Badge className="inline-flex items-center border transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer bg-[#2563eb] dark:bg-[#0053a6] text-[#ffffff]" data-testid="category-ai">
-              🤖 AI & ML
-            </Badge>
-            <Badge className="inline-flex items-center border transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer text-[#1a472a] dark:text-[#23252f] bg-[#86d4a0] dark:bg-[#a6e3bc]" data-testid="category-student">
-              🎓 Student
-            </Badge>
-            <Badge className="bg-[#eab308] dark:bg-yellow text-[#1f2937] dark:text-foreground px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer" data-testid="category-beginner">
-              👶 Beginner
-            </Badge>
-            <Badge className="bg-[#dc2626] dark:bg-coral text-white px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer" data-testid="category-weekend">
-              ⚡ Weekend
-            </Badge>
-            <Badge className="bg-[#374151] dark:bg-text-dark px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer text-[#060606]" data-testid="category-prize">
-              💰 Prize $10k+
-            </Badge>
+        </section>
+        {/* Category Pills */}
+        <section className="py-8 bg-soft-gray/50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-wrap gap-3 justify-center text-[#0d1322] bg-[transparent]">
+              <Badge className="inline-flex items-center border transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer bg-[#2563eb] dark:bg-[#0053a6] text-[#ffffff]" data-testid="category-ai">
+                🤖 AI & ML
+              </Badge>
+              <Badge className="inline-flex items-center border transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer text-[#1a472a] dark:text-[#23252f] bg-[#86d4a0] dark:bg-[#a6e3bc]" data-testid="category-student">
+                🎓 Student
+              </Badge>
+              <Badge className="bg-[#eab308] dark:bg-yellow text-[#1f2937] dark:text-black/70 px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer" data-testid="category-beginner">
+                👶 Beginner
+              </Badge>
+              <Badge className="bg-[#dc2626] dark:bg-coral text-white px-4 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer" data-testid="category-weekend">
+                ⚡ Weekend
+              </Badge>
+              <Badge className="bg-[#374151] dark:bg-text-dark px-4 dark:text-black/80 py-2 rounded-full text-sm font-medium hover-scale cursor-pointer text-white/90" data-testid="category-prize">
+                💰 Prize $10k+
+              </Badge>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
+      
       {/* Featured Events */}
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -115,7 +118,7 @@ export default function Landing() {
 
           <div className="text-center mt-12">
             <Link to="/explore">
-              <Button size="lg" className="bg-[#2563eb] dark:bg-sky px-8 py-3 rounded-full font-medium hover-scale hover:bg-[#1d4ed8] dark:hover:bg-sky/80 transition-colors text-[#2e3678]" data-testid="button-explore-all">
+              <Button size="lg" className="bg-[#2563eb] dark:bg-sky px-8 py-3 rounded-full font-medium hover-scale hover:bg-[#1d4ed8] dark:hover:bg-sky/80 dark:text-black/70 transition-colors text-white/90" data-testid="button-explore-all">
                 <Search className="w-5 h-5 mr-2" />
                 Explore All Events
               </Button>

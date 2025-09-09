@@ -136,7 +136,7 @@ export default function EventCard({ event, showActions = true }: EventCardProps)
 
             {/* Footer */}
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-1 font-semibold text-coral">
+              <div className="flex items-center gap-1 font-semibold dark:text-coral text-pink-600">
                 <Trophy className="w-4 h-4" />
                 <span>Prize: {formatPrize(event.prizePool)}</span>
               </div>

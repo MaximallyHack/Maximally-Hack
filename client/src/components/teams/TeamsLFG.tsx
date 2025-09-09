@@ -58,7 +58,7 @@ export default function TeamsLFG() {
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
                 <h3 className="font-semibold text-foreground">{post.title}</h3>
-                <Badge className="bg-mint/10 text-mint">Individual</Badge>
+                <Badge className="text-text-dark bg-mint dark:bg-card dark:text-mint">Individual</Badge>
               </div>
               <p className="text-sm text-muted-foreground mb-1">{user?.fullName} • @{user?.username}</p>
               <p className="text-foreground mb-4">{post.description}</p>
@@ -69,7 +69,7 @@ export default function TeamsLFG() {
                     <h4 className="text-sm font-medium text-foreground mb-2">Skills</h4>
                     <div className="flex flex-wrap gap-1">
                       {post.skills.slice(0, 3).map(skill => (
-                        <Badge key={skill} variant="secondary" className="bg-coral/10 text-coral text-xs">
+                        <Badge key={skill} variant="secondary" className="bg-coral text-text-dark dark:bg-card dark:text-coral text-xs">
                           {skill}
                         </Badge>
                       ))}
@@ -84,7 +84,7 @@ export default function TeamsLFG() {
                     <h4 className="text-sm font-medium text-foreground mb-2">Preferred Roles</h4>
                     <div className="flex flex-wrap gap-1">
                       {post.preferredRoles.slice(0, 2).map(role => (
-                        <Badge key={role} variant="secondary" className="bg-mint/10 text-mint text-xs">
+                        <Badge key={role} variant="secondary" className="bg-mint text-text-dark dark:bg-card dark:text-mint text-xs">
                           {role}
                         </Badge>
                       ))}
@@ -107,7 +107,7 @@ export default function TeamsLFG() {
                     </>
                   )}
                 </div>
-                <Button size="sm" className="bg-coral hover:bg-coral/90" data-testid={`button-contact-${post.id}`}>
+                <Button size="sm" className="bg-coral hover:bg-coral-dark" data-testid={`button-contact-${post.id}`}>
                   <MessageCircle className="w-4 h-4 mr-2" />
                   Contact
                 </Button>
@@ -130,7 +130,7 @@ export default function TeamsLFG() {
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
                 <h3 className="font-semibold text-foreground">{post.title}</h3>
-                <Badge className="bg-sky/10 text-sky">Team</Badge>
+                <Badge className="bg-sky text-text-dark dark:bg-card dark:text-sky">Team</Badge>
               </div>
               
               {team && (
@@ -159,7 +159,7 @@ export default function TeamsLFG() {
                     <h4 className="text-sm font-medium text-foreground mb-2">Required Skills</h4>
                     <div className="flex flex-wrap gap-1">
                       {post.skills.slice(0, 3).map(skill => (
-                        <Badge key={skill} variant="secondary" className="bg-coral/10 text-coral text-xs">
+                        <Badge key={skill} variant="secondary" className="bg-coral text-text-dark dark:bg-card dark:text-coral text-xs">
                           {skill}
                         </Badge>
                       ))}
@@ -174,7 +174,7 @@ export default function TeamsLFG() {
                     <h4 className="text-sm font-medium text-foreground mb-2">Looking For</h4>
                     <div className="flex flex-wrap gap-1">
                       {post.lookingFor.slice(0, 2).map(role => (
-                        <Badge key={role} variant="secondary" className="bg-mint/10 text-mint text-xs">
+                        <Badge key={role} variant="secondary" className="bg-mint text-text-dark dark:bg-card dark:text-mint text-xs">
                           {role}
                         </Badge>
                       ))}
@@ -186,21 +186,7 @@ export default function TeamsLFG() {
                 )}
               </div>
             </div>
-            
-            <div className="flex flex-col gap-2">
-              {team && (
-                <Link to={`/teams/${team.id}`}>
-                  <Button size="sm" variant="outline" className="border-sky text-sky hover:bg-sky/10" data-testid={`button-view-team-${post.id}`}>
-                    View Team
-                  </Button>
-                </Link>
-              )}
-              <Link to={`/teams/${post.teamId}/apply`}>
-                <Button size="sm" className="bg-coral hover:bg-coral/90" data-testid={`button-apply-team-${post.id}`}>
-                  Apply to Join
-                </Button>
-              </Link>
-            </div>
+
           </div>
           
           <Separator className="my-4" />
@@ -215,6 +201,21 @@ export default function TeamsLFG() {
                   <span className="text-sm text-muted-foreground">{team.members.length}/{team.maxSize} members</span>
                 </>
               )}
+            </div>
+                        
+            <div className="flex justify-end gap-2">
+              {team && (
+                <Link to={`/teams/${team.id}`}>
+                  <Button size="sm" variant="outline" className="border-sky text-sky hover:bg-sky-dark" data-testid={`button-view-team-${post.id}`}>
+                    View Team
+                  </Button>
+                </Link>
+              )}
+              <Link to={`/teams/${post.teamId}/apply`}>
+                <Button size="sm" className="bg-coral hover:bg-coral-dark" data-testid={`button-apply-team-${post.id}`}>
+                  Apply to Join
+                </Button>
+              </Link>
             </div>
           </div>
         </CardContent>
@@ -238,7 +239,7 @@ export default function TeamsLFG() {
             <h1 className="text-3xl font-heading font-bold text-foreground mb-2">Looking for Group</h1>
             <p className="text-muted-foreground">Find teammates or discover individuals looking to join teams</p>
           </div>
-          <Button className="bg-coral hover:bg-coral/90" data-testid="button-create-post">
+          <Button className="bg-coral hover:bg-coral-dark" data-testid="button-create-post">
             <Plus className="w-4 h-4 mr-2" />
             Create Post
           </Button>
@@ -286,8 +287,8 @@ export default function TeamsLFG() {
 
       {/* LFG Posts */}
       <Tabs defaultValue="all" className="space-y-6" data-testid="lfg-tabs">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="all" data-testid="tab-all">All Posts ({lfgPosts.length})</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-3 ">
+          <TabsTrigger value="all" data-testid="tab-all" >All Posts ({lfgPosts.length})</TabsTrigger>
           <TabsTrigger value="individuals" data-testid="tab-individuals">Individuals ({individualPosts.length})</TabsTrigger>
           <TabsTrigger value="teams" data-testid="tab-teams">Teams ({teamPosts.length})</TabsTrigger>
         </TabsList>
