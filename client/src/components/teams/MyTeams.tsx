@@ -51,11 +51,11 @@ export default function MyTeams() {
           <div className="flex items-start justify-between mb-4">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
-                <Link to={`/teams/${team.id}`} className="text-xl font-semibold text-foreground hover:text-coral transition-colors">
+                <Link to={`/teams/${team.id}`} className="text-2xl font-semibold text-foreground hover:text-coral transition-colors">
                   {team.name}
                 </Link>
-                {isLeader && <Crown className="w-5 h-5 text-yellow" />}
-                <Badge variant={team.status === 'recruiting' ? 'default' : 'secondary'} className="bg-mint/10 text-mint">
+                {isLeader && <Crown className="w-5 h-5 text-yellow-dark dark:text-yellow" />}
+                <Badge variant={team.status === 'recruiting' ? 'default' : 'secondary'} className="bg-mint text-text-dark dark:bg-card dark:text-mint">
                   {team.status === 'recruiting' ? 'Recruiting' : team.status === 'full' ? 'Full' : 'Closed'}
                 </Badge>
               </div>
@@ -65,13 +65,13 @@ export default function MyTeams() {
             {showActions && (
               <div className="flex gap-2">
                 <Link to={`/teams/${team.id}/chat`}>
-                  <Button size="sm" variant="outline" className="border-sky text-sky hover:bg-sky/10" data-testid={`button-chat-${team.id}`}>
+                  <Button size="sm" variant="outline" className="border-sky text-sky hover:bg-sky-dark" data-testid={`button-chat-${team.id}`}>
                     <MessageCircle className="w-4 h-4" />
                   </Button>
                 </Link>
                 {isLeader && (
                   <Link to={`/teams/${team.id}/manage`}>
-                    <Button size="sm" variant="outline" className="border-coral text-coral hover:bg-coral/10" data-testid={`button-manage-${team.id}`}>
+                    <Button size="sm" variant="outline" className="border-coral text-coral hover:bg-coral-dark" data-testid={`button-manage-${team.id}`}>
                       <Settings className="w-4 h-4" />
                     </Button>
                   </Link>
@@ -93,7 +93,7 @@ export default function MyTeams() {
           <div className="mb-4">
             <div className="flex items-center gap-2 mb-2">
               <h4 className="text-sm font-medium text-foreground">Team Members</h4>
-              <span className="text-xs text-[#6C6C6C] dark:text-muted-foreground">({team.members.length}/{team.maxSize} members)</span>
+              <span className="text-xs text-text-dark dark:text-muted-foreground">({team.members.length}/{team.maxSize} members)</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="flex -space-x-2">
@@ -111,7 +111,7 @@ export default function MyTeams() {
                 )}
               </div>
               {team.status === 'recruiting' && availableSpots > 0 && (
-                <span className="text-sm text-mint">({availableSpots} spots available)</span>
+                <span className="text-sm text-mint-dark dark:text-mint">({availableSpots} spots available)</span>
               )}
             </div>
           </div>
@@ -123,7 +123,7 @@ export default function MyTeams() {
                 <h4 className="text-sm font-medium text-foreground mb-2">Skills</h4>
                 <div className="flex flex-wrap gap-1">
                   {team.requiredSkills.slice(0, 3).map(skill => (
-                    <Badge key={skill} variant="secondary" className="bg-coral/10 text-coral text-xs">
+                    <Badge key={skill} variant="secondary" className="bg-coral text-text-dark dark:bg-card dark:text-coral text-xs">
                       {skill}
                     </Badge>
                   ))}
@@ -138,7 +138,7 @@ export default function MyTeams() {
                 <h4 className="text-sm font-medium text-foreground mb-2">Looking For</h4>
                 <div className="flex flex-wrap gap-1">
                   {team.lookingForRoles.slice(0, 2).map(role => (
-                    <Badge key={role} variant="secondary" className="bg-mint/10 text-mint text-xs">
+                    <Badge key={role} variant="secondary" className="bg-mint text-text-dark dark:bg-card dark:text-mint text-xs">
                       {role}
                     </Badge>
                   ))}
@@ -160,7 +160,7 @@ export default function MyTeams() {
             </div>
             <div className="flex gap-2">
               <Link to={`/teams/${team.id}`}>
-                <Button size="sm" variant="outline" className="border-sky text-sky hover:bg-sky/10" data-testid={`button-view-${team.id}`}>
+                <Button size="sm" variant="outline" className="border-sky text-sky hover:bg-sky-dark" data-testid={`button-view-${team.id}`}>
                   View Details
                 </Button>
               </Link>
