@@ -7,15 +7,36 @@
 :root {
   /* Theme Colors */
   --cream: hsl(48, 100%, 98%);
+  --cream-dark: hsl(48, 100%, 88%);
+
   --soft-gray: hsl(0, 0%, 90%);
+  --soft-gray-dark: hsl(0, 0%, 70%);
+
   --text-dark: hsl(0, 0%, 18%);
+  --text-dark-dark: hsl(0, 0%, 8%);
+
   --text-muted: hsl(0, 0%, 32%);
+  --text-muted-dark: hsl(0, 0%, 22%);
+
   --sky: hsl(204, 100%, 82%);
+  --sky-dark: hsl(204, 100%, 62%);
+
   --coral: hsl(0, 69%, 78%);
+  --coral-dark: hsl(0, 69%, 58%);
+
   --yellow: hsl(49, 100%, 75%);
+  --yellow-dark: hsl(49, 100%, 55%);
+
   --mint: hsl(142, 52%, 77%);
+  --mint-dark: hsl(142, 52%, 57%);
+
   --success: hsl(120, 50%, 70%);
+  --success-dark: hsl(120, 50%, 50%);
+
   --error: hsl(0, 69%, 71%);
+  --error-dark: hsl(0, 69%, 51%);
+
+
   
   /* Shadcn Variables */
   --background: hsl(48, 100%, 98%);
@@ -104,24 +125,62 @@
 }
 
 @layer utilities {
+  /* Background Utilities */
   .bg-cream { background-color: var(--cream); }
+  .bg-cream-dark { background-color: var(--cream-dark); }
+
   .bg-soft-gray { background-color: var(--soft-gray); }
+  .bg-soft-gray-dark { background-color: var(--soft-gray-dark); }
+
   .bg-sky { background-color: var(--sky); }
+  .bg-sky-dark { background-color: var(--sky-dark); }
+
   .bg-coral { background-color: var(--coral); }
+  .bg-coral-dark { background-color: var(--coral-dark); }
+
   .bg-yellow { background-color: var(--yellow); }
+  .bg-yellow-dark { background-color: var(--yellow-dark); }
+
   .bg-mint { background-color: var(--mint); }
+  .bg-mint-dark { background-color: var(--mint-dark); }
+
   .bg-success { background-color: var(--success); }
+  .bg-success-dark { background-color: var(--success-dark); }
+
   .bg-error { background-color: var(--error); }
-  
+  .bg-error-dark { background-color: var(--error-dark); }
+
+  /* Text Utilities */
   .text-cream { color: var(--cream); }
+  .text-cream-dark { color: var(--cream-dark); }
+
+  .text-soft-gray { color: var(--soft-gray); }
+  .text-soft-gray-dark { color: var(--soft-gray-dark); }
+
   .text-text-dark { color: var(--text-dark); }
+  .text-text-dark-dark { color: var(--text-dark-dark); }
+
   .text-text-muted { color: var(--text-muted); }
+  .text-text-muted-dark { color: var(--text-muted-dark); }
+
   .text-sky { color: var(--sky); }
+  .text-sky-dark { color: var(--sky-dark); }
+
   .text-coral { color: var(--coral); }
+  .text-coral-dark { color: var(--coral-dark); }
+
   .text-yellow { color: var(--yellow); }
+  .text-yellow-dark { color: var(--yellow-dark); }
+
   .text-mint { color: var(--mint); }
+  .text-mint-dark { color: var(--mint-dark); }
+
   .text-success { color: var(--success); }
+  .text-success-dark { color: var(--success-dark); }
+
   .text-error { color: var(--error); }
+  .text-error-dark { color: var(--error-dark); }
+
   
   .border-soft-gray { border-color: var(--soft-gray); }
   .border-sky { border-color: var(--sky); }
