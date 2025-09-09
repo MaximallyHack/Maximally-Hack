@@ -132,12 +132,12 @@ export default function OrganizerDashboard() {
           </div>
           <div className="flex gap-3">
             <Link href="/organizer/events/new">
-              <Button className="bg-coral text-white hover:bg-coral/80 rounded-full px-6" data-testid="button-create-event">
+              <Button className="bg-coral text-white hover:bg-coral-dark rounded-full px-6" data-testid="button-create-event">
                 <Plus className="w-4 h-4 mr-2" />
                 Create Event
               </Button>
             </Link>
-            <Button variant="outline" className="border-sky text-sky hover:bg-sky/10 rounded-full px-6" data-testid="button-analytics">
+            <Button variant="outline" className="border-sky text-sky hover:bg-sky-dark rounded-full px-6" data-testid="button-analytics">
               <BarChart3 className="w-4 h-4 mr-2" />
               Analytics
             </Button>
@@ -146,7 +146,7 @@ export default function OrganizerDashboard() {
 
         {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <Card className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray">
+          <Card className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray dark:bg-card">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-text-muted text-sm">Total Events</p>
@@ -161,7 +161,7 @@ export default function OrganizerDashboard() {
             </div>
           </Card>
 
-          <Card className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray">
+          <Card className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray dark:bg-card">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-text-muted text-sm">Registrations</p>
@@ -176,7 +176,7 @@ export default function OrganizerDashboard() {
             </div>
           </Card>
 
-          <Card className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray">
+          <Card className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray dark:bg-card">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-text-muted text-sm">Total Submissions</p>
@@ -191,7 +191,7 @@ export default function OrganizerDashboard() {
             </div>
           </Card>
 
-          <Card className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray">
+          <Card className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray dark:bg-card">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-text-muted text-sm">Judges</p>
@@ -208,8 +208,8 @@ export default function OrganizerDashboard() {
         </div>
 
         {/* Main Content */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-4 bg-white rounded-xl border border-soft-gray p-1 mb-8">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full ">
+          <TabsList className="grid w-full grid-cols-4 bg-white rounded-xl border border-soft-gray p-1 mb-8 dark:bg-card">
             <TabsTrigger value="overview" className="rounded-lg" data-testid="tab-overview">Overview</TabsTrigger>
             <TabsTrigger value="events" className="rounded-lg" data-testid="tab-events">Events</TabsTrigger>
             <TabsTrigger value="analytics" className="rounded-lg" data-testid="tab-analytics">Analytics</TabsTrigger>
@@ -220,16 +220,19 @@ export default function OrganizerDashboard() {
           <TabsContent value="overview">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {/* Recent Events */}
-              <Card className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray">
-                <div className="flex items-center justify-between mb-6">
+              <Card className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray dark:bg-card">
+                <div className="flex items-center justify-between mb-6 ">
                   <h3 className="font-heading font-semibold text-xl text-text-dark">Recent Events</h3>
-                  <Link href="#" className="text-coral hover:text-coral/80 text-sm font-medium">View All</Link>
+                  <Link href="#" className="text-coral hover:text-coral-dark text-sm font-medium">View All</Link>
                 </div>
                 
                 <div className="space-y-4">
                   {events?.slice(0, 3).map((event) => (
                     <div key={event.id} className="flex items-center justify-between p-4 rounded-xl bg-soft-gray/30 hover:bg-soft-gray/50 transition-colors">
                       <div className="flex-1">
+                        <Badge className={`bg-${getStatusColor(event.status)} text-text-dark dark:bg-card dark:text-${getStatusColor(event.status)} px-2 py-1 rounded-full text-xs border-0`}>
+                          {event.status}
+                        </Badge>
                         <h4 className="font-medium text-text-dark">{event.title}</h4>
                         <div className="flex items-center gap-4 mt-1 text-sm text-text-muted">
                           <span>{formatDate(event.startDate)}</span>
@@ -237,14 +240,11 @@ export default function OrganizerDashboard() {
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Badge className={`bg-${getStatusColor(event.status)}/20 text-${getStatusColor(event.status)} px-2 py-1 rounded-full text-xs border-0`}>
-                          {event.status}
-                        </Badge>
                         <Link href={`/e/${event.id}`}>
                           <Button 
                             size="sm" 
                             variant="outline"
-                            className="border-coral text-coral hover:bg-coral/10 text-xs px-3"
+                            className="border-coral text-coral hover:bg-coral-dark text-xs px-3"
                             data-testid={`button-view-event-${event.id}`}
                           >
                             <Eye className="w-3 h-3 mr-1" />
@@ -254,7 +254,7 @@ export default function OrganizerDashboard() {
                         <Link href={`/organizer/events/${event.id}/overview`}>
                           <Button 
                             size="sm" 
-                            className="bg-sky text-white hover:bg-sky/80 text-xs px-3"
+                            className="bg-sky hover:bg-sky-dark dark:text-text-dark-dark text-xs px-3"
                             data-testid={`button-manage-${event.id}`}
                           >
                             Manage
@@ -267,33 +267,33 @@ export default function OrganizerDashboard() {
               </Card>
 
               {/* Quick Actions */}
-              <Card className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray">
+              <Card className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray dark:bg-card">
                 <h3 className="font-heading font-semibold text-xl text-text-dark mb-6">Quick Actions</h3>
                 
                 <div className="grid grid-cols-2 gap-4">
                   <Link href="/organizer/events/new">
-                    <Button variant="outline" className="w-full h-20 border-coral text-coral hover:bg-coral/10 rounded-xl flex-col gap-2" data-testid="quick-create-event">
+                    <Button variant="outline" className="w-full h-20 border-coral text-coral hover:text-text-dark-dark hover:bg-coral rounded-xl flex-col gap-2" data-testid="quick-create-event">
                       <Plus className="w-6 h-6" />
                       <span>Create Event</span>
                     </Button>
                   </Link>
                   
                   <Link href="/e/ai-for-good-2024/submissions">
-                    <Button variant="outline" className="w-full h-20 border-sky text-sky hover:bg-sky/10 rounded-xl flex-col gap-2" data-testid="quick-view-submissions">
+                    <Button variant="outline" className="w-full h-20 border-sky text-sky hover:text-text-dark-dark hover:bg-sky rounded-xl flex-col gap-2" data-testid="quick-view-submissions">
                       <Trophy className="w-6 h-6" />
                       <span>View Submissions</span>
                     </Button>
                   </Link>
                   
                   <Link href="/e/ai-for-good-2024/teams">
-                    <Button variant="outline" className="w-full h-20 border-mint text-mint hover:bg-mint/10 rounded-xl flex-col gap-2" data-testid="quick-view-teams">
+                    <Button variant="outline" className="w-full h-20 border-mint text-mint hover:text-text-dark-dark hover:bg-mint rounded-xl flex-col gap-2" data-testid="quick-view-teams">
                       <Users className="w-6 h-6" />
                       <span>View Teams</span>
                     </Button>
                   </Link>
                   
                   <Link href="/e/ai-for-good-2024/judging">
-                    <Button variant="outline" className="w-full h-20 border-yellow text-text-dark hover:bg-yellow/10 rounded-xl flex-col gap-2" data-testid="quick-view-judging">
+                    <Button variant="outline" className="w-full h-20 border-yellow text-yellow hover:text-text-dark-dark hover:bg-yellow rounded-xl flex-col gap-2" data-testid="quick-view-judging">
                       <Settings className="w-6 h-6" />
                       <span>View Judging</span>
                     </Button>
@@ -305,7 +305,7 @@ export default function OrganizerDashboard() {
 
           {/* Events Tab */}
           <TabsContent value="events">
-            <Card className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray">
+            <Card className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray dark:bg-card">
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
                 <h3 className="font-heading font-semibold text-xl text-text-dark">Your Events</h3>
                 <div className="flex gap-3">
@@ -321,7 +321,7 @@ export default function OrganizerDashboard() {
                     </SelectContent>
                   </Select>
                   <Link href="/organizer/events/new">
-                    <Button className="bg-coral text-white hover:bg-coral/80 rounded-xl" data-testid="button-new-event">
+                    <Button className="bg-coral text-white hover:bg-coral-dark rounded-xl" data-testid="button-new-event">
                       <Plus className="w-4 h-4 mr-2" />
                       New Event
                     </Button>
@@ -352,7 +352,7 @@ export default function OrganizerDashboard() {
                           <div className="flex items-center gap-3 mb-2">
                             <h4 className="font-heading font-semibold text-lg text-text-dark">{event.title}</h4>
                             <div className="flex items-center gap-2">
-                              <Badge className={`bg-${getStatusColor(event.status)}/20 text-${getStatusColor(event.status)} px-2 py-1 rounded-full text-xs border-0`}>
+                              <Badge className={`bg-${getStatusColor(event.status)} text-text-dark dark:bg-card dark:text-${getStatusColor(event.status)} px-2 py-1 rounded-full text-xs border-0`}>
                                 {event.status}
                               </Badge>
                               <Select value={event.status} onValueChange={(newStatus) => handleStatusChange(event.id, newStatus)}>
@@ -459,7 +459,7 @@ export default function OrganizerDashboard() {
           {/* Analytics Tab */}
           <TabsContent value="analytics">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <Card className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray">
+              <Card className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray dark:bg-card">
                 <h3 className="font-heading font-semibold text-xl text-text-dark mb-6">Participation Trends</h3>
                 <div className="h-64 flex items-center justify-center bg-soft-gray/30 rounded-xl">
                   <div className="text-center">
@@ -469,7 +469,7 @@ export default function OrganizerDashboard() {
                 </div>
               </Card>
 
-              <Card className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray">
+              <Card className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray dark:bg-card">
                 <h3 className="font-heading font-semibold text-xl text-text-dark mb-6">Event Performance</h3>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center p-3 bg-soft-gray/30 rounded-lg">
@@ -491,7 +491,7 @@ export default function OrganizerDashboard() {
 
           {/* Settings Tab */}
           <TabsContent value="settings">
-            <Card className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray">
+            <Card className="bg-white rounded-2xl p-6 shadow-soft border border-soft-gray dark:bg-card">
               <h3 className="font-heading font-semibold text-xl text-text-dark mb-6">Organizer Settings</h3>
               
               <div className="space-y-6">
@@ -499,11 +499,11 @@ export default function OrganizerDashboard() {
                   <div>
                     <h4 className="font-medium text-text-dark mb-3">Profile Settings</h4>
                     <div className="space-y-3">
-                      <Button variant="outline" className="w-full justify-start border-soft-gray hover:bg-soft-gray/50" data-testid="button-edit-profile">
+                      <Button variant="outline" className="w-full justify-start border-soft-gray hover:bg-soft-gray-dark" data-testid="button-edit-profile">
                         <Edit className="w-4 h-4 mr-2" />
                         Edit Profile
                       </Button>
-                      <Button variant="outline" className="w-full justify-start border-soft-gray hover:bg-soft-gray/50" data-testid="button-notification-settings">
+                      <Button variant="outline" className="w-full justify-start border-soft-gray hover:bg-soft-gray-dark" data-testid="button-notification-settings">
                         <Settings className="w-4 h-4 mr-2" />
                         Notification Settings
                       </Button>
@@ -513,11 +513,11 @@ export default function OrganizerDashboard() {
                   <div>
                     <h4 className="font-medium text-text-dark mb-3">Event Management</h4>
                     <div className="space-y-3">
-                      <Button variant="outline" className="w-full justify-start border-soft-gray hover:bg-soft-gray/50" data-testid="button-default-settings">
+                      <Button variant="outline" className="w-full justify-start border-soft-gray hover:bg-soft-gray-dark" data-testid="button-default-settings">
                         <Calendar className="w-4 h-4 mr-2" />
                         Default Event Settings
                       </Button>
-                      <Button variant="outline" className="w-full justify-start border-soft-gray hover:bg-soft-gray/50" data-testid="button-template-management">
+                      <Button variant="outline" className="w-full justify-start border-soft-gray hover:bg-soft-gray-dark" data-testid="button-template-management">
                         <Trophy className="w-4 h-4 mr-2" />
                         Template Management
                       </Button>
@@ -528,15 +528,15 @@ export default function OrganizerDashboard() {
                 <div className="pt-6 border-t border-soft-gray">
                   <h4 className="font-medium text-text-dark mb-3">Data & Privacy</h4>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    <Button variant="outline" className="border-sky text-sky hover:bg-sky/10" data-testid="button-export-all">
+                    <Button variant="outline" className="border-sky text-sky hover:bg-sky-dark" data-testid="button-export-all">
                       <Download className="w-4 h-4 mr-2" />
                       Export All Data
                     </Button>
-                    <Button variant="outline" className="border-mint text-mint hover:bg-mint/10" data-testid="button-privacy-settings">
+                    <Button variant="outline" className="border-mint text-mint hover:bg-mint-dark" data-testid="button-privacy-settings">
                       <Shield className="w-4 h-4 mr-2" />
                       Privacy Settings
                     </Button>
-                    <Button variant="outline" className="border-coral text-coral hover:bg-coral/10" data-testid="button-account-settings">
+                    <Button variant="outline" className="border-coral text-coral hover:bg-coral-dark" data-testid="button-account-settings">
                       <Users className="w-4 h-4 mr-2" />
                       Account Settings
                     </Button>
