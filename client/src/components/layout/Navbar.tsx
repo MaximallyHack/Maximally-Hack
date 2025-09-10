@@ -72,7 +72,7 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-18 bg-white dark:bg-[#0f1628]">
             {/* Enhanced Logo */}
-            <Link to="/" className="flex items-center space-x-3 hover-scale group transition-all duration-300" data-testid="logo-link">
+            <Link to="/" className="flex items-center space-x-3 group transition-all duration-300" data-testid="logo-link">
               <div className="relative">
                 <div className="w-10 h-10 bg-gradient-to-br from-coral to-coral/80 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105 overflow-hidden">
                   <Rocket className={rocketClass} />
