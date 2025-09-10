@@ -32,6 +32,8 @@ import Dashboard from "@/pages/Dashboard";
 import Organize from "@/pages/Organize";
 import NotFound from "@/pages/not-found";
 import CreateEventPage from "@/pages/CreateEventPage";
+import SearchUsers from "@/pages/SearchUsers";
+import Connections from "@/pages/Connections";
 
 // Team Components
 import TeamsHome from "@/components/teams/TeamsHome";
@@ -163,6 +165,8 @@ function AppRouter() {
             <Route path="/organize" component={Organize} />
             <Route path="/create-event" component={CreateEventPage} />
             <Route path="/profile/:handle" component={Profile} />
+            <Route path="/search" component={SearchUsers} />
+            <Route path="/connections" component={Connections} />
             <Route path="/leaders" component={Leaderboards} />
             <Route path="/sponsors" component={Sponsors} />
             <Route path="/help" component={Help} />

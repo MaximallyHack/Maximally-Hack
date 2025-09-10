@@ -23,6 +23,8 @@ import {
   Users,
   Sparkles,
   UserPlus,
+  SearchCheck,
+  UsersRound,
 } from "lucide-react";
 import { useAuth } from "@/contexts/SupabaseAuthContext";
 
@@ -41,6 +43,11 @@ export default function Navbar() {
     { href: "/teams", label: "Teams", icon: Users, testId: "nav-teams" },
     { href: "/organize", label: "Organize with Us", icon: UserPlus, testId: "nav-organize" },
   ];
+
+  const userNavItems = user ? [
+    { href: "/search", label: "Discover People", icon: SearchCheck, testId: "nav-search" },
+    { href: "/connections", label: "My Network", icon: UsersRound, testId: "nav-connections" },
+  ] : [];
 
   const isActive = (href: string) => {
     if (href === "/" && location === "/") return true;
@@ -138,6 +145,34 @@ export default function Navbar() {
                   </Link>
                 );
               })}
+              
+              {/* User-specific navigation items */}
+              {userNavItems.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <Link key={item.href} to={item.href} data-testid={item.testId}>
+                    <div
+                      className={`group flex items-center space-x-2 px-4 py-2 rounded-xl transition-all duration-300 hover:bg-mint/10 hover:shadow-sm ${
+                        isActive(item.href)
+                          ? "bg-mint/15 text-mint font-medium shadow-sm"
+                          : "text-foreground hover:text-mint"
+                      }`}
+                    >
+                      <Icon
+                        className={`w-4 h-4 transition-all duration-300 ${
+                          isActive(item.href)
+                            ? "text-mint"
+                            : "text-muted-foreground group-hover:text-mint"
+                        }`}
+                      />
+                      <span className="font-medium text-sm">{item.label}</span>
+                      {isActive(item.href) && (
+                        <div className="w-1.5 h-1.5 bg-mint rounded-full"></div>
+                      )}
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
 
             {/* Desktop Actions */}
@@ -196,6 +231,24 @@ export default function Navbar() {
                       >
                         <User className="mr-3 h-4 w-4 text-coral" />
                         <span className="font-medium">My Profile</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link
+                        to="/search"
+                        className="flex items-center p-3 rounded-lg hover:bg-mint/5"
+                      >
+                        <SearchCheck className="mr-3 h-4 w-4 text-mint" />
+                        <span className="font-medium">Discover People</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link
+                        to="/connections"
+                        className="flex items-center p-3 rounded-lg hover:bg-mint/5"
+                      >
+                        <UsersRound className="mr-3 h-4 w-4 text-mint" />
+                        <span className="font-medium">My Network</span>
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
@@ -300,6 +353,29 @@ export default function Navbar() {
                               className={`flex items-center space-x-3 p-3 rounded-xl transition-all duration-300 hover:bg-coral/10 ${
                                 isActive(item.href)
                                   ? "bg-coral/15 text-coral"
+                                  : "text-foreground"
+                              }`}
+                            >
+                              <Icon className="w-5 h-5" />
+                              <span className="font-medium">{item.label}</span>
+                            </div>
+                          </Link>
+                        );
+                      })}
+                      
+                      {/* User-specific mobile nav items */}
+                      {userNavItems.map((item) => {
+                        const Icon = item.icon;
+                        return (
+                          <Link
+                            key={item.href}
+                            to={item.href}
+                            onClick={() => setIsOpen(false)}
+                          >
+                            <div
+                              className={`flex items-center space-x-3 p-3 rounded-xl transition-all duration-300 hover:bg-mint/10 ${
+                                isActive(item.href)
+                                  ? "bg-mint/15 text-mint"
                                   : "text-foreground"
                               }`}
                             >

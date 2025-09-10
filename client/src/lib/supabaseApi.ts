@@ -1917,6 +1917,489 @@ export const supabaseApi = {
       .eq('recipient_id', user.id);
 
     if (error) throw error;
+  },
+
+  // Enhanced Profile APIs
+  getUserProjects: async (userId: string): Promise<any[]> => {
+    const { data, error } = await supabase
+      .from('user_projects')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    return data || [];
+  },
+
+  createUserProject: async (projectData: any): Promise<any> => {
+    const { data, error } = await supabase
+      .from('user_projects')
+      .insert(projectData)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  },
+
+  updateUserProject: async (projectId: string, projectData: any): Promise<any> => {
+    const { data, error } = await supabase
+      .from('user_projects')
+      .update(projectData)
+      .eq('id', projectId)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  },
+
+  deleteUserProject: async (projectId: string): Promise<void> => {
+    const { error } = await supabase
+      .from('user_projects')
+      .delete()
+      .eq('id', projectId);
+
+    if (error) throw error;
+  },
+
+  getUserCertificates: async (userId: string): Promise<any[]> => {
+    const { data, error } = await supabase
+      .from('user_certificates')
+      .select('*')
+      .eq('user_id', userId)
+      .order('issue_date', { ascending: false });
+
+    if (error) throw error;
+    return data || [];
+  },
+
+  createUserCertificate: async (certData: any): Promise<any> => {
+    const { data, error } = await supabase
+      .from('user_certificates')
+      .insert(certData)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  },
+
+  updateUserCertificate: async (certId: string, certData: any): Promise<any> => {
+    const { data, error } = await supabase
+      .from('user_certificates')
+      .update(certData)
+      .eq('id', certId)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  },
+
+  deleteUserCertificate: async (certId: string): Promise<void> => {
+    const { error } = await supabase
+      .from('user_certificates')
+      .delete()
+      .eq('id', certId);
+
+    if (error) throw error;
+  },
+
+  getUserHackathonHistory: async (userId: string): Promise<any[]> => {
+    const { data, error } = await supabase
+      .from('user_hackathon_history')
+      .select('*')
+      .eq('user_id', userId)
+      .order('started_at', { ascending: false });
+
+    if (error) throw error;
+    return data || [];
+  },
+
+  createHackathonHistory: async (historyData: any): Promise<any> => {
+    const { data, error } = await supabase
+      .from('user_hackathon_history')
+      .insert(historyData)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  },
+
+  // User Search APIs
+  searchUsers: async (query: string, filters: any = {}): Promise<any[]> => {
+    let queryBuilder = supabase
+      .from('profiles')
+      .select(`
+        id,
+        username,
+        full_name,
+        avatar_url,
+        headline,
+        location,
+        skills,
+        bio,
+        github,
+        linkedin,
+        socials
+      `);
+
+    // Text search across multiple fields
+    if (query) {
+      queryBuilder = queryBuilder.or(
+        `full_name.ilike.%${query}%,username.ilike.%${query}%,headline.ilike.%${query}%,bio.ilike.%${query}%`
+      );
+    }
+
+    // Apply filters
+    if (filters.location) {
+      queryBuilder = queryBuilder.ilike('location', `%${filters.location}%`);
+    }
+    
+    if (filters.skills) {
+      queryBuilder = queryBuilder.contains('skills', [filters.skills]);
+    }
+
+    // Apply sorting
+    switch (filters.sortBy) {
+      case 'alphabetical':
+        queryBuilder = queryBuilder.order('full_name', { ascending: true });
+        break;
+      case 'recent':
+        queryBuilder = queryBuilder.order('created_at', { ascending: false });
+        break;
+      default:
+        queryBuilder = queryBuilder.order('full_name', { ascending: true });
+    }
+
+    const { data, error } = await queryBuilder.limit(50);
+
+    if (error) throw error;
+
+    // Get connection status for each user if authenticated
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user || !data) return data || [];
+
+    // Get connection statuses
+    const userIds = data.map(profile => profile.id);
+    const [connectionsData, requestsData] = await Promise.all([
+      supabase
+        .from('user_connections')
+        .select('user_id_a, user_id_b')
+        .or(`user_id_a.eq.${user.id},user_id_b.eq.${user.id}`)
+        .in('user_id_a', [...userIds, user.id])
+        .in('user_id_b', [...userIds, user.id]),
+      
+      supabase
+        .from('user_connection_requests')
+        .select('requester_id, recipient_id, status')
+        .or(`requester_id.eq.${user.id},recipient_id.eq.${user.id}`)
+        .in('requester_id', [...userIds, user.id])
+        .in('recipient_id', [...userIds, user.id])
+        .eq('status', 'pending')
+    ]);
+
+    // Process connection statuses
+    const connections = new Set();
+    const pendingRequests = new Map();
+    const sentRequests = new Set();
+
+    connectionsData.data?.forEach(conn => {
+      const otherId = conn.user_id_a === user.id ? conn.user_id_b : conn.user_id_a;
+      connections.add(otherId);
+    });
+
+    requestsData.data?.forEach(req => {
+      if (req.requester_id === user.id) {
+        sentRequests.add(req.recipient_id);
+      } else {
+        pendingRequests.set(req.requester_id, true);
+      }
+    });
+
+    // Enhance data with connection status
+    return data.map(profile => ({
+      ...profile,
+      connection_status: {
+        isConnected: connections.has(profile.id),
+        hasPendingRequest: pendingRequests.has(profile.id),
+        isRequestSent: sentRequests.has(profile.id)
+      }
+    }));
+  },
+
+  getSuggestedUsers: async (): Promise<any[]> => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('User not authenticated');
+
+    // Get user's profile to find similar interests/skills
+    const { data: currentUser } = await supabase
+      .from('profiles')
+      .select('skills, interests, location')
+      .eq('id', user.id)
+      .single();
+
+    if (!currentUser) return [];
+
+    // Get existing connections
+    const { data: connections } = await supabase
+      .from('user_connections')
+      .select('user_id_a, user_id_b')
+      .or(`user_id_a.eq.${user.id},user_id_b.eq.${user.id}`);
+
+    const connectedUserIds = new Set(
+      connections?.flatMap(conn => [conn.user_id_a, conn.user_id_b]) || []
+    );
+    connectedUserIds.add(user.id); // Exclude self
+
+    // Find users with similar skills or location
+    let queryBuilder = supabase
+      .from('profiles')
+      .select(`
+        id,
+        username,
+        full_name,
+        avatar_url,
+        headline,
+        location,
+        skills,
+        bio,
+        github,
+        linkedin,
+        socials
+      `)
+      .not('id', 'in', `(${Array.from(connectedUserIds).join(',')})`)
+      .limit(20);
+
+    // Add location or skill-based suggestions
+    if (currentUser.location || (currentUser.skills && currentUser.skills.length > 0)) {
+      const conditions = [];
+      if (currentUser.location) {
+        conditions.push(`location.ilike.%${currentUser.location}%`);
+      }
+      if (currentUser.skills && currentUser.skills.length > 0) {
+        conditions.push(`skills.cs.{${currentUser.skills.join(',')}}`);
+      }
+      if (conditions.length > 0) {
+        queryBuilder = queryBuilder.or(conditions.join(','));
+      }
+    }
+
+    const { data, error } = await queryBuilder;
+    if (error) throw error;
+
+    return data || [];
+  },
+
+  // Connection Management APIs
+  sendConnectionRequest: async (recipientId: string, message?: string): Promise<void> => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('User not authenticated');
+
+    const { error } = await supabase
+      .from('user_connection_requests')
+      .insert({
+        requester_id: user.id,
+        recipient_id: recipientId,
+        message: message || ''
+      });
+
+    if (error) throw error;
+  },
+
+  acceptConnectionRequest: async (requestId: string): Promise<void> => {
+    const { error } = await supabase.rpc('accept_connection_request', {
+      p_request_id: requestId
+    });
+
+    if (error) throw error;
+  },
+
+  declineConnectionRequest: async (requestId: string): Promise<void> => {
+    const { error } = await supabase
+      .from('user_connection_requests')
+      .update({ status: 'declined', responded_at: new Date().toISOString() })
+      .eq('id', requestId);
+
+    if (error) throw error;
+  },
+
+  cancelConnectionRequest: async (requestId: string): Promise<void> => {
+    const { error } = await supabase
+      .from('user_connection_requests')
+      .update({ status: 'cancelled' })
+      .eq('id', requestId);
+
+    if (error) throw error;
+  },
+
+  removeConnection: async (userId: string): Promise<void> => {
+    const { error } = await supabase.rpc('remove_connection_with', {
+      p_other_user: userId
+    });
+
+    if (error) throw error;
+  },
+
+  getUserConnections: async (): Promise<any[]> => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('User not authenticated');
+
+    const { data, error } = await supabase
+      .from('user_connections')
+      .select(`
+        id,
+        user_id_a,
+        user_id_b,
+        connected_at
+      `)
+      .or(`user_id_a.eq.${user.id},user_id_b.eq.${user.id}`);
+
+    if (error) throw error;
+
+    // Get user profiles for each connection
+    const connections = data || [];
+    const userIds = connections.flatMap(conn => [conn.user_id_a, conn.user_id_b]).filter(id => id !== user.id);
+    
+    if (userIds.length === 0) return [];
+
+    const { data: profiles, error: profilesError } = await supabase
+      .from('profiles')
+      .select(`
+        id,
+        username,
+        full_name,
+        avatar_url,
+        headline,
+        location,
+        skills,
+        bio
+      `)
+      .in('id', userIds);
+
+    if (profilesError) throw profilesError;
+
+    // Map connections with user profiles
+    return connections.map(connection => {
+      const otherUserId = connection.user_id_a === user.id ? connection.user_id_b : connection.user_id_a;
+      const userProfile = profiles?.find(p => p.id === otherUserId);
+      
+      return {
+        id: connection.id,
+        user_id_a: connection.user_id_a,
+        user_id_b: connection.user_id_b,
+        connected_at: connection.connected_at,
+        user: userProfile
+      };
+    });
+  },
+
+  getPendingConnectionRequests: async (): Promise<any[]> => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('User not authenticated');
+
+    const { data, error } = await supabase
+      .from('user_connection_requests')
+      .select(`
+        *,
+        requester:profiles!requester_id(
+          id,
+          username,
+          full_name,
+          avatar_url,
+          headline,
+          location,
+          skills,
+          bio
+        )
+      `)
+      .eq('recipient_id', user.id)
+      .eq('status', 'pending')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    return data || [];
+  },
+
+  getSentConnectionRequests: async (): Promise<any[]> => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('User not authenticated');
+
+    const { data, error } = await supabase
+      .from('user_connection_requests')
+      .select(`
+        *,
+        recipient:profiles!recipient_id(
+          id,
+          username,
+          full_name,
+          avatar_url,
+          headline,
+          location,
+          skills,
+          bio
+        )
+      `)
+      .eq('requester_id', user.id)
+      .eq('status', 'pending')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    return data || [];
+  },
+
+  getConnectionStatus: async (userId: string): Promise<any> => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('User not authenticated');
+
+    // Check if already connected
+    const { data: connection } = await supabase
+      .from('user_connections')
+      .select('id')
+      .or(`and(user_id_a.eq.${user.id},user_id_b.eq.${userId}),and(user_id_a.eq.${userId},user_id_b.eq.${user.id})`)
+      .single();
+
+    if (connection) {
+      // Get connection count
+      const { count } = await supabase
+        .from('user_connections')
+        .select('*', { count: 'exact' })
+        .or(`user_id_a.eq.${userId},user_id_b.eq.${userId}`);
+
+      return {
+        isConnected: true,
+        hasPendingRequest: false,
+        isRequestSent: false,
+        connectionCount: count || 0,
+        mutualConnections: 0 // TODO: Calculate mutual connections
+      };
+    }
+
+    // Check for pending requests
+    const { data: requests } = await supabase
+      .from('user_connection_requests')
+      .select('requester_id, recipient_id')
+      .or(`and(requester_id.eq.${user.id},recipient_id.eq.${userId}),and(requester_id.eq.${userId},recipient_id.eq.${user.id})`)
+      .eq('status', 'pending');
+
+    const hasPendingRequest = requests?.some(r => r.requester_id === userId) || false;
+    const isRequestSent = requests?.some(r => r.requester_id === user.id) || false;
+
+    // Get connection count
+    const { count } = await supabase
+      .from('user_connections')
+      .select('*', { count: 'exact' })
+      .or(`user_id_a.eq.${userId},user_id_b.eq.${userId}`);
+
+    return {
+      isConnected: false,
+      hasPendingRequest,
+      isRequestSent,
+      connectionCount: count || 0,
+      mutualConnections: 0 // TODO: Calculate mutual connections
+    };
   }
 };
 
