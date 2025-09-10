@@ -1,6 +1,8 @@
 # Overview
 
-Maximally Hack is a frontend-only hackathon platform designed with a playful minimal aesthetic using pastel crayon colors. The application provides a complete hackathon ecosystem including event discovery, team formation, project submission, judging interfaces, and community features. Built as a React TypeScript application, it simulates a full-featured platform like Devpost but with a friendlier, more approachable design.
+Maximally Hack is a full-stack hackathon platform designed with a playful minimal aesthetic using pastel crayon colors. The application provides a complete hackathon ecosystem including event discovery, team formation, project submission, judging interfaces, and community features. Built as a React TypeScript frontend with an Express backend, it simulates a full-featured platform like Devpost but with a friendlier, more approachable design.
+
+**Project Status**: Successfully imported and configured for Replit environment on September 10, 2025.
 
 # User Preferences
 
