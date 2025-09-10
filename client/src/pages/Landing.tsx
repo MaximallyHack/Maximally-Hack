@@ -115,7 +115,7 @@ export default function Landing() {
 
           <div className="text-center mt-12">
             <Link to="/explore">
-              <Button size="lg" className="bg-[#2563eb] dark:bg-sky px-8 py-3 rounded-full font-medium hover-scale hover:bg-[#1d4ed8] dark:hover:bg-sky/80 transition-colors text-[#2e3678]" data-testid="button-explore-all">
+              <Button size="lg" className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 h-11 dark:bg-sky px-8 py-3 rounded-full font-medium hover-scale hover:bg-[#1d4ed8] dark:hover:bg-sky/80 transition-colors text-[#2e3678] bg-[#40fffe]" data-testid="button-explore-all">
                 <Search className="w-5 h-5 mr-2" />
                 Explore All Events
               </Button>
