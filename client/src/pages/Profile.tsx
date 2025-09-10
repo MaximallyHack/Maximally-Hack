@@ -38,34 +38,53 @@ export default function Profile() {
   // ✅ Fetch profile by username (or id if handle is uuid)
   useEffect(() => {
     async function fetchProfile() {
+      if (!handle) {
+        console.error('No handle provided for profile');
+        setLoading(false);
+        setProfile(null);
+        return;
+      }
+
       setLoading(true);
+      console.log('Fetching profile for handle:', handle);
 
-      const isUuid = /^[0-9a-fA-F-]{36}$/.test(handle);
-      console.log("isuuid", isUuid);
+      const isUuid = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(handle);
+      console.log('Handle is UUID:', isUuid, handle);
 
-      const { data, error } = await supabase
-        .from("profiles")
-        .select(
-          "id, username, full_name, avatar_url, email, phone, location, github, linkedin, skills, interests, bio"
-        )
-        .or(isUuid ? `id.eq.${handle}` : `username.eq.${handle}`)
-        .maybeSingle();
-      console.log("fetched profile data:", data, "error:", error);
+      try {
+        const { data, error } = await supabase
+          .from("profiles")
+          .select(
+            "id, username, full_name, avatar_url, email, phone, location, github, linkedin, skills, interests, bio"
+          )
+          .or(isUuid ? `id.eq.${handle}` : `username.eq.${handle}`)
+          .maybeSingle();
+        
+        console.log('Profile fetch result:', { data, error });
 
-      if (error) {
-        console.error("Supabase profile fetch error:", error);
+        if (error) {
+          console.error("Supabase profile fetch error:", error);
+          setProfile(null);
+          setForm(null);
+        } else if (data) {
+          setProfile(data);
+          setForm(data);
+          console.log('Profile loaded successfully:', data);
+        } else {
+          console.log('No profile found for handle:', handle);
+          setProfile(null);
+          setForm(null);
+        }
+      } catch (err) {
+        console.error('Error in profile fetch:', err);
         setProfile(null);
         setForm(null);
-      } else if (data) {
-        setProfile(data);
-        setForm(data);
-        console.log(data)
       }
-      
 
       setLoading(false);
     }
-    if (handle) fetchProfile();
+    
+    fetchProfile();
   }, [handle]);
 
   // ✅ Save profile changes

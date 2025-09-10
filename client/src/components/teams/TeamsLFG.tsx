@@ -126,10 +126,12 @@ export default function TeamsLFG() {
                     </>
                   )}
                 </div>
-                <Button size="sm" className="bg-coral hover:bg-coral/90" data-testid={`button-contact-${post.id}`}>
-                  <MessageCircle className="w-4 h-4 mr-2" />
-                  Contact
-                </Button>
+                <Link to={`/profile/${postUser?.id}`}>
+                  <Button size="sm" className="bg-coral hover:bg-coral/90" data-testid={`button-contact-${post.id}`}>
+                    <MessageCircle className="w-4 h-4 mr-2" />
+                    Contact
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>

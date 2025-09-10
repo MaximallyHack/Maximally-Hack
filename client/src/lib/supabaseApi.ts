@@ -348,52 +348,7 @@ export interface Scorecard {
 }
 
 
-export interface Submission {
-  id: string;
-  title: string;
-  tagline?: string;
-  description: string;
-  longDescription?: string;
-  eventId: string;
-  teamId?: string;
-  submittedBy: string;
-  track?: string;
-  tags: string[];
-  techStack: string[];
-  demoUrl?: string;
-  githubUrl?: string;
-  slidesUrl?: string;
-  videoUrl?: string;
-  images: string[];
-  status: 'draft' | 'submitted' | 'judging' | 'judged';
-  features: string[];
-  averageScore?: number;
-  awards?: string[];
-  submittedAt?: string;
-  scores?: any;
-}
-
-export interface Judge {
-  id: string;
-  name: string;
-  title: string;
-  company: string;
-  avatar?: string;
-  bio?: string;
-  expertise: string[];
-  location?: string;
-  social: {
-    linkedin?: string;
-    twitter?: string;
-    website?: string;
-  };
-  badges: string[];
-  eventsJudged: number;
-  rating: number;
-  quote?: string;
-  availability: 'Available' | 'Limited' | 'Unavailable';
-  timezone?: string;
-}
+// Removed duplicate interfaces - using the ones defined above
 
 // Supabase API functions
 export const supabaseApi = {
@@ -555,7 +510,14 @@ export const supabaseApi = {
     // Transform the data to match expected format
     return (data || []).map(team => ({
       ...team,
-      members: team.members?.map((m: any) => m.user) || []
+      members: team.members?.map((m: any) => mapDBProfileToUser(m.user)) || [],
+      // Map database fields to component expectations
+      requiredSkills: team.skills || [],
+      lookingForRoles: team.looking_for || [],
+      maxSize: team.max_size,
+      leaderId: team.leader_id,
+      lastActivity: team.updated_at || team.created_at,
+      tags: team.track ? [team.track] : []
     }));
   },
 
@@ -580,7 +542,14 @@ export const supabaseApi = {
 
     return {
       ...data,
-      members: data.members?.map((m: any) => m.user) || []
+      members: data.members?.map((m: any) => mapDBProfileToUser(m.user)) || [],
+      // Map database fields to component expectations
+      requiredSkills: data.skills || [],
+      lookingForRoles: data.looking_for || [],
+      maxSize: data.max_size,
+      leaderId: data.leader_id,
+      lastActivity: data.updated_at || data.created_at,
+      tags: data.track ? [data.track] : []
     };
   },
 
@@ -588,13 +557,23 @@ export const supabaseApi = {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) throw new Error('User not authenticated');
 
+    // Map component fields to database fields
+    const dbTeamData = {
+      name: teamData.name,
+      description: teamData.description,
+      event_id: teamData.event_id,
+      max_size: teamData.maxSize || teamData.max_size || 4,
+      skills: teamData.requiredSkills || teamData.skills || [],
+      looking_for: teamData.lookingForRoles || teamData.looking_for || [],
+      track: teamData.track,
+      status: teamData.status || 'recruiting',
+      leader_id: user.id,
+      join_code: Math.random().toString(36).substring(2, 8).toUpperCase()
+    };
+
     const { data, error } = await supabase
       .from('teams')
-      .insert({
-        ...teamData,
-        leader_id: user.id,
-        join_code: Math.random().toString(36).substring(2, 8).toUpperCase()
-      })
+      .insert(dbTeamData)
       .select()
       .single();
 
@@ -609,7 +588,17 @@ export const supabaseApi = {
         role: 'leader'
       });
 
-    return data;
+    // Return mapped data
+    return {
+      ...data,
+      requiredSkills: data.skills || [],
+      lookingForRoles: data.looking_for || [],
+      maxSize: data.max_size,
+      leaderId: data.leader_id,
+      lastActivity: data.updated_at || data.created_at,
+      tags: data.track ? [data.track] : [],
+      members: []
+    };
   },
 
   joinTeam: async (teamId: string): Promise<void> => {
@@ -638,6 +627,472 @@ export const supabaseApi = {
       .eq('user_id', user.id);
 
     if (error) throw error;
+  },
+
+  // Team Applications
+  applyToTeam: async (teamId: string, message?: string, skills?: string[]): Promise<void> => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('User not authenticated');
+
+    const { error } = await supabase
+      .from('team_applications')
+      .insert({
+        team_id: teamId,
+        applicant_id: user.id,
+        message: message || '',
+        skills: skills || []
+      });
+
+    if (error) throw error;
+  },
+
+  getTeamApplications: async (teamId: string): Promise<any[]> => {
+    const { data, error } = await supabase
+      .from('team_applications')
+      .select(`
+        *,
+        applicant:profiles!applicant_id(*),
+        team:teams(*)
+      `)
+      .eq('team_id', teamId)
+      .order('applied_at', { ascending: false });
+
+    if (error) throw error;
+    return data || [];
+  },
+
+  getUserApplications: async (): Promise<any[]> => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('User not authenticated');
+
+    const { data, error } = await supabase
+      .from('team_applications')
+      .select(`
+        *,
+        team:teams(*)
+      `)
+      .eq('applicant_id', user.id)
+      .order('applied_at', { ascending: false });
+
+    if (error) throw error;
+    return data || [];
+  },
+
+  updateApplicationStatus: async (applicationId: string, status: 'accepted' | 'rejected'): Promise<void> => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('User not authenticated');
+
+    const { error } = await supabase
+      .from('team_applications')
+      .update({
+        status,
+        reviewed_at: new Date().toISOString(),
+        reviewed_by: user.id
+      })
+      .eq('id', applicationId);
+
+    if (error) throw error;
+
+    // If accepted, add user to team
+    if (status === 'accepted') {
+      const { data: application } = await supabase
+        .from('team_applications')
+        .select('team_id, applicant_id')
+        .eq('id', applicationId)
+        .single();
+
+      if (application) {
+        await supabase
+          .from('team_members')
+          .insert({
+            team_id: application.team_id,
+            user_id: application.applicant_id,
+            role: 'member'
+          });
+      }
+    }
+  },
+
+  // Team Invitations
+  inviteToTeam: async (teamId: string, inviteeId: string, message?: string): Promise<void> => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('User not authenticated');
+
+    const { error } = await supabase
+      .from('team_invitations')
+      .insert({
+        team_id: teamId,
+        inviter_id: user.id,
+        invitee_id: inviteeId,
+        message: message || ''
+      });
+
+    if (error) throw error;
+  },
+
+  getTeamInvitations: async (teamId: string): Promise<any[]> => {
+    const { data, error } = await supabase
+      .from('team_invitations')
+      .select(`
+        *,
+        inviter:profiles!inviter_id(*),
+        invitee:profiles!invitee_id(*),
+        team:teams(*)
+      `)
+      .eq('team_id', teamId)
+      .order('sent_at', { ascending: false });
+
+    if (error) throw error;
+    return data || [];
+  },
+
+  getUserInvitations: async (): Promise<any[]> => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('User not authenticated');
+
+    const { data, error } = await supabase
+      .from('team_invitations')
+      .select(`
+        *,
+        inviter:profiles!inviter_id(*),
+        team:teams(*)
+      `)
+      .eq('invitee_id', user.id)
+      .eq('status', 'pending')
+      .order('sent_at', { ascending: false });
+
+    if (error) throw error;
+    return data || [];
+  },
+
+  respondToInvitation: async (invitationId: string, status: 'accepted' | 'rejected'): Promise<void> => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('User not authenticated');
+
+    const { error } = await supabase
+      .from('team_invitations')
+      .update({
+        status,
+        responded_at: new Date().toISOString()
+      })
+      .eq('id', invitationId)
+      .eq('invitee_id', user.id);
+
+    if (error) throw error;
+
+    // If accepted, add user to team
+    if (status === 'accepted') {
+      const { data: invitation } = await supabase
+        .from('team_invitations')
+        .select('team_id, invitee_id')
+        .eq('id', invitationId)
+        .single();
+
+      if (invitation) {
+        await supabase
+          .from('team_members')
+          .insert({
+            team_id: invitation.team_id,
+            user_id: invitation.invitee_id,
+            role: 'member'
+          });
+      }
+    }
+  },
+
+  // Team Activity
+  getTeamActivity: async (teamId: string): Promise<any[]> => {
+    // Fetch different types of team activity
+    const activities = [];
+
+    try {
+      // 1. Team member joins
+      const { data: memberJoins, error: memberError } = await supabase
+        .from('team_members')
+        .select(`
+          joined_at,
+          role,
+          user:profiles!user_id(
+            id,
+            username,
+            full_name,
+            avatar_url
+          )
+        `)
+        .eq('team_id', teamId)
+        .order('joined_at', { ascending: false });
+
+      if (!memberError && memberJoins) {
+        memberJoins.forEach(join => {
+          activities.push({
+            type: 'member_joined',
+            timestamp: join.joined_at,
+            user: {
+              id: join.user.id,
+              name: join.user.full_name || join.user.username,
+              username: join.user.username,
+              avatar: join.user.avatar_url
+            },
+            data: {
+              role: join.role
+            }
+          });
+        });
+      }
+
+      // 2. Team applications
+      const { data: applications, error: appError } = await supabase
+        .from('team_applications')
+        .select(`
+          applied_at,
+          reviewed_at,
+          status,
+          applicant:profiles!applicant_id(
+            id,
+            username,
+            full_name,
+            avatar_url
+          ),
+          reviewer:profiles!reviewed_by(
+            id,
+            username,
+            full_name,
+            avatar_url
+          )
+        `)
+        .eq('team_id', teamId)
+        .order('applied_at', { ascending: false });
+
+      if (!appError && applications) {
+        applications.forEach(app => {
+          // Application submitted
+          activities.push({
+            type: 'application_submitted',
+            timestamp: app.applied_at,
+            user: {
+              id: app.applicant.id,
+              name: app.applicant.full_name || app.applicant.username,
+              username: app.applicant.username,
+              avatar: app.applicant.avatar_url
+            },
+            data: {
+              status: app.status
+            }
+          });
+
+          // Application reviewed (if reviewed)
+          if (app.reviewed_at && app.reviewer) {
+            activities.push({
+              type: 'application_reviewed',
+              timestamp: app.reviewed_at,
+              user: {
+                id: app.reviewer.id,
+                name: app.reviewer.full_name || app.reviewer.username,
+                username: app.reviewer.username,
+                avatar: app.reviewer.avatar_url
+              },
+              data: {
+                status: app.status,
+                applicant: {
+                  name: app.applicant.full_name || app.applicant.username
+                }
+              }
+            });
+          }
+        });
+      }
+
+      // 3. Team invitations
+      const { data: invitations, error: invError } = await supabase
+        .from('team_invitations')
+        .select(`
+          sent_at,
+          responded_at,
+          status,
+          inviter:profiles!inviter_id(
+            id,
+            username,
+            full_name,
+            avatar_url
+          ),
+          invitee:profiles!invitee_id(
+            id,
+            username,
+            full_name,
+            avatar_url
+          )
+        `)
+        .eq('team_id', teamId)
+        .order('sent_at', { ascending: false });
+
+      if (!invError && invitations) {
+        invitations.forEach(inv => {
+          // Invitation sent
+          activities.push({
+            type: 'invitation_sent',
+            timestamp: inv.sent_at,
+            user: {
+              id: inv.inviter.id,
+              name: inv.inviter.full_name || inv.inviter.username,
+              username: inv.inviter.username,
+              avatar: inv.inviter.avatar_url
+            },
+            data: {
+              invitee: {
+                name: inv.invitee.full_name || inv.invitee.username
+              },
+              status: inv.status
+            }
+          });
+
+          // Invitation responded (if responded)
+          if (inv.responded_at) {
+            activities.push({
+              type: 'invitation_responded',
+              timestamp: inv.responded_at,
+              user: {
+                id: inv.invitee.id,
+                name: inv.invitee.full_name || inv.invitee.username,
+                username: inv.invitee.username,
+                avatar: inv.invitee.avatar_url
+              },
+              data: {
+                status: inv.status
+              }
+            });
+          }
+        });
+      }
+
+      // 4. Team creation (from team record)
+      const { data: team, error: teamError } = await supabase
+        .from('teams')
+        .select(`
+          created_at,
+          leader:profiles!leader_id(
+            id,
+            username,
+            full_name,
+            avatar_url
+          )
+        `)
+        .eq('id', teamId)
+        .single();
+
+      if (!teamError && team) {
+        activities.push({
+          type: 'team_created',
+          timestamp: team.created_at,
+          user: {
+            id: team.leader.id,
+            name: team.leader.full_name || team.leader.username,
+            username: team.leader.username,
+            avatar: team.leader.avatar_url
+          },
+          data: {}
+        });
+      }
+
+    } catch (error) {
+      console.error('Error fetching team activity:', error);
+    }
+
+    // Sort all activities by timestamp (most recent first)
+    return activities.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+  },
+
+  // Team Management APIs
+  updateTeam: async (teamId: string, teamData: Partial<Team>): Promise<Team> => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('User not authenticated');
+
+    // Map component fields to database fields
+    const updateData: any = {};
+    if (teamData.name) updateData.name = teamData.name;
+    if (teamData.description !== undefined) updateData.description = teamData.description;
+    if (teamData.max_size || teamData.maxSize) updateData.max_size = teamData.max_size || teamData.maxSize;
+    if (teamData.skills || teamData.requiredSkills) updateData.skills = teamData.skills || teamData.requiredSkills || [];
+    if (teamData.looking_for || teamData.lookingForRoles) updateData.looking_for = teamData.looking_for || teamData.lookingForRoles || [];
+    if (teamData.track !== undefined) updateData.track = teamData.track;
+    if (teamData.status) updateData.status = teamData.status;
+
+    const { data, error } = await supabase
+      .from('teams')
+      .update(updateData)
+      .eq('id', teamId)
+      .eq('leader_id', user.id) // Only team leader can update
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  },
+
+  deleteTeam: async (teamId: string): Promise<void> => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('User not authenticated');
+
+    const { error } = await supabase
+      .from('teams')
+      .delete()
+      .eq('id', teamId)
+      .eq('leader_id', user.id); // Only team leader can delete
+
+    if (error) throw error;
+  },
+
+  removeMemberFromTeam: async (teamId: string, userId: string): Promise<void> => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('User not authenticated');
+
+    // Check if the current user is the team leader
+    const { data: team, error: teamError } = await supabase
+      .from('teams')
+      .select('leader_id')
+      .eq('id', teamId)
+      .single();
+
+    if (teamError) throw teamError;
+    if (team.leader_id !== user.id) throw new Error('Only team leader can remove members');
+
+    const { error } = await supabase
+      .from('team_members')
+      .delete()
+      .eq('team_id', teamId)
+      .eq('user_id', userId);
+
+    if (error) throw error;
+  },
+
+  transferLeadership: async (teamId: string, newLeaderId: string): Promise<void> => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('User not authenticated');
+
+    // Update team leader
+    const { error: teamError } = await supabase
+      .from('teams')
+      .update({ leader_id: newLeaderId })
+      .eq('id', teamId)
+      .eq('leader_id', user.id); // Only current leader can transfer
+
+    if (teamError) throw teamError;
+
+    // Update member roles
+    const { error: oldLeaderError } = await supabase
+      .from('team_members')
+      .update({ role: 'member' })
+      .eq('team_id', teamId)
+      .eq('user_id', user.id);
+
+    if (oldLeaderError) throw oldLeaderError;
+
+    const { error: newLeaderError } = await supabase
+      .from('team_members')
+      .update({ role: 'leader' })
+      .eq('team_id', teamId)
+      .eq('user_id', newLeaderId);
+
+    if (newLeaderError) throw newLeaderError;
   },
 
   // Submissions
@@ -683,7 +1138,31 @@ export const supabaseApi = {
       .order('created_at', { ascending: false });
 
     if (error) throw error;
-    return data || [];
+    
+    // Map database fields to interface fields
+    return (data || []).map(dbSubmission => ({
+      id: dbSubmission.id,
+      title: dbSubmission.title,
+      tagline: dbSubmission.tagline,
+      description: dbSubmission.description,
+      longDescription: dbSubmission.long_description,
+      eventId: dbSubmission.event_id,
+      teamId: dbSubmission.team_id,
+      submittedBy: dbSubmission.submitted_by,
+      track: dbSubmission.track,
+      tags: dbSubmission.tags || [],
+      techStack: dbSubmission.tech_stack || [],
+      demoUrl: dbSubmission.demo_url,
+      githubUrl: dbSubmission.github_url,
+      slidesUrl: dbSubmission.slides_url,
+      videoUrl: dbSubmission.video_url,
+      images: dbSubmission.images || [],
+      status: dbSubmission.status,
+      features: dbSubmission.features || [],
+      averageScore: dbSubmission.average_score,
+      awards: dbSubmission.awards,
+      submittedAt: dbSubmission.submitted_at
+    }));
   },
 
   createSubmission: async (submissionData: Partial<Submission>): Promise<Submission> => {
@@ -1080,6 +1559,364 @@ export const supabaseApi = {
     }
 
     return data || [];
+  },
+
+  // Team Settings APIs
+  getTeamSettings: async (teamId: string): Promise<any> => {
+    console.log('Getting team settings for team:', teamId);
+    
+    const { data, error } = await supabase
+      .from('team_settings')
+      .select('*')
+      .eq('team_id', teamId)
+      .single();
+
+    if (error) {
+      console.log('Team settings query error:', error);
+      // If no settings exist, return default settings
+      if (error.code === 'PGRST116') {
+        console.log('No settings found, returning defaults for team:', teamId);
+        return {
+          teamId,
+          teamDescription: '',
+          teamVisibility: 'public',
+          allowJoinRequests: true,
+          autoAcceptApplications: false,
+          maxMembersOverride: null,
+          enableTeamMails: true,
+          mailNotifications: true,
+          allowExternalContact: true,
+          showMemberProfiles: true,
+          showMemberSkills: true,
+          showTeamActivity: true,
+          showJoinCode: false,
+          memberCanInvite: false,
+          memberCanViewApplications: false,
+          memberCanManageSettings: false,
+          teamTags: [],
+          customFields: {}
+        };
+      }
+      throw error;
+    }
+
+    console.log('Team settings data retrieved from DB:', data);
+    
+    // Map database fields to frontend format
+    const mappedData = {
+      id: data.id,
+      teamId: data.team_id,
+      teamDescription: data.team_description,
+      teamVisibility: data.team_visibility,
+      allowJoinRequests: data.allow_join_requests,
+      autoAcceptApplications: data.auto_accept_applications,
+      maxMembersOverride: data.max_members_override,
+      enableTeamMails: data.enable_team_mails,
+      mailNotifications: data.mail_notifications,
+      allowExternalContact: data.allow_external_contact,
+      showMemberProfiles: data.show_member_profiles,
+      showMemberSkills: data.show_member_skills,
+      showTeamActivity: data.show_team_activity,
+      showJoinCode: data.show_join_code,
+      memberCanInvite: data.member_can_invite,
+      memberCanViewApplications: data.member_can_view_applications,
+      memberCanManageSettings: data.member_can_manage_settings,
+      teamTags: data.team_tags || [],
+      customFields: data.custom_fields || {}
+    };
+    console.log('Mapped team settings data:', mappedData);
+    return mappedData;
+  },
+
+  updateTeamSettings: async (teamId: string, settingsData: any): Promise<any> => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('User not authenticated');
+
+    console.log('Updating team settings for team:', teamId);
+    console.log('Settings data:', settingsData);
+
+    // Map frontend format to database fields
+    const updateData = {
+      team_description: settingsData.teamDescription,
+      team_visibility: settingsData.teamVisibility,
+      allow_join_requests: settingsData.allowJoinRequests,
+      auto_accept_applications: settingsData.autoAcceptApplications,
+      max_members_override: settingsData.maxMembersOverride,
+      enable_team_mails: settingsData.enableTeamMails,
+      mail_notifications: settingsData.mailNotifications,
+      allow_external_contact: settingsData.allowExternalContact,
+      show_member_profiles: settingsData.showMemberProfiles,
+      show_member_skills: settingsData.showMemberSkills,
+      show_team_activity: settingsData.showTeamActivity,
+      show_join_code: settingsData.showJoinCode,
+      member_can_invite: settingsData.memberCanInvite,
+      member_can_view_applications: settingsData.memberCanViewApplications,
+      member_can_manage_settings: settingsData.memberCanManageSettings,
+      team_tags: settingsData.teamTags || [],
+      custom_fields: settingsData.customFields || {}
+    };
+
+    console.log('Mapped update data:', updateData);
+
+    // First check if settings exist
+    const { data: existingSettings } = await supabase
+      .from('team_settings')
+      .select('id')
+      .eq('team_id', teamId)
+      .single();
+
+    let data, error;
+    
+    if (existingSettings) {
+      // Update existing settings
+      const result = await supabase
+        .from('team_settings')
+        .update(updateData)
+        .eq('team_id', teamId)
+        .select()
+        .single();
+      data = result.data;
+      error = result.error;
+    } else {
+      // Insert new settings
+      const result = await supabase
+        .from('team_settings')
+        .insert({
+          team_id: teamId,
+          ...updateData
+        })
+        .select()
+        .single();
+      data = result.data;
+      error = result.error;
+    }
+
+    if (error) {
+      console.error('Team settings update error:', error);
+      throw error;
+    }
+    
+    console.log('Team settings updated successfully:', data);
+    return data;
+  },
+
+  // Team Mails APIs
+  getTeamMails: async (teamId: string): Promise<any[]> => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('User not authenticated');
+
+    // First, get the basic mail data
+    const { data: mailsData, error: mailsError } = await supabase
+      .from('team_mails')
+      .select(`
+        *,
+        sender:profiles!sender_id(
+          id,
+          username,
+          full_name,
+          avatar_url
+        )
+      `)
+      .eq('team_id', teamId)
+      .order('sent_at', { ascending: false });
+
+    if (mailsError) throw mailsError;
+
+    if (!mailsData || mailsData.length === 0) {
+      return [];
+    }
+
+    // Get user-specific mail recipient data
+    const mailIds = mailsData.map(mail => mail.id);
+    const { data: recipientData, error: recipientError } = await supabase
+      .from('team_mail_recipients')
+      .select('mail_id, is_read, read_at, is_starred, is_archived')
+      .in('mail_id', mailIds)
+      .eq('recipient_id', user.id);
+
+    if (recipientError) throw recipientError;
+
+    // Create a lookup map for recipient data
+    const recipientMap = new Map();
+    recipientData?.forEach(recipient => {
+      recipientMap.set(recipient.mail_id, recipient);
+    });
+
+    // Transform data for frontend
+    return mailsData.map(mail => {
+      const userRecipient = recipientMap.get(mail.id);
+      return {
+        id: mail.id,
+        teamId: mail.team_id,
+        senderId: mail.sender_id,
+        senderName: mail.sender?.full_name || mail.sender?.username || 'Unknown',
+        senderAvatar: mail.sender?.avatar_url,
+        recipientIds: mail.recipient_ids || [],
+        subject: mail.subject,
+        body: mail.body,
+        priority: mail.priority,
+        mailType: mail.mail_type,
+        attachments: mail.attachments || [],
+        isRead: userRecipient?.is_read || false,
+        isStarred: userRecipient?.is_starred || false,
+        isArchived: userRecipient?.is_archived || false,
+        important: mail.important || false,
+        sentAt: mail.sent_at,
+        readAt: userRecipient?.read_at
+      };
+    });
+  },
+
+  sendTeamMail: async (teamId: string, mailData: any): Promise<any> => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('User not authenticated');
+
+    console.log('Sending team mail:', { teamId, mailData });
+
+    // Insert the mail
+    const { data: mailRecord, error: mailError } = await supabase
+      .from('team_mails')
+      .insert({
+        team_id: teamId,
+        sender_id: user.id,
+        recipient_ids: mailData.recipientIds,
+        subject: mailData.subject,
+        body: mailData.body,
+        priority: mailData.priority,
+        mail_type: mailData.mailType,
+        attachments: mailData.attachments || [],
+        is_sent: true,
+        is_draft: false
+      })
+      .select()
+      .single();
+
+    if (mailError) {
+      console.error('Error inserting team mail:', mailError);
+      throw mailError;
+    }
+
+    console.log('Mail inserted successfully:', mailRecord);
+
+    // Create recipient records
+    if (mailData.recipientIds && mailData.recipientIds.length > 0) {
+      const recipientRecords = mailData.recipientIds.map((recipientId: string) => ({
+        mail_id: mailRecord.id,
+        recipient_id: recipientId,
+        is_read: false,
+        is_starred: false,
+        is_archived: false,
+        is_deleted: false
+      }));
+
+      const { error: recipientError } = await supabase
+        .from('team_mail_recipients')
+        .insert(recipientRecords);
+
+      if (recipientError) {
+        console.error('Error inserting recipient records:', recipientError);
+        // Don't throw here as the mail was successfully sent, just log the error
+      } else {
+        console.log('Recipient records created successfully');
+      }
+    }
+
+    return mailRecord;
+  },
+
+  getTeamMailDrafts: async (teamId: string): Promise<any[]> => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('User not authenticated');
+
+    const { data, error } = await supabase
+      .from('team_mail_drafts')
+      .select('*')
+      .eq('team_id', teamId)
+      .eq('author_id', user.id)
+      .order('updated_at', { ascending: false });
+
+    if (error) throw error;
+    return data || [];
+  },
+
+  saveDraft: async (teamId: string, draftData: any): Promise<any> => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('User not authenticated');
+
+    const { data, error } = await supabase
+      .from('team_mail_drafts')
+      .upsert({
+        id: draftData.id, // Include ID if updating existing draft
+        team_id: teamId,
+        author_id: user.id,
+        subject: draftData.subject,
+        body: draftData.body,
+        recipient_ids: draftData.recipientIds,
+        mail_type: draftData.mailType,
+        priority: draftData.priority,
+        attachments: draftData.attachments || []
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  },
+
+  markTeamMailsAsRead: async (mailIds: string[]): Promise<void> => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('User not authenticated');
+
+    // Update the team_mail_recipients table
+    const { error } = await supabase
+      .from('team_mail_recipients')
+      .update({
+        is_read: true,
+        read_at: new Date().toISOString()
+      })
+      .in('mail_id', mailIds)
+      .eq('recipient_id', user.id);
+
+    if (error) throw error;
+  },
+
+  starTeamMail: async (mailId: string, starred: boolean): Promise<void> => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('User not authenticated');
+
+    const { error } = await supabase
+      .from('team_mail_recipients')
+      .update({ is_starred: starred })
+      .eq('mail_id', mailId)
+      .eq('recipient_id', user.id);
+
+    if (error) throw error;
+  },
+
+  archiveTeamMail: async (mailId: string, archived: boolean): Promise<void> => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('User not authenticated');
+
+    const { error } = await supabase
+      .from('team_mail_recipients')
+      .update({ is_archived: archived })
+      .eq('mail_id', mailId)
+      .eq('recipient_id', user.id);
+
+    if (error) throw error;
+  },
+
+  deleteTeamMail: async (mailId: string): Promise<void> => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('User not authenticated');
+
+    const { error } = await supabase
+      .from('team_mail_recipients')
+      .update({ is_deleted: true })
+      .eq('mail_id', mailId)
+      .eq('recipient_id', user.id);
+
+    if (error) throw error;
   }
 };
 

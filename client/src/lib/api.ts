@@ -101,13 +101,21 @@ export interface User {
   expertise?: string[];
 }
 
+export interface TeamMember {
+  id: string;
+  name: string;
+  username: string;
+  role: string;
+  avatar?: string;
+}
+
 export interface Team {
   id: string;
   name: string;
   description: string;
-  eventId: string;
+  eventId: string | null;
   leaderId: string;
-  members: string[];
+  members: TeamMember[];
   maxSize: number;
   joinCode: string;
   skills: string[];
@@ -292,7 +300,13 @@ const mapDBTeamToTeam = (dbTeam: any): Team => ({
   description: dbTeam.description || '',
   eventId: dbTeam.event_id,
   leaderId: dbTeam.leader_id,
-  members: dbTeam.members?.map((m: any) => m.user_id || m.id) || [],
+  members: dbTeam.members?.map((m: any) => ({
+    id: m.user_id || m.user?.id || m.id,
+    name: m.user?.full_name || m.user?.username || 'Unknown',
+    username: m.user?.username || '',
+    role: m.role || 'member',
+    avatar: m.user?.avatar_url
+  })) || [],
   maxSize: dbTeam.max_size,
   joinCode: dbTeam.join_code,
   skills: dbTeam.skills || [],
@@ -535,13 +549,13 @@ export const api = {
       .insert({
         name: teamData.name,
         description: teamData.description,
-        event_id: teamData.eventId,
+        event_id: teamData.eventId || null,
         leader_id: user.id,
         max_size: teamData.maxSize || 4,
         join_code: Math.random().toString(36).substring(2, 8).toUpperCase(),
         skills: teamData.skills || [],
         looking_for: teamData.lookingFor || [],
-        track: teamData.track,
+        track: teamData.track || 'General',
         status: 'recruiting'
       })
       .select()
@@ -550,13 +564,18 @@ export const api = {
     if (error) throw error;
 
     // Add the creator as a team member
-    await supabase
+    const { error: memberError } = await supabase
       .from('team_members')
       .insert({
         team_id: data.id,
         user_id: user.id,
         role: 'leader'
       });
+
+    if (memberError) {
+      console.error('Error adding team leader as member:', memberError);
+      // Don't throw error here, just log it as team is already created
+    }
 
     return mapDBTeamToTeam(data);
   },

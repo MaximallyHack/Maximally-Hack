@@ -32,6 +32,7 @@ interface AuthContextType {
   signInWithGoogle: () => Promise<{ success: boolean; error?: string }>;
   signOut: () => Promise<void>;
   updateProfile: (updates: Partial<AuthUser>) => Promise<{ success: boolean; error?: string }>;
+  switchTestRole: (role: 'participant' | 'organizer' | 'judge') => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -112,20 +113,29 @@ export function SupabaseAuthProvider({ children }: { children: React.ReactNode }
     role?: 'participant' | 'organizer' | 'judge';
   }) => {
     try {
-      setIsLoading(true);
+      console.log('Starting signup process for:', email, userData.username);
       
       // First check if username is already taken
-      const { data: existingUser } = await supabase
-        .from('profiles')
-        .select('username')
-        .eq('username', userData.username)
-        .single();
+      try {
+        const { data: existingUser, error: checkError } = await supabase
+          .from('profiles')
+          .select('username')
+          .eq('username', userData.username)
+          .single();
 
-      if (existingUser) {
-        return { success: false, error: 'Username is already taken' };
+        console.log('Username check result:', { existingUser, checkError });
+
+        // Only return error if username exists (404 error means username is available)
+        if (existingUser && !checkError) {
+          return { success: false, error: 'Username is already taken' };
+        }
+      } catch (checkErr) {
+        // Username check failed, but we can continue - this might just mean the table doesn't exist yet
+        console.log('Username check failed, continuing with signup:', checkErr);
       }
 
       // Sign up with Supabase Auth
+      console.log('Calling supabase.auth.signUp...');
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -138,44 +148,55 @@ export function SupabaseAuthProvider({ children }: { children: React.ReactNode }
         }
       });
 
+      console.log('Supabase auth signup result:', { data, error });
+
       if (error) {
+        console.error('Supabase signup error:', error);
         return { success: false, error: error.message };
       }
 
       if (data.user) {
-        // The profile will be created automatically by the trigger
-        // But let's also insert it manually to be sure
-        const { error: profileError } = await supabase
-          .from('profiles')
-          .upsert({
-            id: data.user.id,
-            username: userData.username,
-            full_name: userData.full_name,
-            email: email,
-            role: userData.role || 'participant',
-            skills: [],
-            badges: [],
-            expertise: []
-          });
+        console.log('User created, attempting to create profile...');
+        
+        // Try to create profile, but don't fail the whole signup if this fails
+        try {
+          const { error: profileError } = await supabase
+            .from('profiles')
+            .upsert({
+              id: data.user.id,
+              username: userData.username,
+              full_name: userData.full_name,
+              email: email,
+              role: userData.role || 'participant',
+              skills: [],
+              badges: [],
+              expertise: []
+            });
 
-        if (profileError) {
-          console.error('Error creating profile:', profileError);
+          if (profileError) {
+            console.error('Error creating profile (non-fatal):', profileError);
+          } else {
+            console.log('Profile created successfully');
+          }
+        } catch (profileErr) {
+          console.error('Profile creation failed (non-fatal):', profileErr);
         }
 
+        console.log('Signup completed successfully');
         return { success: true };
       }
 
+      console.error('No user returned from signup');
       return { success: false, error: 'Failed to create user' };
     } catch (error: any) {
-      return { success: false, error: error.message };
-    } finally {
-      setIsLoading(false);
+      console.error('Signup process failed:', error);
+      return { success: false, error: error.message || 'Unknown error occurred' };
     }
   };
 
   const signIn = async (email: string, password: string) => {
     try {
-      setIsLoading(true);
+      // Don't set global isLoading for signin - let the component handle its own loading state
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password
@@ -188,14 +209,12 @@ export function SupabaseAuthProvider({ children }: { children: React.ReactNode }
       return { success: true };
     } catch (error: any) {
       return { success: false, error: error.message };
-    } finally {
-      setIsLoading(false);
     }
   };
 
   const signInWithGoogle = async () => {
     try {
-      setIsLoading(true);
+      // Don't set global isLoading for Google signin - let the component handle its own loading state
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
@@ -210,8 +229,6 @@ export function SupabaseAuthProvider({ children }: { children: React.ReactNode }
       return { success: true };
     } catch (error: any) {
       return { success: false, error: error.message };
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -221,6 +238,13 @@ export function SupabaseAuthProvider({ children }: { children: React.ReactNode }
     setUser(null);
     setSupabaseUser(null);
     setIsLoading(false);
+  };
+
+  const switchTestRole = (role: 'participant' | 'organizer' | 'judge') => {
+    if (user) {
+      setUser(prev => prev ? { ...prev, role } : null);
+      console.log(`🎭 Test Mode: Switched to ${role} role`);
+    }
   };
 
   const updateProfile = async (updates: Partial<AuthUser>) => {
@@ -267,7 +291,8 @@ export function SupabaseAuthProvider({ children }: { children: React.ReactNode }
     signIn,
     signInWithGoogle,
     signOut,
-    updateProfile
+    updateProfile,
+    switchTestRole
   };
 
   return (
@@ -297,3 +322,4 @@ export function useUser() {
 
 // Legacy exports for backward compatibility
 export const AuthProvider = SupabaseAuthProvider;
+export const useSupabaseAuth = useAuth;

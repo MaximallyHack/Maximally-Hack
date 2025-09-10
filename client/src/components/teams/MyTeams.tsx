@@ -7,8 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Users, Settings, MessageCircle, Calendar, ArrowLeft, Plus, Crown } from "lucide-react";
-import { useAuth } from "@/contexts/AuthContext";
-import { api, type Team, type User } from "@/lib/supabaseApi";
+import { useAuth } from "@/contexts/SupabaseAuthContext";
+import { api, type Team, type User } from "@/lib/api";
 
 export default function MyTeams() {
   const [, navigate] = useLocation();
@@ -24,15 +24,15 @@ export default function MyTeams() {
   });
 
   const userTeams = (allTeams || []).filter((team: any) =>
-    (team as any).members?.some((m: any) => m.id === user?.id)
+    team.leaderId === user?.id || team.members?.some((m: any) => m.id === user?.id)
   );
-  const leadingTeams = userTeams.filter((team: any) => team.leader_id === user?.id);
-  const memberTeams = userTeams.filter((team: any) => team.leader_id !== user?.id);
+  const leadingTeams = userTeams.filter((team: any) => team.leaderId === user?.id);
+  const memberTeams = userTeams.filter((team: any) => team.leaderId !== user?.id);
 
   const getTeamRole = (team: any) => {
     // members are profiles in API shape; role is on team_members join not present in simplified mapping
     if (!user) return "Member";
-    return team.leader_id === user.id ? "Leader" : "Member";
+    return team.leaderId === user.id ? "Leader" : "Member";
   };
 
   const getTeamMembers = (team: any): User[] => {
@@ -41,7 +41,7 @@ export default function MyTeams() {
 
   const TeamCard = ({ team, showActions = true }: { team: Team; showActions?: boolean }) => {
     const members = getTeamMembers(team);
-    const isLeader = team.leader_id === user?.id;
+    const isLeader = team.leaderId === user?.id;
     const availableSpots = (team.max_size ?? team.maxSize) - (team.members?.length || 0);
 
     return (
@@ -154,7 +154,7 @@ export default function MyTeams() {
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4 text-muted-foreground" />
               <span className="text-xs text-muted-foreground">
-                Created: {new Date(team.created_at).toLocaleDateString()}
+                Created: {new Date(team.created).toLocaleDateString()}
               </span>
             </div>
             <div className="flex gap-2">

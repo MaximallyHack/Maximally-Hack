@@ -129,7 +129,7 @@ export default function CreateTeam() {
       const teamData = {
         name: formData.name,
         description: formData.description,
-        eventId: 'default-event', // You might want to get this from context or URL
+        eventId: null, // Make eventId null for general teams
         skills: formData.requiredSkills,
         lookingFor: formData.lookingForRoles,
         maxSize: formData.maxSize,

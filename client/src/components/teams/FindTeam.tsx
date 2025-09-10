@@ -70,7 +70,7 @@ export default function FindTeam() {
     // Skills filter
     if (filters.skills.length > 0) {
       filtered = filtered.filter((team: any) =>
-        filters.skills.some(skill => (team.skills || []).includes(skill))
+        filters.skills.some(skill => (team.requiredSkills || team.skills || []).includes(skill))
       );
     }
 
@@ -119,7 +119,7 @@ export default function FindTeam() {
 
   const getTeamLeader = (team: any): User | undefined => {
     // For now, return a basic leader object
-    return team.members?.find((member: any) => member.id === team.leader_id);
+    return team.members?.find((member: any) => member.id === (team.leaderId || team.leader_id));
   };
 
   const getAvailableSpots = (team: any) => {
@@ -358,56 +358,56 @@ export default function FindTeam() {
                           <h4 className="text-sm font-medium text-foreground mb-2">Team Size</h4>
                           <div className="flex items-center gap-2">
                             <Users className="w-4 h-4 text-muted-foreground" />
-                            <span className="text-sm text-muted-foreground">{team.members.length}/{team.maxSize} members</span>
+                            <span className="text-sm text-muted-foreground">{(team.members || []).length}/{team.maxSize || team.max_size || 4} members</span>
                           </div>
                         </div>
                       </div>
 
                       {/* Skills */}
-                      {team.requiredSkills.length > 0 && (
+                      {(team.requiredSkills || []).length > 0 && (
                         <div className="mb-4">
                           <h4 className="text-sm font-medium text-foreground mb-2">Required Skills</h4>
                           <div className="flex flex-wrap gap-2">
-                            {team.requiredSkills.slice(0, 4).map(skill => (
+                            {(team.requiredSkills || []).slice(0, 4).map(skill => (
                               <Badge key={skill} variant="secondary" className="bg-coral/10 text-coral text-xs">
                                 {skill}
                               </Badge>
                             ))}
-                            {team.requiredSkills.length > 4 && (
-                              <Badge variant="secondary" className="text-xs">+{team.requiredSkills.length - 4} more</Badge>
+                            {(team.requiredSkills || []).length > 4 && (
+                              <Badge variant="secondary" className="text-xs">+{(team.requiredSkills || []).length - 4} more</Badge>
                             )}
                           </div>
                         </div>
                       )}
 
                       {/* Looking For */}
-                      {team.lookingForRoles.length > 0 && (
+                      {(team.lookingForRoles || []).length > 0 && (
                         <div className="mb-4">
                           <h4 className="text-sm font-medium text-foreground mb-2">Looking For</h4>
                           <div className="flex flex-wrap gap-2">
-                            {team.lookingForRoles.slice(0, 3).map(role => (
+                            {(team.lookingForRoles || []).slice(0, 3).map(role => (
                               <Badge key={role} variant="secondary" className="bg-mint/10 text-mint text-xs">
                                 {role}
                               </Badge>
                             ))}
-                            {team.lookingForRoles.length > 3 && (
-                              <Badge variant="secondary" className="text-xs">+{team.lookingForRoles.length - 3} more</Badge>
+                            {(team.lookingForRoles || []).length > 3 && (
+                              <Badge variant="secondary" className="text-xs">+{(team.lookingForRoles || []).length - 3} more</Badge>
                             )}
                           </div>
                         </div>
                       )}
 
                       {/* Tags */}
-                      {team.tags.length > 0 && (
+                      {(team.tags || []).length > 0 && (
                         <div className="mb-4">
                           <div className="flex flex-wrap gap-2">
-                            {team.tags.slice(0, 3).map(tag => (
+                            {(team.tags || []).slice(0, 3).map(tag => (
                               <Badge key={tag} variant="outline" className="border-sky/20 text-sky text-xs">
                                 {tag}
                               </Badge>
                             ))}
-                            {team.tags.length > 3 && (
-                              <Badge variant="outline" className="text-xs">+{team.tags.length - 3} more</Badge>
+                            {(team.tags || []).length > 3 && (
+                              <Badge variant="outline" className="text-xs">+{(team.tags || []).length - 3} more</Badge>
                             )}
                           </div>
                         </div>

@@ -1,4 +1,4 @@
-import { CreateEventForm } from '../components/CreateEventForm';
+import { CreateEventForm } from '@/components/CreateEventForm';
 import { useLocation } from 'wouter';
 
 export default function CreateEventPage() {

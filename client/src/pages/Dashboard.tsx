@@ -19,6 +19,7 @@ export default function Dashboard() {
   const { user } = useAuth();
   const { toast } = useToast();
 
+  // Move all hooks before any conditional returns
   const { data: events } = useQuery({
     queryKey: ['events'],
     queryFn: supabaseApi.getEvents,
@@ -30,6 +31,13 @@ export default function Dashboard() {
     enabled: !!user
   });
 
+  const { data: userRegistrations = [] } = useQuery({
+    queryKey: ['user-registrations', user?.id],
+    queryFn: () => supabaseApi.getUserEventRegistrations(),
+    enabled: !!user?.id,
+  });
+
+  // Early return after all hooks
   if (!user) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
@@ -42,12 +50,6 @@ export default function Dashboard() {
       </div>
     );
   }
-
-  const { data: userRegistrations = [] } = useQuery({
-    queryKey: ['user-registrations', user?.id],
-    queryFn: () => supabaseApi.getUserEventRegistrations(),
-    enabled: !!user?.id,
-  });
 
   // Get events where user is actually registered
   const registeredEvents = events?.filter(event => 
@@ -348,13 +350,13 @@ export default function Dashboard() {
 
                           <div className="flex items-center justify-between pt-2">
                             <div className="flex gap-2">
-                              <Link href={`/projects/${project.id}`}>
+                              <Link to={`/projects/${project.id}`}>
                                 <Button size="sm" variant="outline">
                                   <Eye className="w-4 h-4 mr-1" />
                                   View
                                 </Button>
                               </Link>
-                              <Link href={`/projects/${project.id}/edit`}>
+                              <Link to={`/projects/${project.id}/edit`}>
                                 <Button size="sm" variant="outline">
                                   <Edit3 className="w-4 h-4 mr-1" />
                                   Edit
@@ -364,18 +366,18 @@ export default function Dashboard() {
                             
                             <div className="flex gap-1">
                               {project.githubUrl && (
-                                <Link href={project.githubUrl}>
+                                <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
                                   <Button size="sm" variant="ghost" className="w-8 h-8 p-0">
                                     <Github className="w-4 h-4" />
                                   </Button>
-                                </Link>
+                                </a>
                               )}
                               {project.demoUrl && (
-                                <Link href={project.demoUrl}>
+                                <a href={project.demoUrl} target="_blank" rel="noopener noreferrer">
                                   <Button size="sm" variant="ghost" className="w-8 h-8 p-0">
                                     <Globe className="w-4 h-4" />
                                   </Button>
-                                </Link>
+                                </a>
                               )}
                             </div>
                           </div>

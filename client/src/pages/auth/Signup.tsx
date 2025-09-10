@@ -15,7 +15,7 @@ export default function Signup() {
   const { signUp, signInWithGoogle } = useAuth();
   const { toast } = useToast();
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({
@@ -25,6 +25,12 @@ export default function Signup() {
     password: "",
     confirmPassword: ""
   });
+
+  const resetForm = () => {
+    setIsSubmitting(false);
+    setError("");
+    console.log('Form reset called');
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
@@ -36,6 +42,7 @@ export default function Signup() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('Form submitted with data:', formData);
     setError("");
 
     if (formData.password !== formData.confirmPassword) {
@@ -48,32 +55,52 @@ export default function Signup() {
       return;
     }
 
-    setIsLoading(true);
+    // Force a timeout to ensure the button can reset
+    console.log('Setting isSubmitting to true');
+    setIsSubmitting(true);
+    setError("");
+
+    // Add a timeout to ensure the button doesn't get stuck
+    const timeoutId = setTimeout(() => {
+      setIsSubmitting(false);
+      console.log('Forced timeout reset of isSubmitting after 10 seconds');
+    }, 10000);
 
     try {
+      console.log('Calling signUp function...');
       const result = await signUp(formData.email, formData.password, {
         username: formData.username,
         full_name: formData.fullName,
       });
 
+      // Clear the timeout since we got a response
+      clearTimeout(timeoutId);
+      console.log('SignUp result:', result);
+
       if (result.success) {
+        console.log('Signup successful, showing toast and redirecting');
         toast({
           title: "Account created successfully!",
           description: "Welcome to Maximally Hack! You can now register for hackathons.",
         });
         setLocation("/dashboard");
       } else {
+        console.error('Signup failed:', result.error);
         setError(result.error || "Failed to create account");
       }
     } catch (err: any) {
+      // Clear the timeout
+      clearTimeout(timeoutId);
+      console.error('Exception during signup:', err);
       setError(err.message || "Failed to create account");
     } finally {
-      setIsLoading(false);
+      console.log('Setting isSubmitting to false');
+      setIsSubmitting(false);
     }
   };
 
   const handleGoogleSignup = async () => {
-    setIsLoading(true);
+    setIsSubmitting(true);
     setError("");
     
     try {
@@ -90,7 +117,7 @@ export default function Signup() {
     } catch (err: any) {
       setError(err.message || "Failed to sign up with Google");
     } finally {
-      setIsLoading(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -192,20 +219,34 @@ export default function Signup() {
                 </Alert>
               )}
 
-              <Button
-                type="submit"
-                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Creating account...
-                  </>
-                ) : (
-                  "Create Account"
+              <div className="space-y-2">
+                <Button
+                  type="submit"
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Creating account...
+                    </>
+                  ) : (
+                    "Create Account"
+                  )}
+                </Button>
+                
+                {/* Debug reset button - remove in production */}
+                {isSubmitting && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full text-sm"
+                    onClick={resetForm}
+                  >
+                    Reset (Debug)
+                  </Button>
                 )}
-              </Button>
+              </div>
             </form>
 
             {/* Divider */}
@@ -224,7 +265,7 @@ export default function Signup() {
               variant="outline"
               className="w-full"
               onClick={handleGoogleSignup}
-              disabled={isLoading}
+              disabled={isSubmitting}
             >
               <Chrome className="mr-2 h-4 w-4" />
               Sign up with Google

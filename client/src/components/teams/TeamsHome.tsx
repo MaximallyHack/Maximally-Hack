@@ -41,10 +41,24 @@ export default function TeamsHome() {
     enabled: !!user
   });
 
-  // Filter teams where user is a member
-  const userTeams = (allTeams || []).filter((team: Team) =>
-    team.members?.some((member: User) => member.id === user?.id)
-  );
+  // Filter teams where user is a member or leader
+  const userTeams = (allTeams || []).filter((team: Team) => {
+    if (!user) return false;
+    
+    // Check if user is the leader
+    if (team.leaderId === user.id || team.leader_id === user.id) {
+      return true;
+    }
+    
+    // Check if user is in members array (members are now User objects, not just IDs)
+    if (team.members && Array.isArray(team.members)) {
+      return team.members.some((member: any) => 
+        member.id === user.id || member.user_id === user.id || member === user.id
+      );
+    }
+    
+    return false;
+  });
 
   // Mock recent activities - in production this would be a real API call
   useEffect(() => {
@@ -64,16 +78,30 @@ export default function TeamsHome() {
     }
   }, [userTeams, user]);
 
+  // Get pending applications count
+  const { data: pendingApplications = [] } = useQuery({
+    queryKey: ['pending-applications', user?.id],
+    queryFn: () => api.getUserApplications(),
+    enabled: !!user
+  });
+
+  // Get pending invitations count
+  const { data: pendingInvitations = [] } = useQuery({
+    queryKey: ['pending-invitations', user?.id],
+    queryFn: () => api.getUserInvitations(),
+    enabled: !!user
+  });
+
   // Calculate stats
   const stats = {
     totalTeams: userTeams.length,
-    activeApplications: 0, // Would be real API call in production
-    invitations: 0 // Would be real API call in production
+    activeApplications: pendingApplications.filter(app => app.status === 'pending').length,
+    invitations: pendingInvitations.filter(inv => inv.status === 'pending').length
   };
 
   const getTeamRole = (team: Team) => {
     if (!user) return "Member";
-    return team.leader_id === user.id ? "Leader" : "Member";
+    return (team.leaderId === user.id || team.leader_id === user.id) ? "Leader" : "Member";
   };
 
   const getActivityIcon = (type: string) => {

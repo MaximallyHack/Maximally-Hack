@@ -88,6 +88,13 @@ export default function Submit() {
     enabled: !!slug,
   });
 
+  // If no slug (direct /projects/create), use mock event or none
+  const currentEvent = event || (slug ? null : {
+    id: 'general',
+    title: 'General Project',
+    tracks: ['General', 'Web Development', 'Mobile', 'AI/ML', 'Design']
+  });
+
   const { data: teams } = useQuery({
     queryKey: ['teams', event?.id],
     queryFn: () => supabaseApi.getTeams(event?.id),

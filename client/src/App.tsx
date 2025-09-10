@@ -45,7 +45,7 @@ import TeamRequests from "@/components/teams/TeamRequests";
 import TeamDetail from "@/components/teams/TeamDetail";
 import TeamManage from "@/components/teams/TeamManage";
 import TeamApply from "@/components/teams/TeamApply";
-import TeamChat from "@/components/teams/TeamChat";
+import TeamMails from "@/components/teams/TeamMails";
 import TeamSettings from "@/components/teams/TeamSettings";
 import TeamRoles from "@/components/teams/TeamRoles";
 
@@ -148,7 +148,7 @@ function AppRouter() {
             <Route path="/teams/:id" component={TeamDetail} />
             <Route path="/teams/:id/manage" component={TeamManage} />
             <Route path="/teams/:id/apply" component={TeamApply} />
-            <Route path="/teams/:id/chat" component={TeamChat} />
+            <Route path="/teams/:id/mails" component={TeamMails} />
             <Route path="/teams/:id/settings" component={TeamSettings} />
             <Route path="/teams/:id/roles" component={TeamRoles} />
 
@@ -181,8 +181,10 @@ function AppRouter() {
             <Route path="/organizer/events/:id/content" component={EventContentEditor} />
             <Route path="/organizer/events/:id/judges" component={JudgeManagement} />
             <Route path="/organizer/events/:id/edit-hackathon" component={EditHackathon} />
+            <Route path="/organizer/partnership" component={() => <div className="p-8"><h1 className="text-2xl font-bold mb-4">Partnership Requests</h1><p>Partner with us to organize amazing hackathons! Contact us at partnerships@maximally.in</p></div>} />
             <Route path="/judge" component={JudgeDashboard} />
             <Route path="/judge/dashboard" component={JudgeDashboard} />
+            <Route path="/projects/create" component={Submit} />
             <Route component={NotFound} />
           </Switch>
           <Footer />

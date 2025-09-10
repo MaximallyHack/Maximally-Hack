@@ -26,6 +26,7 @@ interface Filters {
 }
 
 export default function SimpleExplore() {
+  const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [showFilters, setShowFilters] = useState(false);
@@ -307,7 +308,9 @@ export default function SimpleExplore() {
           searchQuery || filters.tags.length > 0 || filters.prizeMin > 0 || filters.status || filters.format ? (
             <NoSearchResults query={searchQuery || 'filtered results'} />
           ) : (
-            <NoEventsFound onCreateEvent={() => window.location.href = '/create-event'} />
+            <NoEventsFound 
+              onCreateEvent={user?.role === 'organizer' ? () => window.location.href = '/create-event' : undefined} 
+            />
           )
         )}
       </div>

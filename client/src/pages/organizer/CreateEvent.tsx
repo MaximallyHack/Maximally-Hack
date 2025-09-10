@@ -12,7 +12,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { useConfetti } from "@/components/ui/confetti";
 import { CrayonSquiggle } from "@/components/ui/floating-elements";
-import { supabaseApi, Event } from "@/lib/supabaseApi";
+import { api, Event } from "@/lib/api";
+import { useAuth } from "@/contexts/SupabaseAuthContext";
 import { 
   ArrowRight, 
   ArrowLeft,
@@ -99,6 +100,7 @@ export default function CreateEvent() {
   const [isPreview, setIsPreview] = useState(false);
   const { toast } = useToast();
   const { isActive: confettiActive, trigger: triggerConfetti, Confetti } = useConfetti();
+  const { user } = useAuth();
 
   const totalSteps = 5;
   const progress = (step / totalSteps) * 100;
@@ -227,6 +229,11 @@ export default function CreateEvent() {
   };
 
   const handleSaveDraft = async () => {
+    if (!user) {
+      toast({ title: "Error", description: "Please log in to create events", variant: "destructive" });
+      return;
+    }
+    
     try {
       const eventData: Partial<Event> = {
         slug: data.slug,
@@ -253,7 +260,7 @@ export default function CreateEvent() {
         participantCount: 0
       };
 
-      await supabaseApi.createEvent(eventData);
+      await api.createEvent(eventData);
       toast({
         title: "Draft saved! 💾",
         description: "Your event has been saved as a draft.",
@@ -269,6 +276,11 @@ export default function CreateEvent() {
   };
 
   const handlePublish = async () => {
+    if (!user) {
+      toast({ title: "Error", description: "Please log in to create events", variant: "destructive" });
+      return;
+    }
+    
     try {
       const eventData: Partial<Event> = {
         slug: data.slug,
@@ -295,7 +307,7 @@ export default function CreateEvent() {
         participantCount: 0
       };
 
-      await supabaseApi.createEvent(eventData);
+      await api.createEvent(eventData);
       
       triggerConfetti();
       toast({

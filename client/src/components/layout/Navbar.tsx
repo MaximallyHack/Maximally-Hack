@@ -29,7 +29,7 @@ import { useAuth } from "@/contexts/SupabaseAuthContext";
 export default function Navbar() {
   const [location] = useLocation();
   const [isOpen, setIsOpen] = useState(false);
-  const { user, signOut } = useAuth();
+  const { user, signOut, switchTestRole } = useAuth();
   const profile = user; // user already contains profile data
   const [rocketClass, setRocketClass] = useState(
     "w-5 h-5 text-white group-hover:rotate-12 transition-transform duration-300 rocket-animation"
@@ -183,15 +183,15 @@ export default function Navbar() {
                         <p className="text-sm text-muted-foreground truncate">
                           {user.email}
                         </p>
-                        <Badge variant="secondary" className="mt-1 text-xs">
-                          👨‍💻 Participant
-                        </Badge>
+                      <Badge variant="secondary" className="mt-1 text-xs">
+                        {user?.role === 'organizer' ? '🏢' : user?.role === 'judge' ? '⚖️' : '👨‍💻'} {user?.role?.charAt(0).toUpperCase() + user?.role?.slice(1)}
+                      </Badge>
                       </div>
                     </div>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
                       <Link
-                        to={`/profile/${profile?.username || user?.id}`}
+                        to={`/profile/${user?.username || user?.id}`}
                         className="flex items-center p-3 rounded-lg hover:bg-coral/5"
                       >
                         <User className="mr-3 h-4 w-4 text-coral" />
@@ -207,6 +207,37 @@ export default function Navbar() {
                         <span className="font-medium">Dashboard</span>
                       </Link>
                     </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    {/* Test Role Switcher */}
+                    <div className="px-3 py-2">
+                      <p className="text-xs font-medium text-muted-foreground mb-2">🎭 Test Mode - Switch Role:</p>
+                      <div className="flex gap-1">
+                        <Button 
+                          size="sm" 
+                          variant={user?.role === 'participant' ? 'default' : 'outline'} 
+                          className="text-xs h-6 px-2"
+                          onClick={() => switchTestRole('participant')}
+                        >
+                          👨‍💻
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant={user?.role === 'organizer' ? 'default' : 'outline'} 
+                          className="text-xs h-6 px-2"
+                          onClick={() => switchTestRole('organizer')}
+                        >
+                          🏢
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant={user?.role === 'judge' ? 'default' : 'outline'} 
+                          className="text-xs h-6 px-2"
+                          onClick={() => switchTestRole('judge')}
+                        >
+                          ⚖️
+                        </Button>
+                      </div>
+                    </div>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
                       onClick={async () => {

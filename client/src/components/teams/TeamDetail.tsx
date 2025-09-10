@@ -7,8 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Users, MessageCircle, Settings, Calendar, MapPin, ArrowLeft, Crown, Mail, ExternalLink } from "lucide-react";
-import { useAuth } from '@/contexts/AuthContext';
+import { Users, MessageCircle, Settings, Calendar, MapPin, ArrowLeft, Crown, Mail, ExternalLink, UserPlus, UserCheck, Send, CheckCircle, XCircle } from "lucide-react";
+import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { useSupabaseAuth } from '@/contexts/SupabaseAuthContext';
 import { supabaseApi, type Team, type User } from '@/lib/supabaseApi';
 
@@ -28,7 +28,94 @@ export default function TeamDetail() {
     enabled: !!id
   });
 
+  const { data: teamActivity, isLoading: activityLoading } = useQuery({
+    queryKey: ['teamActivity', id],
+    queryFn: async () => {
+      if (!id) return [];
+      return await supabaseApi.getTeamActivity(id);
+    },
+    enabled: !!id
+  });
+
   const teamMembers = (team?.members || []) as User[];
+
+  // Helper function to get activity icon
+  const getActivityIcon = (type: string) => {
+    switch (type) {
+      case 'member_joined':
+        return <UserPlus className="w-5 h-5 text-mint mt-0.5" />;
+      case 'team_created':
+        return <Calendar className="w-5 h-5 text-coral mt-0.5" />;
+      case 'application_submitted':
+        return <Send className="w-5 h-5 text-sky mt-0.5" />;
+      case 'application_reviewed':
+        return <CheckCircle className="w-5 h-5 text-mint mt-0.5" />;
+      case 'invitation_sent':
+        return <Mail className="w-5 h-5 text-coral mt-0.5" />;
+      case 'invitation_responded':
+        return <UserCheck className="w-5 h-5 text-mint mt-0.5" />;
+      default:
+        return <MessageCircle className="w-5 h-5 text-sky mt-0.5" />;
+    }
+  };
+
+  // Helper function to get activity message
+  const getActivityMessage = (activity: any) => {
+    const userName = activity.user.name;
+    
+    switch (activity.type) {
+      case 'member_joined':
+        return `${userName} joined the team${activity.data.role === 'leader' ? ' as leader' : ''}`;
+      case 'team_created':
+        return `Team was created by ${userName}`;
+      case 'application_submitted':
+        return `${userName} applied to join the team`;
+      case 'application_reviewed':
+        return `${userName} ${activity.data.status === 'accepted' ? 'accepted' : 'rejected'} ${activity.data.applicant?.name}'s application`;
+      case 'invitation_sent':
+        return `${userName} invited ${activity.data.invitee?.name} to join the team`;
+      case 'invitation_responded':
+        return `${userName} ${activity.data.status === 'accepted' ? 'accepted' : 'rejected'} the team invitation`;
+      default:
+        return `${userName} performed an action`;
+    }
+  };
+
+  // Helper function to get activity background color
+  const getActivityBgColor = (type: string) => {
+    switch (type) {
+      case 'member_joined':
+      case 'application_reviewed':
+      case 'invitation_responded':
+        return 'bg-mint/5';
+      case 'team_created':
+      case 'invitation_sent':
+        return 'bg-coral/5';
+      case 'application_submitted':
+      default:
+        return 'bg-sky/5';
+    }
+  };
+
+  // Helper function to format timestamp
+  const formatTimestamp = (timestamp: string) => {
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+    
+    if (diffMins < 60) {
+      return `${diffMins === 0 ? 'Just now' : `${diffMins} min${diffMins === 1 ? '' : 's'} ago`}`;
+    } else if (diffHours < 24) {
+      return `${diffHours} hour${diffHours === 1 ? '' : 's'} ago`;
+    } else if (diffDays < 30) {
+      return `${diffDays} day${diffDays === 1 ? '' : 's'} ago`;
+    } else {
+      return date.toLocaleDateString();
+    }
+  };
 
   if (isLoading) {
     return (
@@ -112,10 +199,10 @@ export default function TeamDetail() {
           <div className="flex gap-2">
             {isCurrentUserMember ? (
               <>
-                <Link to={`/teams/${team.id}/chat`}>
-                  <Button className="bg-sky hover:bg-sky/90" data-testid="button-team-chat">
-                    <MessageCircle className="w-4 h-4 mr-2" />
-                    Team Chat
+                <Link to={`/teams/${team.id}/mails`}>
+                  <Button className="bg-sky hover:bg-sky/90" data-testid="button-team-mails">
+                    <Mail className="w-4 h-4 mr-2" />
+                    Team Mails
                   </Button>
                 </Link>
                 {isCurrentUserLeader && (
@@ -287,36 +374,46 @@ export default function TeamDetail() {
                   <CardTitle>Recent Activity</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  {/* Mock activity feed */}
-                  <div className="space-y-4">
-                    <div className="flex items-start gap-3 p-3 bg-mint/5 rounded-lg">
-                      <Users className="w-5 h-5 text-mint mt-0.5" />
-                      <div>
-                        <p className="text-sm text-foreground">
-                          <strong>Mike Johnson</strong> joined as ML Engineer
-                        </p>
-                        <p className="text-xs text-muted-foreground">2 days ago</p>
-                      </div>
+                  {activityLoading ? (
+                    <div className="space-y-4">
+                      {[1, 2, 3].map(i => (
+                        <div key={i} className="animate-pulse flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
+                          <div className="w-5 h-5 bg-muted rounded"></div>
+                          <div className="flex-1">
+                            <div className="h-4 bg-muted rounded mb-2"></div>
+                            <div className="h-3 bg-muted rounded w-24"></div>
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                    <div className="flex items-start gap-3 p-3 bg-sky/5 rounded-lg">
-                      <MessageCircle className="w-5 h-5 text-sky mt-0.5" />
-                      <div>
-                        <p className="text-sm text-foreground">
-                          <strong>Alex Chen</strong> started a discussion about project architecture
-                        </p>
-                        <p className="text-xs text-muted-foreground">3 days ago</p>
-                      </div>
+                  ) : teamActivity && teamActivity.length > 0 ? (
+                    <div className="space-y-4">
+                      {teamActivity.slice(0, 10).map((activity, index) => (
+                        <div key={`${activity.type}-${activity.timestamp}-${index}`} className={`flex items-start gap-3 p-3 ${getActivityBgColor(activity.type)} rounded-lg`}>
+                          {getActivityIcon(activity.type)}
+                          <div>
+                            <p className="text-sm text-foreground">
+                              {getActivityMessage(activity)}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              {formatTimestamp(activity.timestamp)}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                      {teamActivity.length === 0 && (
+                        <div className="text-center py-8">
+                          <MessageCircle className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                          <p className="text-muted-foreground">No recent activity</p>
+                        </div>
+                      )}
                     </div>
-                    <div className="flex items-start gap-3 p-3 bg-coral/5 rounded-lg">
-                      <Calendar className="w-5 h-5 text-coral mt-0.5" />
-                      <div>
-                        <p className="text-sm text-foreground">
-                          Team was created by <strong>Alex Chen</strong>
-                        </p>
-                        <p className="text-xs text-muted-foreground">1 week ago</p>
-                      </div>
+                  ) : (
+                    <div className="text-center py-8">
+                      <MessageCircle className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                      <p className="text-muted-foreground">No recent activity</p>
                     </div>
-                  </div>
+                  )}
                 </CardContent>
               </Card>
             </TabsContent>
@@ -405,10 +502,10 @@ export default function TeamDetail() {
             <CardContent className="space-y-3">
               {isCurrentUserMember ? (
                 <>
-                  <Link to={`/teams/${team.id}/chat`} className="block">
-                    <Button className="w-full bg-sky hover:bg-sky/90" data-testid="action-team-chat">
-                      <MessageCircle className="w-4 h-4 mr-2" />
-                      Team Chat
+                  <Link to={`/teams/${team.id}/mails`} className="block">
+                    <Button className="w-full bg-sky hover:bg-sky/90" data-testid="action-team-mails">
+                      <Mail className="w-4 h-4 mr-2" />
+                      Team Mails
                     </Button>
                   </Link>
                   {isCurrentUserLeader && (
